@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "engagements",
+  "info": {
+    "singularName": "engagement",
+    "pluralName": "engagements",
+    "displayName": "Engagement"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "like",
+        "view",
+        "play",
+        "share",
+        "impression",
+        "clicks"
+      ],
+      "required": true
+    },
+    "post_type": {
+      "type": "enumeration",
+      "enum": [
+        "content",
+        "ad"
+      ],
+      "default": "content"
+    }
+  }
+}
