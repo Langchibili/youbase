@@ -1,0 +1,34 @@
+{
+  "collectionName": "components_user_profile_details",
+  "info": {
+    "displayName": "details",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "firstname": {
+      "type": "string"
+    },
+    "lastname": {
+      "type": "string"
+    },
+    "about": {
+      "type": "text"
+    },
+    "age": {
+      "type": "string"
+    },
+    "gender": {
+      "type": "enumeration",
+      "enum": [
+        "male",
+        "female",
+        "other"
+      ],
+      "default": "other"
+    },
+    "phoneNumber": {
+      "type": "string"
+    }
+  }
+}

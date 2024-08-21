@@ -4,7 +4,8 @@
   "info": {
     "singularName": "engagement",
     "pluralName": "engagements",
-    "displayName": "Engagement"
+    "displayName": "Engagement",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -23,13 +24,40 @@
       ],
       "required": true
     },
-    "post_type": {
+    "postType": {
       "type": "enumeration",
       "enum": [
         "content",
         "ad"
       ],
       "default": "content"
+    },
+    "post": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::post.post",
+      "inversedBy": "engagements"
+    },
+    "ad": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::ad.ad",
+      "inversedBy": "engagements"
+    },
+    "users": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "engagements"
+    },
+    "userId": {
+      "type": "string"
+    },
+    "postId": {
+      "type": "string"
+    },
+    "extra_payload": {
+      "type": "json"
     }
   }
 }

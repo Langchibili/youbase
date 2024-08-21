@@ -1,0 +1,85 @@
+{
+  "kind": "collectionType",
+  "collectionName": "ads",
+  "info": {
+    "singularName": "ad",
+    "pluralName": "ads",
+    "displayName": "Ad",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "text",
+        "image",
+        "music",
+        "video"
+      ],
+      "default": "text"
+    },
+    "adCreator": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "ads"
+    },
+    "description": {
+      "type": "text"
+    },
+    "adFormat": {
+      "type": "enumeration",
+      "enum": [
+        "banner",
+        "strip",
+        "slider",
+        "list",
+        "grid"
+      ],
+      "default": "banner"
+    },
+    "engagements": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::engagement.engagement",
+      "mappedBy": "ad"
+    },
+    "media": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "mediaType": {
+      "type": "enumeration",
+      "enum": [
+        "single",
+        "multiple"
+      ],
+      "default": "single"
+    },
+    "impressions": {
+      "type": "biginteger",
+      "default": "0"
+    },
+    "clicks": {
+      "type": "biginteger",
+      "default": "0"
+    },
+    "userId": {
+      "type": "string"
+    },
+    "extra_payload": {
+      "type": "json"
+    }
+  }
+}

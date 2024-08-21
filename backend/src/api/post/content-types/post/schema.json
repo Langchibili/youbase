@@ -4,16 +4,167 @@
   "info": {
     "singularName": "post",
     "pluralName": "posts",
-    "displayName": "Post"
+    "displayName": "Post",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
-    "titile": {
+    "title": {
       "type": "string",
       "default": "untitled"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "posts"
+    },
+    "description": {
+      "type": "text"
+    },
+    "engagements": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::engagement.engagement",
+      "mappedBy": "post"
+    },
+    "comments": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::comment.comment",
+      "mappedBy": "post"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "text",
+        "image",
+        "music",
+        "video"
+      ],
+      "default": "text"
+    },
+    "media": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "mediaType": {
+      "type": "enumeration",
+      "enum": [
+        "single",
+        "multiple"
+      ],
+      "default": "single"
+    },
+    "parentPost": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::post.post",
+      "inversedBy": "rePosts"
+    },
+    "rePosts": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::post.post",
+      "mappedBy": "parentPost"
+    },
+    "featuredImages": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "likes": {
+      "type": "biginteger",
+      "default": "0"
+    },
+    "views": {
+      "type": "biginteger",
+      "default": "0"
+    },
+    "plays": {
+      "type": "biginteger",
+      "default": "0"
+    },
+    "shares": {
+      "type": "biginteger",
+      "default": "0"
+    },
+    "userId": {
+      "type": "string"
+    },
+    "mediaSource": {
+      "type": "enumeration",
+      "enum": [
+        "local",
+        "youtube",
+        "facebook"
+      ]
+    },
+    "extra_payload": {
+      "type": "json"
+    },
+    "playlists": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::playlist.playlist",
+      "mappedBy": "posts"
+    },
+    "dashed_title": {
+      "type": "string"
+    },
+    "is_title_user_writted": {
+      "type": "boolean",
+      "default": false
+    },
+    "impressions": {
+      "type": "biginteger",
+      "default": "0"
+    },
+    "postLikedBy": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "likedPosts"
+    },
+    "postSharedBy": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "sharedPosts"
+    },
+    "postViewedBy": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "viewedPosts"
+    },
+    "postPlayedBy": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "playedPosts"
+    },
+    "postSeenBy": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "seenPosts"
     }
   }
 }

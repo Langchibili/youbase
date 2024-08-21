@@ -1,0 +1,213 @@
+{
+  "kind": "collectionType",
+  "collectionName": "up_users",
+  "info": {
+    "name": "user",
+    "description": "",
+    "singularName": "user",
+    "pluralName": "users",
+    "displayName": "User"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "username": {
+      "type": "string",
+      "minLength": 3,
+      "unique": true,
+      "configurable": false,
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "minLength": 6,
+      "configurable": false,
+      "required": true
+    },
+    "provider": {
+      "type": "string",
+      "configurable": false
+    },
+    "password": {
+      "type": "password",
+      "minLength": 6,
+      "configurable": false,
+      "private": true,
+      "searchable": false
+    },
+    "resetPasswordToken": {
+      "type": "string",
+      "configurable": false,
+      "private": true,
+      "searchable": false
+    },
+    "confirmationToken": {
+      "type": "string",
+      "configurable": false,
+      "private": true,
+      "searchable": false
+    },
+    "confirmed": {
+      "type": "boolean",
+      "default": false,
+      "configurable": false
+    },
+    "blocked": {
+      "type": "boolean",
+      "default": false,
+      "configurable": false
+    },
+    "role": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.role",
+      "inversedBy": "users",
+      "configurable": false
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "default",
+        "loggedin"
+      ],
+      "default": "default"
+    },
+    "loggedInUserType": {
+      "type": "enumeration",
+      "enum": [
+        "default",
+        "artist",
+        "streamer",
+        "podcaster",
+        "ad_creator"
+      ],
+      "default": "default"
+    },
+    "follows": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "following"
+    },
+    "following": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "follows"
+    },
+    "posts": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::post.post",
+      "mappedBy": "user"
+    },
+    "comments": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::comment.comment",
+      "mappedBy": "user"
+    },
+    "ads": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::ad.ad",
+      "mappedBy": "adCreator"
+    },
+    "authType": {
+      "type": "enumeration",
+      "enum": [
+        "local",
+        "google",
+        "facebook"
+      ],
+      "default": "local"
+    },
+    "connectedAccounts": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "parentAccount"
+    },
+    "parentAccount": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "connectedAccounts"
+    },
+    "engagements": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::engagement.engagement",
+      "mappedBy": "users"
+    },
+    "extra_payload": {
+      "type": "json"
+    },
+    "likedPosts": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::post.post",
+      "inversedBy": "postLikedBy"
+    },
+    "sharedPosts": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::post.post",
+      "inversedBy": "postSharedBy"
+    },
+    "viewedPosts": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::post.post",
+      "inversedBy": "postViewedBy"
+    },
+    "playedPosts": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::post.post",
+      "inversedBy": "postPlayedBy"
+    },
+    "seenPosts": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::post.post",
+      "inversedBy": "postSeenBy"
+    },
+    "likedPostsIds": {
+      "type": "json"
+    },
+    "sharedPostsIds": {
+      "type": "json"
+    },
+    "viewedPostsIds": {
+      "type": "json"
+    },
+    "playedPostsIds": {
+      "type": "json"
+    },
+    "seenPostsIds": {
+      "type": "json"
+    },
+    "followsUserIds": {
+      "type": "json"
+    },
+    "followingUserIds": {
+      "type": "json"
+    },
+    "profilePicture": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "details": {
+      "displayName": "details",
+      "type": "component",
+      "repeatable": false,
+      "component": "user-profile.details"
+    }
+  }
+}
