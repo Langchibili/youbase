@@ -1,6 +1,6 @@
 // UTILITY FUNCTIONS
 
-import { api_url, backEndUrl } from "./Constants"
+import { api_url, backEndUrl, getJwt } from "./Constants"
 
 const getPostIDFromDashedTitle = (dashed_title)=>{
     const parts = dashed_title.split('-')
@@ -221,7 +221,159 @@ export const getPost = async (title)=>{
      return null
   }
 
-  
+ //  logging and deleting an engagement to a post, like a like or view 
+
+  const engagementMappings = {
+    likes: {
+        action: 'likedPosts',
+        idArray: 'likedPostsIds',
+        postBy: 'postLikedBy'
+    },
+    shares: {
+        action: 'sharedPosts',
+        idArray: 'sharedPostsIds',
+        postBy: 'postSharedBy'
+    },
+    views: {
+        action: 'viewedPosts',
+        idArray: 'viewedPostsIds',
+        postBy: 'postViewedBy'
+    },
+    plays: {
+        action: 'playedPosts',
+        idArray: 'playedPostsIds',
+        postBy: 'postPlayedBy'
+    },
+    impressions: {
+        action: 'seenPosts',
+        idArray: 'seenPostsIds',
+        postBy: 'postSeenBy'
+    }
+};
+
+export const logEngagement = async (type, postId, loggedInUser, ctx)=> {
+    const { action, idArray, postBy } = engagementMappings[type];
+
+    let userEngagementIds = ctx.state.loggedInUser.user[idArray] || [];
+    
+    if (!userEngagementIds.includes(postId)) {
+        userEngagementIds.push(postId);
+    }
+
+    const updateUserObject = {
+        [action]: { connect: [postId] },
+        [idArray]: userEngagementIds
+    };
+
+    const response = await fetch(`${api_url}/users/${loggedInUser.id}`, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${getJwt()}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updateUserObject)
+    }).then(response => response.json());
+
+    if (response) {
+        const postEngagements = parseInt(ctx.state.post[type] || 0);
+        const updatePostObject = {
+            data: {
+                [postBy]: { connect: [loggedInUser.id] },
+                [type]: postEngagements + 1
+            }
+        };
+
+        const response2 = await fetch(`${api_url}/posts/${postId}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${getJwt()}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatePostObject)
+        }).then(response => response.json());
+        if (response2) {
+            ctx.setState(prevState => {
+                return {
+                    ...prevState,
+                    loggedInUser: {
+                        ...prevState.loggedInUser,
+                        user: {
+                            ...prevState.loggedInUser.user,
+                            [idArray]: response[idArray]
+                        }
+                    },
+                    post: {
+                        ...prevState.post,
+                        [type]: postEngagements + 1
+                    },
+                    requesting: false
+                };
+            });
+        }
+    }
+}
+
+export const deleteEngagement = async (type, postId, loggedInUser, ctx)=> {
+    const { action, idArray, postBy } = engagementMappings[type];
+
+    let userEngagementIds = ctx.state.loggedInUser.user[idArray] || [];
+
+    userEngagementIds = userEngagementIds.filter(id => id !== postId);
+
+    const updateUserObject = {
+        [action]: { disconnect: [postId] },
+        [idArray]: userEngagementIds
+    };
+
+    const response = await fetch(`${api_url}/users/${loggedInUser.id}`, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${getJwt()}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updateUserObject)
+    }).then(response => response.json());
+
+    if (response) {
+        const postEngagements = parseInt(ctx.state.post[type] || 1)
+        const updatePostObject = {
+            data: {
+                [postBy]: { disconnect: [loggedInUser.id] },
+                [type]: postEngagements - 1
+            }
+        };
+
+        const response2 = await fetch(`${api_url}/posts/${postId}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${getJwt()}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatePostObject)
+        }).then(response => response.json());
+        if (response2) {
+            ctx.setState(prevState => {
+                return {
+                    ...prevState,
+                    loggedInUser: {
+                        ...prevState.loggedInUser,
+                        user: {
+                            ...prevState.loggedInUser.user,
+                            [idArray]: response[idArray]
+                        }
+                    },
+                    post: {
+                        ...prevState.post,
+                        [type]: postEngagements - 1
+                    },
+                    requesting: false
+                }
+            })
+        }
+    }
+}
+ 
+
 
 // USER FUNCTIONS
 

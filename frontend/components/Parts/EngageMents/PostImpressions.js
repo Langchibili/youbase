@@ -3,18 +3,20 @@
 
 'use client'
 
+import { logEngagement } from "@/Functions"
 import React from "react"
 
 export default class PostImpressions extends React.Component{
    constructor(props){
       super(props)
       this.state = {
-        views: this.props.post.views
+         ...props
       }
    }
 
    componentDidMount(){
-      // on component mounting, log the impression
+      // on component mounting, log the impression // no time constraints at the moment
+      logEngagement('impressions',this.props.post.id,this.props.loggedInUser.user,this) 
    }
 
    render(){
