@@ -47,12 +47,6 @@ let apiurl, backendUrl, clienturl
  // export let clientUrl = clienturl
  
 
- 
-
-export const createUser = ()=>{
-    
-} 
-
 
 export const getFeature = async (featureId)=>{
     const feature = await fetch(api_url+'/app-features/'+featureId,{

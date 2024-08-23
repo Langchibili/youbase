@@ -2,7 +2,7 @@
 
 import LogInFirstModal from "@/components/Includes/Modals/LogInFirstModal"
 import React from "react"
-import { deleteEngagement, handleCountsDisplay, logEngagement } from "@/Functions"
+import { deleteEngagement, getUserById, handleCountsDisplay, logEngagement, logNotification } from "@/Functions"
 
 export default class LikeButton extends React.Component{
    constructor(props){
@@ -13,6 +13,16 @@ export default class LikeButton extends React.Component{
         showLogInFirstModal: false
       }
    }
+  
+ createLikeNotification = async ()=>{
+        const loggedInUserId = this.props.loggedInUser.user.id
+        const userId = this.props.user.id
+        const postId = this.props.post.id 
+        const loggedInuserDetails = await getUserById(loggedInUserId, "details")
+        const fullnames = loggedInuserDetails.details?.firstname && loggedInuserDetails.details?.lastname ? `${loggedInuserDetails.details.firstname} ${loggedInuserDetails.details.lastname}` : "A user";
+        const notificationTitle = fullnames + " likes your post"
+        logNotification(notificationTitle,loggedInUserId,[userId], "post", postId) // send notification to the user being followed
+ } 
 
  handleLike = async ()=>{
         if(!this.props.loggedInUser.status){ // means you are logged out or you have never followed anyone before
@@ -24,7 +34,7 @@ export default class LikeButton extends React.Component{
         this.setState({
             requesting: true // to show user something is happening
         })
-        logEngagement('likes',this.props.post.id,this.props.loggedInUser.user,this) 
+        logEngagement('likes',this.props.post.id,this.props.loggedInUser.user,this,this.createLikeNotification) 
    }
 
    handleUnLike = async ()=>{

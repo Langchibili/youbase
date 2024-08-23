@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_user_profile_socials",
+  "info": {
+    "displayName": "socials"
+  },
+  "options": {},
+  "attributes": {
+    "facebook": {
+      "type": "string"
+    },
+    "instagram": {
+      "type": "string"
+    },
+    "x": {
+      "type": "string"
+    },
+    "tiktok": {
+      "type": "string"
+    },
+    "youtube": {
+      "type": "string"
+    },
+    "telegram": {
+      "type": "string"
+    }
+  }
+}

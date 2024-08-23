@@ -2,9 +2,15 @@
 
 import { api_url, backEndUrl, getJwt } from "./Constants"
 
-const getPostIDFromDashedTitle = (dashed_title)=>{
+const getIDFromDashedString = (dashed_title)=>{
     const parts = dashed_title.split('-')
     return parts[parts.length - 1]
+}
+
+export const generateUniqueText = ()=>{
+    const timestamp = Date.now().toString(36); // Convert timestamp to a base-36 string
+    const randomPart = Math.random().toString(36).substr(2, 9); // Random base-36 string
+    return `untitled${timestamp}-${randomPart}`;
 }
 
 export const removeIdFromArray = (arr,id)=>{
@@ -40,34 +46,6 @@ export const handleCountsDisplay = (counts) => { // formating counts like: likes
     // If the text is within the limit, return it as is
     return text;
 }
-
-// Example usage
-const originalText = "This is a long piece of text that needs to be truncated.";
-const truncatedText = truncateText(originalText, 20);
-console.log(truncatedText); // Output: "This is a long pi..."
- 
-//   export const getImage = (image, size = "normal",use="normal") => {
-//     if (!image || !image.attributes || !image.attributes.formats) {
-//         if(use === "profilePicture") return "/default-profile.png"
-//         return "/no-cover-photo.jpg"
-//     }
-
-//     const formats = image.attributes.formats;
-//     const defaultUrl = image.attributes.url || null;
-
-//     switch (size) {
-//         case "thumbnail":
-//             return backEndUrl+formats.thumbnail?.url || defaultUrl;
-//         case "small":
-//             return backEndUrl+formats.small?.url || defaultUrl;
-//         case "medium":
-//             return backEndUrl+formats.medium?.url || defaultUrl;
-//         case "large":
-//             return backEndUrl+formats.large?.url || defaultUrl;
-//         default:
-//             return backEndUrl+defaultUrl;
-//     }
-// }
 
 export const getImage = (image, size = "normal", use = "normal") => {
     // Default URLs for profile pictures and cover photos
@@ -116,9 +94,28 @@ export const getImage = (image, size = "normal", use = "normal") => {
 
 // POSTS FUNCTIONS
 
+export const createNewPost = async (data)=>{
+    const post =  await fetch(api_url+'/posts', {
+        method: 'POST',
+        headers: {
+         'Authorization': `Bearer ${getJwt()}`,
+         'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+      })
+      .then(response => response.json())
+      .then(data => data)
+
+    if(post && post.data && post.data.attributes){
+        post.data.attributes.id = post.data.id
+        return post.data.attributes
+     }
+    return null
+}
+
 
 export const getPost = async (title)=>{
-    const postid = getPostIDFromDashedTitle(title)
+    const postid = getIDFromDashedString(title)
     const post = await fetch(api_url+'/posts/'+postid,{
       headers: {
         'Content-Type': 'application/json'
@@ -135,8 +132,25 @@ export const getPost = async (title)=>{
       return null
   }
 
+  export const getPostFromId = async (postid)=>{
+    const post = await fetch(api_url+'/posts/'+postid,{
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(response => response.json())
+        .then(data => data)
+        .catch(error => console.error(error))
+        console.log('this is a post',post)
+        
+        if(post && post.data && post.data.attributes){
+           post.data.attributes.id = post.data.id
+           return post.data.attributes
+        }
+        return null
+  }
+
   export const getPostUser = async (title)=>{
-    const postid = getPostIDFromDashedTitle(title)
+    const postid = getIDFromDashedString(title)
     const post = await fetch(api_url+'/posts/'+postid+'?populate=user,user.details',{
       headers: {
         'Content-Type': 'application/json'
@@ -154,7 +168,7 @@ export const getPost = async (title)=>{
   }
 
   export const getPostEngagement = async (title)=>{
-    const postid = getPostIDFromDashedTitle(title)
+    const postid = getIDFromDashedString(title)
     const post = await fetch(api_url+'/posts/'+postid+'?populate=engagements',{
       headers: {
         'Content-Type': 'application/json'
@@ -171,7 +185,7 @@ export const getPost = async (title)=>{
   }
 
   export const getPostComments = async (title)=>{
-    const postid = getPostIDFromDashedTitle(title)
+    const postid = getIDFromDashedString(title)
     const post = await fetch(api_url+'/posts/'+postid+'?populate=comments',{
       headers: {
         'Content-Type': 'application/json'
@@ -188,7 +202,7 @@ export const getPost = async (title)=>{
   }
 
   export const getPostMedia = async (title)=>{
-    const postid = getPostIDFromDashedTitle(title)
+    const postid = getIDFromDashedString(title)
     const post = await fetch(api_url+'/posts/'+postid+'?populate=media',{
       headers: {
         'Content-Type': 'application/json'
@@ -205,7 +219,7 @@ export const getPost = async (title)=>{
   }
 
   export const getPostfeaturedImages = async (title)=>{
-    const postid = getPostIDFromDashedTitle(title)
+    const postid = getIDFromDashedString(title)
     const post = await fetch(api_url+'/posts/'+postid+'?populate=featuredImages',{
       headers: {
         'Content-Type': 'application/json'
@@ -251,7 +265,8 @@ export const getPost = async (title)=>{
     }
 };
 
-export const logEngagement = async (type, postId, loggedInUser, ctx)=> {
+
+export const logEngagement = async (type, postId, loggedInUser, ctx,createNotification=()=>{})=> {
     const { action, idArray, postBy } = engagementMappings[type];
 
     let userEngagementIds = ctx.state.loggedInUser.user[idArray] || [];
@@ -292,6 +307,9 @@ export const logEngagement = async (type, postId, loggedInUser, ctx)=> {
             body: JSON.stringify(updatePostObject)
         }).then(response => response.json());
         if (response2) {
+            if(type === "likes" || type === "shares"){
+                createNotification() // send notification to respective parties
+            }
             ctx.setState(prevState => {
                 return {
                     ...prevState,
@@ -395,3 +413,52 @@ export const getUserById = async (id,populateString="")=>{
         }
         return null
 }
+
+
+export const getUserFromDashedId = async (dashedId,populateString)=>{
+    const userId = getIDFromDashedString(dashedId)
+    return await getUserById(userId,populateString)
+}
+
+   export const getUserFromUsername = async (username, populateString)=>{
+    const response = await fetch(api_url+'/auths?username='+username,{
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(response => response.json())
+        .then(data => data)
+        .catch(error => console.error(error))
+    if(!response.hasOwnProperty('user')){
+       return null
+    }    
+    return await getUserById(response.user.id,populateString)
+   }
+
+
+
+   // notifications logging
+
+   export const logNotification = async(title,userId,notifiedUserIds,contentType="user",contentId="")=>{
+       const notificationObject = {
+          data:{
+            title: title,
+            notifier: {connect: [parseInt(userId)]},
+            notifiedUsers: { connect: notifiedUserIds},
+            type: contentType
+          }
+       }
+       if(contentType === "post"){
+           notificationObject.data.post = {connect: [parseInt(contentId)]}  
+       }
+       // if it is a user, then the activity logger is the user of interest
+       await fetch(api_url+'/notifications', {
+        method: 'POST',
+        headers: {
+         'Authorization': `Bearer ${getJwt()}`,
+         'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(notificationObject),
+      })
+      .then(response => response.json())
+      .then(data => data)
+   }

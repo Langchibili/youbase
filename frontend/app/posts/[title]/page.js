@@ -37,5 +37,13 @@ export default function Post({ params }) {
     return <ContentNotFound />
   }
 
+  if (!post.status) {
+    return <ContentNotFound />
+  }
+  
+  if (post.status === "draft") {
+    return <ContentNotFound />
+  }
+
   return <SinglePostDisplay post={post} loggedInUser={loggedInUser} user={postUser}/>
 }

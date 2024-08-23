@@ -208,6 +208,47 @@
       "type": "component",
       "repeatable": false,
       "component": "user-profile.details"
+    },
+    "followersCount": {
+      "type": "biginteger",
+      "default": "0"
+    },
+    "postsCount": {
+      "type": "biginteger",
+      "default": "0"
+    },
+    "followingCount": {
+      "type": "biginteger",
+      "default": "0"
+    },
+    "activity": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::notification.notification",
+      "mappedBy": "notifier"
+    },
+    "notifications": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::notification.notification",
+      "mappedBy": "notifiedUsers"
+    },
+    "notificationsCount": {
+      "type": "biginteger",
+      "default": "0"
+    },
+    "seenNotifications": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::notification.notification"
+    },
+    "seenNotificationsIds": {
+      "type": "json"
+    },
+    "socials": {
+      "type": "component",
+      "repeatable": false,
+      "component": "user-profile.socials"
     }
   }
 }

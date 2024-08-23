@@ -1,5 +1,6 @@
 'use client'
 
+import CreatePostButton from "@/components/Includes/CreatePostButton/CreatePostButton"
 import React from "react"
 
 export default class MainHeader extends React.Component{
@@ -11,6 +12,7 @@ export default class MainHeader extends React.Component{
    render(){
     return (
         <header className="header clearfix">
+            <CreatePostButton action="create" {...this.props}/>
             <button type="button" id="toggleMenu" className="toggle_menu">
                 <i className="uil uil-bars" />
             </button>

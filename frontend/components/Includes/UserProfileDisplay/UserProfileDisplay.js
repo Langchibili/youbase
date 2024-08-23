@@ -1,8 +1,54 @@
 
+"use client"
+
+import MainFooter from "@/components/Parts/Footer/MainFooter";
 import MainHeader from "@/components/Parts/Header/MainHeader";
 import MainMenu from "@/components/Parts/Menus/MainMenu";
+import { getImage } from "@/Functions";
+import SocialsDisplay from "../SocialsDisplay/SocialsDisplay";
+import Link from "next/link";
+import UserFollowingButtons from "@/components/Parts/UserActionButtons/UserFollowingButtons";
 
 export default function UserProfileDisplay(props) {
+  const user = props.user
+  const thisIsMyAccount = props.thisIsMyAccount
+  console.log('in the profile page',user)
+  const fullnames = user.details?.firstname && user.details?.lastname ? `${user.details.firstname} ${user.details.lastname}` : "UnNamed User";
+  const aboutUser = user.details?.about ?? "Nothing added yet";
+  const userType = user.loggedInUserType === "default" ? "User" : user.loggedInUserType;
+  const profilePicture = getImage(props.user?.profilePicture, "thumbnail", "profilePicture");
+  const followersCount = user.followersCount ?? "0";
+  const followingCount = user.followingCount ?? "0";
+  const postsCount = user.postsCount ?? "0";
+
+  const displaySocials = () => {
+    const renderSocial = (url, type) => {
+      return <SocialsDisplay url={url && url.trim() !== "" ? url : null} type={type} key={type} />;
+    }
+
+    if (user.socials) {
+      return (
+        <>
+          {renderSocial(user.socials.facebook, "facebook")}
+          {renderSocial(user.socials.tiktok, "tiktok")}
+          {renderSocial(user.socials.instagram, "instagram")}
+          {renderSocial(user.socials.youtube, "youtube")}
+          {renderSocial(user.socials.youtube, "x")}
+        </>
+      )
+    } else {
+      return (
+        <>
+          {renderSocial(null, "facebook")}
+          {renderSocial(null, "tiktok")}
+          {renderSocial(null, "instagram")}
+          {renderSocial(null, "youtube")}
+          {renderSocial(null, "x")}
+        </>
+      );
+    }
+  }  
+
   return (
     <>
     {/* Header Start */}
@@ -20,96 +66,75 @@ export default function UserProfileDisplay(props) {
           <div className="section3125 rpt145">
             <div className="row">
               <div className="col-lg-7">
-                <a href="#" className="_216b22">
+                {thisIsMyAccount? <Link href="#" className="_216b22">
                   <span>
                     <i className="uil uil-cog" />
                   </span>
                   Setting
-                </a>
+                </Link> : <></>}
                 <div className="dp_dt150">
                   <div className="img148">
-                    <img src="images/hd_dp.jpg" alt="" />
+                    <img src={profilePicture} alt="profile pic" />
                   </div>
                   <div className="prfledt1">
-                    <h2>Joginder Singh</h2>
-                    <span>UI / UX Designer and Web Developer</span>
+                    <h2>{fullnames}</h2>
+                    <span>{userType}</span>
                   </div>
                 </div>
                 <ul className="_ttl120">
                   <li>
                     <div className="_ttl121">
-                      <div className="_ttl122">Enroll Students</div>
-                      <div className="_ttl123">612K</div>
+                      <div className="_ttl122">Followers</div>
+                      <div className="_ttl123">{followersCount}</div>
                     </div>
                   </li>
                   <li>
                     <div className="_ttl121">
-                      <div className="_ttl122">Courses</div>
-                      <div className="_ttl123">8</div>
+                      <div className="_ttl122">Posts</div>
+                      <div className="_ttl123">{postsCount}</div>
                     </div>
                   </li>
                   <li>
                     <div className="_ttl121">
-                      <div className="_ttl122">Reviews</div>
-                      <div className="_ttl123">11K</div>
+                      <div className="_ttl122">Following</div>
+                      <div className="_ttl123">{followingCount}</div>
                     </div>
                   </li>
-                  <li>
-                    <div className="_ttl121">
-                      <div className="_ttl122">Subscriptions</div>
-                      <div className="_ttl123">452K</div>
-                    </div>
-                  </li>
+                  
                 </ul>
               </div>
               <div className="col-lg-5">
-                <a href="setting.html" className="_216b12">
+                {thisIsMyAccount? <Link href="/user/manage/account" className="_216b12">
                   <span>
                     <i className="uil uil-cog" />
                   </span>
                   Setting
-                </a>
+                </Link> : <></>}
                 <div className="rgt-145">
                   <ul className="tutor_social_links">
-                    <li>
-                      <a href="#" className="fb">
-                        <i className="fab fa-facebook-f" />
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="tw">
-                        <i className="fab fa-twitter" />
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="ln">
-                        <i className="fab fa-linkedin-in" />
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="yu">
-                        <i className="fab fa-youtube" />
-                      </a>
-                    </li>
+                    {displaySocials()}
                   </ul>
                 </div>
                 <ul className="_bty149">
-                  <li>
-                    <button
-                      className="studio-link-btn btn500"
-                      onclick="window.location.href = 'instructor_dashboard.html';"
-                    >
-                      Cursus Studio
-                    </button>
-                  </li>
-                  <li>
-                    <button
+                  {thisIsMyAccount? <li>
+                    <Link
                       className="msg125 btn500"
-                      onclick="window.location.href = 'setting.html';"
+                      href="/user/manage/profile"
+                      style={{ display:'inline-block',alignContent: 'center'}}
+                    >
+                      Update Profile
+                    </Link>
+                  </li> : <UserFollowingButtons userId={props.user.id} loggedInUser={props.loggedInUser}/>}
+                  
+                    {thisIsMyAccount? <li>
+                    <Link
+                      className="msg125 btn500"
+                      href="/user/manage/content"
+                      style={{ display:'inline-block',alignContent: 'center'}}
                     >
                       Edit
-                    </button>
-                  </li>
+                    </Link>  </li>: <></>}
+                 
                 </ul>
               </div>
             </div>
@@ -147,7 +172,7 @@ export default function UserProfileDisplay(props) {
                   role="tab"
                   aria-selected="false"
                 >
-                  Courses
+                  Posts
                 </a>
                 <a
                   className="nav-item nav-link"
@@ -157,7 +182,7 @@ export default function UserProfileDisplay(props) {
                   role="tab"
                   aria-selected="false"
                 >
-                  Purchased
+                  Music
                 </a>
                 <a
                   className="nav-item nav-link"
@@ -167,9 +192,9 @@ export default function UserProfileDisplay(props) {
                   role="tab"
                   aria-selected="false"
                 >
-                  Discussion
+                  Videos
                 </a>
-                <a
+                {/* <a
                   className="nav-item nav-link active"
                   id="nav-subscriptions-tab"
                   data-toggle="tab"
@@ -177,8 +202,8 @@ export default function UserProfileDisplay(props) {
                   role="tab"
                   aria-selected="true"
                 >
-                  Subscriptions
-                </a>
+                  Followers
+                </a> */}
               </div>
             </nav>
           </div>
@@ -195,33 +220,8 @@ export default function UserProfileDisplay(props) {
               <div className="tab-pane fade" id="nav-about" role="tabpanel">
                 <div className="_htg451">
                   <div className="_htg452">
-                    <h3>About Me</h3>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Vestibulum scelerisque nibh sed ligula blandit, quis
-                      faucibus lorem pellentesque. Suspendisse pulvinar dictum
-                      pellentesque. Vestibulum at sagittis lectus, sit amet
-                      aliquam turpis. In quis elit tempus, semper justo vitae,
-                      lacinia massa. Etiam sagittis quam quis fermentum lacinia.
-                      Curabitur blandit sapien et risus congue viverra. Mauris
-                      auctor risus sit amet cursus sollicitudin. Lorem ipsum
-                      dolor sit amet, consectetur adipiscing elit. Nulla feugiat
-                      sodales massa, in viverra dolor condimentum ut. In
-                      imperdiet, justo nec volutpat blandit, tellus justo tempor
-                      quam, sed pretium nibh nunc nec mauris. Mauris vel
-                      malesuada magna. Quisque iaculis molestie purus, non
-                      luctus mauris porta id. Maecenas imperdiet tincidunt
-                      mauris vestibulum vulputate. Aenean sollicitudin pretium
-                      nibh, et sagittis risus tincidunt ac. Phasellus
-                      scelerisque rhoncus massa, ac euismod massa pharetra non.
-                      Phasellus dignissim, urna in iaculis varius, turpis libero
-                      mollis velit, sit amet euismod arcu mi ac nibh. Praesent
-                      tincidunt eros at ligula pellentesque elementum. Fusce
-                      condimentum enim a tellus egestas, sit amet rutrum elit
-                      gravida. Pellentesque in porta sapien. Fusce tristique
-                      maximus ipsum et mollis. Sed at massa ac est dapibus
-                      vulputate at eu nibh.
-                    </p>
+                    {aboutUser.length > 0? <h3>About Me</h3> : <></>}
+                    {aboutUser.length > 0? <p>{aboutUser}</p> : <></>}
                   </div>
                 </div>
               </div>
@@ -236,7 +236,7 @@ export default function UserProfileDisplay(props) {
                             href="course_detail_view.html"
                             className="fcrse_img"
                           >
-                            <img src="images/courses/img-1.jpg" alt="" />
+                            <img src="/theme/images/courses/img-1.jpg" alt="" />
                             <div className="course-overlay">
                               <div className="badge_seller">Bestseller</div>
                               <div className="crse_reviews">
@@ -297,7 +297,7 @@ export default function UserProfileDisplay(props) {
                             href="course_detail_view.html"
                             className="fcrse_img"
                           >
-                            <img src="images/courses/img-2.jpg" alt="" />
+                            <img src="/theme/images/courses/img-2.jpg" alt="" />
                             <div className="course-overlay">
                               <div className="badge_seller">Bestseller</div>
                               <div className="crse_reviews">
@@ -358,7 +358,7 @@ export default function UserProfileDisplay(props) {
                             href="course_detail_view.html"
                             className="fcrse_img"
                           >
-                            <img src="images/courses/img-20.jpg" alt="" />
+                            <img src="/theme/images/courses/img-20.jpg" alt="" />
                             <div className="course-overlay">
                               <div className="crse_reviews">
                                 <i className="uil uil-star" />
@@ -418,7 +418,7 @@ export default function UserProfileDisplay(props) {
                             href="course_detail_view.html"
                             className="fcrse_img"
                           >
-                            <img src="images/courses/img-4.jpg" alt="" />
+                            <img src="/theme/images/courses/img-4.jpg" alt="" />
                             <div className="course-overlay">
                               <div className="badge_seller">Bestseller</div>
                               <div className="crse_reviews">
@@ -479,7 +479,7 @@ export default function UserProfileDisplay(props) {
                             href="course_detail_view.html"
                             className="fcrse_img"
                           >
-                            <img src="images/courses/img-13.jpg" alt="" />
+                            <img src="/theme/images/courses/img-13.jpg" alt="" />
                             <div className="course-overlay">
                               <span className="play_btn1">
                                 <i className="uil uil-play" />
@@ -535,7 +535,7 @@ export default function UserProfileDisplay(props) {
                             href="course_detail_view.html"
                             className="fcrse_img"
                           >
-                            <img src="images/courses/img-7.jpg" alt="" />
+                            <img src="/theme/images/courses/img-7.jpg" alt="" />
                             <div className="course-overlay">
                               <div className="badge_seller">Bestseller</div>
                               <div className="crse_reviews">
@@ -596,7 +596,7 @@ export default function UserProfileDisplay(props) {
                             href="course_detail_view.html"
                             className="fcrse_img"
                           >
-                            <img src="images/courses/img-8.jpg" alt="" />
+                            <img src="/theme/images/courses/img-8.jpg" alt="" />
                             <div className="course-overlay">
                               <div className="badge_seller">Bestseller</div>
                               <div className="crse_reviews">
@@ -657,7 +657,7 @@ export default function UserProfileDisplay(props) {
                             href="course_detail_view.html"
                             className="fcrse_img"
                           >
-                            <img src="images/courses/img-16.jpg" alt="" />
+                            <img src="/theme/images/courses/img-16.jpg" alt="" />
                             <div className="course-overlay">
                               <span className="play_btn1">
                                 <i className="uil uil-play" />
@@ -719,7 +719,7 @@ export default function UserProfileDisplay(props) {
                       <div className="col-md-9">
                         <div className="fcrse_1 mt-20">
                           <a href="course_detail_view.html" className="hf_img">
-                            <img src="images/courses/img-1.jpg" alt="" />
+                            <img src="/theme/images/courses/img-1.jpg" alt="" />
                             <div className="course-overlay">
                               <div className="badge_seller">Bestseller</div>
                               <div className="crse_reviews">
@@ -776,7 +776,7 @@ export default function UserProfileDisplay(props) {
                         </div>
                         <div className="fcrse_1 mt-30">
                           <a href="course_detail_view.html" className="hf_img">
-                            <img src="images/courses/img-2.jpg" alt="" />
+                            <img src="/theme/images/courses/img-2.jpg" alt="" />
                             <div className="course-overlay">
                               <div className="badge_seller">Bestseller</div>
                               <div className="crse_reviews">
@@ -833,7 +833,7 @@ export default function UserProfileDisplay(props) {
                         </div>
                         <div className="fcrse_1 mt-30">
                           <a href="course_detail_view.html" className="hf_img">
-                            <img src="images/courses/img-3.jpg" alt="" />
+                            <img src="/theme/images/courses/img-3.jpg" alt="" />
                             <div className="course-overlay">
                               <div className="badge_seller">Bestseller</div>
                               <div className="crse_reviews">
@@ -890,7 +890,7 @@ export default function UserProfileDisplay(props) {
                         </div>
                         <div className="fcrse_1 mt-30">
                           <a href="course_detail_view.html" className="hf_img">
-                            <img src="images/courses/img-4.jpg" alt="" />
+                            <img src="/theme/images/courses/img-4.jpg" alt="" />
                             <div className="course-overlay">
                               <div className="badge_seller">Bestseller</div>
                               <div className="crse_reviews">
@@ -962,7 +962,7 @@ export default function UserProfileDisplay(props) {
                       <div className="cmmnt_1526">
                         <div className="cmnt_group">
                           <div className="img160">
-                            <img src="images/hd_dp.jpg" alt="" />
+                            <img src="/theme/images/hd_dp.jpg" alt="" />
                           </div>
                           <textarea
                             className="_cmnt001"
@@ -977,7 +977,7 @@ export default function UserProfileDisplay(props) {
                       <div className="review_all120">
                         <div className="review_item">
                           <div className="review_usr_dt">
-                            <img src="images/left-imgs/img-1.jpg" alt="" />
+                            <img src="/theme/images/left-imgs/img-1.jpg" alt="" />
                             <div className="rv1458">
                               <h4 className="tutor_name1">John Doe</h4>
                               <span className="time_145">2 hour ago</span>
@@ -1022,7 +1022,7 @@ export default function UserProfileDisplay(props) {
                         <div className="review_reply">
                           <div className="review_item">
                             <div className="review_usr_dt">
-                              <img src="images/left-imgs/img-3.jpg" alt="" />
+                              <img src="/theme/images/left-imgs/img-3.jpg" alt="" />
                               <div className="rv1458">
                                 <h4 className="tutor_name1">Rock Doe</h4>
                                 <span className="time_145">1 hour ago</span>
@@ -1068,157 +1068,7 @@ export default function UserProfileDisplay(props) {
                 id="nav-subscriptions"
                 role="tabpanel"
               >
-                <div className="_htg451">
-                  <div className="_htg452">
-                    <h3>Subscriptions</h3>
-                    <div className="row">
-                      <div className="col-lg-3 col-md-4">
-                        <div className="fcrse_1 mt-30">
-                          <div className="tutor_img">
-                            <a href="#">
-                              <img src="images/left-imgs/img-1.jpg" alt="" />
-                            </a>
-                          </div>
-                          <div className="tutor_content_dt">
-                            <div className="tutor150">
-                              <a href="#" className="tutor_name">
-                                John Doe
-                              </a>
-                              <div className="mef78" title="Verify">
-                                <i className="uil uil-check-circle" />
-                              </div>
-                            </div>
-                            <div className="tutor_cate">
-                              Wordpress &amp; Plugin Tutor
-                            </div>
-                            <ul className="tutor_social_links">
-                              <li>
-                                <button className="sbbc145">Subscribed</button>
-                              </li>
-                              <li>
-                                <button className="sbbc146">
-                                  <i className="uil uil-bell" />
-                                </button>
-                              </li>
-                            </ul>
-                            <div className="tut1250">
-                              <span className="vdt15">100K Students</span>
-                              <span className="vdt15">15 Courses</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-lg-3 col-md-4">
-                        <div className="fcrse_1 mt-30">
-                          <div className="tutor_img">
-                            <a href="#">
-                              <img src="images/left-imgs/img-2.jpg" alt="" />
-                            </a>
-                          </div>
-                          <div className="tutor_content_dt">
-                            <div className="tutor150">
-                              <a href="#" className="tutor_name">
-                                Kerstin Cable
-                              </a>
-                              <div className="mef78" title="Verify">
-                                <i className="uil uil-check-circle" />
-                              </div>
-                            </div>
-                            <div className="tutor_cate">
-                              Language Learning Coach, Writer, Online Tutor
-                            </div>
-                            <ul className="tutor_social_links">
-                              <li>
-                                <button className="sbbc145">Subscribed</button>
-                              </li>
-                              <li>
-                                <button className="sbbc146">
-                                  <i className="uil uil-bell" />
-                                </button>
-                              </li>
-                            </ul>
-                            <div className="tut1250">
-                              <span className="vdt15">14K Students</span>
-                              <span className="vdt15">11 Courses</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-lg-3 col-md-4">
-                        <div className="fcrse_1 mt-30">
-                          <div className="tutor_img">
-                            <a href="#">
-                              <img src="images/left-imgs/img-3.jpg" alt="" />
-                            </a>
-                          </div>
-                          <div className="tutor_content_dt">
-                            <div className="tutor150">
-                              <a href="#" className="tutor_name">
-                                Jose Portilla
-                              </a>
-                              <div className="mef78" title="Verify">
-                                <i className="uil uil-check-circle" />
-                              </div>
-                            </div>
-                            <div className="tutor_cate">
-                              Head of Data Science, Pierian Data Inc.
-                            </div>
-                            <ul className="tutor_social_links">
-                              <li>
-                                <button className="sbbc145">Subscribed</button>
-                              </li>
-                              <li>
-                                <button className="sbbc146">
-                                  <i className="uil uil-bell" />
-                                </button>
-                              </li>
-                            </ul>
-                            <div className="tut1250">
-                              <span className="vdt15">1M Students</span>
-                              <span className="vdt15">25 Courses</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-lg-3 col-md-4">
-                        <div className="fcrse_1 mt-30">
-                          <div className="tutor_img">
-                            <a href="#">
-                              <img src="images/left-imgs/img-3.jpg" alt="" />
-                            </a>
-                          </div>
-                          <div className="tutor_content_dt">
-                            <div className="tutor150">
-                              <a href="#" className="tutor_name">
-                                Jose Portilla
-                              </a>
-                              <div className="mef78" title="Verify">
-                                <i className="uil uil-check-circle" />
-                              </div>
-                            </div>
-                            <div className="tutor_cate">
-                              Head of Data Science, Pierian Data Inc.
-                            </div>
-                            <ul className="tutor_social_links">
-                              <li>
-                                <button className="sbbc145">Subscribed</button>
-                              </li>
-                              <li>
-                                <button className="sbbc146">
-                                  <i className="uil uil-bell" />
-                                </button>
-                              </li>
-                            </ul>
-                            <div className="tut1250">
-                              <span className="vdt15">1M Students</span>
-                              <span className="vdt15">25 Courses</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                
               </div>
             </div>
           </div>
@@ -1226,7 +1076,7 @@ export default function UserProfileDisplay(props) {
       </div>
     </div>
   </div>
-  <MainFooter />
+  <MainFooter {...props}/>
 </div>
 
 

@@ -1,7 +1,5 @@
 import MainHeader from "@/components/Parts/Header/MainHeader";
 import MainMenu from "@/components/Parts/Menus/MainMenu";
-import { checkUserLogginStatus } from "@/Constants";
-import Image from "next/image";
 
 
 export default function Home() {
@@ -2606,5 +2604,5 @@ export default function Home() {
     {/* Body End */}
   </>
   
-  );
+  )
 }

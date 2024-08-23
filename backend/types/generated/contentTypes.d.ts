@@ -806,6 +806,27 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     followingUserIds: Attribute.JSON;
     profilePicture: Attribute.Media;
     details: Attribute.Component<'user-profile.details'>;
+    followersCount: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
+    postsCount: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
+    followingCount: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
+    activity: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::notification.notification'
+    >;
+    notifications: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'manyToMany',
+      'api::notification.notification'
+    >;
+    notificationsCount: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
+    seenNotifications: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::notification.notification'
+    >;
+    seenNotificationsIds: Attribute.JSON;
+    socials: Attribute.Component<'user-profile.socials'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1084,6 +1105,54 @@ export interface ApiEngagementEngagement extends Schema.CollectionType {
   };
 }
 
+export interface ApiNotificationNotification extends Schema.CollectionType {
+  collectionName: 'notifications';
+  info: {
+    singularName: 'notification';
+    pluralName: 'notifications';
+    displayName: 'Notification';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Attribute.String;
+    type: Attribute.Enumeration<['post', 'user', 'system']> &
+      Attribute.DefaultTo<'post'>;
+    notifier: Attribute.Relation<
+      'api::notification.notification',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    notifiedUsers: Attribute.Relation<
+      'api::notification.notification',
+      'manyToMany',
+      'plugin::users-permissions.user'
+    >;
+    post: Attribute.Relation<
+      'api::notification.notification',
+      'oneToOne',
+      'api::post.post'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::notification.notification',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::notification.notification',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiPlaylistPlaylist extends Schema.CollectionType {
   collectionName: 'playlists';
   info: {
@@ -1206,6 +1275,8 @@ export interface ApiPostPost extends Schema.CollectionType {
       'manyToMany',
       'plugin::users-permissions.user'
     >;
+    status: Attribute.Enumeration<['published', 'draft']> &
+      Attribute.DefaultTo<'draft'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1239,6 +1310,7 @@ declare module '@strapi/types' {
       'api::auth.auth': ApiAuthAuth;
       'api::comment.comment': ApiCommentComment;
       'api::engagement.engagement': ApiEngagementEngagement;
+      'api::notification.notification': ApiNotificationNotification;
       'api::playlist.playlist': ApiPlaylistPlaylist;
       'api::post.post': ApiPostPost;
     }
