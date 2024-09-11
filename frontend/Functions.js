@@ -6,6 +6,12 @@ const getIDFromDashedString = (dashed_title)=>{
     const parts = dashed_title.split('-')
     return parts[parts.length - 1]
 }
+export const generateDashedString = (str)=> {
+  // Trim the string to 100 characters if it's longer
+  let trimmedStr = str.length > 100 ? str.substring(0, 100) : str;
+  // Replace spaces with dashes and return the result
+  return trimmedStr.trim().replace(/\s+/g, '-');
+}
 
 export const generateUniqueText = ()=>{
     const timestamp = Date.now().toString(36); // Convert timestamp to a base-36 string
@@ -132,8 +138,12 @@ export const getPost = async (title)=>{
       return null
   }
 
-  export const getPostFromId = async (postid)=>{
-    const post = await fetch(api_url+'/posts/'+postid,{
+  export const getPostFromId = async (postid,populateString="")=>{
+    let populate = '?populate='+populateString
+    if(populateString.length === 0){
+       populate = "" // it means populate nothing
+    }
+    const post = await fetch(api_url+'/posts/'+postid+populateString,{
         headers: {
           'Content-Type': 'application/json'
         }

@@ -1,6 +1,9 @@
 'use client'
 
 import React from "react"
+import FormFooter from "./FormParts/FormFooter"
+import FormHeader from "./FormParts/FormHeader"
+import PostDescription from "./FormParts/PostDescription"
 
 export default class TextPost extends React.Component{
    constructor(props){
@@ -13,8 +16,9 @@ export default class TextPost extends React.Component{
    render(){
     return (
         <>
-        <button onClick={this.props.changePostType}>back</button>
-        TextPost
+        <FormHeader changePostType={this.props.changePostType} title="Add Post" />
+        <PostDescription description={this.props.post.description} setPostDescriptionOrTitle={this.props.setPostDescription} descriptionPlaceholder="Write something..."/>
+        <FormFooter {...this.props}/>
         </>
     )
    }

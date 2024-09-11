@@ -53,7 +53,6 @@ export default class LikeButton extends React.Component{
    renderLikeButton = ()=>{
        const likedPostsIds = this.state.loggedInUser.user.likedPostsIds
        const postId = this.state.post.id
-    
        if(!likedPostsIds){ // meaning you have followed no-one before
          return  <li>
                     <button disabled={this.state.requesting} className="lkcm152" onClick={this.handleLike}>
@@ -78,6 +77,14 @@ export default class LikeButton extends React.Component{
                     </button>
                 </li>
        }
+       if(!likedPostsIds.includes(postId)){ // it means you are already following this user, you can only unfollow the user
+        return  <li>
+                    <button disabled={this.state.requesting} className="lkcm152" onClick={this.handleLike}>
+                        <i className="uil uil-thumbs-up" />
+                        <span>{handleCountsDisplay(this.state.post.likes)}</span>
+                    </button>
+                </li>
+      }
        return <></>
    }
 

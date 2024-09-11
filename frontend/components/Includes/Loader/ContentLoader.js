@@ -12,6 +12,7 @@ export default class ContentLoader extends React.Component{
                 <div className="bar"></div>
                 <div className="bar"></div>
             </div>
+            <p>{this.props.text}</p>
         </div>
     )
    }

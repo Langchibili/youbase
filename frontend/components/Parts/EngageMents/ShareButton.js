@@ -79,6 +79,14 @@ createShareNotification = async ()=>{
                     </button>   
                 </li>
        }
+       if(!sharedPostsIds.includes(postId)){ // it means you are already following this user, you can only unfollow the user
+        return  <li>
+                    <button disabled={this.state.requesting} className="lkcm152" onClick={this.handleShare}>
+                        <i className="uil uil-share-alt" />
+                        <span>{handleCountsDisplay(this.state.post.shares)}</span>
+                    </button>
+                </li>
+      }
        return <></>
    }
 

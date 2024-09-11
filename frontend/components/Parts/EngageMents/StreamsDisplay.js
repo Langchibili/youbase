@@ -69,6 +69,14 @@ export default class StreamsDisplay extends React.Component{
                     </button>
                 </li>
        }
+       if(!playedPostsIds.includes(postId)){ // it means you are already following this user, you can only unfollow the user
+        return  <li>
+                    <button disabled={this.state.requesting} className="lkcm152" onClick={this.handlePlay}>
+                        <i className="uil uil-music" />
+                        <span>{handleCountsDisplay(this.state.post.plays)}</span>
+                    </button>
+                </li>
+      }
        return <></>
    }
 

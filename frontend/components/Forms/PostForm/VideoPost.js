@@ -1,5 +1,6 @@
 'use client'
 
+import Uploader from "@/components/Includes/Uploader/Uploader"
 import React from "react"
 
 export default class VideoPost extends React.Component{
@@ -18,7 +19,13 @@ export default class VideoPost extends React.Component{
     return (
         <>
         <button onClick={this.props.changePostType}>back</button>
-        VideoPost
+        <Uploader
+               refId={this.props.post.id}
+               refName="api::post.post"
+               fieldName="media"
+               allowedTypes={['video/*']}
+               allowMultiple={false}
+        />
         </>
     )
    }

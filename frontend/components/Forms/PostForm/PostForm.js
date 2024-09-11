@@ -13,19 +13,27 @@ import ImagePost from "./ImagePost"
 import MusicPost from "./MusicPost"
 import VideoPost from "./VideoPost"
 import TextPost from "./TextPost"
-import { createNewPost, getPostFromId } from "@/Functions"
+import { createNewPost, generateDashedString, getPostFromId, truncateText } from "@/Functions"
 import { api_url, getJwt } from "@/Constants"
 import { FacebookTwoTone, Twitter, X, YouTube } from "@mui/icons-material"
 import EmbedPost from "./EmbedPost"
+import ContentLoader from "@/components/Includes/Loader/ContentLoader"
 
 export default class PostForm extends React.Component{
    constructor(props){
       super(props)
       this.state = {
          post: null,
+         action: this.props.action,
+         postToSaveObject: {data:{status:'draft'}},
          dummyPostCreated: this.props.action === "create"? false : true,
          userSelectedPostType: this.props.action === "create"? false : true,
-         postType: this.props.action === "create"? "text" : this.props.post.type // if you are editing, then a post prop will be supplied
+         postType: this.props.action === "create"? "text" : this.props.post.type, // if you are editing, then a post prop will be supplied
+         postSaved: false,
+         postSaving: false,
+         postSavingAsDraft: false,
+         postSavedAsDraft: false,
+         loadingPost: true 
       }
    }
    
@@ -36,6 +44,94 @@ export default class PostForm extends React.Component{
         })
    }
    
+   setPostDescription = (description)=>{
+        const post = this.state.post
+        const postToSaveObject = this.state.postToSaveObject
+        post.description = description
+        postToSaveObject.data.description = description
+        this.setState({
+            ...post,
+            postToSaveObject:postToSaveObject,
+            postSaved: false
+        })
+   }
+
+   setPostTitle = (title)=>{
+        const post = this.state.post
+        const postToSaveObject = this.state.postToSaveObject
+        post.title = title
+        postToSaveObject.data.title = title
+        postToSaveObject.data.is_title_user_writted = true
+        this.setState({
+            ...post,
+            postToSaveObject:postToSaveObject,
+            postSaved: false
+        })
+   }
+   
+   savePost = async (publish)=>{
+      const draftPostId = localStorage.getItem('draftPostId')
+      const postToSaveObject = this.state.postToSaveObject
+      const action = this.state.action
+      this.setState({
+        postSaving: true
+      })
+      if(publish){
+        console.log(postToSaveObject)
+        postToSaveObject.data.status = "published"
+        if(!postToSaveObject.data.is_title_user_writted){  // means add an automated title from the description, this is usually with texts and images
+           postToSaveObject.data.title = truncateText(postToSaveObject.data.description,100)
+        } // otherwise the title has already been addeded by user
+        if(action === "create"){ // only can be done once, never when editing
+          postToSaveObject.data.type = this.state.postType
+          if(this.state.postType === "video" || this.state.postType === "music" || this.state.postType === "embed"){
+            if(postToSaveObject.data.is_title_user_writted){
+              postToSaveObject.data.dashed_title = generateDashedString(postToSaveObject.data.title) + "-" + draftPostId
+            }
+          }
+          else{
+            postToSaveObject.data.dashed_title = generateDashedString(postToSaveObject.data.description) + "-" + draftPostId
+          }
+        }
+      }
+      else{
+        this.setState({
+          postSavingAsDraft: true
+        })
+        postToSaveObject.data.status = "draft"
+      }
+      const response =  await fetch(api_url+'/posts/'+draftPostId, {
+        method: 'PUT',
+        headers: {
+         'Authorization': `Bearer ${getJwt()}`,
+         'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(postToSaveObject)
+      })
+     .then(response => response.json())
+     .then(data => data)
+     if(response){
+         if(publish){
+          localStorage.removeItem('draftPostId') // remove the draf post id to ensure a new draft post can be created
+          this.setState({
+            postSaved: true,
+            postSavedAsDraft: false,
+            postSavingAsDraft: false,
+            postSaving: false,
+            action: "edit"
+          })
+         }
+         else{
+          this.setState({
+            postSaved: true,
+            postSavedAsDraft: true,
+            postSavingAsDraft: false,
+            postSaving: false
+          })
+         }
+     }
+   }
+ 
 
    postTypeSelector = ()=>{
     if(!this.state.dummyPostCreated){
@@ -159,24 +255,78 @@ export default class PostForm extends React.Component{
    renderForm = ()=>{
         const postType = this.state.postType
         if(postType === "image"){
-            return <ImagePost post={this.state.post} changePostType={this.changePostType} />
+            return <ImagePost post={this.state.post} 
+                              setPostDescription={this.setPostDescription}
+                              setPostTitle={this.setPostTitle}
+                              changePostType={this.changePostType} 
+                              savePost={this.savePost}
+                              action={this.state.action}
+                              postSaved={this.state.postSaved}
+                              postSavedAsDraft={this.state.postSavedAsDraft}
+                              postSaving={this.state.postSaving}
+                              postSavingAsDraft={this.state.postSavingAsDraft}
+                              />
         }
         else if(postType === "music"){
-            return <MusicPost post={this.state.post} changePostType={this.changePostType} />
+            return <MusicPost post={this.state.post} 
+                              setPostDescription={this.setPostDescription}
+                              setPostTitle={this.setPostTitle}
+                              changePostType={this.changePostType}
+                              savePost={this.savePost} 
+                              action={this.state.action}
+                              postSaved={this.state.postSaved}
+                              postSavedAsDraft={this.state.postSavedAsDraft}
+                              postSaving={this.state.postSaving}
+                              postSavingAsDraft={this.state.postSavingAsDraft}
+                              />
         }
         if(postType === "video"){
-            return <VideoPost post={this.state.post} changePostType={this.changePostType} />
+            return <VideoPost post={this.state.post} 
+                              setPostDescription={this.setPostDescription}
+                              setPostTitle={this.setPostTitle}
+                              changePostType={this.changePostType}
+                              savePost={this.savePost}
+                              action={this.state.action}
+                              postSaved={this.state.postSaved}
+                              postSavedAsDraft={this.state.postSavedAsDraft}
+                              postSaving={this.state.postSaving}
+                              postSavingAsDraft={this.state.postSavingAsDraft}
+                              />
         }
         if(postType === "text"){
-            return <TextPost post={this.state.post} changePostType={this.changePostType} />
+            return <TextPost  post={this.state.post} 
+                              setPostDescription={this.setPostDescription}
+                              setPostTitle={this.setPostTitle}
+                              changePostType={this.changePostType} 
+                              savePost={this.savePost}
+                              action={this.state.action}
+                              postSaved={this.state.postSaved}
+                              postSavedAsDraft={this.state.postSavedAsDraft}
+                              postSaving={this.state.postSaving}
+                              postSavingAsDraft={this.state.postSavingAsDraft}
+                              />
         }
-        return <EmbedPost post={this.state.post} changePostType={this.changePostType} />
+        return <EmbedPost   post={this.state.post}
+                            setPostDescription={this.setPostDescription}
+                            setPostTitle={this.setPostTitle} 
+                            changePostType={this.changePostType}
+                            savePost={this.savePost}
+                            action={this.state.action}
+                            postSaved={this.state.postSaved}
+                            postSavedAsDraft={this.state.postSavedAsDraft}
+                            postSaving={this.state.postSaving}
+                            postSavingAsDraft={this.state.postSavingAsDraft}
+                            />
    }
 
   async componentDidMount(){
-       const action = this.props.action
+       const action = this.state.action
+       console.log('what is the action here',action)
        const loggedInUserId = this.props.loggedInUser.user.id
        if(action === "create"){
+          this.setState({
+            loadingPost: false
+          })
           // create a dummy post and set it to state
           const draftPostId = localStorage.getItem('draftPostId')
           if(!draftPostId){
@@ -217,9 +367,17 @@ export default class PostForm extends React.Component{
           
        }
        else{ // you are editing them, so get the post and edit it
+           console.log('how is this not being hit')
+           this.setState({
+            loadingPost: true
+           })
+            const post = await getPostFromId(this.props.postId,"user,media,featuredImages")
+            console.log('uggh', post)
             this.setState({
+                post:post,
                 dummyPostCreated: true,
-                userSelectedPostType: true
+                userSelectedPostType: true,
+                loadingPost: false
             })
        }
    }
@@ -231,7 +389,14 @@ export default class PostForm extends React.Component{
    }
 
 
-   render(){
+   renderPostForm = ()=>{
+    // if(this.state.postSaving && !this.state.postSavingAsDraft){
+    //   return <ContentLoader text="loading..."/>
+    //  }
      return this.state.userSelectedPostType? this.renderForm() : this.postTypeSelector()
+   }
+
+   render(){
+     return <>{this.state.loadingPost? <></> : this.renderPostForm()}</>
    }
   }

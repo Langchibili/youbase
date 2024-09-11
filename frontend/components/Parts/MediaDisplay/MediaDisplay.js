@@ -16,7 +16,8 @@ export default class MediaDisplay extends React.Component{
             mediaLoaded: false
          }
     }
-    async componentDidMount(){
+
+  getPost = async ()=>{
         const post = this.props.post
         console.log(post)
         const featuredImages = await getPostfeaturedImages(post.dashed_title)
@@ -33,14 +34,18 @@ export default class MediaDisplay extends React.Component{
             })
         }
     }
+    componentDidMount(){
+       this.getPost(false)
+    }
 
+    
     featuredImagesDisplay = ()=>{
         const post = this.props.post
         if(this.state.featuredImagesLoaded){
             if(this.state.featuredImages === null) { // this means there is just text description, that's all
                 return
             }
-            return <FeaturedImages images={this.state.featuredImages}/>
+            return <FeaturedImages images={this.state.featuredImages} handleRemoveImage={this.props.handleRemoveImage} listtype={this.props.listtype || "carousel"}/>
         }
 
     }
@@ -51,7 +56,7 @@ export default class MediaDisplay extends React.Component{
             return 
         }
         if(post.type === "image") { // the media is as good as the featured images in this case
-            return <FeaturedImages images={this.state.media}/>
+            return <FeaturedImages images={this.state.media} handleRemoveImage={this.props.handleRemoveImage} listtype={this.props.listtype || "carousel"}/>
         }
         if(post.type === "music") { 
             return <MusicDisplay songs={this.state.media}/>
@@ -61,14 +66,25 @@ export default class MediaDisplay extends React.Component{
         }
         
      }
-
+    
+    titleAndDescription = ()=>{
+        if(this.props.displayType === "mediaOnly") { // means don't show the title and description
+            return <></>
+        }
+        return (
+            <>
+            {!this.props.post.is_title_user_writted? <></> : <span className="_abc123">{this.props.post.title}</span>}
+            <p>{this.props.post.description}</p>
+            </>
+        )
+    } 
+    
     render(){
         return (
             !this.state.featuredImagesLoaded? <>loading...</> : <>
             {this.featuredImagesDisplay()}
             {!this.state.mediaLoaded? <></> : this.mediaDisplay()}
-            {!this.props.post.is_title_user_writted? <></> : <span className="_abc123">{this.props.post.title}</span>}
-            <p>{this.props.post.description}</p>
+            {this.titleAndDescription()}
             </>
         )
     }

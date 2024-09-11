@@ -35,7 +35,7 @@ export default function SinglePostDisplay(props) {
               <div className="user_dt_right">
                 <ul>
                   {props.post.type === "video"? <ViewsDisplay {...props}/> : <></>}
-                  {props.post.type === "muisc"? <StreamsDisplay {...props}/> : <></>}
+                  {props.post.type === "music"? <StreamsDisplay {...props}/> : <></>}
                   <LikeButton {...props}/>
                   <ShareButton {...props}/>
                   <PostImpressions {...props}/>

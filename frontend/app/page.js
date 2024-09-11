@@ -1,15 +1,37 @@
+"use client"
+
+import ContentDisplay from "@/components/Includes/ContentDisplay/ContentDisplay";
+import ContentLoader from "@/components/Includes/Loader/ContentLoader";
 import MainHeader from "@/components/Parts/Header/MainHeader";
 import MainMenu from "@/components/Parts/Menus/MainMenu";
+import { checkUserLogginStatus } from "@/Constants";
+import { useEffect, useState } from "react";
 
 
 export default function Home() {
+  const [loggedInUser, setLoggedInUser] = useState(null)
+  const [loading, setLoading] = useState(true)
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        setLoggedInUser(await checkUserLogginStatus()) // the loggedInUser 
+      } catch (error) {
+        console.error('Error fetching logged in user:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchUser()
+  }, [])
+  if(loading) return <ContentLoader />
   return (
     <>
     {/* Header Start */}
-    <MainHeader />
+    <MainHeader loggedInUser={loggedInUser}/>
     {/* Header End */}
     {/* Left Sidebar Start */}
-    <MainMenu />
+    <MainMenu loggedInUser={loggedInUser}/>
     {/* Left Sidebar End */}
     {/* Body Start */}
     <div className="wrapper">
@@ -18,6 +40,13 @@ export default function Home() {
           <div className="row">
             <div className="col-xl-9 col-lg-8">
               <div className="section3125">
+              <ContentDisplay 
+                            loggedInUser={loggedInUser} 
+                            contentUri={`/posts?populate=user,featuredImages,media`}
+                            startPage="1"
+                            limit="1000"
+                            sort="desc"
+                            />
                 <h4 className="item_title">Live Streams</h4>
                 <a href="live_streams.html" className="see150">
                   See all
@@ -209,6 +238,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="section3125 mt-50">
+                
                 <h4 className="item_title">Featured Courses</h4>
                 <a href="#" className="see150">
                   See all
@@ -2600,6 +2630,7 @@ export default function Home() {
           </div>
         </div>
       </footer>
+      
     </div>
     {/* Body End */}
   </>

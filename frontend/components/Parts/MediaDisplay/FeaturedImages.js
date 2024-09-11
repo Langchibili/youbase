@@ -2,6 +2,9 @@
 
 import { getImage } from "@/Functions";
 import React from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
+
 
 export default class FeaturedImages extends React.Component {
     constructor(props) {
@@ -31,27 +34,53 @@ export default class FeaturedImages extends React.Component {
         }
 
         return (
-            <div className="live1452">
-                {images.length > 1 ? (
-                    <div className="carousel">
-                        {images.map(image => (
-                            <div key={image.id} className="carousel-item">
-                                {this.renderImage(image)}
-                            </div>
-                        ))}
-                        <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-                        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span className="visually-hidden">Previous</span>
-                        </button>
-                        <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-                        <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span className="visually-hidden">Next</span>
-                        </button>
+            this.props.listtype === "grid" ? (
+                <div className="image-grid">
+                  {images.map(image => (
+                    <div key={image.id} className="grid-item" id={"#"+image.id}>
+                      {this.renderImage(image)}
+                      <button className="remove-btn" onClick={() => this.props.handleRemoveImage(image.id)}>
+                        Remove
+                      </button>
                     </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="live1452">
+                {images.length > 1 ? (
+                  <div id="carouselExampleControls" className="carousel slide" data-bs-ride="carousel">
+                    <div className="carousel-inner">
+                      {images.map((image, index) => (
+                        <div key={image.id} className={`carousel-item ${index === 0 ? 'active' : ''}`}>
+                          {this.renderImage(image)}
+                        </div>
+                      ))}
+                    </div>
+                    <button
+                      className="carousel-control-prev"
+                      type="button"
+                      data-bs-target="#carouselExampleControls"
+                      data-bs-slide="prev"
+                    >
+                      <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span className="visually-hidden">Previous</span>
+                    </button>
+                    <button
+                      className="carousel-control-next"
+                      type="button"
+                      data-bs-target="#carouselExampleControls"
+                      data-bs-slide="next"
+                    >
+                      <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span className="visually-hidden">Next</span>
+                    </button>
+                  </div>
                 ) : (
-                    this.renderImage(images[0])
+                  this.renderImage(images[0])
                 )}
-            </div>
-        );
+              </div>
+              
+              )
+        )
     }
 }
