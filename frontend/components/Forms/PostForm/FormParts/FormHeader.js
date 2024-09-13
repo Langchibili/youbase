@@ -1,5 +1,7 @@
 'use client'
 
+import { ArrowBack } from "@mui/icons-material"
+import { IconButton } from "@mui/material"
 import React from "react"
 
 export default class FormHeader extends React.Component{
@@ -13,8 +15,9 @@ export default class FormHeader extends React.Component{
    render(){
     return (
         <div>
-            <button onClick={this.props.changePostType}>back</button>
+            <IconButton onClick={this.props.changePostType}><ArrowBack/></IconButton>
             <h3>{this.props.title}</h3>
+            <hr/>
         </div>
     )
    }

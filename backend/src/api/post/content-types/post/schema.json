@@ -43,7 +43,8 @@
         "text",
         "image",
         "music",
-        "video"
+        "video",
+        "embed"
       ],
       "default": "text"
     },
@@ -113,8 +114,11 @@
       "enum": [
         "local",
         "youtube",
-        "facebook"
-      ]
+        "facebook",
+        "tiktok",
+        "twitter"
+      ],
+      "default": "local"
     },
     "extra_payload": {
       "type": "json"
@@ -173,6 +177,9 @@
         "draft"
       ],
       "default": "draft"
+    },
+    "embedLink": {
+      "type": "string"
     }
   }
 }

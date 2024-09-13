@@ -31,8 +31,11 @@ export default function Uploader(props) {
       progress(e.lengthComputable, e.loaded, e.total);
     }
 
-    request.onload = function () {
+    request.onload = async function () {
       if (request.status >= 200 && request.status < 300) {
+        if(props.addMediaOnUpload){
+           props.addMediaOnUpload()
+        }
         load(request.responseText);
       } else {
         error('Upload failed');

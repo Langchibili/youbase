@@ -13,7 +13,7 @@ import ImagePost from "./ImagePost"
 import MusicPost from "./MusicPost"
 import VideoPost from "./VideoPost"
 import TextPost from "./TextPost"
-import { createNewPost, generateDashedString, getPostFromId, truncateText } from "@/Functions"
+import { createNewPost, generateDashedString, getPostFromId, getPostMedia, truncateText } from "@/Functions"
 import { api_url, getJwt } from "@/Constants"
 import { FacebookTwoTone, Twitter, X, YouTube } from "@mui/icons-material"
 import EmbedPost from "./EmbedPost"
@@ -29,46 +29,129 @@ export default class PostForm extends React.Component{
          dummyPostCreated: this.props.action === "create"? false : true,
          userSelectedPostType: this.props.action === "create"? false : true,
          postType: this.props.action === "create"? "text" : this.props.post.type, // if you are editing, then a post prop will be supplied
+         embedType: '',
          postSaved: false,
          postSaving: false,
          postSavingAsDraft: false,
          postSavedAsDraft: false,
-         loadingPost: true 
+         loadingPost: true, 
+         mediaData: null  // just for refrence within post form
       }
    }
    
    handlePostTypeSelect = (postType)=>{
-        this.setState({
-            postType: postType,
+        if(postType === "text" || postType === "image" || postType === "music" || postType === "video"){
+          this.setState({
+              postType: postType,
+              userSelectedPostType: true
+          })
+        }
+        else{
+          this.setState({
+            postType: "embed",
+            embedType: postType,
             userSelectedPostType: true
-        })
+          })
+        }
    }
    
    setPostDescription = (description)=>{
-        const post = this.state.post
+        let post = this.state.post
+        if(!post){
+          post = {}
+        }
         const postToSaveObject = this.state.postToSaveObject
         post.description = description
         postToSaveObject.data.description = description
         this.setState({
-            ...post,
+            post:post,
             postToSaveObject:postToSaveObject,
             postSaved: false
         })
    }
 
    setPostTitle = (title)=>{
-        const post = this.state.post
+        let post = this.state.post
+        if(!post){
+          post = {}
+        }
         const postToSaveObject = this.state.postToSaveObject
         post.title = title
         postToSaveObject.data.title = title
         postToSaveObject.data.is_title_user_writted = true
+        
         this.setState({
-            ...post,
+            post:post,
             postToSaveObject:postToSaveObject,
             postSaved: false
         })
    }
-   
+   setPostEmbed = (embedLink)=>{
+    let post = this.state.post
+    if(!post){
+      post = {}
+    }
+    const postToSaveObject = this.state.postToSaveObject
+    post.embedLink = embedLink
+    postToSaveObject.data.embedLink = embedLink
+    this.setState({
+        post:post,
+        postToSaveObject:postToSaveObject,
+            postSaved: false
+        })
+    }
+
+   setPostMedia = (mediaArray)=>{
+    console.log('the media array',mediaArray)
+        let media = this.state.mediaData
+        if(!mediaArray) return
+        if(!media){ 
+          media = {}
+        }
+        mediaArray.forEach((medium)=>{
+          media[medium.id] = medium
+        })
+        this.setState({
+          mediaData:media
+        })
+   } 
+
+   removePostMedia = (mediaId)=>{
+        let media = this.state.mediaData
+        delete media[mediaId] // remove the media with provided id
+        if(Object.keys(media).length === 0){
+          media = null
+        }
+        this.setState({
+          mediaData:media
+        })
+  } 
+  
+  addMediaOnUpload = async ()=>{
+        let mediaArray
+        if(this.state.action === "edit"){
+          const post = await getPostFromId(this.props.postId,"media")
+          mediaArray = post.media.data
+        }
+        else{
+          const draftPostId = localStorage.getItem('draftPostId')
+          const post = await getPostFromId(draftPostId,"media")
+          mediaArray = post.media.data
+        }
+        let media = this.state.mediaData
+        if(!mediaArray) return
+        if(!media){ 
+          media = {}
+        }
+        mediaArray.forEach((medium)=>{
+          media[medium.id] = medium
+        })
+        console.log('media in parent post', media)
+        this.setState({
+          mediaData:media
+        })
+  }
+
    savePost = async (publish)=>{
       const draftPostId = localStorage.getItem('draftPostId')
       const postToSaveObject = this.state.postToSaveObject
@@ -77,20 +160,66 @@ export default class PostForm extends React.Component{
         postSaving: true
       })
       if(publish){
-        console.log(postToSaveObject)
         postToSaveObject.data.status = "published"
         if(!postToSaveObject.data.is_title_user_writted){  // means add an automated title from the description, this is usually with texts and images
-           postToSaveObject.data.title = truncateText(postToSaveObject.data.description,100)
+          if(postToSaveObject.data.description){
+            if(postToSaveObject.data.description.length > 0){ // only add an automated title if you at least added a description
+              postToSaveObject.data.title = truncateText(postToSaveObject.data.description,100)
+            }
+          }
         } // otherwise the title has already been addeded by user
         if(action === "create"){ // only can be done once, never when editing
           postToSaveObject.data.type = this.state.postType
+          if(this.state.postType === "embed"){
+            postToSaveObject.data.mediaSource = this.state.embedType // source not local
+          }
+          
+          if(postToSaveObject.data.title !== "untitled" || postToSaveObject.data.title.length > 0){ // this is significant in case of editing
+            postToSaveObject.data.is_title_user_writted = true
+          }
+          // media type error checks
+          if(this.state.postType === "music" && !postToSaveObject.data.is_title_user_writted){
+            alert("song must have a title") 
+            this.setState({
+              postSaving: false
+            })
+            return // cannot post song without title
+          }
+          if(this.state.postType === "music" && !this.state.mediaData){
+            alert("music must have a song, upload a song") 
+            this.setState({
+              postSaving: false
+            })
+            return // cannot post song without song file
+          }
+
+          if(this.state.postType === "video" && !this.state.mediaData){
+            alert("you must upload a video") 
+            this.setState({
+              postSaving: false
+            })
+            return // cannot post song without song file
+          }
+          
           if(this.state.postType === "video" || this.state.postType === "music" || this.state.postType === "embed"){
             if(postToSaveObject.data.is_title_user_writted){
-              postToSaveObject.data.dashed_title = generateDashedString(postToSaveObject.data.title) + "-" + draftPostId
+              if(!postToSaveObject.data.title){ // in which case the dashed title is already added during drafting
+                postToSaveObject.data.title = "untitled"
+              }
+              else{
+                postToSaveObject.data.dashed_title = generateDashedString(postToSaveObject.data.title) + "-" + draftPostId
+              }
             }
           }
           else{
-            postToSaveObject.data.dashed_title = generateDashedString(postToSaveObject.data.description) + "-" + draftPostId
+            if(!postToSaveObject.data.description){
+              if(postToSaveObject.data.description.length < 0){
+                postToSaveObject.data.description = ""
+              }
+            }
+            else{
+              postToSaveObject.data.dashed_title = generateDashedString(postToSaveObject.data.description) + "-" + draftPostId
+            }
           }
         }
       }
@@ -112,7 +241,7 @@ export default class PostForm extends React.Component{
      .then(data => data)
      if(response){
          if(publish){
-          localStorage.removeItem('draftPostId') // remove the draf post id to ensure a new draft post can be created
+          localStorage.removeItem('draftPostId') // remove the draft post id to ensure a new draft post can be created
           this.setState({
             postSaved: true,
             postSavedAsDraft: false,
@@ -230,7 +359,7 @@ export default class PostForm extends React.Component{
       <Grid item xs={6}>
         <StyledIconButton
           onClick={() => {
-            this.handlePostTypeSelect("tiktok");
+            this.handlePostTypeSelect("youtube");
           }}
         >
           <YouTube style={{ fontSize: 40, color: red[500] }} />
@@ -240,7 +369,7 @@ export default class PostForm extends React.Component{
       <Grid item xs={6}>
         <StyledIconButton
           onClick={() => {
-            this.handlePostTypeSelect("tiktok");
+            this.handlePostTypeSelect("twitter");
           }}
         >
           <X style={{ fontSize: 40, color: "black" }} />
@@ -250,7 +379,6 @@ export default class PostForm extends React.Component{
     </CenteredGrid>
   );
    }
-
 
    renderForm = ()=>{
         const postType = this.state.postType
@@ -269,6 +397,9 @@ export default class PostForm extends React.Component{
         }
         else if(postType === "music"){
             return <MusicPost post={this.state.post} 
+                              setPostMedia={this.setPostMedia}
+                              addMediaOnUpload={this.addMediaOnUpload}
+                              removePostMedia={this.removePostMedia}
                               setPostDescription={this.setPostDescription}
                               setPostTitle={this.setPostTitle}
                               changePostType={this.changePostType}
@@ -282,6 +413,9 @@ export default class PostForm extends React.Component{
         }
         if(postType === "video"){
             return <VideoPost post={this.state.post} 
+                              setPostMedia={this.setPostMedia}
+                              addMediaOnUpload={this.addMediaOnUpload}
+                              removePostMedia={this.removePostMedia}
                               setPostDescription={this.setPostDescription}
                               setPostTitle={this.setPostTitle}
                               changePostType={this.changePostType}
@@ -309,6 +443,7 @@ export default class PostForm extends React.Component{
         return <EmbedPost   post={this.state.post}
                             setPostDescription={this.setPostDescription}
                             setPostTitle={this.setPostTitle} 
+                            setPostEmbed={this.setPostEmbed}
                             changePostType={this.changePostType}
                             savePost={this.savePost}
                             action={this.state.action}
@@ -316,6 +451,7 @@ export default class PostForm extends React.Component{
                             postSavedAsDraft={this.state.postSavedAsDraft}
                             postSaving={this.state.postSaving}
                             postSavingAsDraft={this.state.postSavingAsDraft}
+                            embedType={this.state.embedType}
                             />
    }
 
@@ -336,10 +472,6 @@ export default class PostForm extends React.Component{
                 }
             }
             const post = await createNewPost(data)
-            this.setState({
-                post: post,
-                dummyPostCreated: true
-            })
             // update the dashed title, such that even when published without a title, the post should be found
             const updatedDraftPostObject = {data:{ dashed_title: 'post-'+post.id}}
             const updatedDraftPost = await fetch(api_url+'/posts/'+post.id, {
@@ -353,6 +485,11 @@ export default class PostForm extends React.Component{
             .then(response => response.json())
             .then(data => data)
             if(updatedDraftPost){
+                post.dashed_title = 'post-'+post.id // coz we have updated and added the dashed titile property
+                this.setState({
+                  post: post,
+                  dummyPostCreated: true
+                })
                 localStorage.setItem('draftPostId',post.id)
             }
           }
@@ -372,7 +509,6 @@ export default class PostForm extends React.Component{
             loadingPost: true
            })
             const post = await getPostFromId(this.props.postId,"user,media,featuredImages")
-            console.log('uggh', post)
             this.setState({
                 post:post,
                 dummyPostCreated: true,
@@ -386,6 +522,10 @@ export default class PostForm extends React.Component{
        this.setState({
           userSelectedPostType: false
        })
+   }
+
+   componentWillUnmount(){
+     this.savePost(false) // save draft during the unmounting phase
    }
 
 

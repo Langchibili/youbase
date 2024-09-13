@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2024-09-10T17:49:14.935Z"
+    "x-generation-date": "2024-09-13T03:41:24.947Z"
   },
   "x-strapi-config": {
     "path": "/documentation",
@@ -1741,7 +1741,8 @@
                                         "text",
                                         "image",
                                         "music",
-                                        "video"
+                                        "video",
+                                        "embed"
                                       ]
                                     },
                                     "media": {
@@ -2100,7 +2101,9 @@
                                       "enum": [
                                         "local",
                                         "youtube",
-                                        "facebook"
+                                        "facebook",
+                                        "tiktok",
+                                        "twitter"
                                       ]
                                     },
                                     "extra_payload": {},
@@ -2318,6 +2321,9 @@
                                         "published",
                                         "draft"
                                       ]
+                                    },
+                                    "embedLink": {
+                                      "type": "string"
                                     },
                                     "createdAt": {
                                       "type": "string",
@@ -6383,7 +6389,8 @@
                           "text",
                           "image",
                           "music",
-                          "video"
+                          "video",
+                          "embed"
                         ]
                       },
                       "media": {
@@ -6742,7 +6749,9 @@
                         "enum": [
                           "local",
                           "youtube",
-                          "facebook"
+                          "facebook",
+                          "tiktok",
+                          "twitter"
                         ]
                       },
                       "extra_payload": {},
@@ -6960,6 +6969,9 @@
                           "published",
                           "draft"
                         ]
+                      },
+                      "embedLink": {
+                        "type": "string"
                       },
                       "createdAt": {
                         "type": "string",
@@ -9594,7 +9606,8 @@
                           "text",
                           "image",
                           "music",
-                          "video"
+                          "video",
+                          "embed"
                         ]
                       },
                       "media": {
@@ -9953,7 +9966,9 @@
                         "enum": [
                           "local",
                           "youtube",
-                          "facebook"
+                          "facebook",
+                          "tiktok",
+                          "twitter"
                         ]
                       },
                       "extra_payload": {},
@@ -10171,6 +10186,9 @@
                           "published",
                           "draft"
                         ]
+                      },
+                      "embedLink": {
+                        "type": "string"
                       },
                       "createdAt": {
                         "type": "string",
@@ -11960,7 +11978,8 @@
                                         "text",
                                         "image",
                                         "music",
-                                        "video"
+                                        "video",
+                                        "embed"
                                       ]
                                     },
                                     "media": {
@@ -12319,7 +12338,9 @@
                                       "enum": [
                                         "local",
                                         "youtube",
-                                        "facebook"
+                                        "facebook",
+                                        "tiktok",
+                                        "twitter"
                                       ]
                                     },
                                     "extra_payload": {},
@@ -12537,6 +12558,9 @@
                                         "published",
                                         "draft"
                                       ]
+                                    },
+                                    "embedLink": {
+                                      "type": "string"
                                     },
                                     "createdAt": {
                                       "type": "string",
@@ -15599,7 +15623,8 @@
                             "text",
                             "image",
                             "music",
-                            "video"
+                            "video",
+                            "embed"
                           ]
                         },
                         "media": {
@@ -15958,7 +15983,9 @@
                           "enum": [
                             "local",
                             "youtube",
-                            "facebook"
+                            "facebook",
+                            "tiktok",
+                            "twitter"
                           ]
                         },
                         "extra_payload": {},
@@ -16177,6 +16204,9 @@
                             "draft"
                           ]
                         },
+                        "embedLink": {
+                          "type": "string"
+                        },
                         "createdAt": {
                           "type": "string",
                           "format": "date-time"
@@ -16360,7 +16390,8 @@
                   "text",
                   "image",
                   "music",
-                  "video"
+                  "video",
+                  "embed"
                 ]
               },
               "media": {
@@ -16451,7 +16482,9 @@
                 "enum": [
                   "local",
                   "youtube",
-                  "facebook"
+                  "facebook",
+                  "tiktok",
+                  "twitter"
                 ]
               },
               "extra_payload": {},
@@ -16556,6 +16589,9 @@
                   "published",
                   "draft"
                 ]
+              },
+              "embedLink": {
+                "type": "string"
               }
             }
           }
@@ -18115,7 +18151,8 @@
                                         "text",
                                         "image",
                                         "music",
-                                        "video"
+                                        "video",
+                                        "embed"
                                       ]
                                     },
                                     "media": {
@@ -18474,7 +18511,9 @@
                                       "enum": [
                                         "local",
                                         "youtube",
-                                        "facebook"
+                                        "facebook",
+                                        "tiktok",
+                                        "twitter"
                                       ]
                                     },
                                     "extra_payload": {},
@@ -18692,6 +18731,9 @@
                                         "published",
                                         "draft"
                                       ]
+                                    },
+                                    "embedLink": {
+                                      "type": "string"
                                     },
                                     "createdAt": {
                                       "type": "string",
@@ -19445,7 +19487,8 @@
               "text",
               "image",
               "music",
-              "video"
+              "video",
+              "embed"
             ]
           },
           "media": {
@@ -19804,7 +19847,9 @@
             "enum": [
               "local",
               "youtube",
-              "facebook"
+              "facebook",
+              "tiktok",
+              "twitter"
             ]
           },
           "extra_payload": {},
@@ -19945,6 +19990,9 @@
               "published",
               "draft"
             ]
+          },
+          "embedLink": {
+            "type": "string"
           },
           "createdAt": {
             "type": "string",

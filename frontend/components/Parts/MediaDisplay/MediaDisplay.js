@@ -5,6 +5,7 @@ import React from "react";
 import MusicDisplay from "./MusicDisplay";
 import VideosDisplay from "./VideosDisplay";
 import FeaturedImages from "./FeaturedImages";
+import EmbedDisplay from "@/components/Includes/EmbedDisplay/EmbedDisplay";
 
 export default class MediaDisplay extends React.Component{
     constructor(props){
@@ -25,7 +26,7 @@ export default class MediaDisplay extends React.Component{
             featuredImages: featuredImages,
             featuredImagesLoaded: true
         })
-        if(post.type === "video" || post.type === "music" || post.type === "image"){ // only bother to get media if post is of this type
+        if(post.type === "video" || post.type === "music" || post.type === "image"  || post.type === "embed"){ // only bother to get media if post is of this type
             const media = await getPostMedia(post.dashed_title)
             this.setState({
                 media: media,
@@ -63,6 +64,9 @@ export default class MediaDisplay extends React.Component{
         }
         if(post.type === "video") { 
             return <VideosDisplay videos={this.state.media}/>
+        }
+        if(post.type === "embed") { 
+            return <EmbedDisplay url={this.props.post.embedLink}/>
         }
         
      }

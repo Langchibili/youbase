@@ -2,6 +2,28 @@
 
 import { api_url, backEndUrl, getJwt } from "./Constants"
 
+export const createYouTubeEmbedLink = (url)=>{
+  // Regular expression to match different YouTube URL formats
+  const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/|live\/|playlist\?v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+
+  // Extract the VIDEO_ID from the URL
+  const match = url.match(regex);
+
+  // If there's a match, return the embed URL, otherwise return null or handle invalid URLs
+  if (match && match[1]) {
+    const videoId = match[1];
+    return `https://www.youtube.com/embed/${videoId}`;
+  } else {
+    return null; // Or handle invalid YouTube URLs as needed
+  }
+}
+
+// Example usage:
+const youtubeUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+const embedLink = createYouTubeEmbedLink(youtubeUrl);
+console.log(embedLink); // Outputs: https://www.youtube.com/embed/dQw4w9WgXcQ
+
+
 const getIDFromDashedString = (dashed_title)=>{
     const parts = dashed_title.split('-')
     return parts[parts.length - 1]
@@ -143,7 +165,7 @@ export const getPost = async (title)=>{
     if(populateString.length === 0){
        populate = "" // it means populate nothing
     }
-    const post = await fetch(api_url+'/posts/'+postid+populateString,{
+    const post = await fetch(api_url+'/posts/'+postid+populate,{
         headers: {
           'Content-Type': 'application/json'
         }
@@ -151,7 +173,7 @@ export const getPost = async (title)=>{
         .then(data => data)
         .catch(error => console.error(error))
         console.log('this is a post',post)
-        
+         
         if(post && post.data && post.data.attributes){
            post.data.attributes.id = post.data.id
            return post.data.attributes
@@ -245,6 +267,26 @@ export const getPost = async (title)=>{
      return null
   }
 
+ // uploads stuff
+ 
+
+
+ export const getMediaFile = async (uploadId)=>{
+  const postid = getIDFromDashedString(title)
+  const post = await fetch(api_url+'/posts/'+postid+'?populate=media',{
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }).then(response => response.json())
+    .then(data => data)
+    .catch(error => console.error(error))
+    console.log('this is a post with media',post)
+    
+    if(post && post.data && post.data.attributes && post.data.attributes.media){
+       return post.data.attributes.media.data
+    }
+    return null
+}
  //  logging and deleting an engagement to a post, like a like or view 
 
   const engagementMappings = {

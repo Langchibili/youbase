@@ -1,15 +1,17 @@
 import AvatarWithPostDate from "@/components/Parts/UserDisplay/AvatarWithPostDate";
 import PostMoreBtn from "../PostMoreBtn/PostMoreBtn";
 import Link from "next/link";
+import EmbedDisplay from "../EmbedDisplay/EmbedDisplay";
 
 export default function EmbedPostMedium(props) {
     return (
       <div style={{backgroundColor:"white",borderRadius:'5px',marginBottom:'10px'}}>
         <div className="review_item" style={{ position: 'relative'}}>
           <AvatarWithPostDate {...props} />
+          <EmbedDisplay url={props.post.embedLink}/>
           <Link href={"/posts/"+props.post.dashed_title}>
           <p className="rvds10" style={{ marginTop: '10px' }}>
-            Nam gravida elit a velit rutrum, eget dapibus ex elementum. Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce lacinia, nunc sit amet tincidunt venenatis.
+           {props.post.description}
           </p>
           </Link>
           {props.postEngagementsDisplay(props.post)}

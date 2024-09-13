@@ -21,7 +21,7 @@ export default function CreatePostButton(props) {
     setOpen(true);
   };
 
-  const handleClose = () => {
+  const handleClose = (e) => {
     setOpen(false);
   };
 

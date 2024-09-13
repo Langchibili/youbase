@@ -1219,7 +1219,7 @@ export interface ApiPostPost extends Schema.CollectionType {
       'oneToMany',
       'api::comment.comment'
     >;
-    type: Attribute.Enumeration<['text', 'image', 'music', 'video']> &
+    type: Attribute.Enumeration<['text', 'image', 'music', 'video', 'embed']> &
       Attribute.DefaultTo<'text'>;
     media: Attribute.Media;
     mediaType: Attribute.Enumeration<['single', 'multiple']> &
@@ -1240,7 +1240,10 @@ export interface ApiPostPost extends Schema.CollectionType {
     plays: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
     shares: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
     userId: Attribute.String;
-    mediaSource: Attribute.Enumeration<['local', 'youtube', 'facebook']>;
+    mediaSource: Attribute.Enumeration<
+      ['local', 'youtube', 'facebook', 'tiktok', 'twitter']
+    > &
+      Attribute.DefaultTo<'local'>;
     extra_payload: Attribute.JSON;
     playlists: Attribute.Relation<
       'api::post.post',
@@ -1277,6 +1280,7 @@ export interface ApiPostPost extends Schema.CollectionType {
     >;
     status: Attribute.Enumeration<['published', 'draft']> &
       Attribute.DefaultTo<'draft'>;
+    embedLink: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

@@ -41,7 +41,7 @@ export default class ImagePost extends React.Component{
     return (
         <>
          <FormHeader changePostType={this.props.changePostType} title="Add Image" />
-         <PostDescription description={this.props.post.description} setPostDescriptionOrTitle={this.props.setPostDescription} descriptionPlaceholder="Write something..."/>
+        
          <Uploader 
                displayType="circular"
                refId={this.props.post.id}
@@ -51,6 +51,9 @@ export default class ImagePost extends React.Component{
                allowMultiple={false}
          />
         <MediaDisplay post={this.props.post} displayType="mediaOnly" refleshImages={this.state.refleshImages} handleRemoveImage={this.handleRemoveImage} listtype="grid"/>
+        <h4>optional</h4>
+        <hr/>
+        <PostDescription description={this.props.post.description} setPostDescriptionOrTitle={this.props.setPostDescription} descriptionPlaceholder="Write something..."/>
         <FormFooter {...this.props}/>
         </>
     )

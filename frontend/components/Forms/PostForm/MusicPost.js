@@ -7,12 +7,16 @@ import FormHeader from "./FormParts/FormHeader"
 import PostDescription from "./FormParts/PostDescription"
 import MediaDisplay from "@/components/Parts/MediaDisplay/MediaDisplay"
 import PostTitle from "./FormParts/PostTitle"
+import { api_url, getJwt } from "@/Constants"
+import { getPostFromId, getPostMedia } from "@/Functions"
+import SongFileDisplay from "@/components/Includes/SongFileDisplay/SongFileDisplay"
 
 export default class MusicPost extends React.Component{
    constructor(props){
       super(props)
       this.state = {
-         ...props
+         ...props,
+         media: null
       }
    }
 
@@ -31,21 +35,59 @@ export default class MusicPost extends React.Component{
        }
   }
 
+   async componentDidMount(){
+         const post = await getPostFromId(this.props.post.id,"media")
+         console.log(post)
+         this.props.setPostMedia(post.media.data)
+         this.setState({
+            media:post.media.data
+         },()=>{
+            console.log(this.state.media)
+         })
+   }
+
+   
+   handleRemoveMedia = async (uploadid)=>{
+      const removed = await fetch(api_url+'/upload/files/'+uploadid,{
+         method: 'DELETE',
+         headers: {
+           'Authorization': `Bearer ${getJwt()}`,
+           'Content-Type': 'application/json'
+         }
+       }).then(response => response.json())
+         .then(data => data)
+         .catch(error => console.error(error))
+        if(removed){
+          this.props.removePostMedia(uploadid)
+          document.getElementById("#media-"+uploadid).style.display = "none"
+        }
+   }
+   
+   renderMedia = ()=>{
+      if(!this.state.media){
+         return <></>
+      }
+      return this.state.media.map((media)=> <SongFileDisplay file={media} handleRemoveMedia={this.handleRemoveMedia}/>)
+   }
+   
    render(){
-      console.log('in the image post edit', this.props)
     return (
         <>
        <FormHeader changePostType={this.props.changePostType} title="Add Music" />
        {/* description is title here, because we are using the same input as description */}
        <PostTitle description={this.props.post.title === "untitled"? "" : this.props.post.title} setPostDescriptionOrTitle={this.props.setPostTitle} descriptionPlaceholder="Title" bordered="yes"/>
-       <h3>Add Song</h3>
+       <h3>Upload Song *</h3>
        <Uploader
             refId={this.props.post.id}
             refName="api::post.post"
             fieldName="media"
             allowedTypes={['audio/*']}
             allowMultiple={false}
+            addMediaOnUpload={this.props.addMediaOnUpload}
         />
+        {this.renderMedia()}
+        <h4>optional</h4>
+        <hr/>
         <h3>Music Art</h3>
         <Uploader 
                displayType="circular"
@@ -56,6 +98,7 @@ export default class MusicPost extends React.Component{
                allowMultiple={false}
          />
         <MediaDisplay post={this.props.post} displayType="mediaOnly" refleshImages={this.state.refleshImages} handleRemoveImage={this.handleRemoveImage} listtype="grid"/>
+        
         <PostDescription description={this.props.post.description} setPostDescriptionOrTitle={this.props.setPostDescription} descriptionPlaceholder="Add Song Description" bordered="yes"/>
         <FormFooter {...this.props}/>
       
