@@ -4,28 +4,31 @@ export const youtubeApiKey = 'AIzaSyCpjeIW-IKAUQSZuc5bb0Ncx1ksxEB5J_8'
 
 
  /*localhost: */ export const environment = 'local'
- ///*liveserver: */ export const environment = 'live'
- // /*testserver: */ export const environment = 'test'
+ ///*liveserver1: */ export const environment = 'live'
+ ///*liveserver2: */ export const environment = 'live2'
+ ///*testserver: */ export const environment = 'test' // mvp will run here
+
 // export the client side stuff
 
 export const getJwt = getJWT
 
 let apiurl, backendUrl, clienturl
-// if(environment === 'local'){
-//   /*localhost: */  apiurl = 'http://192.168.27.143:1339/api'
-// }
+
  if(environment === 'local'){
    /*localhost: */  apiurl = 'http://localhost:1339/api'
  }
  else if(environment === 'live'){
-   /*liveserver: */ apiurl = 'https://api.youbase.app/api' // for production's sake
+   /*liveserver1: */ apiurl = 'https://api.youbase.com/api' // for production's sake
  }
- else if(environment === 'test'){
-  /*testserver: */  apiurl = 'https://testapi.youbase.app/api' // the api to be used when deployed to the test site
+ else if(environment === 'live2'){
+  /*liveserver2: */ apiurl = 'https://api.youbase.app/api' // for production's sake
  }
- else{
-    /*liveserver: */ apiurl = 'https://api.youbase.app/api' // for production's sake
+ else{ // if environment is default, it means it's a test server
+  /*testserver: */  apiurl = 'https://youbaseapi.driverbase.app/api' // the api to be used when deployed to the test site
  }
+// if(environment === 'local'){ // for testing on the phone
+//   /*localhost: */  apiurl = 'http://192.168.27.143:1339/api'
+// }
 
 
  // for removing the api part when handling /uploads and the like
@@ -33,18 +36,33 @@ let apiurl, backendUrl, clienturl
   /*localhost: */  backendUrl = apiurl.replace('http://localhost:1339/api','http://localhost:1339')
  }
  else if(environment === 'live'){
+  /*liveserver: */ backendUrl =  apiurl.replace('youbase.com/api','youbase.com') // for production's sake
+ }
+ else if(environment === 'live2'){
   /*liveserver: */ backendUrl =  apiurl.replace('youbase.app/api','youbase.app') // for production's sake
  }
- else if(environment === 'test'){
-  /*testserver: */ backendUrl =  apiurl.replace('testapi.youbase.app/api','testapi.youbase.app') // the api to be used when deployed to the test site
+ else{ // if environment is default, it means it's a test server
+  /*testserver: */ backendUrl =  apiurl.replace('youbaseapi.driverbase.app/api','youbaseapi.driverbase.app') // the api to be used when deployed to the test site
  }
- else{
-  /*liveserver: */ backendUrl =  apiurl.replace('youbase.app/api','youbase.app') // for production's sake
- }
+ 
+
+if(environment === 'local'){
+  /*localhost: */  clienturl = 'http://localhost:3002'
+}
+else if(environment === 'live'){
+  /*liveserver1: */ clienturl = 'https://youbase.com' // for production's sake
+}
+else if(environment === 'live2'){
+   /*liveserver2: */ clienturl = 'https://youbase.app' // for production's sake
+}
+else{ // if environment is default, it means it's a test server
+  /*testserver: */  clienturl = 'https://youbaseapi.driverbase.app' // the api to be used when deployed to the test site
+}
+ 
 
  export let api_url = apiurl
  export let backEndUrl = backendUrl
- // export let clientUrl = clienturl
+ export let clientUrl = clienturl
  
 
 
@@ -150,6 +168,8 @@ const updateDefaultUserAccountToLogIn = async (username,password)=>{
   const response = await getUserAccountWithUsernameAndPassword(username,password)
   let returnObject = response
   if(response.hasOwnProperty('jwt')){
+    localStorage.removeItem('jwt') // remove whatever existing jwt
+    saveJwt(response.jwt) // save new jwt
     const userUpdated = await fetch(api_url+'/users/'+response.user.id, {
       method: 'PUT',
       headers: {

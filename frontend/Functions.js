@@ -1,6 +1,7 @@
 // UTILITY FUNCTIONS
 
 import { api_url, backEndUrl, getJwt } from "./Constants"
+import { getJWT } from "./secrets";
 
 export const createYouTubeEmbedLink = (url)=>{
   // Regular expression to match different YouTube URL formats
@@ -133,7 +134,6 @@ export const createNewPost = async (data)=>{
       })
       .then(response => response.json())
       .then(data => data)
-
     if(post && post.data && post.data.attributes){
         post.data.attributes.id = post.data.id
         return post.data.attributes
@@ -272,8 +272,7 @@ export const getPost = async (title)=>{
 
 
  export const getMediaFile = async (uploadId)=>{
-  const postid = getIDFromDashedString(title)
-  const post = await fetch(api_url+'/posts/'+postid+'?populate=media',{
+  const upload = await fetch(api_url+'/upload/files/'+uploadId,{
     headers: {
       'Content-Type': 'application/json'
     }
@@ -282,8 +281,8 @@ export const getPost = async (title)=>{
     .catch(error => console.error(error))
     console.log('this is a post with media',post)
     
-    if(post && post.data && post.data.attributes && post.data.attributes.media){
-       return post.data.attributes.media.data
+    if(upload && upload.data && upload.data.attributes && upload.data.attributes.media){
+       return upload.data.attributes.media.data
     }
     return null
 }

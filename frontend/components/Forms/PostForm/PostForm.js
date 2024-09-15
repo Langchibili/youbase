@@ -456,6 +456,7 @@ export default class PostForm extends React.Component{
    }
 
   async componentDidMount(){
+       console.log(this.props.loggedInUser)
        const action = this.state.action
        console.log('what is the action here',action)
        const loggedInUserId = this.props.loggedInUser.user.id
@@ -472,6 +473,10 @@ export default class PostForm extends React.Component{
                 }
             }
             const post = await createNewPost(data)
+            console.log('hit 2',post)
+            if(post){
+              localStorage.setItem('draftPostId',post.id) // save new draft post id to localstorage
+            }
             // update the dashed title, such that even when published without a title, the post should be found
             const updatedDraftPostObject = {data:{ dashed_title: 'post-'+post.id}}
             const updatedDraftPost = await fetch(api_url+'/posts/'+post.id, {
@@ -490,7 +495,6 @@ export default class PostForm extends React.Component{
                   post: post,
                   dummyPostCreated: true
                 })
-                localStorage.setItem('draftPostId',post.id)
             }
           }
           else{

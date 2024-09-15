@@ -63,7 +63,7 @@ export default class MediaDisplay extends React.Component{
             return <MusicDisplay songs={this.state.media}/>
         }
         if(post.type === "video") { 
-            return <VideosDisplay videos={this.state.media}/>
+            return <VideosDisplay postid={this.props.post.id} videos={this.state.media}/>
         }
         if(post.type === "embed") { 
             return <EmbedDisplay url={this.props.post.embedLink}/>

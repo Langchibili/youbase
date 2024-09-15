@@ -3,8 +3,8 @@ module.exports = () => ({
       config: {
         jwt: {
           expiresIn: '100y',
-        },
-      },
+        }
+      }
     },
     // 'strapi-plugin-fcm': {
     //   enabled: true,
@@ -30,7 +30,7 @@ module.exports = () => ({
             medium: 750,
             small: 500,
             xsmall: 64
-          },
-        },
-      },      
-});
+          }
+        }
+      }   
+})
