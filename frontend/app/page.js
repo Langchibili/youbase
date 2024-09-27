@@ -2,10 +2,11 @@
 
 import ContentDisplay from "@/components/Includes/ContentDisplay/ContentDisplay";
 import ContentLoader from "@/components/Includes/Loader/ContentLoader";
+import MainFooter from "@/components/Parts/Footer/MainFooter";
 import MainHeader from "@/components/Parts/Header/MainHeader";
 import MainMenu from "@/components/Parts/Menus/MainMenu";
 import { checkUserLogginStatus } from "@/Constants";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 
 export default function Home() {
@@ -15,15 +16,19 @@ export default function Home() {
     const fetchUser = async () => {
       try {
         setLoggedInUser(await checkUserLogginStatus()) // the loggedInUser 
+        setLoading(true)
       } catch (error) {
         console.error('Error fetching logged in user:', error)
       } finally {
         setLoading(false)
       }
     }
-
+    if(!loading) { 
+      return 
+    }
     fetchUser()
-  }, [])
+  }, [loading])
+
   if(loading) return <ContentLoader />
   return (
     <>
@@ -39,15 +44,7 @@ export default function Home() {
         <div className="container-fluid">
           <div className="row">
             <div className="col-xl-9 col-lg-8">
-              <div className="section3125">
-              <ContentDisplay 
-                            loggedInUser={loggedInUser} 
-                            contentUri={`/posts?populate=user,featuredImages,media`}
-                            startPage="1"
-                            limit="1000"
-                            sort="desc"
-                            />
-                <h4 className="item_title">Live Streams</h4>
+              <div className="section3125">      
                 <a href="live_streams.html" className="see150">
                   See all
                 </a>
@@ -237,6 +234,50 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+              <div className="section3125">
+              <h4 className="item_title">Reels</h4>  
+              {loading? <></> : <ContentDisplay 
+                            contentToView = "portrait-videos"
+                            loggedInUser={loggedInUser} 
+                            contentUri={`/posts?populate=user,featuredImages,media`}
+                            startPage="1"
+                            limit="10"
+                            sort="desc"
+                            displayPortraits={true}
+                            />}
+              </div>
+              <div className="section3125 mt-30">
+                <div className="la5lo1">
+                  <h4 className="item_title">Captures</h4>
+                  {loading? <></> : <ContentDisplay 
+                            contentToView = "portrait-images"
+                            loggedInUser={loggedInUser} 
+                            contentUri={`/posts?populate=user,featuredImages,media`}
+                            startPage="1"
+                            limit="10"
+                            sort="desc"
+                            displayPortraits={true}
+                            portraitsContentType = "video"
+                            />}
+                  </div>
+              </div>
+              <h4 className="item_title">Explore</h4>
+              <div className="section3125 mt-30">
+                  {loading? <></> : <ContentDisplay 
+                            contentToView = "all"
+                            loggedInUser={loggedInUser} 
+                            contentUri={`/posts?populate=user,featuredImages,media`}
+                            startPage="1"
+                            limit="10"
+                            sort="desc"
+                            displayPortraits={false}
+                            portraitsContentType = "video"
+                            />}           
+                <a href="live_streams.html" className="see150">
+                  See all
+                </a>
+              </div>
+              
               <div className="section3125 mt-50">
                 
                 <h4 className="item_title">Featured Courses</h4>
@@ -2159,477 +2200,14 @@ export default function Home() {
             </div>
             <div className="col-xl-12 col-lg-12">
               <div className="section3125 mt-30">
-                <h4 className="item_title">What Our Student Have Today</h4>
-                <div className="la5lo1">
-                  <div className="owl-carousel Student_says owl-theme owl-loaded owl-drag">
-                    <div className="owl-stage-outer">
-                      <div
-                        className="owl-stage"
-                        style={{
-                          transform: "translate3d(0px, 0px, 0px)",
-                          transition: "all",
-                          width: 1965
-                        }}
-                      >
-                        <div
-                          className="owl-item active"
-                          style={{ width: "362.933px", marginRight: 30 }}
-                        >
-                          <div className="item">
-                            <div className="fcrse_4 mb-20">
-                              <div className="say_content">
-                                <p>
-                                  "Donec ac ex eu arcu euismod feugiat. In
-                                  venenatis bibendum nisi, in placerat eros
-                                  ultricies vitae. Praesent pellentesque blandit
-                                  scelerisque. Suspendisse potenti."
-                                </p>
-                              </div>
-                              <div className="st_group">
-                                <div className="stud_img">
-                                  <img src="/theme/images/left-imgs/img-4.jpg" alt="" />
-                                </div>
-                                <h4>Jassica William</h4>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          className="owl-item active"
-                          style={{ width: "362.933px", marginRight: 30 }}
-                        >
-                          <div className="item">
-                            <div className="fcrse_4 mb-20">
-                              <div className="say_content">
-                                <p>
-                                  "Cras id enim lectus. Fusce at arcu tincidunt,
-                                  iaculis libero quis, vulputate mauris. Morbi
-                                  facilisis vitae ligula id aliquam. Nunc
-                                  consectetur malesuada bibendum."
-                                </p>
-                              </div>
-                              <div className="st_group">
-                                <div className="stud_img">
-                                  <img src="/theme/images/left-imgs/img-1.jpg" alt="" />
-                                </div>
-                                <h4>Rock Smith</h4>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          className="owl-item active"
-                          style={{ width: "362.933px", marginRight: 30 }}
-                        >
-                          <div className="item">
-                            <div className="fcrse_4 mb-20">
-                              <div className="say_content">
-                                <p>
-                                  "Lorem ipsum dolor sit amet, consectetur
-                                  adipiscing elit. Class aptent taciti sociosqu ad
-                                  litora torquent per conubia nostra, per inceptos
-                                  himenaeos eros ac, sagittis orci."
-                                </p>
-                              </div>
-                              <div className="st_group">
-                                <div className="stud_img">
-                                  <img src="/theme/images/left-imgs/img-7.jpg" alt="" />
-                                </div>
-                                <h4>Luoci Marchant</h4>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          className="owl-item active"
-                          style={{ width: "362.933px", marginRight: 30 }}
-                        >
-                          <div className="item">
-                            <div className="fcrse_4 mb-20">
-                              <div className="say_content">
-                                <p>
-                                  "Nulla bibendum lectus pharetra, tempus eros ac,
-                                  sagittis orci. Suspendisse posuere dolor neque,
-                                  at finibus mauris lobortis in. Pellentesque
-                                  vitae laoreet tortor."
-                                </p>
-                              </div>
-                              <div className="st_group">
-                                <div className="stud_img">
-                                  <img src="/theme/images/left-imgs/img-6.jpg" alt="" />
-                                </div>
-                                <h4>Poonam Sharma</h4>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          className="owl-item"
-                          style={{ width: "362.933px", marginRight: 30 }}
-                        >
-                          <div className="item">
-                            <div className="fcrse_4 mb-20">
-                              <div className="say_content">
-                                <p>
-                                  "Curabitur placerat justo ac mauris condimentum
-                                  ultricies. In magna tellus, eleifend et volutpat
-                                  id, sagittis vitae est. Pellentesque vitae
-                                  laoreet tortor."
-                                </p>
-                              </div>
-                              <div className="st_group">
-                                <div className="stud_img">
-                                  <img src="/theme/images/left-imgs/img-3.jpg" alt="" />
-                                </div>
-                                <h4>Davinder Singh</h4>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="owl-nav">
-                      <button
-                        type="button"
-                        role="presentation"
-                        className="owl-prev disabled"
-                      >
-                        <i className="uil uil-angle-left" />
-                      </button>
-                      <button
-                        type="button"
-                        role="presentation"
-                        className="owl-next"
-                      >
-                        <i className="uil uil-angle-right" />
-                      </button>
-                    </div>
-                    <div className="owl-dots disabled" />
-                  </div>
-                </div>
+                <h4 className="item_title">Captures</h4>
+                <ContentDisplay contentToView="portrait-images"/>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <footer className="footer mt-30">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-3 col-md-3 col-sm-6">
-              <div className="item_f1">
-                <a href="about_us.html">About</a>
-                <a href="our_blog.html">Blog</a>
-                <a href="career.html">Careers</a>
-                <a href="press.html">Press</a>
-              </div>
-            </div>
-            <div className="col-lg-3 col-md-3 col-sm-6">
-              <div className="item_f1">
-                <a href="help.html">Help</a>
-                <a href="coming_soon.html">Advertise</a>
-                <a href="coming_soon.html">Developers</a>
-                <a href="contact_us.html">Contact Us</a>
-              </div>
-            </div>
-            <div className="col-lg-3 col-md-3 col-sm-6">
-              <div className="item_f1">
-                <a href="terms_of_use.html">Copyright Policy</a>
-                <a href="terms_of_use.html">Terms</a>
-                <a href="terms_of_use.html">Privacy Policy</a>
-                <a href="sitemap.html">Sitemap</a>
-              </div>
-            </div>
-            <div className="col-lg-3 col-md-3 col-sm-6">
-              <div className="item_f3">
-                <a href="#" className="btn1542">
-                  Teach on Cursus
-                </a>
-                <div className="lng_btn">
-                  <div
-                    className="ui language bottom right pointing dropdown floating"
-                    id="languages"
-                    data-content="Select Language"
-                    tabIndex={0}
-                  >
-                    <a href="#">
-                      <i className="uil uil-globe lft" />
-                      Language
-                      <i className="uil uil-angle-down rgt" />
-                    </a>
-                    <div className="menu" tabIndex={-1}>
-                      <div className="scrolling menu">
-                        <div
-                          className="item"
-                          data-percent={100}
-                          data-value="en"
-                          data-english="English"
-                        >
-                          <span className="description">English</span>
-                          English
-                        </div>
-                        <div
-                          className="item"
-                          data-percent={94}
-                          data-value="da"
-                          data-english="Danish"
-                        >
-                          <span className="description">dansk</span>
-                          Danish
-                        </div>
-                        <div
-                          className="item"
-                          data-percent={94}
-                          data-value="es"
-                          data-english="Spanish"
-                        >
-                          <span className="description">Español</span>
-                          Spanish
-                        </div>
-                        <div
-                          className="item"
-                          data-percent={34}
-                          data-value="zh"
-                          data-english="Chinese"
-                        >
-                          <span className="description">简体中文</span>
-                          Chinese
-                        </div>
-                        <div
-                          className="item"
-                          data-percent={54}
-                          data-value="zh_TW"
-                          data-english="Chinese (Taiwan)"
-                        >
-                          <span className="description">中文 (臺灣)</span>
-                          Chinese (Taiwan)
-                        </div>
-                        <div
-                          className="item"
-                          data-percent={79}
-                          data-value="fa"
-                          data-english="Persian"
-                        >
-                          <span className="description">پارسی</span>
-                          Persian
-                        </div>
-                        <div
-                          className="item"
-                          data-percent={41}
-                          data-value="fr"
-                          data-english="French"
-                        >
-                          <span className="description">Français</span>
-                          French
-                        </div>
-                        <div
-                          className="item"
-                          data-percent={37}
-                          data-value="el"
-                          data-english="Greek"
-                        >
-                          <span className="description">ελληνικά</span>
-                          Greek
-                        </div>
-                        <div
-                          className="item"
-                          data-percent={37}
-                          data-value="ru"
-                          data-english="Russian"
-                        >
-                          <span className="description">Русский</span>
-                          Russian
-                        </div>
-                        <div
-                          className="item"
-                          data-percent={36}
-                          data-value="de"
-                          data-english="German"
-                        >
-                          <span className="description">Deutsch</span>
-                          German
-                        </div>
-                        <div
-                          className="item"
-                          data-percent={23}
-                          data-value="it"
-                          data-english="Italian"
-                        >
-                          <span className="description">Italiano</span>
-                          Italian
-                        </div>
-                        <div
-                          className="item"
-                          data-percent={21}
-                          data-value="nl"
-                          data-english="Dutch"
-                        >
-                          <span className="description">Nederlands</span>
-                          Dutch
-                        </div>
-                        <div
-                          className="item"
-                          data-percent={19}
-                          data-value="pt_BR"
-                          data-english="Portuguese"
-                        >
-                          <span className="description">Português(BR)</span>
-                          Portuguese
-                        </div>
-                        <div
-                          className="item"
-                          data-percent={17}
-                          data-value="id"
-                          data-english="Indonesian"
-                        >
-                          <span className="description">Indonesian</span>
-                          Indonesian
-                        </div>
-                        <div
-                          className="item"
-                          data-percent={12}
-                          data-value="lt"
-                          data-english="Lithuanian"
-                        >
-                          <span className="description">Lietuvių</span>
-                          Lithuanian
-                        </div>
-                        <div
-                          className="item"
-                          data-percent={11}
-                          data-value="tr"
-                          data-english="Turkish"
-                        >
-                          <span className="description">Türkçe</span>
-                          Turkish
-                        </div>
-                        <div
-                          className="item"
-                          data-percent={10}
-                          data-value="kr"
-                          data-english="Korean"
-                        >
-                          <span className="description">한국어</span>
-                          Korean
-                        </div>
-                        <div
-                          className="item"
-                          data-percent={7}
-                          data-value="ar"
-                          data-english="Arabic"
-                        >
-                          <span className="description">العربية</span>
-                          Arabic
-                        </div>
-                        <div
-                          className="item"
-                          data-percent={6}
-                          data-value="hu"
-                          data-english="Hungarian"
-                        >
-                          <span className="description">Magyar</span>
-                          Hungarian
-                        </div>
-                        <div
-                          className="item"
-                          data-percent={6}
-                          data-value="vi"
-                          data-english="Vietnamese"
-                        >
-                          <span className="description">tiếng Việt</span>
-                          Vietnamese
-                        </div>
-                        <div
-                          className="item"
-                          data-percent={5}
-                          data-value="sv"
-                          data-english="Swedish"
-                        >
-                          <span className="description">svenska</span>
-                          Swedish
-                        </div>
-                        <div
-                          className="item"
-                          data-precent={4}
-                          data-value="pl"
-                          data-english="Polish"
-                        >
-                          <span className="description">polski</span>
-                          Polish
-                        </div>
-                        <div
-                          className="item"
-                          data-percent={6}
-                          data-value="ja"
-                          data-english="Japanese"
-                        >
-                          <span className="description">日本語</span>
-                          Japanese
-                        </div>
-                        <div
-                          className="item"
-                          data-percent={0}
-                          data-value="ro"
-                          data-english="Romanian"
-                        >
-                          <span className="description">românește</span>
-                          Romanian
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-12">
-              <div className="footer_bottm">
-                <div className="row">
-                  <div className="col-md-6">
-                    <ul className="fotb_left">
-                      <li>
-                        <a href="index.html">
-                          <div className="footer_logo">
-                            <img src="/theme/images/logo1.svg" alt="" />
-                          </div>
-                        </a>
-                      </li>
-                      <li>
-                        <p>
-                          © 2020 <strong>Cursus</strong>. All Rights Reserved.
-                        </p>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="edu_social_links">
-                      <a href="#">
-                        <i className="fab fa-facebook-f" />
-                      </a>
-                      <a href="#">
-                        <i className="fab fa-twitter" />
-                      </a>
-                      <a href="#">
-                        <i className="fab fa-google-plus-g" />
-                      </a>
-                      <a href="#">
-                        <i className="fab fa-linkedin-in" />
-                      </a>
-                      <a href="#">
-                        <i className="fab fa-instagram" />
-                      </a>
-                      <a href="#">
-                        <i className="fab fa-youtube" />
-                      </a>
-                      <a href="#">
-                        <i className="fab fa-pinterest-p" />
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <MainFooter loggedInUser={loggedInUser}/>
       
     </div>
     {/* Body End */}

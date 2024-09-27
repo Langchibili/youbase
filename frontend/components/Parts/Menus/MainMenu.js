@@ -1,119 +1,195 @@
 'use client'
 
-import React from "react"
+import Link from "next/link"
 
-export default class MainMenu extends React.Component{
-   constructor(props){
-      super(props)
-      this.state = {}
-   }
-
-
-   render(){
+export default function MainMenu(){
     return (
         <nav className="vertical_nav">
             <div className="left_section menu_left" id="js-menu">
                 <div className="left_section">
                 <ul>
-                    <li className="menu--item">
-                    <a href="index.html" className="menu--link" title="Home">
-                        <i className="uil uil-home-alt menu--icon" />
-                        <span className="menu--label">Home</span>
-                    </a>
-                    </li>
-                    <li className="menu--item">
-                    <a
+                    {/* <li className="menu--item">
+                    <Link
                         href="live_streams.html"
                         className="menu--link active"
                         title="Live Streams"
                     >
                         <i className="uil uil-kayak menu--icon" />
                         <span className="menu--label">Live Streams</span>
-                    </a>
+                    </Link>
+                    </li> */}
+                    <li className="menu--item">
+                    <Link href="/" className="menu--link" title="Home">
+                        <i className="uil uil-home-alt menu--icon" />
+                        <span className="menu--label">Home</span>
+                    </Link>
                     </li>
                     <li className="menu--item">
-                    <a href="explore.html" className="menu--link" title="Explore">
+                    <Link href="/feed" className="menu--link" title="Explore">
                         <i className="uil uil-search menu--icon" />
                         <span className="menu--label">Explore</span>
-                    </a>
+                    </Link>
+                    </li>
+                    <li className="menu--item">
+                    <Link
+                        href="/reels"
+                        title="Reels"
+                    >
+                        <i className="uil uil-kayak menu--icon" />
+                        <span className="menu--label">Reels</span>
+                    </Link>
+                    </li>
+                    <li className="menu--item">
+                    <Link
+                        href="/music"
+                        title="music"
+                    >
+                        <i className="uil uil-kayak menu--icon" />
+                        <span className="menu--label">Music</span>
+                    </Link>
                     </li>
                     <li className="menu--item menu--item__has_sub_menu">
                     <label className="menu--link" title="Categories">
                         <i className="uil uil-layers menu--icon" />
                         <span className="menu--label">Categories</span>
                     </label>
-                    <ul className="sub_menu">
+                     <ul className="sub_menu">
                         <li className="sub_menu--item">
-                        <a href="#" className="sub_menu--link">
-                            Development
-                        </a>
+                            <Link href="/categories/Movies" className="sub_menu--link">
+                                Movies
+                            </Link>
                         </li>
                         <li className="sub_menu--item">
-                        <a href="#" className="sub_menu--link">
-                            Business
-                        </a>
+                            <Link href="/categories/Music" className="sub_menu--link">
+                                Music
+                            </Link>
                         </li>
                         <li className="sub_menu--item">
-                        <a href="#" className="sub_menu--link">
-                            Finance &amp; Accounting
-                        </a>
+                            <Link href="/categories/TV%20Shows" className="sub_menu--link">
+                                TV Shows
+                            </Link>
                         </li>
                         <li className="sub_menu--item">
-                        <a href="#.html" className="sub_menu--link">
-                            IT &amp; Software
-                        </a>
+                            <Link href="/categories/Gaming" className="sub_menu--link">
+                                Gaming
+                            </Link>
                         </li>
                         <li className="sub_menu--item">
-                        <a href="#" className="sub_menu--link">
-                            Office Productivity
-                        </a>
+                            <Link href="/categories/Sports" className="sub_menu--link">
+                                Sports
+                            </Link>
                         </li>
                         <li className="sub_menu--item">
-                        <a href="#" className="sub_menu--link">
-                            Personal Development
-                        </a>
+                            <Link href="/categories/Celebrities" className="sub_menu--link">
+                                Celebrities
+                            </Link>
                         </li>
                         <li className="sub_menu--item">
-                        <a href="#" className="sub_menu--link">
-                            Design
-                        </a>
+                            <Link href="/categories/Comedy" className="sub_menu--link">
+                                Comedy
+                            </Link>
                         </li>
                         <li className="sub_menu--item">
-                        <a href="#" className="sub_menu--link">
-                            Marketing
-                        </a>
+                            <Link href="/categories/Podcasts" className="sub_menu--link">
+                                Podcasts
+                            </Link>
                         </li>
                         <li className="sub_menu--item">
-                        <a href="#" className="sub_menu--link">
-                            Lifestyle
-                        </a>
+                            <Link href="/categories/Anime" className="sub_menu--link">
+                                Anime
+                            </Link>
                         </li>
                         <li className="sub_menu--item">
-                        <a href="#" className="sub_menu--link">
-                            Photography
-                        </a>
+                            <Link href="/categories/Books" className="sub_menu--link">
+                                Books
+                            </Link>
                         </li>
                         <li className="sub_menu--item">
-                        <a href="#" className="sub_menu--link">
-                            Health &amp; Fitness
-                        </a>
+                            <Link href="/categories/Events" className="sub_menu--link">
+                                Events
+                            </Link>
                         </li>
                         <li className="sub_menu--item">
-                        <a href="#" className="sub_menu--link">
-                            Music
-                        </a>
-                        </li>
-                        <li className="sub_menu--item">
-                        <a href="#" className="sub_menu--link">
-                            Teaching &amp; Academics
-                        </a>
+                            <Link href="/categories/Fashion" className="sub_menu--link">
+                                Fashion
+                            </Link>
                         </li>
                     </ul>
+
+                    </li>
+                    <li className="menu--item menu--item__has_sub_menu">
+                    <label className="menu--link" title="following">
+                        <i className="uil uil-layers menu--icon" />
+                        <span className="menu--label">Following</span>
+                    </label>
+                     <ul className="sub_menu">
+                        <li className="sub_menu--item">
+                            <Link href="/categories/Movies" className="sub_menu--link">
+                                Movies
+                            </Link>
+                        </li>
+                        <li className="sub_menu--item">
+                            <Link href="/categories/Music" className="sub_menu--link">
+                                Music
+                            </Link>
+                        </li>
+                        <li className="sub_menu--item">
+                            <Link href="/categories/TV%20Shows" className="sub_menu--link">
+                                TV Shows
+                            </Link>
+                        </li>
+                        <li className="sub_menu--item">
+                            <Link href="/categories/Gaming" className="sub_menu--link">
+                                Gaming
+                            </Link>
+                        </li>
+                        <li className="sub_menu--item">
+                            <Link href="/categories/Sports" className="sub_menu--link">
+                                Sports
+                            </Link>
+                        </li>
+                        <li className="sub_menu--item">
+                            <Link href="/categories/Celebrities" className="sub_menu--link">
+                                Celebrities
+                            </Link>
+                        </li>
+                        <li className="sub_menu--item">
+                            <Link href="/categories/Comedy" className="sub_menu--link">
+                                Comedy
+                            </Link>
+                        </li>
+                        <li className="sub_menu--item">
+                            <Link href="/categories/Podcasts" className="sub_menu--link">
+                                Podcasts
+                            </Link>
+                        </li>
+                        <li className="sub_menu--item">
+                            <Link href="/categories/Anime" className="sub_menu--link">
+                                Anime
+                            </Link>
+                        </li>
+                        <li className="sub_menu--item">
+                            <Link href="/categories/Books" className="sub_menu--link">
+                                Books
+                            </Link>
+                        </li>
+                        <li className="sub_menu--item">
+                            <Link href="/categories/Events" className="sub_menu--link">
+                                Events
+                            </Link>
+                        </li>
+                        <li className="sub_menu--item">
+                            <Link href="/categories/Fashion" className="sub_menu--link">
+                                Fashion
+                            </Link>
+                        </li>
+                    </ul>
+
                     </li>
                     <li className="menu--item menu--item__has_sub_menu">
                     <label className="menu--link" title="Tests">
                         <i className="uil uil-clipboard-alt menu--icon" />
-                        <span className="menu--label">Tests</span>
+                        <span className="menu--label">Followers</span>
                     </label>
                     <ul className="sub_menu">
                         <li className="sub_menu--item">
@@ -340,7 +416,7 @@ export default class MainMenu extends React.Component{
                 </ul>
                 </div>
                 <div className="left_footer">
-                <ul>
+                {/* <ul>
                     <li>
                     <a href="about_us.html">About</a>
                     </li>
@@ -365,15 +441,14 @@ export default class MainMenu extends React.Component{
                     <li>
                     <a href="terms_of_use.html">Terms</a>
                     </li>
-                </ul>
+                </ul> */}
                 <div className="left_footer_content">
                     <p>
-                    © 2020 <strong>Cursus</strong>. All Rights Reserved.
+                    © 2024 <strong>Youbase</strong>. All Rights Reserved.
                     </p>
                 </div>
                 </div>
             </div>
         </nav>
     )
-   }
   }

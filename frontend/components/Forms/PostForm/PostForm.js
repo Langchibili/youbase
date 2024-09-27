@@ -14,7 +14,7 @@ import MusicPost from "./MusicPost"
 import VideoPost from "./VideoPost"
 import TextPost from "./TextPost"
 import { createNewPost, generateDashedString, getPostFromId, getPostMedia, truncateText } from "@/Functions"
-import { api_url, getJwt } from "@/Constants"
+import { api_url, getJwt, log } from "@/Constants"
 import { FacebookTwoTone, Twitter, X, YouTube } from "@mui/icons-material"
 import EmbedPost from "./EmbedPost"
 import ContentLoader from "@/components/Includes/Loader/ContentLoader"
@@ -102,7 +102,7 @@ export default class PostForm extends React.Component{
     }
 
    setPostMedia = (mediaArray)=>{
-    console.log('the media array',mediaArray)
+        log('the media array',mediaArray)
         let media = this.state.mediaData
         if(!mediaArray) return
         if(!media){ 
@@ -146,7 +146,7 @@ export default class PostForm extends React.Component{
         mediaArray.forEach((medium)=>{
           media[medium.id] = medium
         })
-        console.log('media in parent post', media)
+        log('media in parent post', media)
         this.setState({
           mediaData:media
         })
@@ -456,9 +456,9 @@ export default class PostForm extends React.Component{
    }
 
   async componentDidMount(){
-       console.log(this.props.loggedInUser)
+       log(this.props.loggedInUser)
        const action = this.state.action
-       console.log('what is the action here',action)
+       log('what is the action here',action)
        const loggedInUserId = this.props.loggedInUser.user.id
        if(action === "create"){
           this.setState({
@@ -473,7 +473,7 @@ export default class PostForm extends React.Component{
                 }
             }
             const post = await createNewPost(data)
-            console.log('hit 2',post)
+            log('hit 2',post)
             if(post){
               localStorage.setItem('draftPostId',post.id) // save new draft post id to localstorage
             }
@@ -499,7 +499,7 @@ export default class PostForm extends React.Component{
           }
           else{
               const post = await getPostFromId(parseInt(draftPostId))
-              console.log('in the post form',post)
+              log('in the post form',post)
               this.setState({
                  dummyPostCreated: true,
                  post:post
@@ -508,7 +508,7 @@ export default class PostForm extends React.Component{
           
        }
        else{ // you are editing them, so get the post and edit it
-           console.log('how is this not being hit')
+           log('how is this not being hit')
            this.setState({
             loadingPost: true
            })

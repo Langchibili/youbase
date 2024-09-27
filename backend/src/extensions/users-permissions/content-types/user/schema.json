@@ -249,6 +249,12 @@
       "type": "component",
       "repeatable": false,
       "component": "user-profile.socials"
+    },
+    "reportedPosts": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::reported-post.reported-post",
+      "mappedBy": "reportedPostUser"
     }
   }
 }

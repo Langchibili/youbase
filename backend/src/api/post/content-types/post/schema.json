@@ -180,6 +180,19 @@
     },
     "embedLink": {
       "type": "string"
+    },
+    "mediaDisplayType": {
+      "type": "enumeration",
+      "enum": [
+        "portrait",
+        "landscape"
+      ]
+    },
+    "reports": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::reported-post.reported-post",
+      "mappedBy": "post"
     }
   }
 }

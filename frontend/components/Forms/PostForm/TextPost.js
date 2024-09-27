@@ -17,7 +17,7 @@ export default class TextPost extends React.Component{
     return (
         <>
         <FormHeader changePostType={this.props.changePostType} title="Add Post" />
-        <PostDescription description={this.props.post.description} setPostDescriptionOrTitle={this.props.setPostDescription} descriptionPlaceholder="Write something..."/>
+        <PostDescription description={this.props.post.description} setPostDescriptionOrTitle={this.props.setPostDescription} descriptionPlaceholder="Write something..." bordered="no"/>
         <FormFooter {...this.props}/>
         </>
     )

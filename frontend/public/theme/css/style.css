@@ -8313,4 +8313,10 @@ a.nav-icon-list:hover {
     font-size: 14px;
     color: #999;
   }
-  
+  .css-hqa71r{
+    padding: 15px !important;
+  }
+
+  #fullscreen-content .css-m9glnp-MuiPaper-root-MuiDialog-paper{
+    background-color: black !important;
+  }

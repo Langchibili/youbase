@@ -1,7 +1,7 @@
 import AvatarWithPostDate from "@/components/Parts/UserDisplay/AvatarWithPostDate";
-import PostMoreBtn from "../PostMoreBtn/PostMoreBtn";
 import { getImage } from "@/Functions";
 import Link from "next/link";
+import MediaDisplay from "@/components/Parts/MediaDisplay/MediaDisplay";
 
 export default function ImagePostMedium(props) {
     return (
@@ -12,7 +12,7 @@ export default function ImagePostMedium(props) {
           <p className="rvds10" style={{ marginTop: '10px' }}>
             {props.post.description}
           </p>
-          <img style={{width:'100%'}} src={getImage(props.post.featuredImages, "medium")}/>
+          <MediaDisplay post={props.post} displayType="mediaOnly" imageType="medium" listtype="carousel"/>
           </Link>
           {props.postEngagementsDisplay(props.post)}
         </div>

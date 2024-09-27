@@ -1,6 +1,6 @@
 // UTILITY FUNCTIONS
 
-import { api_url, backEndUrl, getJwt } from "./Constants"
+import { api_url, backEndUrl, getJwt, log } from "./Constants"
 import { getJWT } from "./secrets";
 
 export const createYouTubeEmbedLink = (url)=>{
@@ -22,8 +22,23 @@ export const createYouTubeEmbedLink = (url)=>{
 // Example usage:
 const youtubeUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
 const embedLink = createYouTubeEmbedLink(youtubeUrl);
-console.log(embedLink); // Outputs: https://www.youtube.com/embed/dQw4w9WgXcQ
+log(embedLink); // Outputs: https://www.youtube.com/embed/dQw4w9WgXcQ
 
+export const validateUrl = (url) => {
+  const urlRegex = /^(https?:\/\/)?([a-z0-9-]+\.)+[a-z]{2,}(:\d+)?(\/.*)?$/i;
+
+  if (!url || url.length === 0) {
+      return null // for now it means no error
+      // return 'URL cannot be empty.' // Optional: Check for empty input
+  }
+
+  if (!urlRegex.test(url)) {
+    console.log(url)
+      return 'Please enter a valid URL.'; // Error message for invalid URL
+  }
+
+  return null; // No error
+}
 
 const getIDFromDashedString = (dashed_title)=>{
     const parts = dashed_title.split('-')
@@ -141,6 +156,35 @@ export const createNewPost = async (data)=>{
     return null
 }
 
+export const getPosts = async (customUri=null,getMeta=false)=>{
+  console.log(customUri)
+  let posts = null
+  if(customUri){
+    posts = await fetch(customUri,{
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(response => response.json())
+      .then(data => data)
+      .catch(error => console.error(error))
+  }
+  else{
+    posts = await fetch(api_url+'/posts',{
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(response => response.json())
+      .then(data => data)
+      .catch(error => console.error(error))
+  }
+  if(!posts || !posts.data){
+    return posts
+  }
+  if(getMeta){
+    return posts
+  }
+  return posts.data
+ }
 
 export const getPost = async (title)=>{
     const postid = getIDFromDashedString(title)
@@ -151,7 +195,7 @@ export const getPost = async (title)=>{
     }).then(response => response.json())
       .then(data => data)
       .catch(error => console.error(error))
-      console.log('this is a post',post)
+      log('this is a post',post)
       
       if(post && post.data && post.data.attributes){
          post.data.attributes.id = post.data.id
@@ -172,7 +216,7 @@ export const getPost = async (title)=>{
       }).then(response => response.json())
         .then(data => data)
         .catch(error => console.error(error))
-        console.log('this is a post',post)
+        log('this is a post',post)
          
         if(post && post.data && post.data.attributes){
            post.data.attributes.id = post.data.id
@@ -190,7 +234,7 @@ export const getPost = async (title)=>{
     }).then(response => response.json())
       .then(data => data)
       .catch(error => console.error(error))
-      console.log('this is a post with user',post)
+      log('this is a post with user',post)
       
       if(post && post.data && post.data.attributes && post.data.attributes.user){
         post.data.attributes.user.data.attributes.id = post.data.attributes.user.data.id  // put the id inside the attributes object to reflect the way the logged in user object looks
@@ -208,7 +252,7 @@ export const getPost = async (title)=>{
     }).then(response => response.json())
       .then(data => data)
       .catch(error => console.error(error))
-      console.log('this is a post with engagement',post)
+      log('this is a post with engagement',post)
       
       if(post && post.data && post.data.attributes && post.data.attributes.engagements){
         return post.data.attributes.engagements.data
@@ -225,7 +269,7 @@ export const getPost = async (title)=>{
     }).then(response => response.json())
       .then(data => data)
       .catch(error => console.error(error))
-      console.log('this is a post with comments',post)
+      log('this is a post with comments',post)
       
       if(post && post.data && post.data.attributes && post.data.attributes.comments){
         return post.data.attributes.comments.data
@@ -242,7 +286,7 @@ export const getPost = async (title)=>{
     }).then(response => response.json())
       .then(data => data)
       .catch(error => console.error(error))
-      console.log('this is a post with media',post)
+      log('this is a post with media',post)
       
       if(post && post.data && post.data.attributes && post.data.attributes.media){
          return post.data.attributes.media.data
@@ -259,7 +303,7 @@ export const getPost = async (title)=>{
     }).then(response => response.json())
       .then(data => data)
       .catch(error => console.error(error))
-      console.log('this is a post with feauted images',post)
+      log('this is a post with feauted images',post)
       
       if(post && post.data && post.data.attributes && post.data.attributes.featuredImages){
         return post.data.attributes.featuredImages.data
@@ -279,12 +323,31 @@ export const getPost = async (title)=>{
   }).then(response => response.json())
     .then(data => data)
     .catch(error => console.error(error))
-    console.log('this is a post with media',post)
+    log('this is a post with media',post)
     
     if(upload && upload.data && upload.data.attributes && upload.data.attributes.media){
        return upload.data.attributes.media.data
     }
     return null
+}
+
+export const getVideoMetaFromPostAndId = (post,videoId)=>{
+  if(!post.extra_payload){
+      return null
+  }
+  else{
+     if(!post.extra_payload.media){
+        return null
+     }
+     else{
+       if(!post.extra_payload.media.videos){
+          return null
+       }
+       else{
+         return !post.extra_payload.media.videos[videoId]? null : post.extra_payload.media.videos[videoId]
+       }
+     }
+  }
 }
  //  logging and deleting an engagement to a post, like a like or view 
 
@@ -498,6 +561,7 @@ export const getUserFromDashedId = async (dashedId,populateString)=>{
             type: contentType
           }
        }
+       console.log('inside notifications object',notificationObject)
        if(contentType === "post"){
            notificationObject.data.post = {connect: [parseInt(contentId)]}  
        }

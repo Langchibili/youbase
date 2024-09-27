@@ -1,6 +1,6 @@
 'use client'
 
-import { checkUserLogginStatus, getFeature } from "@/Constants";
+import { checkUserLogginStatus, getFeature, log } from "@/Constants";
 import LocalSignUp from "@/components/Forms/LocalSignUp/LocalSignUp";
 import FaceBookSignIn from "@/components/Includes/FaceBookSignIn/FaceBookSignIn";
 import GoogleSignIn from "@/components/Includes/GoogleSingIn/GoogleSignIn";
@@ -37,7 +37,7 @@ export default function Signup() {
   // Using numerical IDs for features
   const isFacebookEnabled = useFeature(4);  // Assuming 4 is the ID for Facebook login
   const isGoogleEnabled = useFeature(3);    // Assuming 3 is the ID for Google login
-  //console.log(props)
+  //log(props)
   return (
     <>
     <Head>

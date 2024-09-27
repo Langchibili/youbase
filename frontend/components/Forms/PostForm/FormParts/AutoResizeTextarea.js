@@ -24,6 +24,8 @@ const AutoResizeTextarea = (props) => {
             height: 'auto',
             resize: 'none',
             marginTop:"10px",
+            fontWeight:'lighter',
+            borderColor:'ghostwhite',
             padding: props.bordered === "yes"? "10px" : "none",
             fontSize: '16px',
             lineHeight: '1.5',
@@ -37,9 +39,10 @@ const AutoResizeTextarea = (props) => {
               placeholder={props.description && props.description.length > 0 ? '' : props.descriptionPlaceholder}
               onChange={(e) => props.setPostDescriptionOrTitle(e.target.value)}
               style={{
+                border:'none',
                 outline: 'none',
                 width: '100%',
-                height: 'auto',
+                height: '50vh',
                 resize: 'none',
                 marginTop:"10px",
                 fontSize: '16px',

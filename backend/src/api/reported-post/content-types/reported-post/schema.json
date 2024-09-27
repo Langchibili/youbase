@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "reported_posts",
+  "info": {
+    "singularName": "reported-post",
+    "pluralName": "reported-posts",
+    "displayName": "ReportedPost"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "reason": {
+      "type": "enumeration",
+      "enum": [
+        "Spam: Posts that are unsolicited advertisements or irrelevant promotional content.",
+        "Hate Speech: Content that promotes hatred or violence against individuals or groups based on attributes such as race, ethnicity, nationality, religion, gender, sexual orientation, or disability.",
+        "Harassment or Bullying: Posts that target individuals with harmful, threatening, or abusive messages.",
+        "Graphic Violence: Content that depicts extreme violence, gore, or harm to individuals or animals.",
+        "Nudity or Sexual Content: Posts that contain explicit sexual content, nudity, or sexualized imagery that violates community guidelines.",
+        "Misinformation: Sharing false or misleading information, especially regarding health, safety, politics, or public events.",
+        "Impersonation: Accounts or posts that falsely represent someone else, including celebrities or public figures.",
+        "Self-Harm or Suicide Promotion: Content that encourages or glorifies self-harm, suicide, or other dangerous behavior.",
+        "Illegal Activity: Posts that promote or depict illegal activities, such as drug use, trafficking, or other criminal acts.",
+        "Child Exploitation: Any content that involves the exploitation or abuse of minors.",
+        "Intellectual Property Violation: Content that infringes on copyrights, trademarks, or other intellectual property rights.",
+        "Inappropriate Content: Posts that contain inappropriate language, images, or topics that are not suitable for all audiences.",
+        "Trolling: Content intended to provoke or upset others without genuine intent for discussion.",
+        "False Claims: Posts that make baseless accusations or spread conspiracy theories without credible evidence.",
+        "Community Guidelines Violation: Any other behavior or content that breaches the platform's specific community guidelines."
+      ]
+    },
+    "reasonBody": {
+      "type": "text"
+    },
+    "reportedPostUser": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "reportedPosts"
+    },
+    "post": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::post.post",
+      "inversedBy": "reports"
+    }
+  }
+}

@@ -10,26 +10,33 @@ export default class FeaturedImages extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            images: []
-        };
+            images: [],
+            imagesLoading: true
+        }
     }
 
     componentDidMount() {
         const images = this.props.images;
         if (images && images.length > 0) {
-            this.setState({ images });
+            this.setState({ images, imagesLoading: false });
         }
     }
 
     renderImage(image) {
-        const url = getImage(image, "normal"); // Use getImage function
+      let url = null
+        if(this.props.imageType === "medium"){
+          url = getImage(image, "medium"); // Use getImage function
+        }
+        else{
+          url = getImage(image, "normal"); // Use getImage function
+        }
         return <img key={image.id} src={url} alt={image.attributes.name} style={{ width: "100%" }} />;
     }
 
     render() {
         const { images } = this.state;
-
-        if (images.length === 0) {
+        if(this.state.imagesLoading) {
+          console.log(images)
             return <div>Loading...</div>;
         }
 
@@ -51,7 +58,7 @@ export default class FeaturedImages extends React.Component {
                   <div id="carouselExampleControls" className="carousel slide" data-bs-ride="carousel">
                     <div className="carousel-inner">
                       {images.map((image, index) => (
-                        <div key={image.id} className={`carousel-item ${index === 0 ? 'active' : ''}`}>
+                        !image? null: <div key={image.id} className={`carousel-item ${index === 0 ? 'active' : ''}`}>
                           {this.renderImage(image)}
                         </div>
                       ))}
@@ -76,7 +83,7 @@ export default class FeaturedImages extends React.Component {
                     </button>
                   </div>
                 ) : (
-                  this.renderImage(images[0])
+                  !images[0]? null: this.renderImage(images[0])
                 )}
               </div>
               

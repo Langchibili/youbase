@@ -47,7 +47,7 @@ export default class StreamsDisplay extends React.Component{
     
        if(!playedPostsIds){ // meaning you have followed no-one before
          return  <li>
-                    <button disabled={this.state.requesting} className="lkcm152" onClick={this.handlePlay}>
+                    <button disabled className="lkcm152">
                         <i className="uil uil-music" />
                         <span>{handleCountsDisplay(this.state.post.plays)}</span>
                     </button>
@@ -55,7 +55,7 @@ export default class StreamsDisplay extends React.Component{
        }
        if(playedPostsIds.length === 0){ // meaning it's empty
          return  <li>
-                    <button disabled={this.state.requesting} className="lkcm152" onClick={this.handlePlay}>
+                    <button disabled className="lkcm152">
                         <i className="uil uil-music" />
                         <span>{handleCountsDisplay(this.state.post.plays)}</span>
                     </button>
@@ -63,7 +63,7 @@ export default class StreamsDisplay extends React.Component{
        }
        if(playedPostsIds.includes(postId)){ // it means you are already following this user, you can only unfollow the user
          return  <li>
-                    <button disabled={this.state.requesting} className="lkcm152" onClick={this.handleUnPlay} >
+                    <button disabled className="lkcm152">
                         <i className="uil uil-music" style={{color: "green"}}/>
                         <span>{handleCountsDisplay(this.state.post.plays)}</span>
                     </button>
@@ -71,7 +71,7 @@ export default class StreamsDisplay extends React.Component{
        }
        if(!playedPostsIds.includes(postId)){ // it means you are already following this user, you can only unfollow the user
         return  <li>
-                    <button disabled={this.state.requesting} className="lkcm152" onClick={this.handlePlay}>
+                    <button disabled className="lkcm152">
                         <i className="uil uil-music" />
                         <span>{handleCountsDisplay(this.state.post.plays)}</span>
                     </button>

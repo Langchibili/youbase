@@ -3,7 +3,7 @@
 import ContentNotFound from '@/components/Includes/ContentNotFound/ContentNotFound'
 import PageLoader from '@/components/Includes/Loader/PageLoader'
 import VideoDisplay from '@/components/Includes/VideoDisplay/VideoDisplay'
-import { checkUserLogginStatus } from '@/Constants'
+import { checkUserLogginStatus, log } from '@/Constants'
 import { getPostFromId } from '@/Functions'
 import React, { useState, useEffect } from 'react'
 
@@ -16,7 +16,7 @@ export default function VideoDs({ params }) {
   useEffect(() => {
     const fetchPost = async () => {
       const post = await getPostFromId(params.postid,"media,featuredImages,user")
-      console.log(post)
+      log(post)
       try {
         setPost(await getPostFromId(params.postid,"media,featuredImages,user")) // the post without populating anything
         setLoggedInUser(await checkUserLogginStatus() ) // the loggedInUser

@@ -8,11 +8,12 @@ import { getImage } from "@/Functions";
 import SocialsDisplay from "../SocialsDisplay/SocialsDisplay";
 import Link from "next/link";
 import UserFollowingButtons from "@/components/Parts/UserActionButtons/UserFollowingButtons";
+import { log } from "@/Constants";
 
 export default function UserProfileDisplay(props) {
   const user = props.user
   const thisIsMyAccount = props.thisIsMyAccount
-  console.log('in the profile page',user)
+  log('in the profile page',user)
   const fullnames = user.details?.firstname && user.details?.lastname ? `${user.details.firstname} ${user.details.lastname}` : "UnNamed User";
   const aboutUser = user.details?.about ?? "Nothing added yet";
   const userType = user.loggedInUserType === "default" ? "User" : user.loggedInUserType;
@@ -155,7 +156,7 @@ export default function UserProfileDisplay(props) {
                 role="tablist"
               >
                 <a
-                  className="nav-item nav-link"
+                  className="nav-item nav-link active"
                   id="nav-about-tab"
                   data-toggle="tab"
                   href="#nav-about"
@@ -217,7 +218,7 @@ export default function UserProfileDisplay(props) {
         <div className="col-lg-12">
           <div className="course_tab_content">
             <div className="tab-content" id="nav-tabContent">
-              <div className="tab-pane fade" id="nav-about" role="tabpanel">
+              <div className="tab-pane fade show active" id="nav-about" role="tabpanel">
                 <div className="_htg451">
                   <div className="_htg452">
                     {aboutUser.length > 0? <h3>About Me</h3> : <></>}

@@ -21,15 +21,23 @@ export default class AvatarOnly extends React.Component{
         })
   }      
 
+  renderAvatar = ()=>{
+     if(!this.state.user){ 
+      return <img style={{width:'36px', height:'36px'}} src={getImage(this.state.user,'thumbnail','profilePicture')} />
+     }
+     if(!this.props.profileOnly){
+      return (!this.state.avatarLoaded? <></> :
+         <Link href={'/user/'+this.state.user.username}>
+         <div className="user_img5">
+                  <img src={getImage(this.state.user.profilePicture,'thumbnail','profilePicture') } alt="profile pic" />
+         </div>
+         </Link>)
+     }
+     else{
+      return <img style={{width:'36px', height:'36px'}} src={getImage(this.state.user.profilePicture,'thumbnail','profilePicture') } alt="profile pic" />
+     }
+  }
    render(){
-    return (
-           !this.state.avatarLoaded? <></> :
-           <Link href={'/user/'+this.state.user.username}>
-            <div className="user_img5">
-                    <img src={getImage(this.state.user.profilePicture,'thumbnail','profilePicture') } alt="profile pic" />
-            </div>
-           </Link>
-           
-    )
+    return this.renderAvatar()
    }
   }

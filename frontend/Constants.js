@@ -65,6 +65,13 @@ else{ // if environment is default, it means it's a test server
  export let clientUrl = clienturl
  
 
+ export function log(...args) {
+    if (environment === "local") {
+      console.log(...args)
+    } else {
+      return // Do nothing on live or test servers unless environment is set to local
+      }
+ }
 
 export const getFeature = async (featureId)=>{
     const feature = await fetch(api_url+'/app-features/'+featureId,{

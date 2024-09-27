@@ -14,6 +14,63 @@ export interface UserProfileDetails extends Schema.Component {
     gender: Attribute.Enumeration<['male', 'female', 'other']> &
       Attribute.DefaultTo<'other'>;
     phoneNumber: Attribute.String;
+    province: Attribute.Enumeration<
+      [
+        'Central',
+        'Copperbelt',
+        'Eastern',
+        'Luapula',
+        'Lusaka',
+        'Muchinga',
+        'North-Western',
+        'Northern',
+        'Southern',
+        'Western',
+        'other'
+      ]
+    > &
+      Attribute.DefaultTo<'other'>;
+    city: Attribute.Enumeration<
+      [
+        'Lusaka',
+        'Ndola',
+        'Kitwe',
+        'Kabwe',
+        'Chingola',
+        'Mufulira',
+        'Livingstone',
+        'Luanshya',
+        'Chipata',
+        'Chililabombwe',
+        'Kafue',
+        'Kalulushi',
+        'Mazabuka',
+        'Mansa',
+        'Solwezi',
+        'Choma',
+        'Mongu',
+        'Kasama',
+        'Mpika',
+        'Sesheke',
+        'Kapiri Mposhi',
+        'Nakonde',
+        'Kawambwa',
+        'Petauke',
+        'Samfya',
+        'Kalabo',
+        'Siavonga',
+        'Lundazi',
+        'Mwinilunga',
+        'Kaoma',
+        'Chirundu',
+        'Kabompo',
+        'Isoka',
+        'Mumbwa',
+        'Monze',
+        'other'
+      ]
+    > &
+      Attribute.DefaultTo<'other'>;
   };
 }
 

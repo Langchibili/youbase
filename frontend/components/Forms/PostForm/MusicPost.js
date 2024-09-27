@@ -7,7 +7,7 @@ import FormHeader from "./FormParts/FormHeader"
 import PostDescription from "./FormParts/PostDescription"
 import MediaDisplay from "@/components/Parts/MediaDisplay/MediaDisplay"
 import PostTitle from "./FormParts/PostTitle"
-import { api_url, getJwt } from "@/Constants"
+import { api_url, getJwt, log } from "@/Constants"
 import { getPostFromId, getPostMedia } from "@/Functions"
 import SongFileDisplay from "@/components/Includes/SongFileDisplay/SongFileDisplay"
 
@@ -37,12 +37,12 @@ export default class MusicPost extends React.Component{
 
    async componentDidMount(){
          const post = await getPostFromId(this.props.post.id,"media")
-         console.log(post)
+         log(post)
          this.props.setPostMedia(post.media.data)
          this.setState({
             media:post.media.data
          },()=>{
-            console.log(this.state.media)
+            log(this.state.media)
          })
    }
 

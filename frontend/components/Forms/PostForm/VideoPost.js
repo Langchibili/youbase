@@ -7,8 +7,9 @@ import FormFooter from "./FormParts/FormFooter"
 import MediaDisplay from "@/components/Parts/MediaDisplay/MediaDisplay"
 import PostDescription from "./FormParts/PostDescription"
 import PostTitle from "./FormParts/PostTitle"
-import { api_url, getJwt } from "@/Constants"
-import { getPostMedia } from "@/Functions"
+import { api_url, getJwt, log } from "@/Constants"
+import { getPostMedia, getVideoMetaFromPostAndId } from "@/Functions"
+import VideoFileDisplay from "@/components/Includes/VideoDisplay/VideoFileDisplay"
 
 export default class VideoPost extends React.Component{
    constructor(props){
@@ -22,17 +23,18 @@ export default class VideoPost extends React.Component{
    async componentDidMount(){
       const media = await getPostMedia(this.props.post.dashed_title)
       this.props.setPostMedia(media)
-      console.log('media in post', media)
+      log('media in post', media)
       this.setState({
          media:media
       })
     }
 
     renderMedia = ()=>{
+      log(this.state)
       if(!this.state.media){
          return <></>
       }
-      this.state.media.map((media)=> <div id={"#media-"+media.id}>files </div>)
+      return this.state.media.map((media)=> <VideoFileDisplay videoMeta={getVideoMetaFromPostAndId(this.props.post,media.id)} file={media} handleRemoveMedia={this.handleRemoveMedia}/>)
    }
    
    handleRemoveMedia = async (uploadid)=>{

@@ -2,11 +2,12 @@
 
 import CreatePostButton from "@/components/Includes/CreatePostButton/CreatePostButton"
 import React from "react"
+import AvatarOnly from "../UserDisplay/AvatarOnly"
+import Link from "next/link"
 
 export default class MainHeader extends React.Component{
    constructor(props){
       super(props)
-      this.state = {}
    }
 
    render(){
@@ -21,14 +22,14 @@ export default class MainHeader extends React.Component{
                 <span className="collapse_menu--label" />
             </button>
             <div className="main_logo" id="logo">
-                <a href="index.html">
+                <Link href="/">
                 <img src="/theme/images/logo.svg" alt="" />
-                </a>
-                <a href="index.html">
+                </Link>
+                <Link href="/">
                 <img className="logo-inverse" src="/theme/images/ct_logo.svg" alt="" />
-                </a>
+                </Link>
             </div>
-            <div className="top-category">
+            {/* <div className="top-category">
                 <div className="ui compact menu cate-dpdwn">
                 <div className="ui simple dropdown item" tabIndex={0}>
                     <a href="#" className="option_links p-0" title="categories">
@@ -77,7 +78,7 @@ export default class MainHeader extends React.Component{
                     </div>
                 </div>
                 </div>
-            </div>
+            </div> */}
             <div className="search120">
                 <div className="ui search">
                 <div className="ui left icon input swdh10">
@@ -92,7 +93,7 @@ export default class MainHeader extends React.Component{
             </div>
             <div className="header_right">
                 <ul>
-                <li>
+                {/* <li>
                     <a
                     href="create_new_course.html"
                     className="upload_btn"
@@ -106,53 +107,52 @@ export default class MainHeader extends React.Component{
                     <i className="uil uil-shopping-cart-alt" />
                     <span className="noti_count">2</span>
                     </a>
-                </li>
+                </li> */}
                 <li className="ui dropdown" tabIndex={0}>
-                    <a href="#" className="option_links" title="Messages">
-                    <i className="uil uil-envelope-alt" />
-                    <span className="noti_count">3</span>
-                    </a>
-                    <div className="menu dropdown_ms" tabIndex={-1}>
-                    <a href="#" className="channel_my item">
-                        <div className="profile_link">
-                        <img src="/theme/images/left-imgs/img-6.jpg" alt="" />
-                        <div className="pd_content">
-                            <h6>Zoena Singh</h6>
-                            <p>
-                            Hi! Sir, How are you. I ask you one thing please explain it
-                            this video price.
-                            </p>
-                            <span className="nm_time">2 min ago</span>
-                        </div>
-                        </div>
-                    </a>
-                    <a href="#" className="channel_my item">
-                        <div className="profile_link">
-                        <img src="/theme/images/left-imgs/img-5.jpg" alt="" />
-                        <div className="pd_content">
-                            <h6>Joy Dua</h6>
-                            <p>
-                            Hello, I paid you video tutorial but did not play error 404.
-                            </p>
-                            <span className="nm_time">10 min ago</span>
-                        </div>
-                        </div>
-                    </a>
-                    <a href="#" className="channel_my item">
-                        <div className="profile_link">
-                        <img src="/theme/images/left-imgs/img-8.jpg" alt="" />
-                        <div className="pd_content">
-                            <h6>Jass</h6>
-                            <p>Thanks Sir, Such a nice video.</p>
-                            <span className="nm_time">25 min ago</span>
-                        </div>
-                        </div>
-                    </a>
-                    <a className="vbm_btn" href="instructor_messages.html">
-                        View All <i className="uil uil-arrow-right" />
-                    </a>
-                    </div>
-                </li>
+  <a href="#" className="option_links" title="Messages">
+    <i className="uil uil-envelope-alt" />
+    <span className="noti_count">3</span>
+  </a>
+  <div className="menu dropdown_ms left transition hidden" tabIndex={-1}>
+    <a href="#" className="channel_my item">
+      <div className="profile_link">
+        <img src="images/left-imgs/img-6.jpg" alt="" />
+        <div className="pd_content">
+          <h6>Zoena Singh</h6>
+          <p>
+            Hi! Sir, How are you. I ask you one thing please explain it this
+            video price.
+          </p>
+          <span className="nm_time">2 min ago</span>
+        </div>
+      </div>
+    </a>
+    <a href="#" className="channel_my item">
+      <div className="profile_link">
+        <img src="images/left-imgs/img-5.jpg" alt="" />
+        <div className="pd_content">
+          <h6>Joy Dua</h6>
+          <p>Hello, I paid you video tutorial but did not play error 404.</p>
+          <span className="nm_time">10 min ago</span>
+        </div>
+      </div>
+    </a>
+    <a href="#" className="channel_my item">
+      <div className="profile_link">
+        <img src="images/left-imgs/img-8.jpg" alt="" />
+        <div className="pd_content">
+          <h6>Jass</h6>
+          <p>Thanks Sir, Such a nice video.</p>
+          <span className="nm_time">25 min ago</span>
+        </div>
+      </div>
+    </a>
+    <a className="vbm_btn" href="instructor_messages.html">
+      View All <i className="uil uil-arrow-right" />
+    </a>
+  </div>
+</li>
+
                 <li className="ui dropdown" tabIndex={0}>
                     <a href="#" className="option_links" title="Notifications">
                     <i className="uil uil-bell" />
@@ -204,12 +204,13 @@ export default class MainHeader extends React.Component{
                 </li>
                 <li className="ui dropdown" tabIndex={0}>
                     <a href="#" className="opts_account" title="Account">
-                    <img src="/theme/images/hd_dp.jpg" alt="" />
+                    {/* <img src="/theme/images/hd_dp.jpg" alt="" /> */}
+                    <AvatarOnly userId={this.props.loggedInUser.user.id} profileOnly={true}/>
                     </a>
                     <div className="menu dropdown_account" tabIndex={-1}>
                     <div className="channel_my">
                         <div className="profile_link">
-                        <img src="/theme/images/hd_dp.jpg" alt="" />
+                        <AvatarOnly userId={this.props.loggedInUser.user.id} profileOnly={true}/>
                         <div className="pd_content">
                             <div className="rhte85">
                             <h6>Joginder Singh</h6>
@@ -217,12 +218,13 @@ export default class MainHeader extends React.Component{
                                 <i className="uil uil-check-circle" />
                             </div>
                             </div>
-                            <span>gambol943@gmail.com</span>
+                            
+                            <span>{this.props.loggedInUser.user.username}</span>
                         </div>
                         </div>
-                        <a href="my_instructor_profile_view.html" className="dp_link_12">
-                        View Instructor Profile
-                        </a>
+                        <Link href={'/user/profile'} className="dp_link_12" style={{textTransform:'capitalize'}}>  
+                        {this.props.loggedInUser.user.loggedInUserType === "default"? "View Profile" : "View "+this.props.loggedInUser.user.loggedInUserType+ " Profile"}
+                        </Link>
                     </div>
                     <div className="night_mode_switch__btn">
                         <a href="#" id="night-mode" className="btn-night-mode">
@@ -232,24 +234,21 @@ export default class MainHeader extends React.Component{
                         </span>
                         </a>
                     </div>
-                    <a href="instructor_dashboard.html" className="item channel_item">
-                        Cursus dashboard
-                    </a>
-                    <a href="membership.html" className="item channel_item">
-                        Paid Memberships
-                    </a>
-                    <a href="setting.html" className="item channel_item">
-                        Setting
-                    </a>
-                    <a href="help.html" className="item channel_item">
+                    <Link href="/manage/profile" className="item channel_item">
+                        Update Profile
+                    </Link>
+                    <Link href="/manage/posts" className="item channel_item">
+                        Manage Posts
+                    </Link>
+                    <Link href="/manage/account" className="item channel_item">
+                        Settings
+                    </Link>
+                    <Link href="/help" className="item channel_item">
                         Help
-                    </a>
-                    <a href="feedback.html" className="item channel_item">
-                        Send Feedback
-                    </a>
-                    <a href="sign_in.html" className="item channel_item">
+                    </Link>
+                    <Link href="/logout" className="item channel_item">
                         Sign Out
-                    </a>
+                    </Link>
                     </div>
                 </li>
                 </ul>

@@ -45,6 +45,7 @@ export default class ImagePost extends React.Component{
          <Uploader 
                displayType="circular"
                refId={this.props.post.id}
+               extra_payload={this.props.post.extra_payload}
                refName="api::post.post"
                fieldName="featuredImages"
                allowedTypes={['image/*']}
@@ -53,7 +54,7 @@ export default class ImagePost extends React.Component{
         <MediaDisplay post={this.props.post} displayType="mediaOnly" refleshImages={this.state.refleshImages} handleRemoveImage={this.handleRemoveImage} listtype="grid"/>
         <h4>optional</h4>
         <hr/>
-        <PostDescription description={this.props.post.description} setPostDescriptionOrTitle={this.props.setPostDescription} descriptionPlaceholder="Write something..."/>
+        <PostDescription description={this.props.post.description} setPostDescriptionOrTitle={this.props.setPostDescription} descriptionPlaceholder="Write something..."bordered="no"/>
         <FormFooter {...this.props}/>
         </>
     )

@@ -1,4 +1,4 @@
-import { backEndUrl } from '@/Constants';
+import { backEndUrl, log } from '@/Constants';
 import React, { useState, useEffect } from 'react';
 
 // Helper function to format the duration
@@ -16,7 +16,7 @@ export default function SongFileDisplay({ file, handleRemoveMedia }){
   // Calculate duration once the component mounts
   useEffect(() => {
     const audioElement = audioRef.current;
-    console.log(backEndUrl+file.attributes.url)
+    log(backEndUrl+file.attributes.url)
     if (audioElement) {
       audioElement.addEventListener('loadedmetadata', () => {
         setAudioDuration(audioElement.duration);
@@ -38,7 +38,7 @@ export default function SongFileDisplay({ file, handleRemoveMedia }){
       </div>
       <audio ref={audioRef} controls style={{ marginRight: '10px' }}>
         <source src={backEndUrl+file.attributes.url} type={file.attributes.mime} />
-        Your browser does not support the audio element.
+         sorry we are unable to show this audio file
       </audio>
       <button onClick={() => handleRemoveMedia(file.id)} style={{ backgroundColor: 'red', color: 'white', border: 'none', padding: '5px 10px', cursor: 'pointer' }}>
         Remove

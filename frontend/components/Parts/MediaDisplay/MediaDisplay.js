@@ -6,6 +6,7 @@ import MusicDisplay from "./MusicDisplay";
 import VideosDisplay from "./VideosDisplay";
 import FeaturedImages from "./FeaturedImages";
 import EmbedDisplay from "@/components/Includes/EmbedDisplay/EmbedDisplay";
+import { log } from "@/Constants";
 
 export default class MediaDisplay extends React.Component{
     constructor(props){
@@ -20,7 +21,7 @@ export default class MediaDisplay extends React.Component{
 
   getPost = async ()=>{
         const post = this.props.post
-        console.log(post)
+        log(post)
         const featuredImages = await getPostfeaturedImages(post.dashed_title)
         this.setState({
             featuredImages: featuredImages,
@@ -46,7 +47,7 @@ export default class MediaDisplay extends React.Component{
             if(this.state.featuredImages === null) { // this means there is just text description, that's all
                 return
             }
-            return <FeaturedImages images={this.state.featuredImages} handleRemoveImage={this.props.handleRemoveImage} listtype={this.props.listtype || "carousel"}/>
+            return <FeaturedImages images={this.state.featuredImages} handleRemoveImage={this.props.handleRemoveImage} listtype={this.props.listtype || "carousel"} imageType={this.props.imageType}/>
         }
 
     }
@@ -57,13 +58,25 @@ export default class MediaDisplay extends React.Component{
             return 
         }
         if(post.type === "image") { // the media is as good as the featured images in this case
-            return <FeaturedImages images={this.state.media} handleRemoveImage={this.props.handleRemoveImage} listtype={this.props.listtype || "carousel"}/>
+            // if(this.props.displayType === "mediaOnly"){ // means don't show the  video because it's in a form
+            //     return <></>
+            // }
+            
+           return <></> 
+            
+          // return <FeaturedImages images={this.state.media} handleRemoveImage={this.props.handleRemoveImage} listtype={this.props.listtype || "carousel"} imageType={this.props.imageType}/>
+            
         }
         if(post.type === "music") { 
             return <MusicDisplay songs={this.state.media}/>
         }
         if(post.type === "video") { 
-            return <VideosDisplay postid={this.props.post.id} videos={this.state.media}/>
+            if(this.props.displayType === "mediaOnly") { // means don't show the  video because it's in a form
+                return <></>
+            }
+            else{
+                return <VideosDisplay postid={this.props.post.id} videos={this.state.media}/>
+            }
         }
         if(post.type === "embed") { 
             return <EmbedDisplay url={this.props.post.embedLink}/>
@@ -77,7 +90,7 @@ export default class MediaDisplay extends React.Component{
         }
         return (
             <>
-            {!this.props.post.is_title_user_writted? <></> : <span className="_abc123">{this.props.post.title}</span>}
+            {!this.props.post.is_title_user_writted || this.props.post.type === "image" || this.props.post.type === "text"? <></> : <span className="_abc123">{this.props.post.title}</span>}
             <p>{this.props.post.description}</p>
             </>
         )
@@ -85,7 +98,7 @@ export default class MediaDisplay extends React.Component{
     
     render(){
         return (
-            !this.state.featuredImagesLoaded? <>loading...</> : <>
+            !this.state.featuredImagesLoaded? <>loading images...</> : <>
             {this.featuredImagesDisplay()}
             {!this.state.mediaLoaded? <></> : this.mediaDisplay()}
             {this.titleAndDescription()}

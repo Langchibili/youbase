@@ -47,7 +47,7 @@ export default class ViewsDisplay extends React.Component{
     
        if(!viewedPostsIds){ // meaning you have followed no-one before
          return  <li>
-                    <button disabled={this.state.requesting} className="lkcm152" onClick={this.handleView}>
+                    <button disabled className="lkcm152">
                         <i className="uil uil-eye" />
                         <span>{handleCountsDisplay(this.state.post.views)}</span>
                     </button>
@@ -55,7 +55,7 @@ export default class ViewsDisplay extends React.Component{
        }
        if(viewedPostsIds.length === 0){ // meaning it's empty
          return  <li>
-                    <button disabled={this.state.requesting} className="lkcm152" onClick={this.handleView}>
+                    <button disabled className="lkcm152">
                         <i className="uil uil-eye" />
                         <span>{handleCountsDisplay(this.state.post.views)}</span>
                     </button>
@@ -63,7 +63,7 @@ export default class ViewsDisplay extends React.Component{
        }
        if(viewedPostsIds.includes(postId)){ // it means you are already following this user, you can only unfollow the user
          return  <li>
-                    <button disabled={this.state.requesting} className="lkcm152" onClick={this.handleUnView} >
+                    <button disabled className="lkcm152">
                         <i className="uil uil-eye" style={{color: "red"}}/>
                         <span>{handleCountsDisplay(this.state.post.views)}</span>
                     </button>
@@ -71,7 +71,7 @@ export default class ViewsDisplay extends React.Component{
        }
        if(!viewedPostsIds.includes(postId)){ // it means you are already following this user, you can only unfollow the user
         return  <li>
-                    <button disabled={this.state.requesting} className="lkcm152" onClick={this.handleView}>
+                    <button disabled className="lkcm152">
                         <i className="uil uil-eye" />
                         <span>{handleCountsDisplay(this.state.post.views)}</span>
                     </button>

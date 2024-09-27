@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert"; // Menu icon (three dots)
 import PostModal from "../Modals/PostModal";
+import { log } from "@/Constants";
 
 const MoreOptions = ({ anchorEl, open, handleClose,handlePostModalClickOpen }) => {
   return (
@@ -45,7 +46,7 @@ export default function PostMoreBtn(props) {
   const handleClose = () => {
     setAnchorEl(null);
   }
-  console.log('in the more button',props)
+  log('in the more button',props)
   return (
     <>
       <IconButton onClick={handleClick}>

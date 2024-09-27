@@ -51,7 +51,9 @@ export default class AvatarWithPostDate extends React.Component{
             <Link href={'/user/'+user.username}>   
             {!user.details? <h4>Unnamed User</h4> : <h4>{truncateText(user.details.firstname+" "+user.details.lastname,20)}</h4>}
             </Link>
+            <Link href={"/posts/"+this.props.post.dashed_title}>
             <span className="time_145">{this.displayDateOrTime()}</span>
+            </Link>
             </div>
            
         </div>

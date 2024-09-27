@@ -3,6 +3,7 @@
 import LogInFirstModal from "@/components/Includes/Modals/LogInFirstModal"
 import React from "react"
 import { deleteEngagement, getUserById, handleCountsDisplay, logEngagement, logNotification } from "@/Functions"
+import { log } from "@/Constants"
 
 export default class LikeButton extends React.Component{
    constructor(props){
@@ -13,8 +14,9 @@ export default class LikeButton extends React.Component{
         showLogInFirstModal: false
       }
    }
-  
+
  createLikeNotification = async ()=>{
+        log('the nlike button props',this.props)
         const loggedInUserId = this.props.loggedInUser.user.id
         const userId = this.props.user.id
         const postId = this.props.post.id 

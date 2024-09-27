@@ -7,7 +7,7 @@ export default function EmbedPostMedium(props) {
     return (
       <div style={{backgroundColor:"white",borderRadius:'5px',marginBottom:'10px'}}>
         <div className="review_item" style={{ position: 'relative'}}>
-          <AvatarWithPostDate {...props} />
+          <AvatarWithPostDate {...props} /><br/>
           <EmbedDisplay url={props.post.embedLink}/>
           <Link href={"/posts/"+props.post.dashed_title}>
           <p className="rvds10" style={{ marginTop: '10px' }}>

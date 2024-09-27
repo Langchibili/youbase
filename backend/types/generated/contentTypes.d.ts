@@ -827,6 +827,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     >;
     seenNotificationsIds: Attribute.JSON;
     socials: Attribute.Component<'user-profile.socials'>;
+    reportedPosts: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::reported-post.reported-post'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1281,12 +1286,77 @@ export interface ApiPostPost extends Schema.CollectionType {
     status: Attribute.Enumeration<['published', 'draft']> &
       Attribute.DefaultTo<'draft'>;
     embedLink: Attribute.String;
+    mediaDisplayType: Attribute.Enumeration<['portrait', 'landscape']>;
+    reports: Attribute.Relation<
+      'api::post.post',
+      'oneToMany',
+      'api::reported-post.reported-post'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<'api::post.post', 'oneToOne', 'admin::user'> &
       Attribute.Private;
     updatedBy: Attribute.Relation<'api::post.post', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
+export interface ApiReportedPostReportedPost extends Schema.CollectionType {
+  collectionName: 'reported_posts';
+  info: {
+    singularName: 'reported-post';
+    pluralName: 'reported-posts';
+    displayName: 'ReportedPost';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    reason: Attribute.Enumeration<
+      [
+        'Spam: Posts that are unsolicited advertisements or irrelevant promotional content.',
+        'Hate Speech: Content that promotes hatred or violence against individuals or groups based on attributes such as race, ethnicity, nationality, religion, gender, sexual orientation, or disability.',
+        'Harassment or Bullying: Posts that target individuals with harmful, threatening, or abusive messages.',
+        'Graphic Violence: Content that depicts extreme violence, gore, or harm to individuals or animals.',
+        'Nudity or Sexual Content: Posts that contain explicit sexual content, nudity, or sexualized imagery that violates community guidelines.',
+        'Misinformation: Sharing false or misleading information, especially regarding health, safety, politics, or public events.',
+        'Impersonation: Accounts or posts that falsely represent someone else, including celebrities or public figures.',
+        'Self-Harm or Suicide Promotion: Content that encourages or glorifies self-harm, suicide, or other dangerous behavior.',
+        'Illegal Activity: Posts that promote or depict illegal activities, such as drug use, trafficking, or other criminal acts.',
+        'Child Exploitation: Any content that involves the exploitation or abuse of minors.',
+        'Intellectual Property Violation: Content that infringes on copyrights, trademarks, or other intellectual property rights.',
+        'Inappropriate Content: Posts that contain inappropriate language, images, or topics that are not suitable for all audiences.',
+        'Trolling: Content intended to provoke or upset others without genuine intent for discussion.',
+        'False Claims: Posts that make baseless accusations or spread conspiracy theories without credible evidence.',
+        "Community Guidelines Violation: Any other behavior or content that breaches the platform's specific community guidelines."
+      ]
+    >;
+    reasonBody: Attribute.Text;
+    reportedPostUser: Attribute.Relation<
+      'api::reported-post.reported-post',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    post: Attribute.Relation<
+      'api::reported-post.reported-post',
+      'manyToOne',
+      'api::post.post'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::reported-post.reported-post',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::reported-post.reported-post',
+      'oneToOne',
+      'admin::user'
+    > &
       Attribute.Private;
   };
 }
@@ -1317,6 +1387,7 @@ declare module '@strapi/types' {
       'api::notification.notification': ApiNotificationNotification;
       'api::playlist.playlist': ApiPlaylistPlaylist;
       'api::post.post': ApiPostPost;
+      'api::reported-post.reported-post': ApiReportedPostReportedPost;
     }
   }
 }
