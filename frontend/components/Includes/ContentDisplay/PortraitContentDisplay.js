@@ -13,14 +13,17 @@ export default function PortraitContentDisplay(props) {
   return (
     <>
       <div className="la5lo1" style={{marginBottom:'10px'}}>
-       <div className="owl-carousel Student_says owl-theme owl-loaded owl-drag">
+       {/* <div className="owl-carousel Student_says owl-theme owl-loaded owl-drag"> */}
+       <div className="owl-carousel live_stream owl-theme owl-loaded owl-drag">
+       
         <div className="owl-stage-outer">
         <div
             className="owl-stage"
             style={{
             transform: "translate3d(-144px, 0px, 0px)",
             transition: "all",
-            width: "1297px"
+            width: "1297px",
+            backgroundColor: '#rgb(71 55 71)'
             }}
             
         >

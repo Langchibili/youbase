@@ -70,12 +70,12 @@ export const removeIdFromArray = (arr,id)=>{
 
 export const handleCountsDisplay = (counts) => { // formating counts like: likes, views, shares, etc
     if(counts === null) return "0"
-    if (counts >= 1_000_000_000) {
-      return (counts / 1_000_000_000).toFixed(2).replace(/\.00$/, '') + 'B'
-    } else if (counts >= 1_000_000) {
-      return (counts / 1_000_000).toFixed(2).replace(/\.00$/, '') + 'M'
-    } else if (counts >= 1_000) {
-      return (counts / 1_000).toFixed(2).replace(/\.00$/, '') + 'K'
+    if (parseInt(counts) >= 1_000_000_000) {
+      return (parseInt(counts) / 1_000_000_000).toFixed(2).replace(/\.00$/, '') + 'B'
+    } else if (parseInt(counts) >= 1_000_000) {
+      return (parseInt(counts) / 1_000_000).toFixed(2).replace(/\.00$/, '') + 'M'
+    } else if (parseInt(counts) >= 1_000) {
+      return (parseInt(counts) / 1_000).toFixed(2).replace(/\.00$/, '') + 'K'
     } else {
       return counts.toString()
     }
@@ -508,6 +508,34 @@ export const deleteEngagement = async (type, postId, loggedInUser, ctx)=> {
 
 
 // USER FUNCTIONS
+
+export const getUsers = async (customUri=null)=>{
+  console.log(customUri)
+  let users = null
+  if(customUri){
+    users = await fetch(customUri,{
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(response => response.json())
+      .then(data => data)
+      .catch(error => console.error(error))
+  }
+  else{
+    users = await fetch(api_url+'/users',{
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(response => response.json())
+      .then(data => data)
+      .catch(error => console.error(error))
+  }
+  console.log(users)
+  if(!users || !users.data){
+    return users
+  }
+  return users
+ }
 
 export const getUserById = async (id,populateString="")=>{
     let populate = '?populate='+populateString

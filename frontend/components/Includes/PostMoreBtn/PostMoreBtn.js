@@ -49,7 +49,7 @@ export default function PostMoreBtn(props) {
   log('in the more button',props)
   return (
     <>
-      <IconButton onClick={handleClick}>
+      <IconButton onClick={handleClick} sx={{paddingTop: '0px', paddingRight:'0px'}}>
         <MoreVertIcon />
       </IconButton>
       <MoreOptions anchorEl={anchorEl} open={open} handleClose={handleClose} handlePostModalClickOpen={handlePostModalClickOpen} handlePostModalClose={handlePostModalClose}/>

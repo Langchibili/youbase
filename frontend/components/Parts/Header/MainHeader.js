@@ -4,11 +4,10 @@ import CreatePostButton from "@/components/Includes/CreatePostButton/CreatePostB
 import React from "react"
 import AvatarOnly from "../UserDisplay/AvatarOnly"
 import Link from "next/link"
+import { getUserById } from "@/Functions"
 
 export default class MainHeader extends React.Component{
-   constructor(props){
-      super(props)
-   }
+  
 
    render(){
     return (

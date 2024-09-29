@@ -4,7 +4,7 @@
 import MainFooter from "@/components/Parts/Footer/MainFooter";
 import MainHeader from "@/components/Parts/Header/MainHeader";
 import MainMenu from "@/components/Parts/Menus/MainMenu";
-import { getImage } from "@/Functions";
+import { getImage, handleCountsDisplay } from "@/Functions";
 import SocialsDisplay from "../SocialsDisplay/SocialsDisplay";
 import Link from "next/link";
 import UserFollowingButtons from "@/components/Parts/UserActionButtons/UserFollowingButtons";
@@ -86,19 +86,19 @@ export default function UserProfileDisplay(props) {
                   <li>
                     <div className="_ttl121">
                       <div className="_ttl122">Followers</div>
-                      <div className="_ttl123">{followersCount}</div>
+                      <div className="_ttl123">{handleCountsDisplay(followersCount)}</div>
                     </div>
                   </li>
                   <li>
                     <div className="_ttl121">
                       <div className="_ttl122">Posts</div>
-                      <div className="_ttl123">{postsCount}</div>
+                      <div className="_ttl123">{handleCountsDisplay(postsCount)}</div>
                     </div>
                   </li>
                   <li>
                     <div className="_ttl121">
                       <div className="_ttl122">Following</div>
-                      <div className="_ttl123">{followingCount}</div>
+                      <div className="_ttl123">{handleCountsDisplay(followingCount)}</div>
                     </div>
                   </li>
                   

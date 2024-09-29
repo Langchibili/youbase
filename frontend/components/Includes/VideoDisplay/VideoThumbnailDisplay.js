@@ -19,12 +19,13 @@ export default function VideoThumbnailDisplay(props) {
         width:  '320px',
         height: '180px',
         // backgroundColor:'#eae5ea'
-        backgroundColor:'#rgb(71 55 71)'
+        backgroundColor:'rgb(71 55 71)'
   }
   let videoPortraitStyles = {
-        width:  '115px',
+        borderRadius:'5px',
+        width:  '100%',
         height: '200px',
-        backgroundColor:'#rgb(71 55 71)'
+        backgroundColor:'#gb(71 55 71)'
   }   
 
   useEffect(()=>{
@@ -48,8 +49,8 @@ export default function VideoThumbnailDisplay(props) {
 
   return (
         <div
-            className="owl-item active"
-            style={{ width: "134.017px", marginRight: 10 }}
+            className="owl-item"
+            style={{ width: "154", marginRight: 10 }}
         >
             <div className="item" style={{marginBottom:'10px'}}>
                 <div className="stream_1" style={{padding:'10px'}}>

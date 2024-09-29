@@ -30,13 +30,12 @@ export default class FeaturedImages extends React.Component {
         else{
           url = getImage(image, "normal"); // Use getImage function
         }
-        return <img key={image.id} src={url} alt={image.attributes.name} style={{ width: "100%" }} />;
+        return <img key={image.id} src={url} alt={image.attributes.name} style={{ width: "100%", borderRadius:'5px' }} />;
     }
 
     render() {
         const { images } = this.state;
         if(this.state.imagesLoading) {
-          console.log(images)
             return <div>Loading...</div>;
         }
 

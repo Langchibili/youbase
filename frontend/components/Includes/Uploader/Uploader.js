@@ -72,7 +72,7 @@ export default function Uploader(props) {
         const uploadId = responseData[0].id;
         if (videoDimensions) {
           log(videoDimensions.width,videoDimensions.height)
-          const mediaDisplayType = videoDimensions.height > videoDimensions.width ? 'portrait' : 'landscape' 
+          let mediaDisplayType = videoDimensions.height > videoDimensions.width ? 'portrait' : 'landscape' 
           let mediaObject = {
             videos: {
               [uploadId]:{
@@ -100,6 +100,12 @@ export default function Uploader(props) {
           try {
             const post = await getPostFromId(props.refId)
             log(post)
+            if(post.mediaDisplayType){
+              if(post.mediaDisplayType === "portrait"){ // means one of the video files is portrait, so entire post cannot be displayed as landscape
+                mediaDisplayType = "portrait"
+                return
+              }
+            }
             let updateData = {}
             if(!post.extra_payload){
                 updateData =  {data: { mediaDisplayType: mediaDisplayType,extra_payload: { media: mediaObject } } }
