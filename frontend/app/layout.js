@@ -1,38 +1,13 @@
 "use client";
-
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function RootLayout({ children }) {
-  // useEffect(() => {
-  //   console.log('hey')
-  //   // This will run once the component has mounted (DOM is fully rendered)
-  //   const scripts = [
-  //     '/theme/js/jquery-3.3.1.min.js',
-  //     '/theme/js/vertical-responsive-menu.js',
-  //     '/theme/vendor/bootstrap/js/bootstrap.bundle.min.js',
-  //     '/theme/vendor/OwlCarousel/owl.carousel.js',
-  //     '/theme/vendor/semantic/semantic.min.js',
-  //     '/theme/js/custom.js',
-  //     '/theme/js/night-mode.js',
-  //   ];
-
-  //   scripts.forEach((src) => {
-  //     const script = document.createElement('script');
-  //     script.src = src;
-  //     script.async = false; // Ensures scripts load in the correct order
-  //     document.body.appendChild(script);
-  //   });
-  //   return () => {
-  //     // Clean up scripts on unmount if necessary
-  //     scripts.forEach((src) => {
-  //       const script = document.querySelector(`script[src="${src}"]`);
-  //       if (script) {
-  //         document.body.removeChild(script);
-  //       }
-  //     });
-  //   };
-  // }, []);
-
+  const [loading, setLoading]= useState(true)
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+       setLoading(false)
+    }
+  }, []);
   return (
     <html lang="en">
       <head>
@@ -71,7 +46,7 @@ export default function RootLayout({ children }) {
           async=""
         />
       </head>
-      <body>{children}</body>
+      <body>{loading? <></> : children}</body>
     </html>
   );
 }
