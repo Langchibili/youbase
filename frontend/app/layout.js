@@ -1,8 +1,10 @@
 "use client";
+
+import ClientOnly from '@/components/Parts/ClientSideRendering/ClientOnly';
 import React, { useEffect, useState } from 'react';
 
 export default function RootLayout({ children }) {
-  const [loading, setLoading]= useState(true)
+  const [loading, setLoading] = useState(true)
   useEffect(() => {
     if (typeof document !== 'undefined') {
        setLoading(false)
@@ -46,7 +48,7 @@ export default function RootLayout({ children }) {
           async=""
         />
       </head>
-      <body>{loading? <></> : children}</body>
+      <body>{loading? <></> :<ClientOnly>{children}</ClientOnly> }</body>
     </html>
   );
 }

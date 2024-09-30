@@ -4,6 +4,7 @@ import { clientUrl } from '@/Constants';
 import React, { useEffect } from 'react'
 
 export default function MainFooter() {
+  if(typeof document === 'undefined'){ return }
   useEffect(() => {
     const scripts = [
       clientUrl+'/theme/js/jquery-3.3.1.min.js',
