@@ -102,6 +102,7 @@
 //     );
 //   }
 // }
+'use client'
 
 import { backEndUrl } from '@/Constants';
 import React, { Component } from 'react';
@@ -140,7 +141,7 @@ export default class VideoDisplay extends Component {
         videoElement.currentTime = 10; // Seek to 10 seconds
 
         videoElement.addEventListener('seeked', () => {
-          const canvas = document.createElement('canvas');
+          const canvas = typeof document !== 'undefined'? document.createElement('canvas') : <></>;
           canvas.width = videoElement.videoWidth;
           canvas.height = videoElement.videoHeight;
           canvas.getContext('2d').drawImage(videoElement, 0, 0, canvas.width, canvas.height);

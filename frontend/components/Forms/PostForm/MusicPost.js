@@ -31,7 +31,9 @@ export default class MusicPost extends React.Component{
         .then(data => data)
         .catch(error => console.error(error))
        if(removed){
-         document.getElementById("#"+uploadid).style.display = "none"
+         if (typeof document !== 'undefined') {
+            document.getElementById("#"+uploadid).style.display = "none"
+         }
        }
   }
 
@@ -59,8 +61,10 @@ export default class MusicPost extends React.Component{
          .catch(error => console.error(error))
         if(removed){
           this.props.removePostMedia(uploadid)
-          document.getElementById("#media-"+uploadid).style.display = "none"
-        }
+          if (typeof document !== 'undefined') {
+              document.getElementById("#media-"+uploadid).style.display = "none"
+          }
+         }
    }
    
    renderMedia = ()=>{

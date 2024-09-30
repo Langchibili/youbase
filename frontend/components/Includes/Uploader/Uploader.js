@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState } from 'react';
 import { FilePond, registerPlugin } from 'react-filepond';
 import 'filepond/dist/filepond.min.css';
@@ -21,7 +23,7 @@ export default function Uploader(props) {
   // Function to check if the file is a video or image and get its dimensions
   const checkFileDimensions = (file) => {
     if (file.type.startsWith('video/')) {
-      const videoElement = document.createElement('video');
+      const videoElement = typeof document !== 'undefined'? document.createElement('video') : <></>;
       videoElement.src = URL.createObjectURL(file);
       videoElement.onloadedmetadata = () => {
         const width = videoElement.videoWidth;

@@ -49,8 +49,10 @@ export default class VideoPost extends React.Component{
          .catch(error => console.error(error))
         if(removed){
           this.props.removePostMedia(uploadid)
-          document.getElementById("#media-"+uploadid).style.display = "none"
-        }
+          if (typeof document !== 'undefined') {
+             document.getElementById("#media-"+uploadid).style.display = "none"
+          }
+         }
    }
 
    render(){
