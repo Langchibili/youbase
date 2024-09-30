@@ -1,12 +1,13 @@
 'use effect'
 
-import { getPostfeaturedImages, getPostMedia } from "@/Functions";
+import { getPostfeaturedImages, getPostMedia, getVideoMetaFromPostAndId } from "@/Functions";
 import React from "react";
 import MusicDisplay from "./MusicDisplay";
 import VideosDisplay from "./VideosDisplay";
 import FeaturedImages from "./FeaturedImages";
 import EmbedDisplay from "@/components/Includes/EmbedDisplay/EmbedDisplay";
 import { log } from "@/Constants";
+import VideoFileDisplay from "@/components/Includes/VideoDisplay/VideoFileDisplay";
 
 export default class MediaDisplay extends React.Component{
     constructor(props){
@@ -61,9 +62,7 @@ export default class MediaDisplay extends React.Component{
             // if(this.props.displayType === "mediaOnly"){ // means don't show the  video because it's in a form
             //     return <></>
             // }
-            
            return <></> 
-            
           // return <FeaturedImages images={this.state.media} handleRemoveImage={this.props.handleRemoveImage} listtype={this.props.listtype || "carousel"} imageType={this.props.imageType}/>
             
         }
@@ -75,6 +74,7 @@ export default class MediaDisplay extends React.Component{
                 return <></>
             }
             else{
+                return  <VideoFileDisplay  getMedia={true} postTitle={this.props.post.dashed_title} hideRemoveButton={true}/>
                 return <VideosDisplay postid={this.props.post.id} videos={this.state.media}/>
             }
         }

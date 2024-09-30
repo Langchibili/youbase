@@ -55,6 +55,7 @@ export default class LikeButton extends React.Component{
    renderLikeButton = ()=>{
        const likedPostsIds = this.state.loggedInUser.user.likedPostsIds
        const postId = this.state.post.id
+       console.log('post likes', this.state.post)
        if(!likedPostsIds){ // meaning you have followed no-one before
          return  <li>
                     <button disabled={this.state.requesting} className="lkcm152" onClick={this.handleLike}>

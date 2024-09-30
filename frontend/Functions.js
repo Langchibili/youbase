@@ -393,7 +393,7 @@ export const logEngagement = async (type, postId, loggedInUser, ctx,createNotifi
         [action]: { connect: [postId] },
         [idArray]: userEngagementIds
     };
-
+    console.log('the engagement object',updateUserObject)
     const response = await fetch(`${api_url}/users/${loggedInUser.id}`, {
         method: 'PUT',
         headers: {
@@ -411,7 +411,6 @@ export const logEngagement = async (type, postId, loggedInUser, ctx,createNotifi
                 [type]: postEngagements + 1
             }
         };
-
         const response2 = await fetch(`${api_url}/posts/${postId}`, {
             method: 'PUT',
             headers: {

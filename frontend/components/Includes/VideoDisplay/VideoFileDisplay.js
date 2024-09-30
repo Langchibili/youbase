@@ -164,6 +164,7 @@
 
 
 import { backEndUrl, log } from '@/Constants';
+import { getPostMedia } from '@/Functions';
 import React, { useState, useEffect } from 'react';
 
 // Helper function to format the duration
@@ -174,17 +175,29 @@ const formatDuration = (duration) => {
 };
 
 // The VideoFileDisplay component
-export default function VideoFileDisplay({ file, handleRemoveMedia, videoMeta, hideRemoveButton }) {
+export default function VideoFileDisplay({ file, handleRemoveMedia, videoMeta, hideRemoveButton, getMedia, postTitle }) {
   const [videoDuration, setVideoDuration] = useState(null);
   const [videoFile, setVideoFile] = useState(null);
+  // const [videoMeta, setVideoMeta] = useState(null)
   const videoRef = React.createRef();
 
   // Calculate duration once the component mounts
   useEffect(() => {
-    if (!file?.attributes) {
-      setVideoFile(file);
-    } else {
-      setVideoFile(file.attributes);
+    if(getMedia){
+        const runGetMedia = async()=>{
+          const media = await getPostMedia(postTitle)
+          console.log({data:media})
+          setVideoFile({data:media})
+          console.log(media)
+        }
+        runGetMedia()
+    }
+    else{
+      if (!file?.attributes) {
+        setVideoFile(file);
+      } else {
+        setVideoFile(file.attributes);
+      }
     }
 
     const videoElement = videoRef.current;
@@ -199,7 +212,7 @@ export default function VideoFileDisplay({ file, handleRemoveMedia, videoMeta, h
         });
       };
     }
-  }, [file, videoFile]);
+  }, [file]);
 
   // Determine the video display style
   const VideoDisplay = () => {
@@ -208,9 +221,6 @@ export default function VideoFileDisplay({ file, handleRemoveMedia, videoMeta, h
     }
     return videoMeta.mediaDisplayType === 'landscape' ? 'block' : 'flex';
   };
-
-  // If no video file, return null
-  if (!videoFile) return null;
 
   // Function to render the video carousel
   const renderVideoCarousel = (videos, videoRef) => {
@@ -224,7 +234,9 @@ export default function VideoFileDisplay({ file, handleRemoveMedia, videoMeta, h
         </div>
       );
     }
-
+    if(!videos.data) {
+      return null
+    }
     if (videos.data.length === 1) {
       const video = videos.data[0].attributes;
       return (
@@ -255,7 +267,7 @@ export default function VideoFileDisplay({ file, handleRemoveMedia, videoMeta, h
                         <source src={backEndUrl + videoData.url} type={videoData.mime} />
                         Sorry, we are unable to show this video.
                       </video>
-                      <small>{index}</small>
+                      <small>{index+1}</small>
                     </div>
                   </div>
                 </div>
@@ -275,9 +287,13 @@ export default function VideoFileDisplay({ file, handleRemoveMedia, videoMeta, h
     );
   };
 
+  
+  // If no video file, return null
+  if (!videoFile) return null;
+
   return (
     <div
-      id={"#media-" + file.id}
+      id={!hideRemoveButton?"#media-" + file.id : ""}
       style={{
         width: '100%',
         marginTop: '2px',

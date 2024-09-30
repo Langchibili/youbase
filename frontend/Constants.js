@@ -56,7 +56,7 @@ else if(environment === 'live2'){
    /*liveserver2: */ clienturl = 'https://youbase.app' // for production's sake
 }
 else{ // if environment is default, it means it's a test server
-  /*testserver: */  clienturl = 'https://youbaseapi.driverbase.app' // the api to be used when deployed to the test site
+  /*testserver: */  clienturl = 'https://youbase.driverbase.app' // the api to be used when deployed to the test site
 }
  
 

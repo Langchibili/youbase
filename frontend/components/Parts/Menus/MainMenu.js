@@ -35,7 +35,7 @@ export default class MainMenu extends React.Component{
                              <AvatarOnly userId={user.id} profileOnly={true}/>
                         </div>
                         <div>
-                            <Link href={"/users/"+user.username} className="sub_menu--link" style={{paddingLeft:'0px'}}>
+                            <Link href={"/user/"+user.username} className="sub_menu--link" style={{paddingLeft:'0px'}}>
                                 {truncateText(fullnames,15)}
                             </Link>
                         </div>
