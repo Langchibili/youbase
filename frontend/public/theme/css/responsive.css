@@ -4,6 +4,11 @@
     margin-left: 5px !important;
 	width: 110px !important;
 }
+#logo{
+    margin-left: 0px !important;
+    margin-top: 2px !important;
+    width:110px !important;
+}
 
 .search120 {
     display: none;
@@ -14,9 +19,9 @@
 	display: none;
 }
 
-.header_right ul li:nth-child(2) {
+/* .header_right ul li:nth-child(2) {
 	display: none !important;
-}
+} */
 
 .option_links {
     padding: 10px 3px !important;

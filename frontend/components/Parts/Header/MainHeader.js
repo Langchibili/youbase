@@ -4,15 +4,31 @@ import CreatePostButton from "@/components/Includes/CreatePostButton/CreatePostB
 import React from "react"
 import AvatarOnly from "../UserDisplay/AvatarOnly"
 import Link from "next/link"
-import { getUserById } from "@/Functions"
+import { getUserById, handleCountsDisplay, truncateText } from "@/Functions"
 
 export default class MainHeader extends React.Component{
+    constructor(props){
+        super(props)
+        this.state = {
+          fullnames: ""
+        }
+     }
   
-
+     async componentDidMount(){ 
+      if(!this.props.loggedInUser.status){ // no need to make a request when a user is logged out
+        return
+      }
+      const user = await getUserById(this.props.loggedInUser.user.id,"details") // the post without populating anything
+      const fullnames = user.details?.firstname && user.details?.lastname ? `${user.details.firstname} ${user.details.lastname}` : "UnNamed User";
+      this.setState({
+          fullnames: fullnames
+      })
+     }
+   
    render(){
     return (
         <header className="header clearfix">
-            <CreatePostButton action="create" {...this.props}/>
+            {!this.props.loggedInUser.status? <></> : <CreatePostButton action="create" {...this.props}/>}
             <button type="button" id="toggleMenu" className="toggle_menu">
                 <i className="uil uil-bars" />
             </button>
@@ -22,10 +38,10 @@ export default class MainHeader extends React.Component{
             </button>
             <div className="main_logo" id="logo">
                 <Link href="/">
-                <img src="/theme/images/logo.svg" alt="" />
+                <img id="logo" src="/youbase-logo-with-wordings.png" alt="" />
                 </Link>
                 <Link href="/">
-                <img className="logo-inverse" src="/theme/images/ct_logo.svg" alt="" />
+                <img id="logo" className="logo-inverse" src="/youbase-logo-with-wordings.png" alt="" />
                 </Link>
             </div>
             {/* <div className="top-category">
@@ -107,52 +123,52 @@ export default class MainHeader extends React.Component{
                     <span className="noti_count">2</span>
                     </a>
                 </li> */}
-                <li className="ui dropdown" tabIndex={0}>
-  <a href="#" className="option_links" title="Messages">
-    <i className="uil uil-envelope-alt" />
-    <span className="noti_count">3</span>
-  </a>
-  <div className="menu dropdown_ms left transition hidden" tabIndex={-1}>
-    <a href="#" className="channel_my item">
-      <div className="profile_link">
-        <img src="images/left-imgs/img-6.jpg" alt="" />
-        <div className="pd_content">
-          <h6>Zoena Singh</h6>
-          <p>
-            Hi! Sir, How are you. I ask you one thing please explain it this
-            video price.
-          </p>
-          <span className="nm_time">2 min ago</span>
-        </div>
-      </div>
-    </a>
-    <a href="#" className="channel_my item">
-      <div className="profile_link">
-        <img src="images/left-imgs/img-5.jpg" alt="" />
-        <div className="pd_content">
-          <h6>Joy Dua</h6>
-          <p>Hello, I paid you video tutorial but did not play error 404.</p>
-          <span className="nm_time">10 min ago</span>
-        </div>
-      </div>
-    </a>
-    <a href="#" className="channel_my item">
-      <div className="profile_link">
-        <img src="images/left-imgs/img-8.jpg" alt="" />
-        <div className="pd_content">
-          <h6>Jass</h6>
-          <p>Thanks Sir, Such a nice video.</p>
-          <span className="nm_time">25 min ago</span>
-        </div>
-      </div>
-    </a>
-    <a className="vbm_btn" href="instructor_messages.html">
-      View All <i className="uil uil-arrow-right" />
-    </a>
-  </div>
-</li>
+                {!this.props.loggedInUser.status? <li><Link className="btn btn-danger mr-2" href="/signin">Login</Link></li> : <li className="ui dropdown" tabIndex={0}>
+                 <a href="#" className="option_links" title="Messages">
+                    <i className="uil uil-envelope-alt" />
+                    <span className="noti_count">3</span>
+                </a>
+                <div className="menu dropdown_ms left transition hidden" tabIndex={-1}>
+                    <a href="#" className="channel_my item">
+                    <div className="profile_link">
+                        <img src="images/left-imgs/img-6.jpg" alt="" />
+                        <div className="pd_content">
+                        <h6>Zoena Singh</h6>
+                        <p>
+                            Hi! Sir, How are you. I ask you one thing please explain it this
+                            video price.
+                        </p>
+                        <span className="nm_time">2 min ago</span>
+                        </div>
+                    </div>
+                    </a>
+                    <a href="#" className="channel_my item">
+                    <div className="profile_link">
+                        <img src="images/left-imgs/img-5.jpg" alt="" />
+                        <div className="pd_content">
+                        <h6>Joy Dua</h6>
+                        <p>Hello, I paid you video tutorial but did not play error 404.</p>
+                        <span className="nm_time">10 min ago</span>
+                        </div>
+                    </div>
+                    </a>
+                    <a href="#" className="channel_my item">
+                    <div className="profile_link">
+                        <img src="images/left-imgs/img-8.jpg" alt="" />
+                        <div className="pd_content">
+                        <h6>Jass</h6>
+                        <p>Thanks Sir, Such a nice video.</p>
+                        <span className="nm_time">25 min ago</span>
+                        </div>
+                    </div>
+                    </a>
+                    <a className="vbm_btn" href="instructor_messages.html">
+                    View All <i className="uil uil-arrow-right" />
+                    </a>
+                </div>
+                </li>}
 
-                <li className="ui dropdown" tabIndex={0}>
+                {!this.props.loggedInUser.status? <li><Link className="btn btn-danger" href="/signin">Signup</Link></li> : <li className="ui dropdown" tabIndex={0}>
                     <a href="#" className="option_links" title="Notifications">
                     <i className="uil uil-bell" />
                     <span className="noti_count">3</span>
@@ -200,8 +216,8 @@ export default class MainHeader extends React.Component{
                         View All <i className="uil uil-arrow-right" />
                     </a>
                     </div>
-                </li>
-                <li className="ui dropdown" tabIndex={0}>
+                </li> }
+                {!this.props.loggedInUser.status? <></> : <li className="ui dropdown" tabIndex={0}>
                     <a href="#" className="opts_account" title="Account">
                     {/* <img src="/theme/images/hd_dp.jpg" alt="" /> */}
                     <AvatarOnly userId={this.props.loggedInUser.user.id} profileOnly={true}/>
@@ -212,13 +228,14 @@ export default class MainHeader extends React.Component{
                         <AvatarOnly userId={this.props.loggedInUser.user.id} profileOnly={true}/>
                         <div className="pd_content">
                             <div className="rhte85">
-                            <h6>Joginder Singh</h6>
-                            <div className="mef78" title="Verify">
-                                <i className="uil uil-check-circle" />
+                                <h6>{truncateText(this.state.fullnames,25)}</h6>
+                                {this.props.loggedInUser.user.verified? <div className="mef78" title="Verify">
+                                    <i className="uil uil-check-circle" />
+                                </div> : <></>}
                             </div>
-                            </div>
-                            
                             <span>{this.props.loggedInUser.user.username}</span>
+                            <div>{handleCountsDisplay(this.props.loggedInUser.user.followersCount)} Followers</div>
+                            <div>{handleCountsDisplay(this.props.loggedInUser.user.followingCount)} Following</div> 
                         </div>
                         </div>
                         <Link href={'/user/profile'} className="dp_link_12" style={{textTransform:'capitalize'}}>  
@@ -233,6 +250,7 @@ export default class MainHeader extends React.Component{
                         </span>
                         </a>
                     </div>
+                    
                     <Link href="/manage/profile" className="item channel_item">
                         Update Profile
                     </Link>
@@ -249,7 +267,7 @@ export default class MainHeader extends React.Component{
                         Sign Out
                     </Link>
                     </div>
-                </li>
+                </li>}
                 </ul>
             </div>
         </header>

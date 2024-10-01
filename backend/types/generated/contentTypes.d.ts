@@ -362,6 +362,471 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
+export interface ApiAdAd extends Schema.CollectionType {
+  collectionName: 'ads';
+  info: {
+    singularName: 'ad';
+    pluralName: 'ads';
+    displayName: 'Ad';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    type: Attribute.Enumeration<['text', 'image', 'music', 'video']> &
+      Attribute.DefaultTo<'text'>;
+    adCreator: Attribute.Relation<
+      'api::ad.ad',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    description: Attribute.Text;
+    adFormat: Attribute.Enumeration<
+      ['banner', 'strip', 'slider', 'list', 'grid']
+    > &
+      Attribute.DefaultTo<'banner'>;
+    engagements: Attribute.Relation<
+      'api::ad.ad',
+      'oneToMany',
+      'api::engagement.engagement'
+    >;
+    media: Attribute.Media;
+    mediaType: Attribute.Enumeration<['single', 'multiple']> &
+      Attribute.DefaultTo<'single'>;
+    impressions: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
+    clicks: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
+    userId: Attribute.String;
+    extra_payload: Attribute.JSON;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::ad.ad', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::ad.ad', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
+export interface ApiAppFeatureAppFeature extends Schema.CollectionType {
+  collectionName: 'app_features';
+  info: {
+    singularName: 'app-feature';
+    pluralName: 'app-features';
+    displayName: 'AppFeature';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String;
+    about_feature: Attribute.RichText & Attribute.Private;
+    status: Attribute.Boolean & Attribute.DefaultTo<false>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::app-feature.app-feature',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::app-feature.app-feature',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiAuthAuth extends Schema.CollectionType {
+  collectionName: 'auths';
+  info: {
+    singularName: 'auth';
+    pluralName: 'auths';
+    displayName: 'auth';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    otp: Attribute.String;
+    phone_number: Attribute.Integer;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::auth.auth', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::auth.auth', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
+export interface ApiCommentComment extends Schema.CollectionType {
+  collectionName: 'comments';
+  info: {
+    singularName: 'comment';
+    pluralName: 'comments';
+    displayName: 'Comment';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    text: Attribute.Text;
+    post: Attribute.Relation<
+      'api::comment.comment',
+      'manyToOne',
+      'api::post.post'
+    >;
+    user: Attribute.Relation<
+      'api::comment.comment',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    type: Attribute.Enumeration<
+      ['text', 'image', 'audio', 'video', 'emoji', 'sticker']
+    > &
+      Attribute.DefaultTo<'text'>;
+    replies: Attribute.Relation<
+      'api::comment.comment',
+      'oneToMany',
+      'api::comment.comment'
+    >;
+    parentComment: Attribute.Relation<
+      'api::comment.comment',
+      'manyToOne',
+      'api::comment.comment'
+    >;
+    media: Attribute.Media;
+    postId: Attribute.String;
+    userId: Attribute.String;
+    extra_payload: Attribute.JSON;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::comment.comment',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::comment.comment',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiEngagementEngagement extends Schema.CollectionType {
+  collectionName: 'engagements';
+  info: {
+    singularName: 'engagement';
+    pluralName: 'engagements';
+    displayName: 'Engagement';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    type: Attribute.Enumeration<
+      ['like', 'view', 'play', 'share', 'impression', 'clicks']
+    > &
+      Attribute.Required;
+    postType: Attribute.Enumeration<['content', 'ad']> &
+      Attribute.DefaultTo<'content'>;
+    post: Attribute.Relation<
+      'api::engagement.engagement',
+      'manyToOne',
+      'api::post.post'
+    >;
+    ad: Attribute.Relation<
+      'api::engagement.engagement',
+      'manyToOne',
+      'api::ad.ad'
+    >;
+    users: Attribute.Relation<
+      'api::engagement.engagement',
+      'manyToMany',
+      'plugin::users-permissions.user'
+    >;
+    userId: Attribute.String;
+    postId: Attribute.String;
+    extra_payload: Attribute.JSON;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::engagement.engagement',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::engagement.engagement',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiNotificationNotification extends Schema.CollectionType {
+  collectionName: 'notifications';
+  info: {
+    singularName: 'notification';
+    pluralName: 'notifications';
+    displayName: 'Notification';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Attribute.String;
+    type: Attribute.Enumeration<['post', 'user', 'system']> &
+      Attribute.DefaultTo<'post'>;
+    notifier: Attribute.Relation<
+      'api::notification.notification',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    notifiedUsers: Attribute.Relation<
+      'api::notification.notification',
+      'manyToMany',
+      'plugin::users-permissions.user'
+    >;
+    post: Attribute.Relation<
+      'api::notification.notification',
+      'oneToOne',
+      'api::post.post'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::notification.notification',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::notification.notification',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiPlaylistPlaylist extends Schema.CollectionType {
+  collectionName: 'playlists';
+  info: {
+    singularName: 'playlist';
+    pluralName: 'playlists';
+    displayName: 'Playlist';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String;
+    type: Attribute.Enumeration<['music', 'video']> &
+      Attribute.DefaultTo<'music'>;
+    posts: Attribute.Relation<
+      'api::playlist.playlist',
+      'manyToMany',
+      'api::post.post'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::playlist.playlist',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::playlist.playlist',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiPostPost extends Schema.CollectionType {
+  collectionName: 'posts';
+  info: {
+    singularName: 'post';
+    pluralName: 'posts';
+    displayName: 'Post';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Attribute.String & Attribute.DefaultTo<'untitled'>;
+    user: Attribute.Relation<
+      'api::post.post',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    description: Attribute.Text;
+    engagements: Attribute.Relation<
+      'api::post.post',
+      'oneToMany',
+      'api::engagement.engagement'
+    >;
+    comments: Attribute.Relation<
+      'api::post.post',
+      'oneToMany',
+      'api::comment.comment'
+    >;
+    type: Attribute.Enumeration<['text', 'image', 'music', 'video', 'embed']> &
+      Attribute.DefaultTo<'text'>;
+    media: Attribute.Media;
+    mediaType: Attribute.Enumeration<['single', 'multiple']> &
+      Attribute.DefaultTo<'single'>;
+    parentPost: Attribute.Relation<
+      'api::post.post',
+      'manyToOne',
+      'api::post.post'
+    >;
+    rePosts: Attribute.Relation<
+      'api::post.post',
+      'oneToMany',
+      'api::post.post'
+    >;
+    featuredImages: Attribute.Media;
+    likes: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
+    views: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
+    plays: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
+    shares: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
+    userId: Attribute.String;
+    mediaSource: Attribute.Enumeration<
+      ['local', 'youtube', 'facebook', 'tiktok', 'twitter']
+    > &
+      Attribute.DefaultTo<'local'>;
+    extra_payload: Attribute.JSON;
+    playlists: Attribute.Relation<
+      'api::post.post',
+      'manyToMany',
+      'api::playlist.playlist'
+    >;
+    dashed_title: Attribute.String;
+    is_title_user_writted: Attribute.Boolean & Attribute.DefaultTo<false>;
+    impressions: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
+    postLikedBy: Attribute.Relation<
+      'api::post.post',
+      'manyToMany',
+      'plugin::users-permissions.user'
+    >;
+    postSharedBy: Attribute.Relation<
+      'api::post.post',
+      'manyToMany',
+      'plugin::users-permissions.user'
+    >;
+    postViewedBy: Attribute.Relation<
+      'api::post.post',
+      'manyToMany',
+      'plugin::users-permissions.user'
+    >;
+    postPlayedBy: Attribute.Relation<
+      'api::post.post',
+      'manyToMany',
+      'plugin::users-permissions.user'
+    >;
+    postSeenBy: Attribute.Relation<
+      'api::post.post',
+      'manyToMany',
+      'plugin::users-permissions.user'
+    >;
+    status: Attribute.Enumeration<['published', 'draft']> &
+      Attribute.DefaultTo<'draft'>;
+    embedLink: Attribute.String;
+    mediaDisplayType: Attribute.Enumeration<['portrait', 'landscape']>;
+    reports: Attribute.Relation<
+      'api::post.post',
+      'oneToMany',
+      'api::reported-post.reported-post'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::post.post', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::post.post', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
+export interface ApiReportedPostReportedPost extends Schema.CollectionType {
+  collectionName: 'reported_posts';
+  info: {
+    singularName: 'reported-post';
+    pluralName: 'reported-posts';
+    displayName: 'ReportedPost';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    reason: Attribute.Enumeration<
+      [
+        'Spam: Posts that are unsolicited advertisements or irrelevant promotional content.',
+        'Hate Speech: Content that promotes hatred or violence against individuals or groups based on attributes such as race, ethnicity, nationality, religion, gender, sexual orientation, or disability.',
+        'Harassment or Bullying: Posts that target individuals with harmful, threatening, or abusive messages.',
+        'Graphic Violence: Content that depicts extreme violence, gore, or harm to individuals or animals.',
+        'Nudity or Sexual Content: Posts that contain explicit sexual content, nudity, or sexualized imagery that violates community guidelines.',
+        'Misinformation: Sharing false or misleading information, especially regarding health, safety, politics, or public events.',
+        'Impersonation: Accounts or posts that falsely represent someone else, including celebrities or public figures.',
+        'Self-Harm or Suicide Promotion: Content that encourages or glorifies self-harm, suicide, or other dangerous behavior.',
+        'Illegal Activity: Posts that promote or depict illegal activities, such as drug use, trafficking, or other criminal acts.',
+        'Child Exploitation: Any content that involves the exploitation or abuse of minors.',
+        'Intellectual Property Violation: Content that infringes on copyrights, trademarks, or other intellectual property rights.',
+        'Inappropriate Content: Posts that contain inappropriate language, images, or topics that are not suitable for all audiences.',
+        'Trolling: Content intended to provoke or upset others without genuine intent for discussion.',
+        'False Claims: Posts that make baseless accusations or spread conspiracy theories without credible evidence.',
+        "Community Guidelines Violation: Any other behavior or content that breaches the platform's specific community guidelines."
+      ]
+    >;
+    reasonBody: Attribute.Text;
+    reportedPostUser: Attribute.Relation<
+      'api::reported-post.reported-post',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    post: Attribute.Relation<
+      'api::reported-post.reported-post',
+      'manyToOne',
+      'api::post.post'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::reported-post.reported-post',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::reported-post.reported-post',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -832,6 +1297,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::reported-post.reported-post'
     >;
+    verified: Attribute.Boolean & Attribute.DefaultTo<false>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -896,471 +1362,6 @@ export interface PluginI18NLocale extends Schema.CollectionType {
   };
 }
 
-export interface ApiAdAd extends Schema.CollectionType {
-  collectionName: 'ads';
-  info: {
-    singularName: 'ad';
-    pluralName: 'ads';
-    displayName: 'Ad';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    type: Attribute.Enumeration<['text', 'image', 'music', 'video']> &
-      Attribute.DefaultTo<'text'>;
-    adCreator: Attribute.Relation<
-      'api::ad.ad',
-      'manyToOne',
-      'plugin::users-permissions.user'
-    >;
-    description: Attribute.Text;
-    adFormat: Attribute.Enumeration<
-      ['banner', 'strip', 'slider', 'list', 'grid']
-    > &
-      Attribute.DefaultTo<'banner'>;
-    engagements: Attribute.Relation<
-      'api::ad.ad',
-      'oneToMany',
-      'api::engagement.engagement'
-    >;
-    media: Attribute.Media;
-    mediaType: Attribute.Enumeration<['single', 'multiple']> &
-      Attribute.DefaultTo<'single'>;
-    impressions: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
-    clicks: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
-    userId: Attribute.String;
-    extra_payload: Attribute.JSON;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<'api::ad.ad', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<'api::ad.ad', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-  };
-}
-
-export interface ApiAppFeatureAppFeature extends Schema.CollectionType {
-  collectionName: 'app_features';
-  info: {
-    singularName: 'app-feature';
-    pluralName: 'app-features';
-    displayName: 'AppFeature';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    name: Attribute.String;
-    about_feature: Attribute.RichText & Attribute.Private;
-    status: Attribute.Boolean & Attribute.DefaultTo<false>;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::app-feature.app-feature',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::app-feature.app-feature',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiAuthAuth extends Schema.CollectionType {
-  collectionName: 'auths';
-  info: {
-    singularName: 'auth';
-    pluralName: 'auths';
-    displayName: 'auth';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    otp: Attribute.String;
-    phone_number: Attribute.Integer;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<'api::auth.auth', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<'api::auth.auth', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-  };
-}
-
-export interface ApiCommentComment extends Schema.CollectionType {
-  collectionName: 'comments';
-  info: {
-    singularName: 'comment';
-    pluralName: 'comments';
-    displayName: 'Comment';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    text: Attribute.Text;
-    post: Attribute.Relation<
-      'api::comment.comment',
-      'manyToOne',
-      'api::post.post'
-    >;
-    user: Attribute.Relation<
-      'api::comment.comment',
-      'manyToOne',
-      'plugin::users-permissions.user'
-    >;
-    type: Attribute.Enumeration<
-      ['text', 'image', 'audio', 'video', 'emoji', 'sticker']
-    > &
-      Attribute.DefaultTo<'text'>;
-    replies: Attribute.Relation<
-      'api::comment.comment',
-      'oneToMany',
-      'api::comment.comment'
-    >;
-    parentComment: Attribute.Relation<
-      'api::comment.comment',
-      'manyToOne',
-      'api::comment.comment'
-    >;
-    media: Attribute.Media;
-    postId: Attribute.String;
-    userId: Attribute.String;
-    extra_payload: Attribute.JSON;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::comment.comment',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::comment.comment',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiEngagementEngagement extends Schema.CollectionType {
-  collectionName: 'engagements';
-  info: {
-    singularName: 'engagement';
-    pluralName: 'engagements';
-    displayName: 'Engagement';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    type: Attribute.Enumeration<
-      ['like', 'view', 'play', 'share', 'impression', 'clicks']
-    > &
-      Attribute.Required;
-    postType: Attribute.Enumeration<['content', 'ad']> &
-      Attribute.DefaultTo<'content'>;
-    post: Attribute.Relation<
-      'api::engagement.engagement',
-      'manyToOne',
-      'api::post.post'
-    >;
-    ad: Attribute.Relation<
-      'api::engagement.engagement',
-      'manyToOne',
-      'api::ad.ad'
-    >;
-    users: Attribute.Relation<
-      'api::engagement.engagement',
-      'manyToMany',
-      'plugin::users-permissions.user'
-    >;
-    userId: Attribute.String;
-    postId: Attribute.String;
-    extra_payload: Attribute.JSON;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::engagement.engagement',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::engagement.engagement',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiNotificationNotification extends Schema.CollectionType {
-  collectionName: 'notifications';
-  info: {
-    singularName: 'notification';
-    pluralName: 'notifications';
-    displayName: 'Notification';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    title: Attribute.String;
-    type: Attribute.Enumeration<['post', 'user', 'system']> &
-      Attribute.DefaultTo<'post'>;
-    notifier: Attribute.Relation<
-      'api::notification.notification',
-      'manyToOne',
-      'plugin::users-permissions.user'
-    >;
-    notifiedUsers: Attribute.Relation<
-      'api::notification.notification',
-      'manyToMany',
-      'plugin::users-permissions.user'
-    >;
-    post: Attribute.Relation<
-      'api::notification.notification',
-      'oneToOne',
-      'api::post.post'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::notification.notification',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::notification.notification',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiPlaylistPlaylist extends Schema.CollectionType {
-  collectionName: 'playlists';
-  info: {
-    singularName: 'playlist';
-    pluralName: 'playlists';
-    displayName: 'Playlist';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    name: Attribute.String;
-    type: Attribute.Enumeration<['music', 'video']> &
-      Attribute.DefaultTo<'music'>;
-    posts: Attribute.Relation<
-      'api::playlist.playlist',
-      'manyToMany',
-      'api::post.post'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::playlist.playlist',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::playlist.playlist',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiPostPost extends Schema.CollectionType {
-  collectionName: 'posts';
-  info: {
-    singularName: 'post';
-    pluralName: 'posts';
-    displayName: 'Post';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    title: Attribute.String & Attribute.DefaultTo<'untitled'>;
-    user: Attribute.Relation<
-      'api::post.post',
-      'manyToOne',
-      'plugin::users-permissions.user'
-    >;
-    description: Attribute.Text;
-    engagements: Attribute.Relation<
-      'api::post.post',
-      'oneToMany',
-      'api::engagement.engagement'
-    >;
-    comments: Attribute.Relation<
-      'api::post.post',
-      'oneToMany',
-      'api::comment.comment'
-    >;
-    type: Attribute.Enumeration<['text', 'image', 'music', 'video', 'embed']> &
-      Attribute.DefaultTo<'text'>;
-    media: Attribute.Media;
-    mediaType: Attribute.Enumeration<['single', 'multiple']> &
-      Attribute.DefaultTo<'single'>;
-    parentPost: Attribute.Relation<
-      'api::post.post',
-      'manyToOne',
-      'api::post.post'
-    >;
-    rePosts: Attribute.Relation<
-      'api::post.post',
-      'oneToMany',
-      'api::post.post'
-    >;
-    featuredImages: Attribute.Media;
-    likes: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
-    views: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
-    plays: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
-    shares: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
-    userId: Attribute.String;
-    mediaSource: Attribute.Enumeration<
-      ['local', 'youtube', 'facebook', 'tiktok', 'twitter']
-    > &
-      Attribute.DefaultTo<'local'>;
-    extra_payload: Attribute.JSON;
-    playlists: Attribute.Relation<
-      'api::post.post',
-      'manyToMany',
-      'api::playlist.playlist'
-    >;
-    dashed_title: Attribute.String;
-    is_title_user_writted: Attribute.Boolean & Attribute.DefaultTo<false>;
-    impressions: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
-    postLikedBy: Attribute.Relation<
-      'api::post.post',
-      'manyToMany',
-      'plugin::users-permissions.user'
-    >;
-    postSharedBy: Attribute.Relation<
-      'api::post.post',
-      'manyToMany',
-      'plugin::users-permissions.user'
-    >;
-    postViewedBy: Attribute.Relation<
-      'api::post.post',
-      'manyToMany',
-      'plugin::users-permissions.user'
-    >;
-    postPlayedBy: Attribute.Relation<
-      'api::post.post',
-      'manyToMany',
-      'plugin::users-permissions.user'
-    >;
-    postSeenBy: Attribute.Relation<
-      'api::post.post',
-      'manyToMany',
-      'plugin::users-permissions.user'
-    >;
-    status: Attribute.Enumeration<['published', 'draft']> &
-      Attribute.DefaultTo<'draft'>;
-    embedLink: Attribute.String;
-    mediaDisplayType: Attribute.Enumeration<['portrait', 'landscape']>;
-    reports: Attribute.Relation<
-      'api::post.post',
-      'oneToMany',
-      'api::reported-post.reported-post'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<'api::post.post', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<'api::post.post', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-  };
-}
-
-export interface ApiReportedPostReportedPost extends Schema.CollectionType {
-  collectionName: 'reported_posts';
-  info: {
-    singularName: 'reported-post';
-    pluralName: 'reported-posts';
-    displayName: 'ReportedPost';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    reason: Attribute.Enumeration<
-      [
-        'Spam: Posts that are unsolicited advertisements or irrelevant promotional content.',
-        'Hate Speech: Content that promotes hatred or violence against individuals or groups based on attributes such as race, ethnicity, nationality, religion, gender, sexual orientation, or disability.',
-        'Harassment or Bullying: Posts that target individuals with harmful, threatening, or abusive messages.',
-        'Graphic Violence: Content that depicts extreme violence, gore, or harm to individuals or animals.',
-        'Nudity or Sexual Content: Posts that contain explicit sexual content, nudity, or sexualized imagery that violates community guidelines.',
-        'Misinformation: Sharing false or misleading information, especially regarding health, safety, politics, or public events.',
-        'Impersonation: Accounts or posts that falsely represent someone else, including celebrities or public figures.',
-        'Self-Harm or Suicide Promotion: Content that encourages or glorifies self-harm, suicide, or other dangerous behavior.',
-        'Illegal Activity: Posts that promote or depict illegal activities, such as drug use, trafficking, or other criminal acts.',
-        'Child Exploitation: Any content that involves the exploitation or abuse of minors.',
-        'Intellectual Property Violation: Content that infringes on copyrights, trademarks, or other intellectual property rights.',
-        'Inappropriate Content: Posts that contain inappropriate language, images, or topics that are not suitable for all audiences.',
-        'Trolling: Content intended to provoke or upset others without genuine intent for discussion.',
-        'False Claims: Posts that make baseless accusations or spread conspiracy theories without credible evidence.',
-        "Community Guidelines Violation: Any other behavior or content that breaches the platform's specific community guidelines."
-      ]
-    >;
-    reasonBody: Attribute.Text;
-    reportedPostUser: Attribute.Relation<
-      'api::reported-post.reported-post',
-      'manyToOne',
-      'plugin::users-permissions.user'
-    >;
-    post: Attribute.Relation<
-      'api::reported-post.reported-post',
-      'manyToOne',
-      'api::post.post'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::reported-post.reported-post',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::reported-post.reported-post',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -1371,14 +1372,6 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
-      'plugin::upload.file': PluginUploadFile;
-      'plugin::upload.folder': PluginUploadFolder;
-      'plugin::content-releases.release': PluginContentReleasesRelease;
-      'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
-      'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
-      'plugin::users-permissions.role': PluginUsersPermissionsRole;
-      'plugin::users-permissions.user': PluginUsersPermissionsUser;
-      'plugin::i18n.locale': PluginI18NLocale;
       'api::ad.ad': ApiAdAd;
       'api::app-feature.app-feature': ApiAppFeatureAppFeature;
       'api::auth.auth': ApiAuthAuth;
@@ -1388,6 +1381,14 @@ declare module '@strapi/types' {
       'api::playlist.playlist': ApiPlaylistPlaylist;
       'api::post.post': ApiPostPost;
       'api::reported-post.reported-post': ApiReportedPostReportedPost;
+      'plugin::upload.file': PluginUploadFile;
+      'plugin::upload.folder': PluginUploadFolder;
+      'plugin::content-releases.release': PluginContentReleasesRelease;
+      'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
+      'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
+      'plugin::users-permissions.role': PluginUsersPermissionsRole;
+      'plugin::users-permissions.user': PluginUsersPermissionsUser;
+      'plugin::i18n.locale': PluginI18NLocale;
     }
   }
 }

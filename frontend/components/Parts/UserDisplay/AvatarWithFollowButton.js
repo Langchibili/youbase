@@ -12,10 +12,10 @@ export default class AvatarWithFollowButton extends React.Component{
       this.state = {}
    }
    renderUserName = ()=>{
-   
     const textColor = this.props.textColor? this.props.textColor: ''
     return !this.props.user.details? <h4 style={{color:textColor}}>Unnamed User</h4> : <h4 style={{color:textColor}}>{truncateText(this.props.user.details.firstname+" "+this.props.user.details.lastname,20)}</h4>
    }
+
    render(){
     return ( 
         this.props.shiftAvatarDisplay? <div className="live_user_dt">
@@ -33,6 +33,9 @@ export default class AvatarWithFollowButton extends React.Component{
             <Link href={'/user/'+this.props.user.username}>   
             {this.renderUserName()}
             </Link>
+            {this.props.user.verified? <div className="mef78" title="Verify">
+                                    <i className="uil uil-check-circle" />
+                                </div> : <></>}
             <UserFollowingButtons {...this.props} userId={this.props.user.id}/>
             </div>
         </div>

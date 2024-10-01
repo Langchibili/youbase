@@ -48,7 +48,7 @@ export default function RootLayout({ children }) {
           async=""
         />
       </head>
-      <body>{loading? <></> :<ClientOnly>{children}</ClientOnly> }</body>
+      <body>{children}</body>
     </html>
   );
 }

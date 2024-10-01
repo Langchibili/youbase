@@ -17,6 +17,9 @@ export default class MainMenu extends React.Component{
      }
   
      async componentDidMount(){ 
+      if(!this.props.loggedInUser.status){ // no need to make a request when a user is logged out
+        return
+      }
       const userFollowing = await getUserById(this.props.loggedInUser.user.id,"profilePicture,following,following.details,follows.details") // the post without populating anything
       this.setState({
           following: userFollowing.following,
@@ -32,7 +35,7 @@ export default class MainMenu extends React.Component{
                 return (
                     <li key={user.username} className="sub_menu--item" style={{display:"flex"}}>
                         <div className="sub_menu--link">
-                             <AvatarOnly userId={user.id} profileOnly={true}/>
+                             <AvatarOnly userId={user.id} profileOnly={true} exra_styles={{width:"36px",borderRadius:"50%"}}/>
                         </div>
                         <div>
                             <Link href={"/user/"+user.username} className="sub_menu--link" style={{paddingLeft:'0px'}}>
@@ -75,6 +78,7 @@ export default class MainMenu extends React.Component{
                         </li>
                         <li className="menu--item">
                         <Link
+                            className="menu--link"
                             href="/reels"
                             title="Reels"
                         >
@@ -84,6 +88,7 @@ export default class MainMenu extends React.Component{
                         </li>
                         <li className="menu--item">
                         <Link
+                            className="menu--link"
                             href="/music"
                             title="music"
                         >
@@ -160,7 +165,7 @@ export default class MainMenu extends React.Component{
                         </ul>
     
                         </li>
-                        <li className="menu--item menu--item__has_sub_menu">
+                        {!this.props.loggedInUser.status? <></> : <li className="menu--item menu--item__has_sub_menu">
                         <label className="menu--link" title="following">
                             <i className="uil uil-layers menu--icon" />
                             <span className="menu--label">Following</span>
@@ -171,8 +176,8 @@ export default class MainMenu extends React.Component{
                                 Follow Users
                             </Link>
                         </ul>
-                        </li>
-                        <li className="menu--item menu--item__has_sub_menu">
+                        </li>}
+                        {!this.props.loggedInUser.status? <></> : <li className="menu--item menu--item__has_sub_menu">
                         <label className="menu--link" title="followers">
                             <i className="uil uil-layers menu--icon" />
                             <span className="menu--label">Followers</span>
@@ -183,9 +188,9 @@ export default class MainMenu extends React.Component{
                                 Follow Users
                             </Link>
                         </ul>
-                        </li>
+                        </li>}
                        
-                        <li className="menu--item">
+                        {/* <li className="menu--item">
                         <a
                             href="saved_courses.html"
                             className="menu--link"
@@ -194,11 +199,11 @@ export default class MainMenu extends React.Component{
                             <i className="uil uil-heart-alt menu--icon" />
                             <span className="menu--label">Saved Courses</span>
                         </a>
-                        </li>
-                        <li className="menu--item menu--item__has_sub_menu">
+                        </li> */}
+                        {/* <li className="menu--item menu--item__has_sub_menu">
                         <label className="menu--link" title="Pages">
                             <i className="uil uil-file menu--icon" />
-                            <span className="menu--label">Pages</span>
+                            <span className="menu--label">More</span>
                         </label>
                         <ul className="sub_menu">
                             <li className="sub_menu--item">
@@ -302,10 +307,10 @@ export default class MainMenu extends React.Component{
                             </a>
                             </li>
                         </ul>
-                        </li>
+                        </li> */}
                     </ul>
                     </div>
-                    <div className="left_section">
+                    {/* <div className="left_section">
                     <h6 className="left_title">SUBSCRIPTIONS</h6>
                     <ul>
                         <li className="menu--item">
@@ -339,8 +344,8 @@ export default class MainMenu extends React.Component{
                         </a>
                         </li>
                     </ul>
-                    </div>
-                    <div className="left_section pt-2">
+                    </div> */}
+                    {/* <div className="left_section pt-2">
                     <ul>
                         <li className="menu--item">
                         <a href="setting.html" className="menu--link" title="Setting">
@@ -371,7 +376,7 @@ export default class MainMenu extends React.Component{
                         </a>
                         </li>
                     </ul>
-                    </div>
+                    </div> */}
                     <div className="left_footer">
                     {/* <ul>
                         <li>
@@ -401,7 +406,7 @@ export default class MainMenu extends React.Component{
                     </ul> */}
                     <div className="left_footer_content">
                         <p>
-                        © 2024 <strong>Youbase</strong>. All Rights Reserved.
+                        © 2024~ <strong>Youbase</strong>. All Rights Reserved.
                         </p>
                     </div>
                     </div>

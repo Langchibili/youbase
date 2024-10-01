@@ -52,7 +52,7 @@ export default function MainFooter() {
     <footer className="footer mt-30">
       <div className="container">
         <div className="row">
-          <div className="col-lg-3 col-md-3 col-sm-6">
+          {/* <div className="col-lg-3 col-md-3 col-sm-6">
             <div className="item_f1">
               <a href="about_us.html">About</a>
               <a href="our_blog.html">Blog</a>
@@ -75,8 +75,8 @@ export default function MainFooter() {
               <a href="terms_of_use.html">Privacy Policy</a>
               <a href="sitemap.html">Sitemap</a>
             </div>
-          </div>
-          <div className="col-lg-3 col-md-3 col-sm-6">
+          </div> */}
+          {/* <div className="col-lg-3 col-md-3 col-sm-6">
             <div className="item_f3">
               <a href="#" className="btn1542">Teach on Cursus</a>
               <div className="lng_btn">
@@ -96,14 +96,14 @@ export default function MainFooter() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="col-lg-12">
             <div className="footer_bottm">
               <div className="row">
                 <div className="col-md-6">
                   <ul className="fotb_left">
                     <li><a href="index.html"><div className="footer_logo"><img src="/theme/images/logo1.svg" alt="" /></div></a></li>
-                    <li><p>© 2020 <strong>Cursus</strong>. All Rights Reserved.</p></li>
+                    <li><p>© 2024~ <strong>Youbase</strong>. All Rights Reserved.</p></li>
                   </ul>
                 </div>
                 <div className="col-md-6">
