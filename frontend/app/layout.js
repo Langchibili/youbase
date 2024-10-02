@@ -1,5 +1,6 @@
 "use client";
 
+import AudioPlayer from '@/components/Includes/AudioPlayer/AudioPlayer';
 import ClientOnly from '@/components/Parts/ClientSideRendering/ClientOnly';
 import React, { useEffect, useState } from 'react';
 
@@ -48,7 +49,8 @@ export default function RootLayout({ children }) {
           async=""
         />
       </head>
-      <body>{children}</body>
+      
+      <body><>{children}<AudioPlayer/></></body>
     </html>
   );
 }

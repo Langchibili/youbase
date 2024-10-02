@@ -3,13 +3,22 @@
 import React from "react"
 import AvatarOnly from "./AvatarOnly"
 import Link from "next/link"
-import { truncateText } from "@/Functions"
 import PostMoreBtn from "@/components/Includes/PostMoreBtn/PostMoreBtn"
+import { getPostUser } from "@/Functions"
 
 export default class AvatarWithPostDate extends React.Component{
    constructor(props){
       super(props)
-      this.state = {}
+      this.state = {
+        thisIsMyPost: false
+      }
+   }
+
+   async componentDidMount(){
+       const postUser = await getPostUser(this.props.post.dashed_title)
+       this.setState({
+        thisIsMyPost: this.props.loggedInUser.user.id === postUser.id
+       })
    }
 
    displayDateOrTime = () => {
@@ -57,7 +66,7 @@ export default class AvatarWithPostDate extends React.Component{
             </div>
            
         </div>
-         <PostMoreBtn {...this.props}  action="edit" postId={this.props.post.id}/>
+         <PostMoreBtn {...this.props}  action="edit" thisIsMyPost={this.state.thisIsMyPost} postId={this.props.post.id}/>
       </div> 
     )
    }

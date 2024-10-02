@@ -70,12 +70,12 @@ export default class MainMenu extends React.Component{
                             <span className="menu--label">Home</span>
                         </Link>
                         </li>
-                        <li className="menu--item">
+                        {!this.props.loggedInUser.status? <></> : <li className="menu--item">
                         <Link href="/feed" className="menu--link" title="Explore">
                             <i className="uil uil-search menu--icon" />
                             <span className="menu--label">Explore</span>
                         </Link>
-                        </li>
+                        </li>}
                         <li className="menu--item">
                         <Link
                             className="menu--link"

@@ -51,7 +51,7 @@ export default function ImagePortraitThumbnails(props) {
 
   return (
     <div
-      className="owl-item active"
+      className="owl-item"
       style={{ width: '134.017px', marginRight: 10 }}
     >
       <div className="item" style={{marginBottom:'10px'}}>
@@ -60,7 +60,7 @@ export default function ImagePortraitThumbnails(props) {
           <img
             style={imageStyles}
             src={getImage(props.file)}
-            alt={props.title}
+            alt={truncateText(props.title,25)}
             onClick={handleClickOpen}
           />
           <div className='user-avatar'>{props.avatar()}</div>

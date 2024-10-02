@@ -17,6 +17,14 @@ export default class ShareButton extends React.Component {
         }
     }
 
+    componentDidMount(){
+        if(this.props.hideButton){
+            this.setState({
+                hideButton: this.props.hideButton
+            })
+        }
+    }
+
     createShareNotification = async () => {
         const loggedInUserId = this.props.loggedInUser.user.id
         const userId = this.props.user.id
@@ -91,7 +99,7 @@ export default class ShareButton extends React.Component {
         }
 
         return (
-            <Modal open={this.state.openShareModal} onClose={this.handleModalClose}>
+            <Modal open={this.props.openShareModal? this.props.openShareModal : this.state.openShareModal} onClose={this.props.handleShareModalClose? this.props.handleShareModalClose : this.handleModalClose}>
                 <Box sx={style}>
                     <Typography variant="h6" component="h2">
                         Share this post
@@ -170,7 +178,7 @@ export default class ShareButton extends React.Component {
     render() {
         return (
             <>
-                {this.renderShareButton()}
+                {this.props.hideButton? <></> : this.renderShareButton() }
                 {this.renderShareModal()}
             </>
         )

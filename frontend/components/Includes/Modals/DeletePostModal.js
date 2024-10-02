@@ -2,8 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Box, Typography, Button, IconButton } from '@mui/material';
 import Link from 'next/link';
 import CloseIcon from '@mui/icons-material/Close';
+import { updatePost } from '@/Functions';
 
-export default function DeletePostModal({ open, handleClose }) {
+export default function DeletePostModal({ open, handleClose, postId }) {
+ const deletePost = async ()=>{
+      const updateObject = {
+        data:{
+            status: 'draft'
+        }
+      }
+      const deletePost = await updatePost(updateObject,postId)
+      if(deletePost && deletePost.status === "draft"){
+       if(document){
+        document.getElementById("post-"+deletePost.id).style.display = "none"
+        handleClose()
+       }
+      }
+ }
   return (
     <Modal
       open={open}
@@ -45,18 +60,16 @@ export default function DeletePostModal({ open, handleClose }) {
         </Typography>
         <Box mt={3} display="flex" justifyContent="space-around">
           <Button
-            component={Link}
-            href="/signup"
             variant="contained"
             color="primary"
+            onClick={handleClose}
           >
             Cancel
           </Button>
           <Button
-            component={Link}
-            href="/signin"
-            variant="outlined"
-            color="primary"
+            variant="contained"
+            color="error"
+            onClick={deletePost}
           >
             Delete
           </Button>

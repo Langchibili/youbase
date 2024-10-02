@@ -130,7 +130,8 @@ export default class UserProfileForm extends React.Component{
                             className="prompt srch_explore"
                             type="text"
                             name="name"
-                            defaultValue={this.state.details.firstname}
+                            value={this.state.details.firstname ?? ""}
+                            onChange={(e) => this.setState({ errorExists: false, submittingText: 'Save Changes',updating: false, details: { ...this.state.details, firstname: e.target.value } })}
                             id="id[name]"
                             required=""
                             maxLength={64}
@@ -146,7 +147,8 @@ export default class UserProfileForm extends React.Component{
                             className="prompt srch_explore"
                             type="text"
                             name="surname"
-                            defaultValue={this.state.details.lastname}
+                            value={this.state.details.lastname ?? ""}
+                            onChange={(e) => this.setState({ errorExists: false, submittingText: 'Save Changes',updating: false, details: { ...this.state.details, lastname: e.target.value } })}
                             id="id[surname]"
                             required=""
                             maxLength={64}
@@ -165,7 +167,8 @@ export default class UserProfileForm extends React.Component{
                             name="description"
                             id="id_about"
                             placeholder="Write a little description about you..."
-                            defaultValue={this.state.details.about}
+                            value={this.state.details.about ?? ""}
+                            onChange={(e) => this.setState({ errorExists: false, submittingText: 'Save Changes',updating: false, details: { ...this.state.details, about: e.target.value } })}
                             />
                         </div>
                         </div>

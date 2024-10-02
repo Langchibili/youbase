@@ -3,8 +3,12 @@ import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert"; // Menu icon (three dots)
 import PostModal from "../Modals/PostModal";
 import { log } from "@/Constants";
+import ShareButton from "@/components/Parts/EngageMents/ShareButton";
+import DeletePostModal from "../Modals/DeletePostModal";
+import ReportPostModal from "../Modals/ReportPostModal";
 
-const MoreOptions = ({ anchorEl, open, handleClose,handlePostModalClickOpen }) => {
+const MoreOptions = ({ anchorEl, open, loggedInUser, handleDeleteModalOpen, handleReportModalOpen, handleShareModalOpen,handleClose,handlePostModalClickOpen,thisIsMyPost}) => {
+  console.log(thisIsMyPost)
   return (
     <Menu
       anchorEl={anchorEl}
@@ -19,9 +23,10 @@ const MoreOptions = ({ anchorEl, open, handleClose,handlePostModalClickOpen }) =
         horizontal: 'right',
       }}
     >
-      <MenuItem onClick={() => { handleClose(); handlePostModalClickOpen(); }}>Edit</MenuItem>
-      <MenuItem onClick={handleClose}>Delete</MenuItem>
-      <MenuItem onClick={handleClose}>Share</MenuItem>
+      {!thisIsMyPost?  <></> : <MenuItem onClick={() => { handleClose(); handlePostModalClickOpen(); }}>Edit</MenuItem>}
+      <MenuItem onClick={()=>{handleShareModalOpen(true)}}>Share</MenuItem>
+      {!thisIsMyPost? <></> :  <MenuItem onClick={()=>{handleDeleteModalOpen(true)}}>Delete</MenuItem>}
+      {!loggedInUser.status? <></> : <MenuItem onClick={()=>{handleReportModalOpen(true)}}>Report</MenuItem>}
     </Menu>
   );
 };
@@ -29,7 +34,10 @@ const MoreOptions = ({ anchorEl, open, handleClose,handlePostModalClickOpen }) =
 export default function PostMoreBtn(props) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const [openModal, setOpen] = useState(false);
+  const [openModal, setOpen] = useState(false)
+  const [openShareModal, handleShareModalOpen] = useState(false)
+  const [openDeleteModal, handleDeleteModalOpen] = useState(false)
+  const [openReportModal, handleReportModalOpen] = useState(false)
 
   const handlePostModalClickOpen = () => {
     setOpen(true);
@@ -39,6 +47,18 @@ export default function PostMoreBtn(props) {
     setOpen(false);
   }
 
+  const handleShareModalClose = ()=>{
+    handleShareModalOpen(false)
+  }
+
+  const handleDeleteModalClose = ()=>{
+    handleDeleteModalOpen(false)
+  }
+
+  const handleReportModalClose = ()=>{
+    handleReportModalOpen(false)
+  }
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   }
@@ -46,13 +66,15 @@ export default function PostMoreBtn(props) {
   const handleClose = () => {
     setAnchorEl(null);
   }
-  log('in the more button',props)
   return (
     <>
+    <DeletePostModal open={openDeleteModal} postId={props.post.id} handleClose={handleDeleteModalClose}/>
+    <ReportPostModal open={openReportModal} {...props} handleClose={handleReportModalClose}/>
+      <ShareButton hideButton={true} openShareModal={openShareModal} handleShareModalClose={handleShareModalClose} post={props.post} user={props.post.user.data.attributes} {...props} />
       <IconButton onClick={handleClick} sx={{paddingTop: '0px', paddingRight:'0px'}}>
         <MoreVertIcon />
       </IconButton>
-      <MoreOptions anchorEl={anchorEl} open={open} handleClose={handleClose} handlePostModalClickOpen={handlePostModalClickOpen} handlePostModalClose={handlePostModalClose}/>
+      <MoreOptions loggedInUser={props.loggedInUser} handleDeleteModalOpen={handleDeleteModalOpen} handleReportModalOpen={handleReportModalOpen} handleShareModalOpen={handleShareModalOpen} thisIsMyPost={props.thisIsMyPost} anchorEl={anchorEl} open={open} handleClose={handleClose} handlePostModalClickOpen={handlePostModalClickOpen} handlePostModalClose={handlePostModalClose}/>
       <PostModal open={openModal} onClose={handlePostModalClose} {...props}/>
     </>
   )

@@ -234,7 +234,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="section3125">
+              <div className="section3125 mt-10">
               <h4 className="item_title">Reels</h4>  
               {loading? <></> : <ContentDisplay 
                             contentToView = "portrait-videos"
@@ -242,8 +242,8 @@ export default function Home() {
                             contentUri={`/posts?populate=user,featuredImages,media`}
                             startPage="1"
                             limit="10"
+                            contentLimit = {9}
                             sort="desc"
-                            displayPortraits={true}
                             />}
               </div>
               <div className="section3125 mt-30">
@@ -255,9 +255,8 @@ export default function Home() {
                             contentUri={`/posts?populate=user,featuredImages,media`}
                             startPage="1"
                             limit="10"
+                            contentLimit = {9}
                             sort="desc"
-                            displayPortraits={true}
-                            portraitsContentType = "video"
                             />}
                   </div>
               </div>
@@ -270,8 +269,6 @@ export default function Home() {
                             startPage="1"
                             limit="10"
                             sort="desc"
-                            displayPortraits={false}
-                            portraitsContentType = "video"
                             />}           
                 <a href="live_streams.html" className="see150">
                   See all
@@ -2198,12 +2195,12 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="col-xl-12 col-lg-12">
+            {/* <div className="col-xl-12 col-lg-12">
               <div className="section3125 mt-30">
                 <h4 className="item_title">Captures</h4>
                 <ContentDisplay contentToView="portrait-images"/>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

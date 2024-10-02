@@ -11,6 +11,7 @@ import Box from "@mui/material/Box";
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/system";
 import PostForm from "@/components/Forms/PostForm/PostForm";
+import ReportPostForm from "@/components/Forms/ReportPostForm/ReportPostForm";
 
 const StyledAppBar = styled(AppBar)({
   position: "relative",
@@ -35,7 +36,7 @@ export default function ReportPostModal(props) {
     <Dialog
       fullScreen
       open={props.open}
-      onClose={props.onClose}
+      onClose={props.handleClose}
       TransitionComponent={Transition}
       color="secondary"
     >
@@ -44,17 +45,17 @@ export default function ReportPostModal(props) {
           <IconButton
             edge="start"
             color="inherit"
-            onClick={props.onClose}
+            onClick={props.handleClose}
             aria-label="close"
           >
             <CloseIcon />
           </IconButton>
-          <StyledTitle variant="h6">{props.action === "create"? "Create New Post" : "Edit Post"}</StyledTitle>
+          <StyledTitle variant="h6">Report Post</StyledTitle>
         </Toolbar>
       </StyledAppBar>
       <StyledContent>
-          <PostForm {...props} />
+         <ReportPostForm {...props}/>
       </StyledContent>
     </Dialog>
-  );
+  )
 }

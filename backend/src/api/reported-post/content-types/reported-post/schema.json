@@ -4,7 +4,8 @@
   "info": {
     "singularName": "reported-post",
     "pluralName": "reported-posts",
-    "displayName": "ReportedPost"
+    "displayName": "ReportedPost",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -28,7 +29,8 @@
         "Inappropriate Content: Posts that contain inappropriate language, images, or topics that are not suitable for all audiences.",
         "Trolling: Content intended to provoke or upset others without genuine intent for discussion.",
         "False Claims: Posts that make baseless accusations or spread conspiracy theories without credible evidence.",
-        "Community Guidelines Violation: Any other behavior or content that breaches the platform's specific community guidelines."
+        "Community Guidelines Violation: Any other behavior or content that breaches the platform's specific community guidelines.",
+        "other"
       ]
     },
     "reasonBody": {

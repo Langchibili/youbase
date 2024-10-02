@@ -1,5 +1,4 @@
 import AvatarWithPostDate from "@/components/Parts/UserDisplay/AvatarWithPostDate";
-import PostMoreBtn from "../PostMoreBtn/PostMoreBtn";
 import Link from "next/link";
 
 export default function TextPostMedium(props) {

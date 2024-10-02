@@ -17,7 +17,7 @@ import { getPosts } from '@/Functions'
 export default function ContentDisplay(props) {
   const [postsMeta, setPostsMeta] = useState(null)
   const [posts, setPosts] = useState([])
-  const [portraitVideos, setPortraitVideos] = useState([])
+  const [portraitContent, setPortraitContent] = useState([])
   const [page, setPage] = useState(parseInt(props.startPage))
   const [loading, setLoading] = useState(true)
 
@@ -55,8 +55,12 @@ export default function ContentDisplay(props) {
             setLoading(true)
             return 
           }
-          const newPortraitVideos = posts.filter(post => {
-            if(!post.attributes.type){
+          if(portraitContent.length > props.contentLimit){ 
+            setLoading(true)
+            return
+          }
+          const newPortraitContent = posts.filter((post) => {
+            if(!post.attributes || !post.attributes.type || post.attributes.status !== 'published'){
               return false
             }
             if(props.contentToView === "portrait-videos" && post.attributes.type === 'image'){
@@ -66,15 +70,13 @@ export default function ContentDisplay(props) {
               return false
             }
             if(post.attributes.type !== 'music' || post.attributes.type !== 'text' || !post.attributes.type !== 'embed'){
-              if(!post.attributes.mediaDisplayType){
-                return true
-              }
-            if(post.attributes.type === "image" || post.attributes.type === "video"){
-              return post.attributes.mediaDisplayType !== 'landscape'
-            }  
+              return !post.attributes.mediaDisplayType || post.attributes.mediaDisplayType !== 'landscape'
+           }
+           else{
+            return false
            }
           })
-          setPortraitVideos(newPortraitVideos)
+          setPortraitContent(newPortraitContent)
           loadMorePosts() // means they are still more posts, so load more
        }
        else{
@@ -100,9 +102,6 @@ export default function ContentDisplay(props) {
   }, [page])
 
   const renderPostContent = (post, postEngagementsDisplay) => {
-    if (props.contentToView === 'portrait-videos' || props.contentToView === 'portrait-images') {
-      return <PortraitContentDisplay content={portraitVideos} loggedInUser={props.loggedInUser} />
-    }
     switch (post.type) {
       case 'text':
         return <TextPostMedium post={post} postEngagementsDisplay={postEngagementsDisplay} {...props} />
@@ -140,7 +139,15 @@ export default function ContentDisplay(props) {
   if(!loading && posts.length === 0){ // then you have tried to load the content but nothing exists
     return <>no content found</>
   }
-  return (
+  if (props.contentToView === 'portrait-videos' || props.contentToView === 'portrait-images') { // filter out portrait content
+    let portraitContentToDisplay = portraitContent
+    console.log(portraitContent.length > props.contentLimit)
+    if(portraitContent.length > props.contentLimit){ 
+       portraitContentToDisplay = portraitContent.slice(0,props.contentLimit)
+    }
+    return <PortraitContentDisplay content={portraitContentToDisplay} loggedInUser={props.loggedInUser} />
+  }
+  return ( // display landscape content
     <div>
       {posts.map((post) => {
         const postAttributes = post.attributes
@@ -150,20 +157,20 @@ export default function ContentDisplay(props) {
         if (!postAttributes.user || postAttributes.status !== 'published') { 
           return null 
         }
-        
-        if(post.attributes.type !== 'music' || post.attributes.type !== 'text' || post.attributes.type !== "embed"){
+        // only show landscape images and videos here
+        if(post.attributes.type === 'image' || post.attributes.type === 'video'){
           if(!post.attributes.mediaDisplayType || post.attributes.mediaDisplayType !== 'landscape'){
               return null
           }
         }
         post.attributes.id = post.id
         return (
-          <div key={post.id}>
+          <div key={post.id} id={"post-"+post.id}>
             {renderPostContent(postAttributes, postEngagementsDisplay)}
           </div>
         )
       })}
-      {loading && page !== postsMeta?.pagination.pageCount && <div>Loading more content...</div> /* means you have already loaded initial posts */}
+      {loading && props.contentToView === "all" && page !== postsMeta?.pagination.pageCount && <div>Loading more content...</div> /* means you have already loaded initial posts */}
     </div>
   )
 }

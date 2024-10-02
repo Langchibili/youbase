@@ -9,7 +9,6 @@ export default function PortraitContentDisplay(props) {
   console.log('portrait vids', props.content); // Make sure content is not empty
 
   if (!props.content || props.content.length === 0) return <></>; // Check for undefined or empty content
-  
   return (
     <>
       <div className="la5lo1" style={{marginBottom:'10px'}}>
@@ -20,15 +19,15 @@ export default function PortraitContentDisplay(props) {
         <div
             className="owl-stage"
             style={{
-            transform: "translate3d(-144px, 0px, 0px)",
+            transform: "translate3d(0px, 0px, 0px)",
             transition: "all",
-            width: "1297px",
+            width: "1841px !important",
             backgroundColor: '#rgb(71 55 71)'
             }}
             
         >
           {props.content.map((content) => {
-            content.attributes.id = content.id
+            content.attributes.id = content.id // same as post.attributes.id = post.id
             if (content.attributes.type === "video" && content.attributes.media) {  // Ensure content has media
                 return content.attributes.media.data.map((media) => {
                     media.attributes.id = media.id; // Ensure media.id exists

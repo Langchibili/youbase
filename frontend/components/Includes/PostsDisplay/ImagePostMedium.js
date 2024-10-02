@@ -1,5 +1,4 @@
 import AvatarWithPostDate from "@/components/Parts/UserDisplay/AvatarWithPostDate";
-import { getImage } from "@/Functions";
 import Link from "next/link";
 import MediaDisplay from "@/components/Parts/MediaDisplay/MediaDisplay";
 
@@ -13,7 +12,6 @@ export default function ImagePostMedium(props) {
           <p className="rvds10" style={{ marginTop: '10px' }}>
             {props.post.description}
           </p>
-          
           </Link>
           {props.postEngagementsDisplay(props.post)}
         </div>

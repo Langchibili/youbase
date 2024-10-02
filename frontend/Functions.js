@@ -156,6 +156,24 @@ export const createNewPost = async (data)=>{
     return null
 }
 
+export const updatePost = async (data,postId)=>{
+  const post =  await fetch(api_url+'/posts/'+postId, {
+      method: 'PUT',
+      headers: {
+       'Authorization': `Bearer ${getJwt()}`,
+       'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => data)
+  if(post && post.data && post.data.attributes){
+      post.data.attributes.id = post.data.id
+      return post.data.attributes
+   }
+  return null
+}
+
 export const getPosts = async (customUri=null,getMeta=false)=>{
   console.log(customUri)
   let posts = null
@@ -221,6 +239,52 @@ export const getPost = async (title)=>{
         if(post && post.data && post.data.attributes){
            post.data.attributes.id = post.data.id
            return post.data.attributes
+        }
+        return null
+  }
+
+  export const getPostsByType = async (posttype,mediaOnly=false,populateString="")=>{
+    let populate = '&populate='+populateString
+    if(populateString.length === 0){
+       populate = "" // it means populate nothing
+    }
+    let requestUri = api_url+'/contents/?type='+posttype+populate
+    if(mediaOnly){
+      requestUri = api_url+'/contents/?type='+posttype+"&mediaOnly=true"+populate
+    }
+    const posts = await fetch(requestUri,{
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(response => response.json())
+        .then(data => data)
+        .catch(error => console.error(error))
+         
+        if(posts){
+           return posts
+        }
+        return null
+  }
+
+  export const getPostsBySeachAndType = async (search,posttype="all",mediaOnly=false,populateString="")=>{
+    let populate = '&populate='+populateString
+    if(populateString.length === 0){
+       populate = "" // it means populate nothing
+    }
+    let requestUri =  requestUri = api_url+'/contents/?type='+posttype+"&search="+search+populate
+    if(mediaOnly){
+     requestUri = api_url+'/contents/?type='+posttype+"&search="+search+"&mediaOnly=true"+populate    
+    }
+    const posts = await fetch(requestUri,{
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(response => response.json())
+        .then(data => data)
+        .catch(error => console.error(error))
+         
+        if(posts){
+           return posts
         }
         return null
   }

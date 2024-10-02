@@ -1,0 +1,18 @@
+{
+  "kind": "singleType",
+  "collectionName": "report_reasons",
+  "info": {
+    "singularName": "report-reason",
+    "pluralName": "report-reasons",
+    "displayName": "reportReason"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "reasons": {
+      "type": "json"
+    }
+  }
+}
