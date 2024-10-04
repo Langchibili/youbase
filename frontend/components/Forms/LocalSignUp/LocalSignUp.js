@@ -42,7 +42,7 @@ export default class LocalSignUp extends React.Component{
     const response = await signUserUp('local',username,password) 
     if(response.hasOwnProperty('error')){
       if(response.error.message === "userExists"){
-        if(typeof window !== undefined){
+        if(typeof window !== "undefined"){
            window.location = "/signin"
         }
         // this.setState({

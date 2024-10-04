@@ -68,7 +68,7 @@ export const removeIdFromArray = (arr,id)=>{
     return arr
 }
 
-export const dynamicConfig = (config="auto")=>{
+export const dynamicConfig = (config="force-dynamic")=>{
     return config
 }
 

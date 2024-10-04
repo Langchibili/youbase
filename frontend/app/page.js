@@ -8,7 +8,7 @@ import React from "react";
 // Force the page to be dynamically rendered on every request
 
 export const dynamic = dynamicConfig();
-export default function Home(props) {
+export default function Page(props) {
     console.log(useUser())
   return (
     <>

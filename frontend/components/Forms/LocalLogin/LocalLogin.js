@@ -42,7 +42,7 @@ export default class Localogin extends React.Component{
     const response = await logUserIn('local',username,password) 
     if(response.hasOwnProperty('error')){
       if(response.error.message === "userDoesNotExists"){
-        if(typeof window !== undefined){
+        if(typeof window !== "undefined"){
           window.location = "/signup"
         }
         return
@@ -61,7 +61,7 @@ export default class Localogin extends React.Component{
       }
       return
     }
-    if(typeof window !== undefined){
+    if(typeof window !== "undefined"){
        window.location = "/"
     }
   }

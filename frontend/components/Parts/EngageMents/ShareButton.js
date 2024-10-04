@@ -55,7 +55,7 @@ export default class ShareButton extends React.Component {
     }
 
     copyLink = () => {
-        if(typeof window !== undefined){
+        if(typeof window !== "undefined"){
             navigator.clipboard.writeText(window.location.href+'posts/'+this.props.post.dashed_title) // Copy the current page URL
             this.setState({
                 linkCopied: true
@@ -64,21 +64,21 @@ export default class ShareButton extends React.Component {
     }
 
     shareOnFacebook = () => {
-        if(typeof window !== undefined){
+        if(typeof window !== "undefined"){
             const url = encodeURIComponent(window.location.href+'posts/'+this.props.post.dashed_title)
             window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank')
         }
     }
 
     shareOnTwitter = () => {
-        if(typeof window !== undefined){
+        if(typeof window !== "undefined"){
             const url = encodeURIComponent(window.location.href+'posts/'+this.props.post.dashed_title)
             window.open(`https://twitter.com/intent/tweet?url=${url}`, '_blank')
         }
     }
 
     shareOnWhatsApp = () => {
-        if(typeof window !== undefined){
+        if(typeof window !== "undefined"){
             const url = encodeURIComponent(window.location.href+'posts/'+this.props.post.dashed_title)
             window.open(`https://wa.me/?text=${url}`, '_blank')
         }
