@@ -7,7 +7,6 @@ import AudioPlayer from '../components/Includes/AudioPlayer/AudioPlayer';
 import { checkUserLogginStatus } from '@/Constants';
 import React, { useEffect, useState } from 'react';
 import { UserProvider } from "@/Contexts/UserContext";
-import ContentLoader from '@/components/Includes/Loader/ContentLoader';
 import PageLoader2 from '@/components/Includes/Loader/PageLoader2';
 import { AudioProvider } from '@/Contexts/AudioContext';
 import ImagePageLoader from '@/components/Includes/Loader/ImagePageLoader';

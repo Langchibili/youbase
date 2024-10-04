@@ -33,7 +33,7 @@ export default class ImagePost extends React.Component{
          .then(data => data)
          .catch(error => console.error(error))
         if(removed){
-          if (typeof document !== 'undefined') {
+          if(typeof document !== 'undefined'){
             document.getElementById("#"+uploadid).style.display = "none"
           }
         }

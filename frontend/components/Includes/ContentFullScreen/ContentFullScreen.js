@@ -27,6 +27,9 @@ export default function ContentFullScreen(props) {
 
   // Add buffering event listeners
   useEffect(() => {
+    if(typeof window === undefined){
+       return
+    }
     if(props.post.type !== "video"){
       return
     }

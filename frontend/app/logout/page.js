@@ -10,10 +10,14 @@ export default function Signup() {
    const runLogUserOut = async ()=> {
      const userLoggedOut = await logUserOut()
      if(userLoggedOut){
-      window.location = "/"
+      if(typeof window !== undefined){
+          window.location = "/"
+      }
      }
      else{
-      window.location = "/logout"
+      if(typeof window !== undefined){
+         window.location = "/logout"
+      }
      }
    }
    runLogUserOut()

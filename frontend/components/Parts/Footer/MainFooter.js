@@ -4,8 +4,10 @@ import { clientUrl } from '@/Constants';
 import React, { useEffect } from 'react'
 
 export default function MainFooter() {
-  if(typeof document === 'undefined'){ return }
   useEffect(() => {
+    if(typeof document !== 'undefined'){ 
+      return 
+    }
     const scripts = [
       clientUrl+'/theme/js/jquery-3.3.1.min.js',
       clientUrl+'/theme/js/vertical-responsive-menu.min.js',
@@ -38,6 +40,9 @@ export default function MainFooter() {
     });
 
     return () => {
+      if(typeof document !== 'undefined'){ 
+        return 
+      }
       // Clean up script elements when the component unmounts
       scripts.forEach((src) => {
         const script = document.querySelector(`script[src="${src}"]`);
@@ -97,7 +102,7 @@ export default function MainFooter() {
               </div>
             </div>
           </div> */}
-          <div className="col-lg-12">
+          {/* <div className="col-lg-12">
             <div className="footer_bottm">
               <div className="row">
                 <div className="col-md-6">
@@ -119,7 +124,7 @@ export default function MainFooter() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </footer>
