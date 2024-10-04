@@ -3,23 +3,12 @@ import PostImpressions from "@/components/Parts/EngageMents/PostImpressions";
 import ShareButton from "@/components/Parts/EngageMents/ShareButton";
 import StreamsDisplay from "@/components/Parts/EngageMents/StreamsDisplay";
 import ViewsDisplay from "@/components/Parts/EngageMents/ViewsDisplay";
-import MainFooter from "@/components/Parts/Footer/MainFooter";
-import MainHeader from "@/components/Parts/Header/MainHeader";
 import MediaDisplay from "@/components/Parts/MediaDisplay/MediaDisplay";
-import MainMenu from "@/components/Parts/Menus/MainMenu";
 import AvatarWithFollowButton from "@/components/Parts/UserDisplay/AvatarWithFollowButton";
 
 export default function SinglePostDisplay(props) {
   return (
     <>
-    {/* Header Start */}
-    <MainHeader {...props}/>
-    {/* Header End */}
-    {/* Left Sidebar Start */}
-    <MainMenu {...props}/>
-    {/* Left Sidebar End */}
-    {/* Body Start */}
-    <div className="wrapper">
   <div className="sa4d25">
     <div className="container-fluid">
       <div className="row">
@@ -301,10 +290,6 @@ export default function SinglePostDisplay(props) {
       </div>
     </div>
   </div>
-  <MainFooter {...props}/>
-</div>
-
-    {/* Body End */}
   </>
   
   );

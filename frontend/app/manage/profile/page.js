@@ -4,13 +4,12 @@ import UserProfileForm from '@/components/Forms/UserProfileForm/UserProfileForm'
 import ContentNotFound from '@/components/Includes/ContentNotFound/ContentNotFound'
 import PageLoader from '@/components/Includes/Loader/PageLoader'
 import LogInFirstModal from '@/components/Includes/Modals/LogInFirstModal'
-import MainFooter from '@/components/Parts/Footer/MainFooter'
-import MainHeader from '@/components/Parts/Header/MainHeader'
-import MainMenu from '@/components/Parts/Menus/MainMenu'
 import { checkUserLogginStatus } from '@/Constants'
-import { getUserById } from '@/Functions'
+import { dynamicConfig, getUserById } from '@/Functions'
 import React, { useState, useEffect } from 'react'
 
+// Force the page to be dynamically rendered on every request
+export const dynamic = dynamicConfig();
 export default function User({ params }) {
   const [loggedInUser, setLoggedInUser] = useState(null)
   const [user, setUser] = useState(null)
@@ -44,14 +43,6 @@ export default function User({ params }) {
 
   return ( 
        <>
-       {/* Header Start */}
-        <MainHeader loggedInUser={loggedInUser}/>
-        {/* Header End */}
-        {/* Left Sidebar Start */}
-        <MainMenu loggedInUser={loggedInUser}/>
-        {/* Left Sidebar End */}
-        {/* Body Start */}
-        <div className="wrapper">
         <div className="sa4d25">
             <div className="container-fluid">
             <div className="row">
@@ -63,10 +54,6 @@ export default function User({ params }) {
                 </div>
             </div>
         </div>
-        <MainFooter loggedInUser={loggedInUser} />
-        
-        </div>
-        {/* Body End */}
        </>
   )
 }

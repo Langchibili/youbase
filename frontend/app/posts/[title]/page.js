@@ -4,9 +4,10 @@ import ContentNotFound from '@/components/Includes/ContentNotFound/ContentNotFou
 import PageLoader from '@/components/Includes/Loader/PageLoader'
 import SinglePostDisplay from '@/components/Includes/SinglePostDisplay/SinglePostDisplay'
 import { checkUserLogginStatus } from '@/Constants'
-import { getPost, getPostUser } from '@/Functions'
+import { dynamicConfig, getPost, getPostUser } from '@/Functions'
 import React, { useState, useEffect } from 'react'
-
+// Force the page to be dynamically rendered on every request
+export const dynamic = dynamicConfig();
 export default function Post({ params }) {
   const [post, setPost] = useState(null)
   const [postUser, setPostUser] = useState(null) // the post owner

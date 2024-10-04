@@ -37,14 +37,6 @@ export default function Videods({ params }) {
   
   return ( 
     <>
-    {/* Header Start */}
-     <MainHeader loggedInUser={loggedInUser}/>
-     {/* Header End */}
-     {/* Left Sidebar Start */}
-     <MainMenu loggedInUser={loggedInUser}/>
-     {/* Left Sidebar End */}
-     {/* Body Start */}
-     <div className="wrapper">
      <div className="sa4d25">
          <div className="container-fluid">
          <div className="row">
@@ -52,10 +44,6 @@ export default function Videods({ params }) {
          </div>
          </div>
      </div>
-     <MainFooter loggedInUser={loggedInUser} />
-     
-     </div>
-     {/* Body End */}
     </>
   )
 }

@@ -1,9 +1,6 @@
 
 "use client"
 
-import MainFooter from "@/components/Parts/Footer/MainFooter";
-import MainHeader from "@/components/Parts/Header/MainHeader";
-import MainMenu from "@/components/Parts/Menus/MainMenu";
 import { getImage, handleCountsDisplay } from "@/Functions";
 import SocialsDisplay from "../SocialsDisplay/SocialsDisplay";
 import Link from "next/link";
@@ -52,15 +49,7 @@ export default function UserProfileDisplay(props) {
 
   return (
     <>
-    {/* Header Start */}
-    <MainHeader {...props}/>
-    {/* Header End */}
-    {/* Left Sidebar Start */}
-    <MainMenu {...props}/>
-    {/* Left Sidebar End */}
-    {/* Body Start */}
-    <div className="wrapper _bg4586">
-  <div className="_216b01">
+  <div className="_216b01" style={{marginTop:'-30px'}}>
     <div className="container-fluid">
       <div className="row justify-content-md-center">
         <div className="col-md-10">
@@ -92,13 +81,13 @@ export default function UserProfileDisplay(props) {
                   <li>
                     <div className="_ttl121">
                       <div className="_ttl122">Posts</div>
-                      <div className="_ttl123">{handleCountsDisplay(postsCount)}</div>
+                      <div className="_ttl123">{handleCountsDisplay}</div>
                     </div>
                   </li>
                   <li>
                     <div className="_ttl121">
                       <div className="_ttl122">Following</div>
-                      <div className="_ttl123">{handleCountsDisplay(followingCount)}</div>
+                      <div className="_ttl123">{followingCount}</div>
                     </div>
                   </li>
                   
@@ -1077,11 +1066,6 @@ export default function UserProfileDisplay(props) {
       </div>
     </div>
   </div>
-  <MainFooter {...props}/>
-</div>
-
-
-    {/* Body End */}
   </>
   
   );

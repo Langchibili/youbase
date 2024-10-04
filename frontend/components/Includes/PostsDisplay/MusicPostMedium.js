@@ -1,10 +1,8 @@
 import AvatarWithPostDate from "@/components/Parts/UserDisplay/AvatarWithPostDate";
 import Link from "next/link";
+import SongPlayButton from "../SongPlayButton/SongPlayButton";
 
 export default function MusicPostMedium(props) {
-    const handlePlayClick = ()=>{
-        
-    }
     return (
       <div style={{backgroundColor:"white",borderRadius:'5px',marginBottom:'10px'}}>
         <div className="review_item" style={{ position: 'relative'}}>
@@ -21,12 +19,11 @@ export default function MusicPostMedium(props) {
 
         <div className="music-post-container" style={{backgroundColor:"lightyellow",marginTop:'10px'}}>
             <div>
-              <button className="play-button" onClick={handlePlayClick}>
-                <i className="uil uil-play"></i>
-              </button>
+              <SongPlayButton {...props} />
             </div>
             {props.postEngagementsDisplay(props.post)}
         </div>
+        {props.post.media.data && props.post.media.data.length > 1? <h3>{props.post.media.data.length} Songs</h3> : <></>}
         </div>
       </div>
     )

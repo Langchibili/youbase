@@ -7,6 +7,10 @@ import GoogleSignIn from "@/components/Includes/GoogleSingIn/GoogleSignIn";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import Head from "next/head";
+import { dynamicConfig } from "@/Functions";
+
+// Force the page to be dynamically rendered on every request
+export const dynamic = dynamicConfig();
 
 export default function Signup() {
  

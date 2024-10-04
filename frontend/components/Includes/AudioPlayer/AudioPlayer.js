@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./AudioPlayer.css";
 import ReactJkMusicPlayer from "react-jinke-music-player";
 import "react-jinke-music-player/assets/index.css";
 import { getImage, getPostsByType } from "@/Functions";
 import { backEndUrl, clientUrl } from "@/Constants";
+import { useAudio } from "@/Contexts/AudioContext";
 
 
 export default class AudioPlayer extends React.Component{
@@ -14,7 +15,8 @@ export default class AudioPlayer extends React.Component{
         playList: [],
         playedSongs: [],
         autoPlay: false,
-        clearPriorAudioLists: true
+        clearPriorAudioLists: true,
+        audioInstance: null
       }
     }
 
@@ -26,7 +28,7 @@ export default class AudioPlayer extends React.Component{
     }
     getDefaultPlaylist = async ()=>{
       const getInitialSongs = await getPostsByType('music',true,'media')
-      console.log(getInitialSongs)
+      //console.log(getInitialSongs)
       this.audioinstance.oncanplay = () =>{ 
         this.audioinstance.pause();
       }
@@ -38,9 +40,10 @@ export default class AudioPlayer extends React.Component{
         console.log(e);
       }
       this.setState({
-        playList: getInitialSongs.media.map((song)=>{ return { key: song.id, musicSrc: backEndUrl+song.url, name: song.name, singer: song.name, cover: clientUrl+"/youbase-logo.png"}})
+        playList: getInitialSongs.media.map((song)=>{ return { key: song.id, musicSrc: backEndUrl+song.url, name: song.name, singer: song.name, cover: getImage(null,'thumbnail','music')}})
       })
     }
+
     PlayNewList = async (nowPlayingListId) =>{
     //   const playlistObject = await api.getItemById("/playlists", nowPlayingListId, " "); // playlist object with song ids
     //   const playListSongs= await api.createItem("/playlists/songs", {postIds: playlistObject.postIds, limit: 20}); // playlist with song objects
@@ -52,28 +55,34 @@ export default class AudioPlayer extends React.Component{
     //     })
     //   })
     }
-    addSongToPlaylist = async (nowPlayingSongId)=>{
-        if(nowPlayingSongId){
-        //   const song = await api.getItemById("/posts", nowPlayingSongId, "");
-        //   const playList = this.state.playList;
-          this.setState({
-            // clearPriorAudioLists: true,
-            // playList: [{key: song._id, musicSrc: song.track.uri_path, name: song.title, singer: song.artist.artistName, cover: song.thumbnail.medium},...playList]
-          }, 
-          ()=>{
-            // this.audioinstance.load();
-            // this.audioinstance.oncanplay = () =>{ 
-              
-            // }
-            // this.audioinstance.onerror = (e)=>{
-              
-            //   this.audioinstance.oncanplay = () =>{
-            //     this.audioinstance.play();
-            //   }
-            //   console.log(e);
-            // }
-            //this.audioinstance.play();
-          }
+    addSongToPlaylist = async (nowPlayingSongs,post)=>{
+        if(nowPlayingSongs){ 
+            const playList = this.state.playList;
+            const newPlayList = nowPlayingSongs.map((song)=>{
+               if(song.hasOwnProperty('attributes')){
+                return {key: song.id, musicSrc: backEndUrl+song.attributes.url, name: song.attributes.name, singer: song.attributes.name, cover: getImage(post.featuredImages,'thumbnail','music')}
+               }
+               return {key: song.id, musicSrc: backEndUrl+song.url, name: song.name, singer: song.name, cover: getImage(post.featuredImages,'thumbnail','music')}
+            })
+            this.setState({
+                clearPriorAudioLists: true,
+                playList: [newPlayList[0],...newPlayList,...playList] //since it plays only from the second song, this guarantees the added song plays
+            }, 
+            ()=>{
+                console.log(this.state.playList)
+                this.audioinstance.load();
+                this.audioinstance.oncanplay = () =>{ 
+                
+                }
+                this.audioinstance.onerror = (e)=>{
+                
+                this.audioinstance.oncanplay = () =>{
+                    this.audioinstance.play();
+                }
+                console.log(e);
+                }
+                this.audioinstance.play();
+            }
           )
         }
         else{ 
@@ -109,11 +118,11 @@ export default class AudioPlayer extends React.Component{
     //     }
     //   } 
     }
-    pauseAudio = ()=>{
-      if(this.props.pauseAudio){
-        this.audioinstance.pause();
-      }
-    }
+    // pauseAudio = ()=>{
+    //   if(this.props.pauseAudio){
+    //     this.audioinstance.pause();
+    //   }
+    // }
     componentWillReceiveProps(nextProps){
     //   if(this.props.nowPlayingSongId != nextProps.nowPlayingSongId){
     //     this.addSongToPlaylist(nextProps.nowPlayingSongId); //update list then
@@ -122,12 +131,22 @@ export default class AudioPlayer extends React.Component{
     //     this.PlayNewList(nextProps.nowPlayingListId); //update list then
     //   }
     }
-    componentWillUpdate(){
-      this.pauseAudio();
-    }
+    // componentWillUpdate(){
+    //   this.pauseAudio();
+    // }
 
     componentDidMount(){
       this.getDefaultPlaylist();
+    }
+
+    // Set audio instance after it's available
+    componentDidUpdate(prevProps, prevState) {
+        if(this.state.audioInstance){
+            return
+        }
+        const audioInstance = {...this,nowPlayingSongId:NaN};
+        this.setState({ audioInstance });
+        
     }
     
     render(){   
@@ -139,11 +158,23 @@ export default class AudioPlayer extends React.Component{
                  defaultPosition = {{right: "0", bottom: "75px"}}
                 {...this.options} 
                 clearPriorAudioLists = {this.state.clearPriorAudioLists}
-                playIndex = {0}
                 audioLists = {this.state.playList}
                 getAudioInstance = {(instance) => {this.audioinstance = instance}}
                />
+               <NowPlaying audioInstance={this.state.audioInstance}/>
         </div>
         );
     }
 }
+
+const NowPlaying = ({audioInstance})=>{
+    const {setAudioInstance} = useAudio()
+    useEffect(() => {
+        if (audioInstance) {
+            setAudioInstance(audioInstance); // Only update if there's a valid instance
+        }
+      }, [audioInstance]);
+
+ return <></>
+}
+

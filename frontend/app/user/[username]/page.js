@@ -4,9 +4,10 @@ import ContentNotFound from '@/components/Includes/ContentNotFound/ContentNotFou
 import PageLoader from '@/components/Includes/Loader/PageLoader'
 import UserProfileDisplay from '@/components/Includes/UserProfileDisplay/UserProfileDisplay'
 import { checkUserLogginStatus } from '@/Constants'
-import { getUserFromUsername } from '@/Functions'
+import { dynamicConfig, getUserFromUsername } from '@/Functions'
 import React, { useState, useEffect } from 'react'
 
+export const dynamic = dynamicConfig();
 export default function User({ params }) {
   const [loggedInUser, setLoggedInUser] = useState(null)
   const [user, setUser] = useState(null)

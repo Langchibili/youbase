@@ -1,7 +1,5 @@
 'use client'
 
-import ContentDisplay from '@/components/Includes/ContentDisplay/ContentDisplay'
-import UsersDisplay from '@/components/Includes/ContentDisplay/UsersDisplay'
 import PageLoader from '@/components/Includes/Loader/PageLoader'
 import MainFooter from '@/components/Parts/Footer/MainFooter'
 import MainHeader from '@/components/Parts/Header/MainHeader'
@@ -37,25 +35,13 @@ export default function Videos({ params }) {
   
   return ( 
     <>
-    {/* Header Start */}
-     <MainHeader loggedInUser={loggedInUser}/>
-     {/* Header End */}
-     {/* Left Sidebar Start */}
-     <MainMenu loggedInUser={loggedInUser}/>
-     {/* Left Sidebar End */}
-     {/* Body Start */}
-     <div className="wrapper">
      <div className="sa4d25">
          <div className="container-fluid">
          <div className="row">
-             categories
+             videos
          </div>
          </div>
      </div>
-     <MainFooter loggedInUser={loggedInUser} />
-     
-     </div>
-     {/* Body End */}
     </>
   )
 }

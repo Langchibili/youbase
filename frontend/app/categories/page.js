@@ -1,14 +1,16 @@
 'use client'
 
-import ContentDisplay from '@/components/Includes/ContentDisplay/ContentDisplay'
-import UsersDisplay from '@/components/Includes/ContentDisplay/UsersDisplay'
 import PageLoader from '@/components/Includes/Loader/PageLoader'
 import MainFooter from '@/components/Parts/Footer/MainFooter'
 import MainHeader from '@/components/Parts/Header/MainHeader'
 import MainMenu from '@/components/Parts/Menus/MainMenu'
 import { checkUserLogginStatus } from '@/Constants'
+import { dynamicConfig } from '@/Functions'
 //import { getUserById } from '@/Functions'
 import React, { useState, useEffect } from 'react'
+
+// Force the page to be dynamically rendered on every request
+export const dynamic = dynamicConfig();
 
 export default function categories({ params }) {
   const [loggedInUser, setLoggedInUser] = useState(null)

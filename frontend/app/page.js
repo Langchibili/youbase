@@ -1,45 +1,17 @@
 "use client"
 
 import ContentDisplay from "@/components/Includes/ContentDisplay/ContentDisplay";
-import ContentLoader from "@/components/Includes/Loader/ContentLoader";
-import MainFooter from "@/components/Parts/Footer/MainFooter";
-import MainHeader from "@/components/Parts/Header/MainHeader";
-import MainMenu from "@/components/Parts/Menus/MainMenu";
-import { checkUserLogginStatus } from "@/Constants";
-import React, { useEffect, useState } from "react";
+import { useUser } from "@/Contexts/UserContext";
+import { dynamicConfig } from "@/Functions";
+import React from "react";
 
+// Force the page to be dynamically rendered on every request
 
-export default function Home() {
-  const [loggedInUser, setLoggedInUser] = useState(null)
-  const [loading, setLoading] = useState(true)
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        setLoggedInUser(await checkUserLogginStatus()) // the loggedInUser 
-        setLoading(true)
-      } catch (error) {
-        console.error('Error fetching logged in user:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    if(!loading) { 
-      return 
-    }
-    fetchUser()
-  }, [loading])
-
-  if(loading) return <ContentLoader />
+export const dynamic = dynamicConfig();
+export default function Home(props) {
+    console.log(useUser())
   return (
     <>
-    {/* Header Start */}
-    <MainHeader loggedInUser={loggedInUser}/>
-    {/* Header End */}
-    {/* Left Sidebar Start */}
-    <MainMenu loggedInUser={loggedInUser}/>
-    {/* Left Sidebar End */}
-    {/* Body Start */}
-    <div className="wrapper">
       <div className="sa4d25">
         <div className="container-fluid">
           <div className="row">
@@ -236,40 +208,40 @@ export default function Home() {
               </div>
               <div className="section3125 mt-10">
               <h4 className="item_title">Reels</h4>  
-              {loading? <></> : <ContentDisplay 
+              <ContentDisplay 
                             contentToView = "portrait-videos"
-                            loggedInUser={loggedInUser} 
+                            loggedInUser={useUser()} 
                             contentUri={`/posts?populate=user,featuredImages,media`}
                             startPage="1"
                             limit="10"
                             contentLimit = {9}
                             sort="desc"
-                            />}
+                            />
               </div>
               <div className="section3125 mt-30">
                 <div className="la5lo1">
                   <h4 className="item_title">Captures</h4>
-                  {loading? <></> : <ContentDisplay 
+                  <ContentDisplay 
                             contentToView = "portrait-images"
-                            loggedInUser={loggedInUser} 
+                            loggedInUser={useUser()} 
                             contentUri={`/posts?populate=user,featuredImages,media`}
                             startPage="1"
                             limit="10"
                             contentLimit = {9}
                             sort="desc"
-                            />}
+                            />
                   </div>
               </div>
               <h4 className="item_title">Explore</h4>
               <div className="section3125 mt-30">
-                  {loading? <></> : <ContentDisplay 
+                  <ContentDisplay 
                             contentToView = "all"
-                            loggedInUser={loggedInUser} 
+                            loggedInUser={useUser()} 
                             contentUri={`/posts?populate=user,featuredImages,media`}
                             startPage="1"
                             limit="10"
                             sort="desc"
-                            />}           
+                            />     
                 <a href="live_streams.html" className="see150">
                   See all
                 </a>
@@ -2204,9 +2176,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <MainFooter loggedInUser={loggedInUser}/>
-      
-    </div>
     {/* Body End */}
   </>
   

@@ -68,6 +68,10 @@ export const removeIdFromArray = (arr,id)=>{
     return arr
 }
 
+export const dynamicConfig = (config="auto")=>{
+    return config
+}
+
 export const handleCountsDisplay = (counts) => { // formating counts like: likes, views, shares, etc
     if(counts === null) return "0"
     if (parseInt(counts) >= 1_000_000_000) {
@@ -93,11 +97,15 @@ export const handleCountsDisplay = (counts) => { // formating counts like: likes
 
 export const getImage = (image, size = "normal", use = "normal") => {
     // Default URLs for profile pictures and cover photos
-    const defaultProfilePicture = "/default-profile.png";
-    const defaultCoverPhoto = "/no-cover-photo.jpg";
+    const defaultProfilePicture = "/default-profile.png"
+    const defaultMusicCover = "/youbase-logo.png"
+    const defaultCoverPhoto = "/no-cover-photo.jpg"
 
     // Check if the image object is valid and contains necessary attributes
     if (!image) {
+        if(use === "music"){
+          return defaultMusicCover
+        }
         // If the image is not provided, return the appropriate default image based on the usage context
         return use === "profilePicture" ? defaultProfilePicture : defaultCoverPhoto;
     }
@@ -115,6 +123,9 @@ export const getImage = (image, size = "normal", use = "normal") => {
 
     // Ensure formats exist before proceeding
     if (!formats) {
+        if(use === "music"){
+          return defaultMusicCover
+        }
         return use === "profilePicture" ? defaultProfilePicture : defaultCoverPhoto;
     }
 

@@ -5,9 +5,10 @@ import PageLoader from '@/components/Includes/Loader/PageLoader'
 import LogInFirstModal from '@/components/Includes/Modals/LogInFirstModal'
 import UserProfileDisplay from '@/components/Includes/UserProfileDisplay/UserProfileDisplay'
 import { checkUserLogginStatus } from '@/Constants'
-import { getUserById } from '@/Functions'
+import { dynamicConfig, getUserById } from '@/Functions'
 import React, { useState, useEffect } from 'react'
 
+export const dynamic = dynamicConfig();
 export default function User({ params }) {
   const [loggedInUser, setLoggedInUser] = useState(null)
   const [user, setUser] = useState(null)
