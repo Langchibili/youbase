@@ -32,8 +32,7 @@ export default function RootLayout({ children }) {
       }
     };
     fetchUser();
-  }, []);
-  if(typeof document !== "undefined"){
+  }, [])
   return (
     <html lang="en">
       <head>
@@ -84,7 +83,6 @@ export default function RootLayout({ children }) {
       </body>
     </html>
   )
- }
 }
 
 

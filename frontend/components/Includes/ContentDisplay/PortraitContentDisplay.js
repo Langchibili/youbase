@@ -3,7 +3,6 @@
 import VideoThumbnailDisplay from '../VideoDisplay/VideoThumbnailDisplay';
 import AvatarOnly from '@/components/Parts/UserDisplay/AvatarOnly';
 import ImagePortraitThumbnails from './ImagePortraitThumbnails';
-import { log } from '@/Constants';
 
 export default function PortraitContentDisplay(props) {
   console.log('portrait vids', props.content); // Make sure content is not empty

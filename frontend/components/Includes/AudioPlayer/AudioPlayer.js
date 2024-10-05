@@ -125,14 +125,14 @@ export default class AudioPlayer extends React.Component{
     //     this.audioinstance.pause();
     //   }
     // }
-    componentWillReceiveProps(nextProps){
+    //componentWillReceiveProps(nextProps){
     //   if(this.props.nowPlayingSongId != nextProps.nowPlayingSongId){
     //     this.addSongToPlaylist(nextProps.nowPlayingSongId); //update list then
     //   }
     //   if(this.props.nowPlayingListId != nextProps.nowPlayingListId){
     //     this.PlayNewList(nextProps.nowPlayingListId); //update list then
     //   }
-    }
+    //}
     // componentWillUpdate(){
     //   this.pauseAudio();
     // }
