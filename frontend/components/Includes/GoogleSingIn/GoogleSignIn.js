@@ -1,3 +1,5 @@
+'use client'
+
 export default function GoogleSignIn() {
   return (
     <button className="social_lnk_btn mt-15 color_btn_go">

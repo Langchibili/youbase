@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useEffect } from "react";
 import "./AudioPlayer.css";
 import ReactJkMusicPlayer from "react-jinke-music-player";

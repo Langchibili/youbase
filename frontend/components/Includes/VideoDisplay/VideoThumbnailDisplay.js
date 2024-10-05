@@ -1,3 +1,5 @@
+'use client'
+
 import { backEndUrl } from '@/Constants';
 import { truncateText } from '@/Functions';
 import React, { useEffect, useState } from 'react';

@@ -1,3 +1,5 @@
+'use client'
+
 import { clientUrl } from "@/Constants";
 import React from "react";
 

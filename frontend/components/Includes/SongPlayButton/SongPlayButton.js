@@ -1,3 +1,5 @@
+'use client'
+
 import { useAudio } from "@/Contexts/AudioContext";
 import { useEffect, useState } from "react";
 

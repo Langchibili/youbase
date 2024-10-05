@@ -1,20 +1,11 @@
+'use client'
+
 import React, { useState, useEffect } from 'react';
 import { Modal, Box, Typography, Button, IconButton } from '@mui/material';
 import Link from 'next/link';
 import CloseIcon from '@mui/icons-material/Close';
 
 export default function LogInFirstModal({ open, handleClose }) {
- // const [isOpen, setIsOpen] = useState(open);
-
-  // Sync state with the prop if it changes
-//   useEffect(() => {
-//     setIsOpen(open);
-//   }, [open]);
-
-//   const handleClose = () => {
-//     setIsOpen(false);
-//   };
-
   return (
     <Modal
       open={open}

@@ -1,4 +1,5 @@
 'use client'
+
 import './ContentLoader.css'
 import React from "react"
 

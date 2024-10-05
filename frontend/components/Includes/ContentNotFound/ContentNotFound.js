@@ -1,4 +1,5 @@
 'use client'
+
 import './ContentNotFound.css'
 import React from "react"
 

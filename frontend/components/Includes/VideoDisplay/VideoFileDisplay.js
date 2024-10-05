@@ -163,6 +163,8 @@
 // }
 
 
+'use client'
+
 import { backEndUrl, log } from '@/Constants';
 import { getPostMedia } from '@/Functions';
 import React, { useState, useEffect } from 'react';
@@ -186,7 +188,6 @@ export default function VideoFileDisplay({ file, handleRemoveMedia, videoMeta, h
     if(getMedia){
         const runGetMedia = async()=>{
           const media = await getPostMedia(postTitle)
-          console.log({data:media})
           setVideoFile({data:media})
           console.log(media)
         }

@@ -1,9 +1,6 @@
 'use client'
 
 import PageLoader from '@/components/Includes/Loader/PageLoader'
-import MainFooter from '@/components/Parts/Footer/MainFooter'
-import MainHeader from '@/components/Parts/Header/MainHeader'
-import MainMenu from '@/components/Parts/Menus/MainMenu'
 import { checkUserLogginStatus } from '@/Constants'
 //import { getUserById } from '@/Functions'
 import React, { useState, useEffect } from 'react'

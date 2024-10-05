@@ -1,4 +1,3 @@
-
 "use client"
 
 import { getImage, handleCountsDisplay } from "@/Functions";

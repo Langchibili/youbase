@@ -1,4 +1,6 @@
-import { backEndUrl } from '@/Constants'
+'use client'
+
+
 import { getImage, truncateText } from '@/Functions'
 import React, { useEffect, useState } from 'react'
 import FullScreenContentModal from '../Modals/FullScreenContentModal'

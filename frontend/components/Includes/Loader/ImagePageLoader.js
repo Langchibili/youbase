@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react';
 import './ImagePageLoader.css'; // Include this in your CSS file
 

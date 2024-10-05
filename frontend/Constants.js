@@ -1,3 +1,5 @@
+'use client'
+
 import { getJWT, saveJwt } from "./secrets"
 
 export const youtubeApiKey = 'AIzaSyCpjeIW-IKAUQSZuc5bb0Ncx1ksxEB5J_8'
@@ -274,7 +276,7 @@ export const checkUserLogginStatus = async () =>{
       const defaultUser = await submitCreateUserRequest(userObject) // make the user account
       logginStatusObject.user = defaultUser.user // current account is a default one
       logginStatusObject.status = false // user has not logged in
-      saveJwt(defaultUser.jwt) // save the jwt of the default user
+       saveJwt(defaultUser.jwt) // save the jwt of the default user
   }
   else{
      // check if user is logged in or not, using jwt

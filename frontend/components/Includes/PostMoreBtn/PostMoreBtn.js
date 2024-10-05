@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState } from "react";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert"; // Menu icon (three dots)

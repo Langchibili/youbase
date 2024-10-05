@@ -3,7 +3,6 @@
 import ContentNotFound from '@/components/Includes/ContentNotFound/ContentNotFound'
 import PageLoader from '@/components/Includes/Loader/PageLoader'
 import LogInFirstModal from '@/components/Includes/Modals/LogInFirstModal'
-import UserProfileDisplay from '@/components/Includes/UserProfileDisplay/UserProfileDisplay'
 import { checkUserLogginStatus } from '@/Constants'
 import { dynamicConfig, getUserById } from '@/Functions'
 import React, { useState, useEffect } from 'react'

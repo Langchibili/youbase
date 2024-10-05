@@ -3,7 +3,7 @@
 import {  logUserOut } from "@/Constants";
 import { useEffect } from "react";
 
-export default function Signup() {
+export default function LogOut() {
  
   // Custom hook to check if a feature is enabled
   useEffect(()=>{

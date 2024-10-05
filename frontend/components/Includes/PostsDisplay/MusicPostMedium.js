@@ -1,3 +1,5 @@
+'use client'
+
 import AvatarWithPostDate from "@/components/Parts/UserDisplay/AvatarWithPostDate";
 import Link from "next/link";
 import SongPlayButton from "../SongPlayButton/SongPlayButton";

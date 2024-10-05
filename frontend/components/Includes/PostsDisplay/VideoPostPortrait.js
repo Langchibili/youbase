@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { log } from "@/Constants";
+'use client'
+
 import VideoThumbnailDisplay from "../VideoDisplay/VideoThumbnailDisplay";
 import AvatarOnly from "@/components/Parts/UserDisplay/AvatarOnly";
 import { useEffect, useState } from "react";

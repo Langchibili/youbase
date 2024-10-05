@@ -73,7 +73,7 @@ export default function Signin() {
                         Or <a href="forgot_password.html">Forgot Password</a>.
                     </p>
                     <p className="mb-0 mt-30 hvsng145">
-                        Don't have an account? <Link href="/signup">Sign Up</Link>
+                      {"  Don't"} have an account? <Link href="/signup">Sign Up</Link>
                     </p>
                     </div>
                     <div className="sign_footer">

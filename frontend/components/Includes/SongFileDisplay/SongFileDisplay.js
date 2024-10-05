@@ -1,3 +1,5 @@
+'use client'
+
 import { backEndUrl, log } from '@/Constants';
 import React, { useState, useEffect } from 'react';
 

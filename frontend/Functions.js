@@ -1,3 +1,5 @@
+'use client'
+
 // UTILITY FUNCTIONS
 
 import { api_url, backEndUrl, getJwt, log } from "./Constants"
