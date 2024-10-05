@@ -71,7 +71,7 @@ export default class MusicPost extends React.Component{
       if(!this.state.media){
          return <></>
       }
-      return this.state.media.map((media)=> <SongFileDisplay file={media} handleRemoveMedia={this.handleRemoveMedia}/>)
+      return this.state.media.map((media,index)=> <SongFileDisplay key={index} file={media} handleRemoveMedia={this.handleRemoveMedia}/>)
    }
    
    render(){

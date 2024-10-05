@@ -10,6 +10,9 @@ import React from "react";
 export const dynamic = dynamicConfig();
 export default function Page(props) {
     console.log(useUser())
+    console.log('here behind')
+   if(typeof document !== "undefined"){
+    console.log('here in the server')
   return (
     <>
       <div className="sa4d25">
@@ -1479,7 +1482,7 @@ export default function Page(props) {
                       <div className="value_content">
                         <h4>Go at your own pace</h4>
                         <p>
-                          Enjoy lifetime access to courses on Edututs+'s website
+                          {"Enjoy lifetime access to courses on Edututs+'s website"}
                         </p>
                       </div>
                     </div>
@@ -2081,7 +2084,7 @@ export default function Page(props) {
                         Get Started
                       </button>
                       <span className="livinfo">
-                        Info : This feature only for 'Instructors'.
+                        Info : This feature only for {"'Instructors'."}
                       </span>
                     </div>
                   </div>
@@ -2180,4 +2183,5 @@ export default function Page(props) {
   </>
   
   )
+  }
 }

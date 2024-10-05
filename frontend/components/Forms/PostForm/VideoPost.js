@@ -34,7 +34,7 @@ export default class VideoPost extends React.Component{
       if(!this.state.media){
          return <></>
       }
-      return this.state.media.map((media)=> <VideoFileDisplay videoMeta={getVideoMetaFromPostAndId(this.props.post,media.id)} file={media} handleRemoveMedia={this.handleRemoveMedia}/>)
+      return this.state.media.map((media,index)=> <VideoFileDisplay key={index} videoMeta={getVideoMetaFromPostAndId(this.props.post,media.id)} file={media} handleRemoveMedia={this.handleRemoveMedia}/>)
    }
    
    handleRemoveMedia = async (uploadid)=>{
