@@ -70,7 +70,7 @@ export const removeIdFromArray = (arr,id)=>{
     return arr
 }
 
-export const dynamicConfig = (config="force-dynamic")=>{
+export const dynamicConfig = (config="auto")=>{
     return config
 }
 
@@ -88,6 +88,9 @@ export const handleCountsDisplay = (counts) => { // formating counts like: likes
   }
 
  export const truncateText = (text, maxLength)=> {
+    if(!text){
+      return ''
+    }
     // Check if the text length exceeds the specified maxLength
     if (text.length > maxLength) {
         // Cut the text to the maxLength, subtracting 3 to account for the "..."

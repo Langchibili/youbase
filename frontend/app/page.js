@@ -18,6 +18,46 @@ const Home = (props) =>{
                 <div className="container-fluid">
                 <div className="row">
                     <div className="col-xl-9 col-lg-8">
+                    <div className="section3125 mt-10">
+                    <h4 className="item_title">Reels</h4>  
+                    <ContentDisplay 
+                                    contentToView = "portrait-videos"
+                                    loggedInUser={loggedInUser} 
+                                    contentUri={`/posts?populate=user,featuredImages,media`}
+                                    startPage="1"
+                                    limit="10"
+                                    contentLimit = {9}
+                                    sort="desc"
+                                    />
+                    </div>
+                    <div className="section3125 mt-30">
+                        <div className="la5lo1">
+                        <h4 className="item_title">Captures</h4>
+                        <ContentDisplay 
+                                    contentToView = "portrait-images"
+                                    loggedInUser={loggedInUser} 
+                                    contentUri={`/posts?populate=user,featuredImages,media`}
+                                    startPage="1"
+                                    limit="10"
+                                    contentLimit = {9}
+                                    sort="desc"
+                                    />
+                        </div>
+                    </div>
+                    <h4 className="item_title">Explore</h4>
+                    <div className="section3125 mt-30">
+                        <ContentDisplay 
+                                    contentToView = "all"
+                                    loggedInUser={loggedInUser} 
+                                    contentUri={`/posts?populate=user,featuredImages,media`}
+                                    startPage="1"
+                                    limit="10"
+                                    sort="desc"
+                                    />     
+                        <a href="live_streams.html" className="see150">
+                        See all
+                        </a>
+                    </div>
                     <div className="section3125">      
                         <a href="live_streams.html" className="see150">
                         See all
@@ -208,47 +248,6 @@ const Home = (props) =>{
                         </div>
                         </div>
                     </div>
-                    <div className="section3125 mt-10">
-                    <h4 className="item_title">Reels</h4>  
-                    <ContentDisplay 
-                                    contentToView = "portrait-videos"
-                                    loggedInUser={loggedInUser} 
-                                    contentUri={`/posts?populate=user,featuredImages,media`}
-                                    startPage="1"
-                                    limit="10"
-                                    contentLimit = {9}
-                                    sort="desc"
-                                    />
-                    </div>
-                    <div className="section3125 mt-30">
-                        <div className="la5lo1">
-                        <h4 className="item_title">Captures</h4>
-                        <ContentDisplay 
-                                    contentToView = "portrait-images"
-                                    loggedInUser={loggedInUser} 
-                                    contentUri={`/posts?populate=user,featuredImages,media`}
-                                    startPage="1"
-                                    limit="10"
-                                    contentLimit = {9}
-                                    sort="desc"
-                                    />
-                        </div>
-                    </div>
-                    <h4 className="item_title">Explore</h4>
-                    <div className="section3125 mt-30">
-                        <ContentDisplay 
-                                    contentToView = "all"
-                                    loggedInUser={loggedInUser} 
-                                    contentUri={`/posts?populate=user,featuredImages,media`}
-                                    startPage="1"
-                                    limit="10"
-                                    sort="desc"
-                                    />     
-                        <a href="live_streams.html" className="see150">
-                        See all
-                        </a>
-                    </div>
-                    
                     <div className="section3125 mt-50">
                         
                         <h4 className="item_title">Featured Courses</h4>

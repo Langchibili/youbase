@@ -1,14 +1,18 @@
 'use client'
 
+import StreamsDisplay from "@/components/Parts/EngageMents/StreamsDisplay";
 import { useAudio } from "@/Contexts/AudioContext";
 import { useEffect, useState } from "react";
 
 export default function SongPlayButton(props) {
   const [songIsPlaying, setSongIsPlaying] = useState(false)
+  const [logPlay, setLogPlay] = useState(false)
+
   // Get audioInstance and setAudioInstance from context
   const { audioInstance,setAudioInstance } = useAudio();
   useEffect(()=>{
     if(audioInstance && audioInstance.nowPlayingSongId){
+
         if(audioInstance.nowPlayingSongId !== props.post.id){
             setSongIsPlaying(false)
         }
@@ -16,7 +20,13 @@ export default function SongPlayButton(props) {
   },[audioInstance.nowPlayingSongId])
 
   const handlePlayClick = () => {
-    console.log(props)
+    audioInstance.audioinstance.ontimeupdate = (e)=>{
+        const progress = (e.target.currentTime / e.target.duration) * 100;
+        // log play after 30 percent of playing
+        if (progress >= 30) {
+           setLogPlay(true)
+        }
+    }
     if(audioInstance){
         audioInstance.addSongToPlaylist(props.post.media.data,props.post)
         audioInstance.audioinstance.play()
@@ -34,6 +44,7 @@ export default function SongPlayButton(props) {
 
   return (
     <div>
+      <StreamsDisplay post={props.post} loggedInUser={props.loggedInUser} logPlay={logPlay} autoLogPlay={true}/>
       {songIsPlaying? <button className="play-button" onClick={handlePauseClick}>
         <i className="uil uil-pause"></i>
       </button> : <button className="play-button" onClick={handlePlayClick}>

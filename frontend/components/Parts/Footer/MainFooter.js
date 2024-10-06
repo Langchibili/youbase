@@ -5,9 +5,6 @@ import React, { useEffect } from 'react'
 
 export default function MainFooter() {
   useEffect(() => {
-    if(typeof document !== 'undefined'){ 
-      return 
-    }
     const scripts = [
       clientUrl+'/theme/js/jquery-3.3.1.min.js',
       clientUrl+'/theme/js/vertical-responsive-menu.min.js',
@@ -22,10 +19,13 @@ export default function MainFooter() {
     const isScriptLoaded = (src) => !!document.querySelector(`script[src="${src}"]`);
 
     // Add and execute scripts if they are not already loaded
-    scripts.forEach((src) => {
+    scripts.forEach((src,index) => {
       if (!isScriptLoaded(src)) {
         const script = document.createElement('script');
         script.src = src;
+        if (index > 3) {
+          script.async = true; // ther
+        }
         script.async = false; // Ensures correct execution order
         script.onload = () => {
           console.log(`${src} has been loaded and executed.`);
@@ -40,9 +40,6 @@ export default function MainFooter() {
     });
 
     return () => {
-      if(typeof document !== 'undefined'){ 
-        return 
-      }
       // Clean up script elements when the component unmounts
       scripts.forEach((src) => {
         const script = document.querySelector(`script[src="${src}"]`);
@@ -51,7 +48,7 @@ export default function MainFooter() {
         }
       });
     };
-  }, []);
+  }, [window.location.pathname]);
 
   return (
     <footer className="footer mt-30">

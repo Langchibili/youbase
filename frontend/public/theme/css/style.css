@@ -8235,6 +8235,7 @@ a.nav-icon-list:hover {
 
 /** Inline engagement buttons **/
 .inline-engagements-display {
+    margin-left: -15px;
     display: flex;
     justify-content: flex-start; /* Aligns buttons to the far left */
   }

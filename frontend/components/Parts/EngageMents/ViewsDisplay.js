@@ -10,8 +10,23 @@ export default class ViewsDisplay extends React.Component{
       this.state = {
         ...props,
         requesting: false,
-        showLogInFirstModal: false
+        showLogInFirstModal: false,
+        viewLogged: false
       }
+   }
+  
+
+
+ componentDidUpdate(){
+    if(this.props.logView && !this.state.viewLogged){
+        this.handleView()
+        this.setState({
+            viewLogged: true
+        })
+    }
+    else{
+        return
+    }
    }
 
  handleView = async ()=>{
@@ -64,7 +79,7 @@ export default class ViewsDisplay extends React.Component{
        if(viewedPostsIds.includes(postId)){ // it means you are already following this user, you can only unfollow the user
          return  <li>
                     <button disabled className="lkcm152">
-                        <i className="uil uil-eye" style={{color: "red"}}/>
+                        <i className="uil uil-eye" style={{color: "#1e7193"}}/>
                         <span>{handleCountsDisplay(this.state.post.views)}</span>
                     </button>
                 </li>
@@ -89,7 +104,7 @@ export default class ViewsDisplay extends React.Component{
     return (
         <>
           {this.state.showLogInFirstModal? <LogInFirstModal open={this.state.showLogInFirstModal} handleClose={this.handleModalClose}/> : <></>}
-         {this.renderViewButton()}
+          {this.props.autoLogView? <></> : this.renderViewButton()}
         </>
     )
    }

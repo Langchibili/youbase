@@ -4,7 +4,7 @@ import AvatarWithPostDate from "@/components/Parts/UserDisplay/AvatarWithPostDat
 import Link from "next/link";
 import { log } from "@/Constants";
 import VideoFileDisplay from "../VideoDisplay/VideoFileDisplay";
-import { getVideoMetaFromPostAndId } from "@/Functions";
+import { getVideoMetaFromPostAndId, truncateText } from "@/Functions";
 
 
 export default function VideoPostMedium(props) {
@@ -14,14 +14,14 @@ export default function VideoPostMedium(props) {
         <div className="review_item" style={{ position: 'relative'}}>
           <AvatarWithPostDate {...props} />
           <div style={{minHeight: '10px'}}></div>
-          <VideoFileDisplay videoMeta={getVideoMetaFromPostAndId(props.post,props.post.media.id)} file={props.post.media} hideRemoveButton={true}/>
+          <VideoFileDisplay post={props.post} loggedInUser={props.loggedInUser} videoMeta={getVideoMetaFromPostAndId(props.post,props.post.media.id)} file={props.post.media} hideRemoveButton={true}/>
           {/* <VideosDisplay postid={props.post.id}/> */}
           <Link href={"/posts/"+props.post.dashed_title}>
           <h4 className="rvds10" style={{ marginTop: '10px' }}>
-            {[props.post.title]}
+          {truncateText(props.post.title,'50')}
           </h4>
           <p className="rvds10" style={{ marginTop: '10px' }}>
-            {[props.post.description]}
+          {truncateText(props.post.description,'100')}
           </p>
           </Link>
           {props.postEngagementsDisplay(props.post)}

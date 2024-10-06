@@ -10,11 +10,16 @@ import ContentLoader from "../Loader/ContentLoader";
 import AvatarWithFollowButton from "@/components/Parts/UserDisplay/AvatarWithFollowButton";
 import { backEndUrl } from "@/Constants";
 import { getImage, truncateText } from "@/Functions";
+import { useAudio } from "@/Contexts/AudioContext";
 
 export default function ContentFullScreen(props) {
   const [isPlaying, setIsPlaying] = useState(true);
   const [isBuffering, setIsBuffering] = useState(false);
   const videoRef = useRef(null);
+  const [currentTime, setCurrentTime] = useState(null);
+  const [logViewHandler, setLogViewHandler] = useState(null)
+  const [logView, setLogView] = useState(false)
+  const { audioInstance } = useAudio();
 
   // Handle video play/pause toggle on tap
   const handleVideoClick = () => {
@@ -28,13 +33,24 @@ export default function ContentFullScreen(props) {
 
   // Add buffering event listeners
   useEffect(() => {
-    if(typeof window === undefined){
-       return
+    if(typeof document !== "undefined"){
+      const musicPlayer = document.getElementById('music-player-controller')
+      musicPlayer.style.display = "none"
     }
     if(props.post.type !== "video"){
+      audioInstance.audioinstance.pause()
       return
     }
     const video = videoRef.current;
+
+    videoRef.current.ontimeupdate = (e)=>{
+      setCurrentTime(e.target.currentTime)
+      const progress = (e.target.currentTime / e.target.duration) * 100;
+      // Show alert at 20% and clear interval
+      if (progress >= 30) {
+          setLogView(true)
+      }
+    }
 
     const handleBuffering = () => setIsBuffering(true);
     const handlePlaying = () => setIsBuffering(false);
@@ -45,8 +61,12 @@ export default function ContentFullScreen(props) {
     return () => {
       video.removeEventListener("waiting", handleBuffering);
       video.removeEventListener("playing", handlePlaying);
+      if(typeof document !== "undefined"){
+        const musicPlayer = document.getElementById('music-player-controller')
+        musicPlayer.style.display = "block"
+      }
     };
-  }, []);
+  }, [videoRef.current]);
 
   const renderContent = () => {
     const user = props.post.user.data.attributes;
@@ -170,6 +190,7 @@ export default function ContentFullScreen(props) {
             {truncateText(props.post.title, 25)}
           </h5>
           <ul>
+           <ViewsDisplay post={props.post} loggedInUser={props.loggedInUser} logView={logView} autoLogView={true}/>
             {props.post.type === "video" ? <ViewsDisplay {...props} user={user} /> : null}
             {props.post.type === "music" ? <StreamsDisplay {...props} user={user} /> : null}
             <LikeButton {...props} user={user} />

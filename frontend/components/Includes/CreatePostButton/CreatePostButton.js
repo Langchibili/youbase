@@ -9,7 +9,7 @@ import PostModal from "../Modals/PostModal";
 
 const StyledFab = styled(Fab)({
   position: "fixed",
-  bottom: 16,
+  bottom: 100,
   right: 16,
   zIndex: 1000,
 });
@@ -26,7 +26,7 @@ export default function CreatePostButton(props) {
   };
 
   return (
-    <>
+    <div id="create-post-btn">
       <Zoom in={!open}>
         <StyledFab
           color="secondary"
@@ -39,6 +39,6 @@ export default function CreatePostButton(props) {
 
       {/* Render the PostModal component */}
       <PostModal open={open} onClose={handleClose} {...props}/>
-    </>
+    </div>
   );
 }

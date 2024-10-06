@@ -1,5 +1,11 @@
 /* Extra small devices (portrait phones, less than 576px) */
  @media (max-width: 575.98px) {
+ #create-post-btn {
+    position: fixed;
+    bottom: 70px;
+    right: 16;
+    z-index: 1000;
+}
 .main_logo {
     margin-left: 5px !important;
 	width: 110px !important;

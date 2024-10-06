@@ -7,8 +7,30 @@ import StreamsDisplay from "@/components/Parts/EngageMents/StreamsDisplay";
 import ViewsDisplay from "@/components/Parts/EngageMents/ViewsDisplay";
 import MediaDisplay from "@/components/Parts/MediaDisplay/MediaDisplay";
 import AvatarWithFollowButton from "@/components/Parts/UserDisplay/AvatarWithFollowButton";
+import SongPlayButton from "../SongPlayButton/SongPlayButton";
+import { useEffect, useState } from "react";
+import { getPostFromId } from "@/Functions";
 
 export default function SinglePostDisplay(props) {
+  const [loadingMusicPost, setLoading] = useState(props.post.type === "music")
+  const [musicPost,setMusicPost] = useState(null)
+
+  useEffect(() => {
+    if(props.post.type !== "music"){
+      return
+    }
+    const fetchMusicPost = async () => {
+      try {
+        setMusicPost(await getPostFromId(props.post.id,'media,user')) // the post with music media
+      } catch (error) {
+        console.error('Error fetching post:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchMusicPost()
+  }, [props.post])
   return (
     <>
   <div className="sa4d25">
@@ -16,7 +38,7 @@ export default function SinglePostDisplay(props) {
       <div className="row">
         <div className="col-xl-8 col-lg-8">
           <div className="section3125">
-           <MediaDisplay {...props}/>
+           <MediaDisplay {...props} displayType="mediaOnly"/>
             <div className="user_dt5">
               <div className="user_dt_left">
                 <div className="live_user_dt">
@@ -26,15 +48,29 @@ export default function SinglePostDisplay(props) {
               <div className="user_dt_right">
                 <ul>
                   {props.post.type === "video"? <ViewsDisplay {...props}/> : <></>}
+                  
                   {props.post.type === "music"? <StreamsDisplay {...props}/> : <></>}
+                  {/* <SongPlayButton {...props} /> */}
                   <LikeButton {...props}/>
                   <ShareButton {...props}/>
                   <PostImpressions {...props}/>
                 </ul>
               </div>
             </div>
+            {!loadingMusicPost? <div className="user_dt5">
+              <div className="user_dt_left">
+                <div className="live_user_dt">
+                {props.post.type === "music"? <SongPlayButton post={musicPost}  loggedInUser={props.loggedInUser}/> : <></>}
+                </div>
+              </div>
+              <div className="user_dt_right">
+                <button className="btn btn-danger">Download</button>
+              </div>
+            </div> : <>Loading...</>}
           </div>
         </div>
+        
+        
         <div className="col-xl-4 col-lg-4">
           <div className="right_side">
             <div className="fcrse_3">

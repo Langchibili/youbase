@@ -141,7 +141,6 @@ export default function ContentDisplay(props) {
   }
   if (props.contentToView === 'portrait-videos' || props.contentToView === 'portrait-images') { // filter out portrait content
     let portraitContentToDisplay = portraitContent
-    console.log(portraitContent.length > props.contentLimit)
     if(portraitContent.length > props.contentLimit){ 
        portraitContentToDisplay = portraitContent.slice(0,props.contentLimit)
     }

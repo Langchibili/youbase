@@ -10,9 +10,11 @@ export default class StreamsDisplay extends React.Component{
       this.state = {
         ...props,
         requesting: false,
-        showLogInFirstModal: false
+        showLogInFirstModal: false,
+        playLogged: false
       }
    }
+ 
 
  handlePlay= async ()=>{
         if(!this.props.loggedInUser.status){ // means you are logged out or you have never followed anyone before
@@ -79,6 +81,18 @@ export default class StreamsDisplay extends React.Component{
       }
        return <></>
    }
+   
+   componentDidUpdate(){
+    if(this.props.logPlay && !this.state.playLogged){
+        this.handlePlay()
+        this.setState({
+            playLogged: true
+        })
+    }
+    else{
+        return
+    }
+   }
 
    handleModalClose = ()=>{
         this.setState({
@@ -89,7 +103,7 @@ export default class StreamsDisplay extends React.Component{
     return (
         <>
           {this.state.showLogInFirstModal? <LogInFirstModal open={this.state.showLogInFirstModal} handleClose={this.handleModalClose}/> : <></>}
-         {this.renderPlayButton()}
+          {this.props.autoLogPlay? <></> : this.renderPlayButton()}
         </>
     )
    }

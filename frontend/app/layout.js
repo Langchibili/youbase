@@ -19,6 +19,7 @@ import ImagePageLoader from '@/components/Includes/Loader/ImagePageLoader';
 export default function RootLayout({ children }) {
   const [loggedInUser, setLoggedInUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showSplushScreen, setShowSplushScreen] = useState(true)
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -29,6 +30,9 @@ export default function RootLayout({ children }) {
         console.error('Error fetching logged in user:', error);
       } finally {
         setLoading(false);
+        setTimeout(()=>{
+           setShowSplushScreen(false)
+        },8000)
       }
     };
     fetchUser();
@@ -40,28 +44,29 @@ export default function RootLayout({ children }) {
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, shrink-to-fit=9" />
         <meta name="description" content="youbase" />
-        <meta name="author" content="youbase" />s
+        <meta name="author" content="youbase" />
         <link rel="icon" type="image/png" href="images/fav.png" />
         {/* Stylesheets */}
         <link
           href="http://fonts.googleapis.com/css?family=Roboto:400,700,500"
           rel="stylesheet"
         />
-        <link href="/theme/vendor/unicons-2.0.1/css/unicons.css" rel="stylesheet" />
+        <link href="/theme/vendor/unicons-2.0.1/css/unicons.css" rel="stylesheet"/>
         <link href="/theme/css/vertical-responsive-menu.min.css" rel="stylesheet" />
         <link href="/theme/css/style.css" rel="stylesheet" />
         <link href="/theme/css/responsive.css" rel="stylesheet" />
-        <link href="/theme/css/night-mode.css" rel="stylesheet" />
+        <link href="/theme/css/night-mode.css" rel="stylesheet"/>
         <link href="/theme/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" />
         <link href="/theme/vendor/OwlCarousel/assets/owl.carousel.css" rel="stylesheet" />
-        <link href="/theme/vendor/OwlCarousel/assets/owl.theme.default.min.css" rel="stylesheet" />
+        <link href="/theme/vendor/OwlCarousel/assets/owl.theme.default.min.css" rel="stylesheet"/>
         <link href="/theme/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-        <link rel="stylesheet" type="text/css" href="/theme/vendor/semantic/semantic.min.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/vendor/semantic/semantic.min.css"/>
       </head>
       <body>
         
         {loading? <ImagePageLoader/> : 
         <>
+         {showSplushScreen? <ImagePageLoader/> : <></>}
           {/* Main header */} 
           <MainHeader loggedInUser={loggedInUser} />
           {/* Sidebar */}
@@ -79,6 +84,15 @@ export default function RootLayout({ children }) {
             {/* Audio player */}
             <AudioPlayer />
           </AudioProvider>
+          <>
+          {/* <script src="js/vertical-responsive-menu.min.js" defer></script>
+          <script src="js/jquery-3.3.1.min.js" defer></script>
+          <script src="vendor/bootstrap/js/bootstrap.bundle.min.js" defer></script>
+          <script src="vendor/OwlCarousel/owl.carousel.js" defer></script>
+          <script src="vendor/semantic/semantic.min.js" defer></script>
+          <script src="js/custom.js" defer></script>
+          <script src="js/night-mode.js" defer></script> */}
+          </>
         </>}
       </body>
     </html>

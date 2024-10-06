@@ -60,7 +60,7 @@ export default class AudioPlayer extends React.Component{
     addSongToPlaylist = async (nowPlayingSongs,post)=>{
         if(nowPlayingSongs){ 
             const playList = this.state.playList;
-            const newPlayList = nowPlayingSongs.map((song)=>{
+            const newPlayList = nowPlayingSongs.map((song,index)=>{
                if(song.hasOwnProperty('attributes')){
                 return {key: song.id, musicSrc: backEndUrl+song.attributes.url, name: song.attributes.name, singer: song.attributes.name, cover: getImage(post.featuredImages,'thumbnail','music')}
                }
@@ -157,7 +157,7 @@ export default class AudioPlayer extends React.Component{
                 <ReactJkMusicPlayer 
                 onAudioPlay={this.logPlay}
                 autoPlay={this.state.autoPlay}
-                 defaultPosition = {{right: "0", bottom: "75px"}}
+                 defaultPosition = {{right: "15px", bottom: "10px"}}
                 {...this.options} 
                 clearPriorAudioLists = {this.state.clearPriorAudioLists}
                 audioLists = {this.state.playList}

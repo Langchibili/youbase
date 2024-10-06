@@ -67,6 +67,9 @@ export default class MediaDisplay extends React.Component{
             
         }
         if(post.type === "music") { 
+            if(this.props.displayType === "mediaOnly") { // means don't show the title and description
+                return <></>
+            }
             return <MusicDisplay songs={this.state.media}/>
         }
         if(post.type === "video") { 

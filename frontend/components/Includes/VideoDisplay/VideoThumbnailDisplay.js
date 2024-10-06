@@ -52,7 +52,7 @@ export default function VideoThumbnailDisplay(props) {
   return (
         <div
             className="owl-item"
-            style={{ width: "154", marginRight: 10 }}
+            style={{ width: "134px", marginRight: 10 }}
         >
             <div className="item" style={{marginBottom:'10px'}}>
                 <div className="stream_1" style={{padding:'10px'}}>

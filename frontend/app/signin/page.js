@@ -51,16 +51,16 @@ export default function Signin() {
     <div className="sign_in_up_bg">
             <div className="container">
                 <div className="row justify-content-lg-center justify-content-md-center">
-                <div className="col-lg-12">
+                {/* <div className="col-lg-12">
                     <div className="main_logo25" id="logo">
                     <a href="index.html">
-                        <img src="images/logo.svg" alt="" />
+                        <img src="/youbase-logo.png" alt="" />
                     </a>
                     <a href="index.html">
-                        <img className="logo-inverse" src="images/ct_logo.svg" alt="" />
+                        <img className="logo-inverse" src="/youbase-logo.png" alt="" />
                     </a>
                     </div>
-                </div>
+                </div> */}
                 <div className="col-lg-6 col-md-8">
                     <div className="sign_form">
                     <h2>Welcome Back</h2>

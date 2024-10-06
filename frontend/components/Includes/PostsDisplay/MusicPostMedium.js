@@ -3,18 +3,21 @@
 import AvatarWithPostDate from "@/components/Parts/UserDisplay/AvatarWithPostDate";
 import Link from "next/link";
 import SongPlayButton from "../SongPlayButton/SongPlayButton";
+import MediaDisplay from "@/components/Parts/MediaDisplay/MediaDisplay";
+import { truncateText } from "@/Functions";
 
 export default function MusicPostMedium(props) {
     return (
       <div style={{backgroundColor:"white",borderRadius:'5px',marginBottom:'10px'}}>
         <div className="review_item" style={{ position: 'relative'}}>
             <AvatarWithPostDate {...props} />
+            <MediaDisplay post={props.post} displayType="mediaOnly" imageType="medium" listtype="carousel"/>
             <hr style={{marginLeft:'5px', marginRight:'5px'}}/>
             <div className="post-info" style={{paddingLeft:'5px'}}>
                 <Link href={"/posts/"+props.post.dashed_title}>
-                <div style={{marginTop:'15px'}}><strong><h3>{props.post.title}</h3></strong></div>
+                <div style={{marginTop:'15px'}}><strong><h3> {truncateText(props.post.title,'50')}</h3></strong></div>
                 <p className="rvds10" style={{ marginTop: '10px' }}>
-                {props.post.description}
+                {truncateText(props.post.description,'100')}
                 </p>
                 </Link>
             </div>
