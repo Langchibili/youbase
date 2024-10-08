@@ -8,7 +8,7 @@ import React from "react";
 // Force the page to be dynamically rendered on every request
 
 export const dynamic = dynamicConfig();
-const Home = (props) =>{
+const Home = () =>{
    const loggedInUser = useUser()
 
    if(typeof document !== "undefined"){
@@ -19,7 +19,8 @@ const Home = (props) =>{
                 <div className="row">
                     <div className="col-xl-9 col-lg-8">
                     <div className="section3125 mt-10">
-                    <h4 className="item_title">Reels</h4>  
+                    <h3>Reels</h3>
+                      
                     <ContentDisplay 
                                     contentToView = "portrait-videos"
                                     loggedInUser={loggedInUser} 
@@ -32,7 +33,7 @@ const Home = (props) =>{
                     </div>
                     <div className="section3125 mt-30">
                         <div className="la5lo1">
-                        <h4 className="item_title">Captures</h4>
+                        <h3>Captures</h3>
                         <ContentDisplay 
                                     contentToView = "portrait-images"
                                     loggedInUser={loggedInUser} 
@@ -44,7 +45,7 @@ const Home = (props) =>{
                                     />
                         </div>
                     </div>
-                    <h4 className="item_title">Explore</h4>
+                    <h3>Explore</h3>
                     <div className="section3125 mt-30">
                         <ContentDisplay 
                                     contentToView = "all"

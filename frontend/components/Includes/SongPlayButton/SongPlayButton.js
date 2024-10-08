@@ -11,28 +11,33 @@ export default function SongPlayButton(props) {
   // Get audioInstance and setAudioInstance from context
   const { audioInstance,setAudioInstance } = useAudio();
   useEffect(()=>{
-    if(audioInstance && audioInstance.nowPlayingSongId){
+    if(audioInstance){
+        if(audioInstance && audioInstance.nowPlayingSongId){
 
-        if(audioInstance.nowPlayingSongId !== props.post.id){
-            setSongIsPlaying(false)
+            if(audioInstance.nowPlayingSongId !== props.post.id){
+                setSongIsPlaying(false)
+            }
         }
-    }
-  },[audioInstance.nowPlayingSongId])
+   }
+  },[audioInstance?.nowPlayingSongId])
 
   const handlePlayClick = () => {
-    audioInstance.audioinstance.ontimeupdate = (e)=>{
-        const progress = (e.target.currentTime / e.target.duration) * 100;
-        // log play after 30 percent of playing
-        if (progress >= 30) {
-           setLogPlay(true)
-        }
-    }
     if(audioInstance){
+        audioInstance.audioinstance.ontimeupdate = (e)=>{
+            const progress = (e.target.currentTime / e.target.duration) * 100;
+            // log play after 30 percent of playing
+            if (progress >= 30) {
+            setLogPlay(true)
+            }
+        }
         audioInstance.addSongToPlaylist(props.post.media.data,props.post)
         audioInstance.audioinstance.play()
-     }
-    setAudioInstance({...audioInstance,nowPlayingSongId:props.post.id})
-    setSongIsPlaying(true)
+        setAudioInstance({...audioInstance,nowPlayingSongId:props.post.id})
+        setSongIsPlaying(true)
+    }
+    else{
+        alert('something went wrong playing this audio')
+    }
   }
   
   const handlePauseClick = () => {

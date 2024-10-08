@@ -45,7 +45,7 @@ export default function RootLayout({ children }) {
         <meta name="viewport" content="width=device-width, shrink-to-fit=9" />
         <meta name="description" content="youbase" />
         <meta name="author" content="youbase" />
-        <link rel="icon" type="image/png" href="images/fav.png" />
+        <link rel="icon" type="image/png" href="favicon.ico" />
         {/* Stylesheets */}
         <link
           href="http://fonts.googleapis.com/css?family=Roboto:400,700,500"
@@ -66,7 +66,7 @@ export default function RootLayout({ children }) {
         
         {loading? <ImagePageLoader/> : 
         <>
-         {showSplushScreen? <ImagePageLoader/> : <></>}
+         {showSplushScreen? <ImagePageLoader/> : <></> /* the splash screen should show while content loads */}
           {/* Main header */} 
           <MainHeader loggedInUser={loggedInUser} />
           {/* Sidebar */}

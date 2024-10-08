@@ -5,7 +5,7 @@ import "./AudioPlayer.css";
 import ReactJkMusicPlayer from "react-jinke-music-player";
 import "react-jinke-music-player/assets/index.css";
 import { getImage, getPostsByType } from "@/Functions";
-import { backEndUrl, clientUrl } from "@/Constants";
+import { backEndUrl } from "@/Constants";
 import { useAudio } from "@/Contexts/AudioContext";
 
 
@@ -22,25 +22,23 @@ export default class AudioPlayer extends React.Component{
       }
     }
 
-      
-    options = {
-      autoPlay: false,
-      showDownload: false,
-      showMediaSession : true
-    }
+    
     getDefaultPlaylist = async ()=>{
       const getInitialSongs = await getPostsByType('music',true,'media')
-      //console.log(getInitialSongs)
-      this.audioinstance.oncanplay = () =>{ 
-        this.audioinstance.pause();
-      }
-      this.audioinstance.onerror = (e)=>{
-        this.audioinstance.load();
-        this.audioinstance.oncanplay = () =>{
-          this.audioinstance.play();
+        if(!this.audioinstance){
+            return
         }
-        console.log(e);
-      }
+    //   //console.log(getInitialSongs)
+    //   this.audioinstance.oncanplay = () =>{ 
+    //     this.audioinstance.pause();
+    //   }
+    //   this.audioinstance.onerror = (e)=>{
+    //     this.audioinstance.load();
+    //     this.audioinstance.oncanplay = () =>{
+    //       this.audioinstance.play();
+    //     }
+    //     console.log(e);
+    //   }
       this.setState({
         playList: getInitialSongs.media.map((song)=>{ return { key: song.id, musicSrc: backEndUrl+song.url, name: song.name, singer: song.name, cover: getImage(null,'thumbnail','music')}})
       })
@@ -71,6 +69,9 @@ export default class AudioPlayer extends React.Component{
                 playList: [newPlayList[0],...newPlayList,...playList] //since it plays only from the second song, this guarantees the added song plays
             }, 
             ()=>{
+                if(!this.audioinstance){
+                    return
+                }
                 console.log(this.state.playList)
                 this.audioinstance.load();
                 this.audioinstance.oncanplay = () =>{ 
@@ -137,35 +138,47 @@ export default class AudioPlayer extends React.Component{
     //   this.pauseAudio();
     // }
 
-    componentDidMount(){
-      this.getDefaultPlaylist();
-    }
+    // componentDidMount(){
+    //   this.getDefaultPlaylist();
+    // }
 
     // Set audio instance after it's available
-    componentDidUpdate(prevProps, prevState) {
-        if(this.state.audioInstance){
-            return
-        }
-        const audioInstance = {...this,nowPlayingSongId:NaN};
-        this.setState({ audioInstance });
+    // componentDidUpdate(prevProps, prevState) {
+    //     if(this.state.audioInstance){
+    //         return
+    //     }
+    //     console.log(this.state.playList)
+    //     if(this.audioinstance){
+    //         this.getDefaultPlaylist();
+    //     }
+    //     const audioInstance = {...this,nowPlayingSongId:NaN};
+    //     this.setState({ audioInstance });
         
-    }
+    // }
     
+    options = {
+        autoPlay: false,
+        showDownload: false,
+        showMediaSession : true
+    }
+
     render(){   
         return(
-        <div>
-                <ReactJkMusicPlayer 
+         <div>
+                <ReactJkMusicPlayer
                 onAudioPlay={this.logPlay}
                 autoPlay={this.state.autoPlay}
                  defaultPosition = {{right: "15px", bottom: "10px"}}
                 {...this.options} 
                 clearPriorAudioLists = {this.state.clearPriorAudioLists}
-                audioLists = {this.state.playList}
-                getAudioInstance = {(instance) => {this.audioinstance = instance}}
+                audioLists = {[]}
+                getAudioInstance = {(instance) => {
+                    this.audioinstance = instance
+                }}
                />
-               <NowPlaying audioInstance={this.state.audioInstance}/>
-        </div>
-        );
+               {this.state.audioInstance? <NowPlaying audioInstance={this.state.audioInstance}/> : <></>}
+        </div> 
+        )
     }
 }
 

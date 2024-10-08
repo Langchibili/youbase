@@ -50,23 +50,15 @@ export default function VideoThumbnailDisplay(props) {
   },[props.file])
 
   return (
-        <div
-            className="owl-item"
-            style={{ width: "134px", marginRight: 10 }}
-        >
-            <div className="item" style={{marginBottom:'10px'}}>
-                <div className="stream_1" style={{padding:'10px'}}>
+            <>
                 <video style={videoStyles} onClick={handleClickOpen}>
                         <div className='user-avatar'>{props.avatar()}</div>
                         <h5 className='video-title'>{truncateText(props.title,25)}</h5>
                         <source src={backEndUrl + props.file.url} type={props.file.mime} />
                         Sorry we are unable to show this video
                 </video>
-                
                 {/* Render the PostModal component */}
                 <div id="fullscreen-content"><FullScreenContentModal open={open} onClose={handleClose} {...props}/></div>
-                </div>
-            </div>
-            </div>
+            </>
   )
 }

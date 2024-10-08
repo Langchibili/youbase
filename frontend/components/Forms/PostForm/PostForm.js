@@ -456,6 +456,12 @@ export default class PostForm extends React.Component{
    }
 
   async componentDidMount(){
+      if(typeof document !== "undefined"){
+        const musicPlayer = document.getElementById('music-player-controller')
+        if(musicPlayer){
+          musicPlayer.style.display = "none"
+        }
+      }
        log(this.props.loggedInUser)
        const action = this.state.action
        log('what is the action here',action)
@@ -530,6 +536,12 @@ export default class PostForm extends React.Component{
 
    componentWillUnmount(){
      this.savePost(false) // save draft during the unmounting phase
+     if(typeof document !== "undefined"){
+      const musicPlayer = document.getElementById('music-player-controller')
+      if(musicPlayer){
+         musicPlayer.style.display = "block"
+      }
+    }
    }
 
 

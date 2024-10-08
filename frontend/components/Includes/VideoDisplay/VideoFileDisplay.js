@@ -18,8 +18,22 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
   const [videoFile, setVideoFile] = useState(null);
   const videoRefs = useRef([]); // Array to store refs for multiple video elements
   const [logView, setLogView] = useState(false)
+  const [OwlCarousel, setOwlCarousel] = useState(null);
 
   useEffect(() => {
+    // Dynamically import OwlCarousel and the styles only on the client side
+    if (typeof window !== 'undefined') {
+      if(OwlCarousel){
+        return
+      }
+      (async () => {
+        const { default: Owl } = await import('react-owl-carousel');
+        // await import('owl.carousel/dist/assets/owl.carousel.css');
+        // await import('owl.carousel/dist/assets/owl.theme.default.css');
+        setOwlCarousel(() => Owl)
+      })();
+    }
+
     if(getMedia){
       const runGetMedia = async()=> {
         const media = await getPostMedia(postTitle);
@@ -30,7 +44,7 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
     } else {
       setVideoFile(file?.attributes ? file.attributes : file);
     }
-  }, [file, getMedia]);
+  }, [file, getMedia, document]);
 
   useEffect(() => {
     if (videoFile && videoFile.data && videoFile.data.length) {
@@ -59,6 +73,22 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
     }
   }, [videoFile]);
 
+  // useEffect(() => {
+    
+  // }, [document])
+
+  if (!OwlCarousel) {
+    return <PortraitContentSkeleton/> // loading carousel
+  }
+
+  const videoWrapperHeight = ()=>{
+    if(window.innerWidth > 990){
+       return "400px"
+    }
+    else{
+      return (window.innerWidth - 70).toString() + "px"
+    }
+  }
   const renderVideoCarousel = (videos) => {
     if (!hideRemoveButton) {
       return (
@@ -71,39 +101,47 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
       )
     }
     if (!videos.data) return null;
-
-    return (
-      <div className="owl-carousel featured_courses owl-theme owl-loaded owl-drag">
-        <div className="owl-stage-outer">
-          <div className="owl-stage" style={{transform: "translate3d(0px, 0px, 0px)", transition: "all", width: "100%"}}>
-            {videos.data.map((video, index) => {
-              const videoData = video.attributes;
-              return (
-                <div
-                  key={index}
-                  className={`owl-item ${index === 0 ? 'active' : ''}`}
-                  style={{ width: "100%", marginRight: 20 }}
-                >
-                  <div className="item">
-                    <div className="fcrse_1 mb-20">
-                      <video
-                        ref={(el) => videoRefs.current[index] = el}
-                        controls
-                        style={{ borderRadius: '5px', width: '100%', maxHeight: '500px' }}
-                      >
-                        <source src={backEndUrl + videoData.url} type={videoData.mime} />
-                        Sorry, we are unable to show this video.
-                      </video>
-                      <small>Duration: {videoDurations[index] ? formatDuration(videoDurations[index]) : 'Loading...'}</small>
+    if(typeof window !== "undefined"){
+      return (
+        <OwlCarousel margin={10} items={10} dots={true} autoWidth={true} className="owl-theme">
+              {videos.data.map((video, index) => {
+                const videoData = video.attributes;
+                return (
+                    <div className="item" key={index} style={{width:videoWrapperHeight()}}>
+                     <div className="stream_1" style={{width:videoWrapperHeight(),padding:'10px'}}>
+                        <video
+                          ref={(el) => videoRefs.current[index] = el}
+                          controls
+                          style={{ borderRadius: '5px', width: '100%', maxHeight: '500px' }}
+                        >
+                          <source src={backEndUrl + videoData.url} type={videoData.mime} />
+                          Sorry, we are unable to show this video.
+                        </video>
+                        <small>Duration: {videoDurations[index] ? formatDuration(videoDurations[index]) : 'Loading...'}</small>
+                      </div>
                     </div>
+                )
+              })}
+              {/* {
+                videos.data.map((video, index) => {
+                  return (
+                    <div>
+                    <button role="button" className="owl-dot">
+                      <span />
+                    </button>
+                    <button role="button" className="owl-dot">
+                      <span />
+                    </button>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    );
+                  )
+                })
+              } */}
+            </OwlCarousel>
+      );
+    }
+    else{
+      return <></>
+    }
   };
 
   if (!videoFile) return null;
@@ -143,4 +181,38 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
       )}
     </div>
   );
+}
+
+
+const PortraitContentSkeleton = ()=>{
+  return (
+    <div className="la5lo1" style={{marginBottom:'10px'}}>
+        <div className="owl-carousel live_stream owl-theme owl-loaded owl-drag">
+       
+        <div className="owl-stage-outer">
+         <div
+            className="owl-stage"
+            style={{
+            transform: "translate3d(0px, 0px, 0px)",
+            transition: "all",
+            width: "1841px",
+            backgroundColor: '#rgb(71 55 71)'
+            }}
+            
+        >
+            {[1,2,3,4,5,6,7,8,9].map((skeleton,index)=>{
+                  return (
+                    <div className="owl-item active" key={index} style={{width:'100%',height:'100px',marginRight:'10px'}}>
+                      
+                        <div className="stream_1" style={{width:'100%',padding:'10px',height:'100px'}}>
+                         
+                      </div>
+                    </div>
+                  )
+            })}
+        </div>
+      </div>
+    </div>
+    </div>
+  )
 }

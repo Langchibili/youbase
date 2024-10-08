@@ -3,19 +3,91 @@
 import VideoThumbnailDisplay from '../VideoDisplay/VideoThumbnailDisplay';
 import AvatarOnly from '@/components/Parts/UserDisplay/AvatarOnly';
 import ImagePortraitThumbnails from './ImagePortraitThumbnails';
+import { useEffect, useState } from 'react';
+
+
 
 export default function PortraitContentDisplay(props) {
-  console.log('portrait vids', props.content); // Make sure content is not empty
+  const [OwlCarousel, setOwlCarousel] = useState(null);
 
+  useEffect(() => {
+    // Dynamically import OwlCarousel and the styles only on the client side
+    if (typeof window !== 'undefined') {
+      if(OwlCarousel){
+        return
+      }
+      (async () => {
+        const { default: Owl } = await import('react-owl-carousel');
+        // await import('owl.carousel/dist/assets/owl.carousel.css');
+        // await import('owl.carousel/dist/assets/owl.theme.default.css');
+        setOwlCarousel(() => Owl)
+      })();
+    }
+  }, [document])
+
+  if (!OwlCarousel) {
+    return <PortraitContentSkeleton/> // loading carousel
+  }
   if (!props.content || props.content.length === 0) return <></>; // Check for undefined or empty content
+  
   return (
-    <>
-      <div className="la5lo1" style={{marginBottom:'10px'}}>
-       {/* <div className="owl-carousel Student_says owl-theme owl-loaded owl-drag"> */}
-       <div className="owl-carousel live_stream owl-theme owl-loaded owl-drag">
+    <OwlCarousel margin={10} items={3} autoWidth className="owl-theme">
+          {props.content.map((content) => {
+            content.attributes.id = content.id // same as post.attributes.id = post.id
+            if (content.attributes.type === "video" && content.attributes.media) {  // Ensure content has media
+             
+              return content.attributes.media.data.map((media) => {
+                    media.attributes.id = media.id; // Ensure media.id exists
+                    return (
+                     
+                      <div className="item" key={media.id} style={{width:'134px'}}>
+                        <div className="stream_1" style={{width:'134px',padding:'10px'}}>
+                          <VideoThumbnailDisplay
+                             
+                              title={content.attributes.title}
+                              file={media.attributes}
+                              post={content.attributes}
+                              loggedInUser={props.loggedInUser}
+                              avatar={()=>{<AvatarOnly userId={content.attributes.user.data.id} />}}
+                          />
+                           </div>
+                          </div>
+                    )
+              })
+            }
+            if (content.attributes.type === "image" && content.attributes.featuredImages ) {  // Ensure content has media
+            
+              return content.attributes.featuredImages.data.map((media) => {
+                  media.attributes.id = media.id; // Ensure media.id exists
+                  return (
+                    <div className="item" key={media.id} style={{width:'134px'}}>
+                        <div className="stream_1" style={{width:'134px',padding:'10px'}}>
+                          <ImagePortraitThumbnails
+                              key={media.id}
+                              title={content.attributes.title}
+                              file={media.attributes}
+                              post={content.attributes}
+                              loggedInUser={props.loggedInUser}
+                              avatar={()=>{<AvatarOnly userId={content.attributes.user.data.id} />}}
+                          />
+                          </div>
+                        </div>
+                  )
+            })
+          }
+            return null; // Return null if not a video or no media
+          })}
+      </OwlCarousel>
+  );
+}
+
+const PortraitContentSkeleton = ()=>{
+  return (
+    <div className="la5lo1" style={{marginBottom:'10px'}}>
+        <div className="owl-carousel live_stream owl-theme owl-loaded owl-drag">
        
         <div className="owl-stage-outer">
-        <div
+         <div
             className="owl-stage"
             style={{
             transform: "translate3d(0px, 0px, 0px)",
@@ -25,57 +97,21 @@ export default function PortraitContentDisplay(props) {
             }}
             
         >
-          {props.content.map((content) => {
-            console.log('portraits',props.content)
-            content.attributes.id = content.id // same as post.attributes.id = post.id
-            if (content.attributes.type === "video" && content.attributes.media) {  // Ensure content has media
-              console.log('video portraits',content) 
-              return content.attributes.media.data.map((media) => {
-                    media.attributes.id = media.id; // Ensure media.id exists
-                    return (
-                        <VideoThumbnailDisplay
-                            key={media.id}
-                            title={content.attributes.title}
-                            file={media.attributes}
-                            post={content.attributes}
-                            loggedInUser={props.loggedInUser}
-                            avatar={()=>{<AvatarOnly userId={content.attributes.user.data.id} />}}
-                        />
-                    )
-              })
-            }
-            if (content.attributes.type === "image" && content.attributes.featuredImages ) {  // Ensure content has media
-              console.log('image portraits',content)
-              return content.attributes.featuredImages.data.map((media) => {
-                  media.attributes.id = media.id; // Ensure media.id exists
+            {[1,2,3,4,5,6,7,8,9].map((skeleton,index)=>{
                   return (
-                      <ImagePortraitThumbnails
-                          key={media.id}
-                          title={content.attributes.title}
-                          file={media.attributes}
-                          post={content.attributes}
-                          loggedInUser={props.loggedInUser}
-                          avatar={()=>{<AvatarOnly userId={content.attributes.user.data.id} />}}
-                      />
+                    <div className="owl-item active" key={index} style={{width:'134px',height:'200px',marginRight:'10px'}}>
+                      
+                        <div className="stream_1" style={{width:'134px',padding:'10px',height:'200px'}}>
+                         
+                      </div>
+                    </div>
                   )
-            })
-          }
-            return null; // Return null if not a video or no media
-          })}
-
+            })}
         </div>
-       </div>
-       <div className="owl-nav">
-      <button type="button" role="presentation" className="owl-prev disabled">
-        <i className="uil uil-angle-left" />
-      </button>
-      <button type="button" role="presentation" className="owl-next">
-        <i className="uil uil-angle-right" />
-      </button>
-    </div>
-    <div className="owl-dots disabled"></div>
       </div>
-     </div>
-    </>
-  );
+    </div>
+    </div>
+  )
 }
+
+                  

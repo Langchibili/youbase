@@ -52,12 +52,7 @@ export default function ImagePortraitThumbnails(props) {
   }, [props.file])
 
   return (
-    <div
-      className="owl-item"
-      style={{ width: '134.017px', marginRight: 10 }}
-    >
-      <div className="item" style={{marginBottom:'10px'}}>
-        <div className="stream_1" style={{padding:'10px'}}>
+          <>
           {/* Image element */}
           <img
             style={imageStyles}
@@ -72,8 +67,6 @@ export default function ImagePortraitThumbnails(props) {
           <div id="fullscreen-content">
             <FullScreenContentModal open={open} onClose={handleClose} {...props} />
           </div>
-        </div>
-      </div>
-    </div>
+        </>
   )
 }

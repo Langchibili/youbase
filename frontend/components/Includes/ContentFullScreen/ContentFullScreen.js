@@ -35,10 +35,12 @@ export default function ContentFullScreen(props) {
   useEffect(() => {
     if(typeof document !== "undefined"){
       const musicPlayer = document.getElementById('music-player-controller')
-      musicPlayer.style.display = "none"
+      if(musicPlayer){
+        musicPlayer.style.display = "none"
+        audioInstance.audioinstance.pause()
+      }
     }
     if(props.post.type !== "video"){
-      audioInstance.audioinstance.pause()
       return
     }
     const video = videoRef.current;
@@ -63,7 +65,9 @@ export default function ContentFullScreen(props) {
       video.removeEventListener("playing", handlePlaying);
       if(typeof document !== "undefined"){
         const musicPlayer = document.getElementById('music-player-controller')
-        musicPlayer.style.display = "block"
+        if(musicPlayer){
+          musicPlayer.style.display = "none"
+        }
       }
     };
   }, [videoRef.current]);

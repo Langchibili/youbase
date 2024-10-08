@@ -2,7 +2,7 @@
 
 import ContentDisplay from '@/components/Includes/ContentDisplay/ContentDisplay'
 import PageLoader from '@/components/Includes/Loader/PageLoader'
-import { checkUserLogginStatus } from '@/Constants'
+import { useUser } from '@/Contexts/UserContext'
 import { dynamicConfig } from '@/Functions'
 //import { getUserById } from '@/Functions'
 import React, { useState, useEffect } from 'react'
@@ -11,16 +11,14 @@ import React, { useState, useEffect } from 'react'
 export const dynamic = dynamicConfig();
 
 export default function Feed({ params }) {
-  const [loggedInUser, setLoggedInUser] = useState(null)
+  const loggedInUser = useUser()
  // const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const loggedInUser = await checkUserLogginStatus() // the loggedInUser 
        // setUser(await getUserById(loggedInUser.user.id,"profilePicture,details,socials")) // the post without populating anything
-        setLoggedInUser(loggedInUser) // the loggedInUser   
     } catch (error) {
         console.error('Error fetching user:', error)
       } finally {
@@ -29,14 +27,14 @@ export default function Feed({ params }) {
     }
 
     fetchUser()
-  }, [params.username])
+  }, [])
  
   if (loading) {
     return <PageLoader/>
   }
   
   return ( 
-    <>s
+    <>
      <div className="sa4d25">
          <div className="container-fluid">
          <div className="row">
