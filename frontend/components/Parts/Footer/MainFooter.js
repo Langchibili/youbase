@@ -139,10 +139,11 @@ export default function MainFooter() {
     const scripts = [
       clientUrl + '/theme/js/vertical-responsive-menu.min.js',
       clientUrl + '/theme/js/jquery-3.3.1.min.js',
-      // clientUrl + '/theme/vendor/bootstrap/js/bootstrap.bundle.min.js',
+       clientUrl + '/theme/vendor/bootstrap/js/bootstrap.bundle.min.js',
       // clientUrl + '/theme/vendor/OwlCarousel/owl.carousel.js',
+      // "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js",
       clientUrl + '/theme/vendor/semantic/semantic.min.js',
-      clientUrl + '/theme/js/custom.js',
+      clientUrl + '/theme/js/custom2.js',
       clientUrl + '/theme/js/night-mode.js',
     ];
 
@@ -155,14 +156,14 @@ export default function MainFooter() {
         if (!isScriptLoaded(src)) {
           const script = document.createElement('script');
           script.src = src;
-          if(index === 3){
-            script.integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            script.crossorigin="anonymous"
-          }
+          // if(index === 3){
+          //   script.integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+          //   script.crossorigin="anonymous"
+          // }
           script.async = false; // Ensures correct execution order
           script.onload = () => {
             console.log(`${src} has been loaded and executed.`);
-            if (src === clientUrl + '/theme/js/custom.js') {
+            if (src === clientUrl + '/theme/js/custom2.js') {
               console.log('Custom JS initialized');
             }
           };
@@ -185,10 +186,10 @@ export default function MainFooter() {
     loadScripts();
 
     // Cleanup old scripts when params change or on unmount
-    return () => {
-      removeScripts();
-    };
-  }, [params]); // Re-run effect on params change
+    // return () => {
+    //   removeScripts();
+    // };
+  }, []); // at times Re-run effect on params change, for now run once
 
   return (
     <footer className="footer mt-30">
