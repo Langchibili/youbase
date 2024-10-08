@@ -139,7 +139,7 @@ export default function MainFooter() {
     const scripts = [
       clientUrl + '/theme/js/vertical-responsive-menu.min.js',
       clientUrl + '/theme/js/jquery-3.3.1.min.js',
-      clientUrl + '/theme/vendor/bootstrap/js/bootstrap.bundle.min.js',
+      // clientUrl + '/theme/vendor/bootstrap/js/bootstrap.bundle.min.js',
       // clientUrl + '/theme/vendor/OwlCarousel/owl.carousel.js',
       clientUrl + '/theme/vendor/semantic/semantic.min.js',
       clientUrl + '/theme/js/custom.js',
@@ -155,6 +155,10 @@ export default function MainFooter() {
         if (!isScriptLoaded(src)) {
           const script = document.createElement('script');
           script.src = src;
+          if(index === 3){
+            script.integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            script.crossorigin="anonymous"
+          }
           script.async = false; // Ensures correct execution order
           script.onload = () => {
             console.log(`${src} has been loaded and executed.`);

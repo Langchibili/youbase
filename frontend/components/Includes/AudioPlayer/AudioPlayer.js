@@ -145,18 +145,17 @@ export default class AudioPlayer extends React.Component{
     }
 
     // Set audio instance after it's available
-    // componentDidUpdate(prevProps, prevState) {
-    //     if(this.state.audioInstance){
-    //         return
-    //     }
-    //     console.log(this.state.playList)
-    //     if(this.audioinstance){
-    //         this.getDefaultPlaylist();
-    //     }
-    //     const audioInstance = {...this,nowPlayingSongId:NaN};
-    //     this.setState({ audioInstance });
+    componentDidUpdate(prevProps, prevState) {
+        if(this.state.audioInstance){
+            return
+        }
+        if(this.audioinstance){
+            this.getDefaultPlaylist();
+        }
+        const audioInstance = {...this,nowPlayingSongId:NaN};
+        this.setState({ audioInstance });
         
-    // }
+    }
     
     options = {
         autoPlay: false,
@@ -168,11 +167,11 @@ export default class AudioPlayer extends React.Component{
         return(
          <div>
                 <ReactJkMusicPlayer
-                // onAudioPlay={this.logPlay}
-                // autoPlay={this.state.autoPlay || false}
+                onAudioPlay={this.logPlay}
+                autoPlay={this.state.autoPlay || false}
                  defaultPosition = {{right: "15px", bottom: "10px"}}
                 {...this.options} 
-                // clearPriorAudioLists = {this.state.clearPriorAudioLists}
+                clearPriorAudioLists = {this.state.clearPriorAudioLists}
                 audioLists = {this.state.playList || []}
                 getAudioInstance = {(instance) => {
                     if(!this.audioinstance){

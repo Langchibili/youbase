@@ -40,7 +40,7 @@ export default function Feed({ params }) {
          <div className="row">
              <div className="col-xl-9 col-lg-8">
              <div className="section3125">
-              <h4 className="item_title">Reels</h4>  
+              <h3>Reels</h3>  
               {loading? <></> : <ContentDisplay
                             contentToView = "portrait-videos"
                             loggedInUser={loggedInUser} 
@@ -53,7 +53,7 @@ export default function Feed({ params }) {
               </div>
               <div className="section3125 mt-30">
                 <div className="la5lo1">
-                  <h4 className="item_title">Captures</h4>
+                  <h3>Captures</h3>
                   {loading? <></> : <ContentDisplay 
                             contentToView = "portrait-images"
                             loggedInUser={loggedInUser} 
@@ -66,7 +66,7 @@ export default function Feed({ params }) {
                             />}
                   </div>
               </div>
-              <h4 className="item_title">Explore</h4>
+              <h3>Explore</h3>
               <div className="section3125 mt-30">
                   {loading? <></> : <ContentDisplay 
                             contentToView = "all"

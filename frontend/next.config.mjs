@@ -1,24 +1,20 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-     // next.config.js
-    reactStrictMode: false,
-    typescript: {
-        ignoreBuildErrors: true, // Ignore TypeScript errors
-      },
-    eslint: {
-        ignoreDuringBuilds: true, // Ignore ESLint errors
-    },
-   
-    webpack: (config, { webpack }) => {
-        // Use the webpack instance from the function's arguments
-      config.plugins.push(
-          new webpack.ProvidePlugin({
-            $: 'jquery',
-            jQuery: 'jquery',
-            'window.jQuery': 'jquery',
-          })
-      )
-    }
+export const reactStrictMode = false
+export const typescript = {
+  ignoreBuildErrors: true, // Ignore TypeScript errors
+}
+export const eslint = {
+  ignoreDuringBuilds: true, // Ignore ESLint errors
+}
+export function webpack(config, { webpack }) {
+  // Use the webpack instance from the function's arguments
+  config.plugins.push(
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery',
+    })
+  )
+  return config
 }
 
 // reactStrictMode: true,
