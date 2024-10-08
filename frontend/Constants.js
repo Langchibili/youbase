@@ -138,7 +138,8 @@ const updateDefaultUserAccountToSignUp = async (username,password)=>{
     username: username,
     email:user.email,
     password: password,
-    type:'loggedin'
+    type:'loggedin',
+    status: "published"
   }
   return await fetch(api_url+'/users/'+user.id, {
     method: 'PUT',

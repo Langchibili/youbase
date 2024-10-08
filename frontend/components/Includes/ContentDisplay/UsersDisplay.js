@@ -86,6 +86,9 @@ export default function UsersDisplay(props) {
     <div>
       {users.map((user,index) => {
         const thisIsMyAccount= props.loggedInUser.user.id === user.id
+        if(user.status !== "published"){
+          return null
+        }
         return <UserMiniProfileDisplay key={index}  user={user} loggedInUser={props.loggedInUser} thisIsMyAccount={thisIsMyAccount}/>
       })}
       {/* {loading && page !== usersMeta?.pagination.pageCount && <div>Loading more users...</div> /* means you have already loaded initial posts */}

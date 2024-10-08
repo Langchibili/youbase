@@ -64,7 +64,7 @@ export default function SinglePostDisplay(props) {
                 </div>
               </div>
               <div className="user_dt_right">
-                <button className="btn btn-danger">Download</button>
+                {props.post.type === "music"? <button className="btn btn-danger">Download</button> : <></>}
               </div>
             </div> : <>Loading...</>}
           </div>

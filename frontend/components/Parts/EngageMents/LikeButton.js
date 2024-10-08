@@ -31,6 +31,7 @@ export default class LikeButton extends React.Component{
             this.setState({
                showLogInFirstModal: true
             })
+            return
         }
 
         this.setState({

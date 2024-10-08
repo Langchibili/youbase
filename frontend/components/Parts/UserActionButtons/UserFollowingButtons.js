@@ -183,6 +183,9 @@ export default class UserFollowingButtons extends React.Component{
        if(followingUserIds.length === 0){ // meaning it's empty
         return <UserFollowButton {...this.state} handleUserFollow={this.handleUserFollow}/>
        }
+       if(!followingUserIds.includes(userId)){ // it means you are already following this user, you can only unfollow the user
+        return <UserFollowButton {...this.state} handleUserFollow={this.handleUserFollow}/>
+       }
        if(followingUserIds.includes(userId)){ // it means you are already following this user, you can only unfollow the user
         return <UserUnFollowButton {...this.state} handleUserUnfollow={this.handleUserUnfollow}/>
        }

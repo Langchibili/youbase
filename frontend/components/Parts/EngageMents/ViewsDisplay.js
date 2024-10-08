@@ -30,11 +30,12 @@ export default class ViewsDisplay extends React.Component{
    }
 
  handleView = async ()=>{
-        if(!this.props.loggedInUser.status){ // means you are logged out or you have never followed anyone before
-            this.setState({
-               showLogInFirstModal: true
-            })
-        }
+        // if(!this.props.loggedInUser.status){ // means you are logged out or you have never followed anyone before
+        //     this.setState({
+        //        showLogInFirstModal: true
+        //     })
+        //     return
+        // } for now we shall allow unlogged out users to view posts
 
         this.setState({
             requesting: true // to show user something is happening

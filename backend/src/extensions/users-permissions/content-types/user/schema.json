@@ -259,6 +259,13 @@
     "verified": {
       "type": "boolean",
       "default": false
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "published",
+        "draft"
+      ]
     }
   }
 }

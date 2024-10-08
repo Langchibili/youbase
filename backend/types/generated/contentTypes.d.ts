@@ -833,6 +833,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'api::reported-post.reported-post'
     >;
     verified: Attribute.Boolean & Attribute.DefaultTo<false>;
+    status: Attribute.Enumeration<['published', 'draft']>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<

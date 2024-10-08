@@ -16,6 +16,7 @@ export default class UserFollowButton extends React.Component{
          this.setState({
             showLogInFirstModal: true
          })
+         return
       }
       this.props.handleUserFollow()  // follow the user
    }

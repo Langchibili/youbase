@@ -17,12 +17,13 @@ export default class StreamsDisplay extends React.Component{
  
 
  handlePlay= async ()=>{
-        if(!this.props.loggedInUser.status){ // means you are logged out or you have never followed anyone before
-            this.setState({
-               showLogInFirstModal: true
-            })
-        }
-
+        // if(!this.props.loggedInUser.status){ // means you are logged out or you have never followed anyone before
+        //     this.setState({
+        //        showLogInFirstModal: true
+        //     })
+        //     return
+        // } for now we shall allowed logged out users to stream music
+       
         this.setState({
             requesting: true // to show user something is happening
         })

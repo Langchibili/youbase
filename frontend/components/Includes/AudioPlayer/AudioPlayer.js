@@ -41,6 +41,8 @@ export default class AudioPlayer extends React.Component{
     //   }
       this.setState({
         playList: getInitialSongs.media.map((song)=>{ return { key: song.id, musicSrc: backEndUrl+song.url, name: song.name, singer: song.name, cover: getImage(null,'thumbnail','music')}})
+      },()=>{
+        console.log(this.state.playList)
       })
     }
 
@@ -138,9 +140,9 @@ export default class AudioPlayer extends React.Component{
     //   this.pauseAudio();
     // }
 
-    // componentDidMount(){
-    //   this.getDefaultPlaylist();
-    // }
+    componentDidMount(){
+      this.getDefaultPlaylist();
+    }
 
     // Set audio instance after it's available
     // componentDidUpdate(prevProps, prevState) {
@@ -166,14 +168,16 @@ export default class AudioPlayer extends React.Component{
         return(
          <div>
                 <ReactJkMusicPlayer
-                onAudioPlay={this.logPlay}
-                autoPlay={this.state.autoPlay}
+                // onAudioPlay={this.logPlay}
+                // autoPlay={this.state.autoPlay || false}
                  defaultPosition = {{right: "15px", bottom: "10px"}}
                 {...this.options} 
-                clearPriorAudioLists = {this.state.clearPriorAudioLists}
-                audioLists = {[]}
+                // clearPriorAudioLists = {this.state.clearPriorAudioLists}
+                audioLists = {this.state.playList || []}
                 getAudioInstance = {(instance) => {
-                    this.audioinstance = instance
+                    if(!this.audioinstance){
+                        this.audioinstance = instance
+                    }
                 }}
                />
                {this.state.audioInstance? <NowPlaying audioInstance={this.state.audioInstance}/> : <></>}

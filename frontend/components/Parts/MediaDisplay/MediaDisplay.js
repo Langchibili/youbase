@@ -37,6 +37,7 @@ export default class MediaDisplay extends React.Component{
             })
         }
     }
+    
     componentDidMount(){
        this.getPost(false)
     }
@@ -88,7 +89,7 @@ export default class MediaDisplay extends React.Component{
      }
     
     titleAndDescription = ()=>{
-        if(this.props.displayType === "mediaOnly") { // means don't show the title and description
+        if(this.props.displayType === "mediaOnly" && this.props.post.type !== "text") { // means don't show the title and description
             return <></>
         }
         return (

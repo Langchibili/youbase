@@ -141,8 +141,8 @@ export default function MainFooter() {
       clientUrl + '/theme/js/jquery-3.3.1.min.js',
       clientUrl + '/theme/vendor/bootstrap/js/bootstrap.bundle.min.js',
       // clientUrl + '/theme/vendor/OwlCarousel/owl.carousel.js',
-      // clientUrl + '/theme/vendor/semantic/semantic.min.js',
-      // clientUrl + '/theme/js/custom.js',
+      clientUrl + '/theme/vendor/semantic/semantic.min.js',
+      clientUrl + '/theme/js/custom.js',
       clientUrl + '/theme/js/night-mode.js',
     ];
 

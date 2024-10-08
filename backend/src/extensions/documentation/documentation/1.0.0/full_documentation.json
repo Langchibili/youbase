@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2024-10-02T08:50:34.691Z"
+    "x-generation-date": "2024-10-08T19:48:48.717Z"
   },
   "x-strapi-config": {
     "path": "/documentation",
@@ -3191,6 +3191,13 @@
                       },
                       "verified": {
                         "type": "boolean"
+                      },
+                      "status": {
+                        "type": "string",
+                        "enum": [
+                          "published",
+                          "draft"
+                        ]
                       },
                       "createdAt": {
                         "type": "string",
@@ -6688,6 +6695,13 @@
                                   },
                                   "verified": {
                                     "type": "boolean"
+                                  },
+                                  "status": {
+                                    "type": "string",
+                                    "enum": [
+                                      "published",
+                                      "draft"
+                                    ]
                                   },
                                   "createdAt": {
                                     "type": "string",
@@ -10521,6 +10535,13 @@
                                   },
                                   "verified": {
                                     "type": "boolean"
+                                  },
+                                  "status": {
+                                    "type": "string",
+                                    "enum": [
+                                      "published",
+                                      "draft"
+                                    ]
                                   },
                                   "createdAt": {
                                     "type": "string",
@@ -14469,6 +14490,13 @@
                       "verified": {
                         "type": "boolean"
                       },
+                      "status": {
+                        "type": "string",
+                        "enum": [
+                          "published",
+                          "draft"
+                        ]
+                      },
                       "createdAt": {
                         "type": "string",
                         "format": "date-time"
@@ -16962,6 +16990,13 @@
                                     },
                                     "verified": {
                                       "type": "boolean"
+                                    },
+                                    "status": {
+                                      "type": "string",
+                                      "enum": [
+                                        "published",
+                                        "draft"
+                                      ]
                                     },
                                     "createdAt": {
                                       "type": "string",
@@ -21086,6 +21121,13 @@
                       },
                       "verified": {
                         "type": "boolean"
+                      },
+                      "status": {
+                        "type": "string",
+                        "enum": [
+                          "published",
+                          "draft"
+                        ]
                       },
                       "createdAt": {
                         "type": "string",
@@ -25258,6 +25300,13 @@
                       },
                       "verified": {
                         "type": "boolean"
+                      },
+                      "status": {
+                        "type": "string",
+                        "enum": [
+                          "published",
+                          "draft"
+                        ]
                       },
                       "createdAt": {
                         "type": "string",
