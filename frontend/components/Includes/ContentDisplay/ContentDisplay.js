@@ -30,6 +30,7 @@ export default function ContentDisplay(props) {
       const requestUri = `${api_url}${props.contentUri}&pagination[page]=${page}&pagination[pageSize]=${props.limit}&sort=createdAt:${props.sort}`
       const newPosts = await getPosts(requestUri)
       if(newPosts){
+        console.log('new posts',newPosts)
         if (newPosts.length > 0) {
           setPosts(prevPosts => [...prevPosts, ...newPosts]) // Avoid mutating the original array
           setPage(prevPage => prevPage + 1)
@@ -89,6 +90,7 @@ export default function ContentDisplay(props) {
                 setPosts(initialPosts.data)
                 setPage(prevPage => prevPage + 1)
                 setLoading(false)
+                console.log('initial posts',initialPosts)
               }
             }
             else{
