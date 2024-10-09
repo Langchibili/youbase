@@ -142,10 +142,12 @@ export default function ContentDisplay(props) {
     return <>no content found</>
   }
   if (props.contentToView === 'portrait-videos' || props.contentToView === 'portrait-images') { // filter out portrait content
+    console.log('portrait content 1', portraitContent)
     let portraitContentToDisplay = portraitContent
     if(portraitContent.length > props.contentLimit){ 
        portraitContentToDisplay = portraitContent.slice(0,props.contentLimit)
     }
+    console.log('portrait portraitContentToDisplay', portraitContentToDisplay)
     return <PortraitContentDisplay content={portraitContentToDisplay} loggedInUser={props.loggedInUser} />
   }
   return ( // display landscape content

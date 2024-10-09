@@ -5,10 +5,10 @@ import { getJWT, saveJwt } from "./secrets"
 export const youtubeApiKey = 'AIzaSyCpjeIW-IKAUQSZuc5bb0Ncx1ksxEB5J_8'
 
 
- ///*localhost: */ export const environment = 'local'
+ /*localhost: */ export const environment = 'local'
  ///*liveserver1: */ export const environment = 'live'
  ///*liveserver2: */ export const environment = 'live2'
- /*testserver: */ export const environment = 'test' // mvp will run here
+ ///*testserver: */ export const environment = 'test' // mvp will run here
 
 // export the client side stuff
 
@@ -17,7 +17,7 @@ export const getJwt = getJWT
 let apiurl, backendUrl, clienturl
 
  if(environment === 'local'){
-   /*localhost: */  apiurl = 'http://localhost:1339/api'
+   /*localhost: */  apiurl = 'http://localhost:1340/api'
  }
  else if(environment === 'live'){
    /*liveserver1: */ apiurl = 'https://api.youbase.com/api' // for production's sake
@@ -35,7 +35,7 @@ let apiurl, backendUrl, clienturl
 
  // for removing the api part when handling /uploads and the like
  if(environment === 'local'){
-  /*localhost: */  backendUrl = apiurl.replace('http://localhost:1339/api','http://localhost:1339')
+  /*localhost: */  backendUrl = apiurl.replace('http://localhost:1340/api','http://localhost:1340')
  }
  else if(environment === 'live'){
   /*liveserver: */ backendUrl =  apiurl.replace('youbase.com/api','youbase.com') // for production's sake
@@ -274,7 +274,7 @@ export const checkUserLogginStatus = async () =>{
       userObject.username = username
       userObject.email = "unset_"+username+"@email.com"
       userObject.password = username
-      const defaultUser = await submitCreateUserRequest(userObject) // make the user account
+      const defaultUser = await submitCreateUserRequest(userObject) // make the user account 
       logginStatusObject.user = defaultUser.user // current account is a default one
       logginStatusObject.status = false // user has not logged in
        saveJwt(defaultUser.jwt) // save the jwt of the default user

@@ -24,8 +24,8 @@ export default function RootLayout({ children }) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const user = await checkUserLogginStatus();
-        setLoggedInUser(user);
+        const user = await checkUserLogginStatus()
+        setLoggedInUser(user)
       } catch (error) {
         console.error('Error fetching logged in user:', error);
       } finally {
@@ -37,6 +37,7 @@ export default function RootLayout({ children }) {
     };
     fetchUser();
   }, [])
+
   return (
     <html lang="en">
       <head>
