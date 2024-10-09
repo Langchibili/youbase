@@ -29,7 +29,7 @@ export default function PortraitContentDisplay(props) {
     return <PortraitContentSkeleton/> // loading carousel
   }
   if (!props.content || props.content.length === 0) return <></>; // Check for undefined or empty content
-  
+  console.log(props.content)
   return (
     <OwlCarousel margin={10} items={3} autoWidth className="owl-theme">
           {props.content.map((content) => {

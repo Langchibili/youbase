@@ -17,7 +17,7 @@ import ImagePageLoader from '@/components/Includes/Loader/ImagePageLoader';
 // };
 
 export default function RootLayout({ children }) {
-  const [loggedInUser, setLoggedInUser] = useState(null);
+  const [loggedInUser, setLoggedInUser] = useState({});
   const [loading, setLoading] = useState(true);
   const [showSplushScreen, setShowSplushScreen] = useState(true)
 
@@ -32,7 +32,7 @@ export default function RootLayout({ children }) {
         setLoading(false);
         setTimeout(()=>{
            setShowSplushScreen(false)
-        },8000)
+        },1000)
       }
     };
     fetchUser();
@@ -69,7 +69,7 @@ export default function RootLayout({ children }) {
         <>
          {showSplushScreen? <ImagePageLoader/> : <></> /* the splash screen should show while content loads */}
           {/* Main header */} 
-          <MainHeader loggedInUser={loggedInUser} />
+          {<MainHeader loggedInUser={loggedInUser} />}
           {/* Sidebar */}
           <MainMenu loggedInUser={loggedInUser} />
           <AudioProvider>
@@ -85,19 +85,8 @@ export default function RootLayout({ children }) {
             {/* Audio player */}
             <AudioPlayer />
           </AudioProvider>
-          <>
-          {/* <script src="js/vertical-responsive-menu.min.js" defer></script>
-          <script src="js/jquery-3.3.1.min.js" defer></script>
-          <script src="vendor/bootstrap/js/bootstrap.bundle.min.js" defer></script>
-          <script src="vendor/OwlCarousel/owl.carousel.js" defer></script>
-          <script src="vendor/semantic/semantic.min.js" defer></script>
-          <script src="js/custom.js" defer></script>
-          <script src="js/night-mode.js" defer></script> */}
-          </>
         </>}
       </body>
     </html>
   )
 }
-
-

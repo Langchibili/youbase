@@ -11,8 +11,8 @@ export default class UserProfileForm extends React.Component{
       this.state = {
         user: this.props.user,
         profilePicture: this.props.user.profilePicture,
-        details: this.props.user.details,
-        socials: this.props.user.socials,
+        details: this.props.user.details || {},
+        socials: this.props.user.socials || {},
         updating: false,
         submittingText: "Save Changes",
         errorExists: false,
