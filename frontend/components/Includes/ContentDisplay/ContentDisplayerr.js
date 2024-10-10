@@ -51,7 +51,7 @@ export default function ContentDisplay(props) {
 
   useEffect(() => {
      const runAsyncPostGetFunctions = async ()=>{
-        if(!loading && posts.length > 0 && !isNaN(page)){
+        if(!loading && posts.length > 0 && page !== NaN){
           if(page === postsMeta.pagination.pageCount){
             setLoading(true)
             return 
@@ -70,7 +70,7 @@ export default function ContentDisplay(props) {
             if(props.contentToView === "portrait-images" && post.attributes.type === 'video'){
               return false
             }
-            if(post.attributes.type !== 'music' && post.attributes.type !== 'text' && !post.attributes.type !== 'embed'){
+            if(post.attributes.type !== 'music' || post.attributes.type !== 'text' || !post.attributes.type !== 'embed'){
               return !post.attributes.mediaDisplayType || post.attributes.mediaDisplayType !== 'landscape'
            }
            else{
@@ -101,7 +101,7 @@ export default function ContentDisplay(props) {
       }
       runAsyncPostGetFunctions()
     
-  }, [page,loading])
+  }, [page])
 
   const renderPostContent = (post, postEngagementsDisplay) => {
     switch (post.type) {
