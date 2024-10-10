@@ -25,10 +25,10 @@ const MoreOptions = ({ anchorEl, open, loggedInUser, handleDeleteModalOpen, hand
         horizontal: 'right',
       }}
     >
-      {!thisIsMyPost?  <></> : <MenuItem onClick={() => { handleClose(); handlePostModalClickOpen(); }}>Edit</MenuItem>}
+      {!thisIsMyPost?  null: <MenuItem onClick={() => { handleClose(); handlePostModalClickOpen(); }}>Edit</MenuItem>}
       <MenuItem onClick={()=>{handleShareModalOpen(true)}}>Share</MenuItem>
-      {!thisIsMyPost? <></> :  <MenuItem onClick={()=>{handleDeleteModalOpen(true)}}>Delete</MenuItem>}
-      {!loggedInUser.status? <></> : <MenuItem onClick={()=>{handleReportModalOpen(true)}}>Report</MenuItem>}
+      {!thisIsMyPost? null :  <MenuItem onClick={()=>{handleDeleteModalOpen(true)}}>Delete</MenuItem>}
+      {!loggedInUser.status? null : <MenuItem onClick={()=>{handleReportModalOpen(true)}}>Report</MenuItem>}
     </Menu>
   );
 };
