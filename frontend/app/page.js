@@ -3,6 +3,8 @@
 import ContentDisplay from "@/components/Includes/ContentDisplay/ContentDisplay";
 import { useUser } from "@/Contexts/UserContext";
 import { dynamicConfig } from "@/Functions";
+import Head from "next/head";
+import Link from "next/link";
 import React from "react";
 
 // Force the page to be dynamically rendered on every request
@@ -14,6 +16,26 @@ const Home = () =>{
    if(typeof document !== "undefined"){
     return (
             <>
+             <Head>
+                <meta charSet="utf-8" />
+                <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+                <meta name="viewport" content="width=device-width, shrink-to-fit=9" />
+                <meta name="description" content="youbase" />
+                <meta name="author" content="youbase" />
+                <link rel="icon" type="image/png" href="favicon.ico" />
+                {/* Stylesheets */}
+                <link href="http://fonts.googleapis.com/css?family=Roboto:400,700,500" rel="stylesheet" />
+                <link href="/theme/vendor/unicons-2.0.1/css/unicons.css" rel="stylesheet" />
+                <link href="/theme/css/vertical-responsive-menu.min.css" rel="stylesheet" />
+                <Link href="/theme/css/style.css" rel="stylesheet" />
+                <link href="/theme/css/responsive.css" rel="stylesheet" />
+                <link href="/theme/css/night-mode.css" rel="stylesheet" />
+                <link href="/theme/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" />
+                <link href="/theme/vendor/OwlCarousel/assets/owl.carousel.css" rel="stylesheet" />
+                <link href="/theme/vendor/OwlCarousel/assets/owl.theme.default.min.css" rel="stylesheet" />
+                <link href="/theme/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+                <link rel="stylesheet" type="text/css" href="/theme/vendor/semantic/semantic.min.css" />
+            </Head>
             <div className="sa4d25">
                 <div className="container-fluid">
                 <div className="row">
