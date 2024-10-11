@@ -11,6 +11,7 @@ export default function MusicPostMedium(props) {
       <div style={{backgroundColor:"white",borderRadius:'5px',marginBottom:'10px'}}>
         <div className="review_item" style={{ position: 'relative'}}>
             <AvatarWithPostDate {...props} />
+            <div style={{minHeight:'10px'}}></div>
             <MediaDisplay post={props.post} displayType="mediaOnly" imageType="medium" listtype="carousel"/>
             <hr style={{marginLeft:'5px', marginRight:'5px'}}/>
             <div className="post-info" style={{paddingLeft:'5px'}}>

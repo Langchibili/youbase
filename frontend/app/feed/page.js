@@ -1,9 +1,10 @@
 'use client'
 
 import ContentDisplay from '@/components/Includes/ContentDisplay/ContentDisplay'
-import PageLoader from '@/components/Includes/Loader/PageLoader'
+import FeedContentDisplay from '@/components/Includes/ContentDisplay/FeedContentDisplay'
 import { useUser } from '@/Contexts/UserContext'
 import { dynamicConfig } from '@/Functions'
+import { FeedOutlined, ImageOutlined, VideocamOutlined } from '@mui/icons-material'
 //import { getUserById } from '@/Functions'
 import React, { useState, useEffect } from 'react'
 
@@ -12,26 +13,10 @@ export const dynamic = dynamicConfig();
 
 export default function Feed({ params }) {
   const loggedInUser = useUser()
- // const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [feedHasReels, setFeedHasReels] = useState(true)
+  const [feedHasCaptures, setFeedHasCaptures] = useState(true)
+  const [feedHasExplore, setFeedHasExplore] = useState(true)
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-       // setUser(await getUserById(loggedInUser.user.id,"profilePicture,details,socials")) // the post without populating anything
-    } catch (error) {
-        console.error('Error fetching user:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchUser()
-  }, [])
- 
-  if (loading) {
-    return <PageLoader/>
-  }
   
   return ( 
     <>
@@ -39,45 +24,83 @@ export default function Feed({ params }) {
          <div className="container-fluid">
          <div className="row">
              <div className="col-xl-9 col-lg-8">
+             {!feedHasReels? <></> :  <div className="section3125">
+              <h3>Reels <VideocamOutlined sx={{color:'crimson'}}/></h3>   
+                <FeedContentDisplay
+                    setFeedHasReels={setFeedHasReels}
+                    contentLimit={100}
+                    contentToView = "portrait-videos"
+                    loggedInUser={loggedInUser} 
+                    limit="10"
+                    sort="desc"
+                    />
+              </div>}
+              {!feedHasCaptures? <></> : <div className="section3125 mt-30">
+                <div className="la5lo1">
+                <h3>Captures <ImageOutlined sx={{color:'indigo'}}/></h3>
+                   <FeedContentDisplay 
+                      setFeedHasCaptures={setFeedHasCaptures}
+                      contentLimit={100}
+                      contentToView = "portrait-images"
+                      loggedInUser={loggedInUser} 
+                      limit="10"
+                      sort="desc"/>
+                  </div>
+             </div>}
+             {!feedHasExplore? <></> :
+              <div className="section3125 mt-30">
+               <h3>Explore <FeedOutlined sx={{color:'forestgreen'}}/></h3>
+                  <FeedContentDisplay 
+                      setFeedHasExplore={setFeedHasExplore}
+                      contentToView = "all"
+                      loggedInUser={loggedInUser} 
+                      limit="10"
+                      sort="desc"
+                      />        
+                <a href="live_streams.html" className="see150">
+                  See all
+                </a>
+             </div>}
+             </div>
+             </div>
+         </div>
+         <div className="container-fluid">
+         <div className="row">
+             <div className="col-xl-9 col-lg-8">
              <div className="section3125">
-              <h3>Reels</h3>  
-              {loading? <></> : <ContentDisplay
-                            contentToView = "portrait-videos"
-                            loggedInUser={loggedInUser} 
-                            contentUri={`/posts?populate=user,featuredImages,media`}
-                            startPage="1"
-                            limit="10"
-                            sort="desc"
-                            displayPortraits={true}
-                            />}
+             <h3>Reels <VideocamOutlined sx={{color:'crimson'}}/></h3>  
+              <ContentDisplay
+                  contentToView = "portrait-videos"
+                  loggedInUser={loggedInUser} 
+                  contentUri={`/posts?populate=user,featuredImages,media`}
+                  startPage="1"
+                  limit="10"
+                  sort="desc"
+               />
               </div>
               <div className="section3125 mt-30">
                 <div className="la5lo1">
-                  <h3>Captures</h3>
-                  {loading? <></> : <ContentDisplay 
-                            contentToView = "portrait-images"
-                            loggedInUser={loggedInUser} 
-                            contentUri={`/posts?populate=user,featuredImages,media`}
-                            startPage="1"
-                            limit="10"
-                            sort="desc"
-                            displayPortraits={true}
-                            portraitsContentType = "video"
-                            />}
+                <h3>Captures <ImageOutlined sx={{color:'indigo'}}/></h3>
+                   <ContentDisplay 
+                      contentToView = "portrait-images"
+                      loggedInUser={loggedInUser} 
+                      contentUri={`/posts?populate=user,featuredImages,media`}
+                      startPage="1"
+                      limit="10"
+                      sort="desc"
+                      />
                   </div>
               </div>
-              <h3>Explore</h3>
               <div className="section3125 mt-30">
-                  {loading? <></> : <ContentDisplay 
-                            contentToView = "all"
-                            loggedInUser={loggedInUser} 
-                            contentUri={`/posts?populate=user,featuredImages,media`}
-                            startPage="1"
-                            limit="10"
-                            sort="desc"
-                            displayPortraits={false}
-                            portraitsContentType = "video"
-                            />}           
+              <h3>Explore <FeedOutlined sx={{color:'forestgreen'}}/></h3>
+                  <ContentDisplay 
+                    contentToView = "all"
+                    loggedInUser={loggedInUser} 
+                    contentUri={`/posts?populate=user,featuredImages,media`}
+                    startPage="1"
+                    limit="10"
+                    sort="desc"
+                    />        
                 <a href="live_streams.html" className="see150">
                   See all
                 </a>

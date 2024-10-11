@@ -3,6 +3,7 @@
 import ContentDisplay from "@/components/Includes/ContentDisplay/ContentDisplay";
 import { useUser } from "@/Contexts/UserContext";
 import { dynamicConfig } from "@/Functions";
+import { FeedOutlined, ImageOutlined, PictureAsPdfOutlined, VideocamOutlined } from "@mui/icons-material";
 import React from "react";
 
 // Force the page to be dynamically rendered on every request
@@ -20,7 +21,7 @@ const Home = () =>{
                 <div className="row">
                     <div className="col-xl-9 col-lg-8">
                     <div className="section3125 mt-10">
-                    <h3>Reels</h3>
+                    <h3>Reels <VideocamOutlined sx={{color:'crimson'}}/></h3>
                       
                     <ContentDisplay 
                                     contentToView = "portrait-videos"
@@ -34,7 +35,7 @@ const Home = () =>{
                     </div>
                     <div className="section3125 mt-30">
                         <div className="la5lo1">
-                        <h3>Captures</h3>
+                        <h3>Captures <ImageOutlined sx={{color:'indigo'}}/></h3>
                         <ContentDisplay 
                                     contentToView = "portrait-images"
                                     loggedInUser={loggedInUser} 
@@ -46,8 +47,8 @@ const Home = () =>{
                                     />
                         </div>
                     </div>
-                    <h3>Explore</h3>
                     <div className="section3125 mt-30">
+                    <h3>Explore <FeedOutlined sx={{color:'forestgreen'}}/></h3>
                         <ContentDisplay 
                                     contentToView = "all"
                                     loggedInUser={loggedInUser} 
@@ -60,7 +61,7 @@ const Home = () =>{
                         See all
                         </a>
                     </div>
-                    <div className="section3125">      
+                    {/* <div className="section3125">      
                         <a href="live_streams.html" className="see150">
                         See all
                         </a>
@@ -1471,7 +1472,7 @@ const Home = () =>{
                             <div className="owl-dots disabled" />
                         </div>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="section3126">
                         <div className="row">
                         <div className="col-xl-6 col-lg-12 col-md-6">

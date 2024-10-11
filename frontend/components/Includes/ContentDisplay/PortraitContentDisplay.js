@@ -29,14 +29,36 @@ export default function PortraitContentDisplay(props) {
     return <PortraitContentSkeleton/> // loading carousel
   }
   if (!props.content || props.content.length === 0) return <></>; // Check for undefined or empty content
-  console.log(props.content)
   return (
     <OwlCarousel margin={10} items={3} autoWidth className="owl-theme">
           {props.content.map((content) => {
-            content.attributes.id = content.id // same as post.attributes.id = post.id
-            if (content.attributes.type === "video" && content.attributes.media) {  // Ensure content has media
-             
+            // STRUCTURING THE CONTENT
+            if(!content.hasOwnProperty("attributes")){
+              content.attributes = content // structure the data such that it can be read by children components
+            }
+            else{
+              content.attributes.id = content.id // same as post.attributes.id = post.id
+            }
+            if(content.user){ // structure the data such that it can be read by children components
+              if(!content.user.hasOwnProperty('data')){
+                 content.user.data = content.user
+                 content.user.data.id = content.user.id
+                 content.user.data.attributes = content.user.data
+                 content.user.data.attributes.id = content.user.data.id
+              } 
+            }  
+            //STRUCTURING CONTENT END
+
+            if(content.attributes.type === "video" && content.attributes.media) {  // Ensure content has media
+              if(content.attributes.media){ // structure the data such that it can be read by children components
+                if(!content.attributes.media.hasOwnProperty('data')){
+                    content.attributes.media.data = content.attributes.media
+                }
+              }
               return content.attributes.media.data.map((media) => {
+                    if(!media.hasOwnProperty("attributes")){
+                       media.attributes = media // structure the data such that it can be read by children components
+                    }
                     media.attributes.id = media.id; // Ensure media.id exists
                     return (
                      
@@ -56,8 +78,15 @@ export default function PortraitContentDisplay(props) {
               })
             }
             if (content.attributes.type === "image" && content.attributes.featuredImages ) {  // Ensure content has media
-            
+              if(content.attributes.featuredImages){ // structure the data such that it can be read by children components
+                 if(!content.attributes.featuredImages.hasOwnProperty('data')){
+                     content.attributes.featuredImages.data = content.attributes.featuredImages
+                 }
+              }
               return content.attributes.featuredImages.data.map((media) => {
+                  if(!media.hasOwnProperty("attributes")){
+                    media.attributes = media // structure the data such that it can be read by children components
+                  }
                   media.attributes.id = media.id; // Ensure media.id exists
                   return (
                     <div className="item" key={media.id} style={{width:'134px'}}>

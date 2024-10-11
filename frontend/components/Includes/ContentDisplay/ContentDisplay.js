@@ -6,13 +6,14 @@ import ImagePostMedium from '../PostsDisplay/ImagePostMedium'
 import VideoPostMedium from '../PostsDisplay/VideoPostMedium'
 import MusicPostMedium from '../PostsDisplay/MusicPostMedium'
 import EmbedPostMedium from '../PostsDisplay/EmbedPostMedium'
-import { api_url, log } from '@/Constants'
+import { api_url } from '@/Constants'
 import ViewsDisplay from '@/components/Parts/EngageMents/ViewsDisplay'
 import StreamsDisplay from '@/components/Parts/EngageMents/StreamsDisplay'
 import LikeButton from '@/components/Parts/EngageMents/LikeButton'
 import ShareButton from '@/components/Parts/EngageMents/ShareButton'
 import PortraitContentDisplay from './PortraitContentDisplay'
 import { getPosts } from '@/Functions'
+import MoreContentLoader from '../Loader/MoreContentLoader'
 
 export default function ContentDisplay(props) {
   const [postsMeta, setPostsMeta] = useState(null)
@@ -33,7 +34,7 @@ export default function ContentDisplay(props) {
         console.log('new posts',newPosts)
         if (newPosts.length > 0) {
           setPosts(prevPosts => [...prevPosts, ...newPosts]) // Avoid mutating the original array
-          setPage(prevPage => prevPage + 1)
+          setPage(prevPage => parseInt(prevPage) + 1)
           setLoading(false)
         }
         else{
@@ -52,14 +53,17 @@ export default function ContentDisplay(props) {
   useEffect(() => {
      const runAsyncPostGetFunctions = async ()=>{
         if(!loading && posts.length > 0 && !isNaN(page)){
-          if(page === postsMeta.pagination.pageCount){
+          if(page > postsMeta.pagination.pageCount){
             setLoading(true)
             return 
           }
-          if(portraitContent.length > props.contentLimit){ 
-            setLoading(true)
-            return
+          if(props.contentLimit){
+            if(portraitContent.length > parseInt(props.contentLimit)){ 
+                setLoading(true)
+                return
+              }
           }
+          
           const newPortraitContent = posts.filter((post) => {
             if(!post.attributes || !post.attributes.type || post.attributes.status !== 'published'){
               return false
@@ -73,9 +77,6 @@ export default function ContentDisplay(props) {
             if(post.attributes.type !== 'music' && post.attributes.type !== 'text' && !post.attributes.type !== 'embed'){
               return !post.attributes.mediaDisplayType || post.attributes.mediaDisplayType !== 'landscape'
            }
-           else{
-            return false
-           }
           })
           setPortraitContent(newPortraitContent)
           loadMorePosts() // means they are still more posts, so load more
@@ -88,7 +89,7 @@ export default function ContentDisplay(props) {
               if(initialPosts.data && initialPosts.data.length > 0){
                 setPostsMeta(initialPosts.meta)
                 setPosts(initialPosts.data)
-                setPage(prevPage => prevPage + 1)
+                setPage(prevPage => parseInt(prevPage) + 1)
                 setLoading(false)
                 console.log('initial posts',initialPosts)
               }
@@ -143,37 +144,44 @@ export default function ContentDisplay(props) {
   }
   if (props.contentToView === 'portrait-videos' || props.contentToView === 'portrait-images') { // filter out portrait content
     console.log('portrait content 1', portraitContent)
-    let portraitContentToDisplay = portraitContent
-    if(portraitContent.length > props.contentLimit){ 
-       portraitContentToDisplay = portraitContent.slice(0,props.contentLimit)
+    if(props.contentLimit){
+        let portraitContentToDisplay = portraitContent
+        if(portraitContent.length > props.contentLimit){ 
+        portraitContentToDisplay = portraitContent.slice(0,props.contentLimit)
+        }
+        console.log('portrait portraitContentToDisplay', portraitContentToDisplay)
+        return <PortraitContentDisplay content={portraitContentToDisplay} loggedInUser={props.loggedInUser} />
     }
-    console.log('portrait portraitContentToDisplay', portraitContentToDisplay)
-    return <PortraitContentDisplay content={portraitContentToDisplay} loggedInUser={props.loggedInUser} />
+    else{
+        return <PortraitContentDisplay content={portraitContent} loggedInUser={props.loggedInUser} />
+    }
   }
   return ( // display landscape content
     <div>
       {posts.map((post) => {
         const postAttributes = post.attributes
-        if(!post.attributes) { 
+        if(!postAttributes) { 
           return null 
         }
         if (!postAttributes.user || postAttributes.status !== 'published') { 
           return null 
         }
         // only show landscape images and videos here
-        if(post.attributes.type === 'image' || post.attributes.type === 'video'){
-          if(!post.attributes.mediaDisplayType || post.attributes.mediaDisplayType !== 'landscape'){
+        if(postAttributes.type === 'image' || postAttributes.type === 'video'){
+          if(!postAttributes.mediaDisplayType || postAttributes.mediaDisplayType !== 'landscape'){
               return null
           }
         }
-        post.attributes.id = post.id
+        
+        postAttributes.id = post.id
+          
         return (
           <div key={post.id} id={"post-"+post.id}>
             {renderPostContent(postAttributes, postEngagementsDisplay)}
           </div>
         )
       })}
-      {loading && props.contentToView === "all" && page !== postsMeta?.pagination.pageCount && <div>Loading more content...</div> /* means you have already loaded initial posts */}
+      {loading && props.contentToView === "all" && page < postsMeta?.pagination.pageCount && <MoreContentLoader/> /* means you have already loaded initial posts */}
     </div>
   )
 }

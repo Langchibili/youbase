@@ -173,7 +173,10 @@ export default class UserFollowingButtons extends React.Component{
        const followingUserIds = this.state.loggedInUser.user.followingUserIds
        const isUserLoggedIn = this.state.loggedInUser.status
        const userId = this.state.userId
-
+       
+       if(userId === this.state.loggedInUser.user.id){
+        return null
+       }
        if(!isUserLoggedIn){ // meaning user is logged out
           return <UserFollowButton {...this.state} handleUserFollow={this.handleUserFollow}/>
        }

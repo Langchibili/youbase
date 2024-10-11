@@ -105,6 +105,14 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
       return (
         <OwlCarousel margin={10} items={10} dots={true} autoWidth={true} className="owl-theme">
               {videos.data.map((video, index) => {
+                if(video){
+                  if(!video.hasOwnProperty('attributes')){
+                    video.attributes = video
+                  }
+                }
+                else{
+                  return null
+                }
                 const videoData = video.attributes;
                 return (
                     <div className="item" key={index} style={{width:videoWrapperHeight()}}>
