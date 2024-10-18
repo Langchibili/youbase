@@ -70,6 +70,7 @@ export default class UserProfileForm extends React.Component{
     if(!updateObject.details.gender){
         delete updateObject.details.gender
     }
+    console.log('the update object',updateObject)
     if(validateUrl(updateObject.socials.x) || validateUrl(updateObject.socials.facebook) || validateUrl(updateObject.socials.youtube) || validateUrl(updateObject.socials.tiktok) || validateUrl(updateObject.socials.youtube) || validateUrl(updateObject.socials.telegram)){
         this.setState({
             errorExists: true,

@@ -38,13 +38,13 @@ let apiurl, backendUrl, clienturl
   /*localhost: */  backendUrl = apiurl.replace('http://localhost:1340/api','http://localhost:1340')
  }
  else if(environment === 'live'){
-  /*liveserver: */ backendUrl =  apiurl.replace('youbase.com/api','youbase.com') // for production's sake
+  /*liveserver: */ backendUrl =  apiurl.replace('https://youbase.com/api','youbase.com') // for production's sake
  }
  else if(environment === 'live2'){
-  /*liveserver: */ backendUrl =  apiurl.replace('youbase.app/api','youbase.app') // for production's sake
+  /*liveserver: */ backendUrl =  apiurl.replace('https://youbase.app/api','youbase.app') // for production's sake
  }
  else{ // if environment is default, it means it's a test server
-  /*testserver: */ backendUrl =  apiurl.replace('youbaseapi.driverbase.app/api','youbaseapi.driverbase.app') // the api to be used when deployed to the test site
+  /*testserver: */ backendUrl =  apiurl.replace('https://youbaseapi.driverbase.app/api','youbaseapi.driverbase.app') // the api to be used when deployed to the test site
  }
  
 

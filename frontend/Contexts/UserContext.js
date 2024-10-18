@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { checkUserLogginStatus } from '@/Constants';
+import ImagePageLoader from '@/components/Includes/Loader/ImagePageLoader';
 
 // Create a context
 const UserContext = createContext(null);
@@ -27,7 +28,7 @@ export function UserProvider({ children }) {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>; // Show a loading state if needed
+    return <ImagePageLoader/> // Show a loading state if needed
   }
 
   return (

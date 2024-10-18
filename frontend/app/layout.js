@@ -259,7 +259,7 @@ export default function RootLayout({ children }) {
    setAssetsLoaded(true);
       setTimeout(() => {
         setShowSplashScreen(false);
-      }, 1000)
+      }, 500)
   }, []);
 
   // if (!isMounted || !assetsLoaded) {
