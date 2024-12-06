@@ -75,7 +75,7 @@ export default function ContentFullScreen(props) {
   const renderContent = () => {
     const user = props.post.user.data.attributes;
     user["id"] = props.post.user.data.id;
-
+    const backendUrl = props.file.provider === "aws-s3"? '' : backEndUrl
     return (
       <div>
         {/* User avatar at the top-right */}
@@ -120,7 +120,7 @@ export default function ContentFullScreen(props) {
             autoPlay
             controls={false}
           >
-            <source src={backEndUrl + props.file.url} type={props.file.mime} />
+            <source src={backendUrl + props.file.url} type={props.file.mime} />
             Sorry, we are unable to show this video.
           </video> : 
                 <img 

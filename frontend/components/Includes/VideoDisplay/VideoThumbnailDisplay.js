@@ -48,13 +48,13 @@ export default function VideoThumbnailDisplay(props) {
         }
      }
   },[props.file])
-
+  const backendUrl = props.file.provider === "aws-s3"? '' : backEndUrl
   return (
             <>
                 <video style={videoStyles} onClick={handleClickOpen}>
                         <div className='user-avatar'>{props.avatar()}</div>
                         <h5 className='video-title'>{truncateText(props.title,25)}</h5>
-                        <source src={backEndUrl + props.file.url} type={props.file.mime} />
+                        <source src={backendUrl + props.file.url} type={props.file.mime} />
                         Sorry we are unable to show this video
                 </video>
                 {/* Render the PostModal component */}

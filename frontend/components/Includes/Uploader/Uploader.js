@@ -8,7 +8,7 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
 import { api_url, getJwt, log } from '@/Constants';
-import { getPostFromId } from '@/Functions';
+import { getPostFromId, truncateText } from '@/Functions';
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -46,8 +46,15 @@ export default function Uploader(props) {
   };
 
   const handleProcess = async (fieldName, file, metadata, load, error, progress, abort) => {
+    // Create a new File object with the truncated name
+    //const extArray = file.name.split('.')
+    //const ext = extArray[extArray.length-1]
+    const truncatedName = truncateText(file.name, 100)//+'.'+ext; // truncat text already adds a ... at the end of string
+    const newFile = new File([file], truncatedName, { type: file.type });
+    console.log('old file',file)
+    console.log('new file',newFile)
     const formData = new FormData();
-    formData.append(props.allowMultiple ? 'files[]' : 'files', file);
+    formData.append(props.allowMultiple ? 'files[]' : 'files', newFile);
     formData.append('refId', props.refId.toString());
     formData.append('ref', props.refName);
     formData.append('field', props.fieldName);

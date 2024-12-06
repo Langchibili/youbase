@@ -90,11 +90,13 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
     }
   }
   const renderVideoCarousel = (videos) => {
+    let backendUrl = ''
     if (!hideRemoveButton) {
+      backendUrl = videos.provider === "aws-s3"? '' : backEndUrl
       return (
         <div>
           <video ref={(el) => videoRefs.current[0] = el} controls style={{ maxWidth: '280px', maxHeight: '180px' }}>
-            <source src={backEndUrl + videos.url} type={videos.mime} />
+            <source src={backendUrl + videos.url} type={videos.mime} />
             Sorry, we are unable to show this video.
           </video>
         </div>
@@ -114,6 +116,7 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
                   return null
                 }
                 const videoData = video.attributes;
+                backendUrl = videoData.provider === "aws-s3"? '' : backEndUrl
                 return (
                     <div className="item" key={index} style={{width:videoWrapperHeight()}}>
                      <div className="stream_1" style={{width:videoWrapperHeight(),padding:'10px'}}>
@@ -122,7 +125,7 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
                           controls
                           style={{ borderRadius: '5px', width: '100%', maxHeight: '500px' }}
                         >
-                          <source src={backEndUrl + videoData.url} type={videoData.mime} />
+                          <source src={backendUrl + videoData.url} type={videoData.mime} />
                           Sorry, we are unable to show this video.
                         </video>
                         <small>Duration: {videoDurations[index] ? formatDuration(videoDurations[index]) : 'Loading...'}</small>

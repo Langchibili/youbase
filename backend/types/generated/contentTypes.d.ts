@@ -1142,6 +1142,41 @@ export interface ApiEngagementEngagement extends Schema.CollectionType {
   };
 }
 
+export interface ApiMediaConvertJobMediaConvertJob
+  extends Schema.CollectionType {
+  collectionName: 'media_convert_jobs';
+  info: {
+    singularName: 'media-convert-job';
+    pluralName: 'media-convert-jobs';
+    displayName: 'MediaConvertJobs';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    jobId: Attribute.String;
+    resolution: Attribute.Enumeration<
+      ['res-1080', 'res-720', 'res-480', 'res-360', 'res-240']
+    >;
+    uploadId: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::media-convert-job.media-convert-job',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::media-convert-job.media-convert-job',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiNotificationNotification extends Schema.CollectionType {
   collectionName: 'notifications';
   info: {
@@ -1449,6 +1484,7 @@ declare module '@strapi/types' {
       'api::comment.comment': ApiCommentComment;
       'api::content.content': ApiContentContent;
       'api::engagement.engagement': ApiEngagementEngagement;
+      'api::media-convert-job.media-convert-job': ApiMediaConvertJobMediaConvertJob;
       'api::notification.notification': ApiNotificationNotification;
       'api::playlist.playlist': ApiPlaylistPlaylist;
       'api::post.post': ApiPostPost;

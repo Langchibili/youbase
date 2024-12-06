@@ -114,38 +114,47 @@ export const getImage = (image, size = "normal", use = "normal") => {
         // If the image is not provided, return the appropriate default image based on the usage context
         return use === "profilePicture" ? defaultProfilePicture : defaultCoverPhoto;
     }
-
+  
     // Handle the first format where the image object contains 'attributes' property
     let formats, defaultUrl;
+    let backendUrl = ''
     if (image.attributes) {
         formats = image.attributes.formats;
         defaultUrl = image.attributes.url || null;
+        backendUrl = image.attributes.provider === "aws-s3"? '' : backEndUrl
     } else {
         // Handle the second format where the image object directly contains the necessary properties
         formats = image.formats;
         defaultUrl = image.url || null;
+        backendUrl = image.provider === "aws-s3"? '' : backEndUrl
     }
 
     // Ensure formats exist before proceeding
     if (!formats) {
-        if(use === "music"){
-          return defaultMusicCover
+        if(!defaultUrl){
+          if(use === "music"){
+            return defaultMusicCover
+          }
+          return use === "profilePicture" ? defaultProfilePicture : defaultCoverPhoto;
         }
-        return use === "profilePicture" ? defaultProfilePicture : defaultCoverPhoto;
+        else{
+          return backendUrl + defaultUrl
+        }
     }
-
+    
+    
     // Return the appropriate image URL based on the requested size
     switch (size) {
         case "thumbnail":
-            return formats.thumbnail?.url ? backEndUrl + formats.thumbnail.url : backEndUrl + defaultUrl;
+            return formats.thumbnail?.url ? backendUrl + formats.thumbnail.url : backendUrl + defaultUrl;
         case "small":
-            return formats.small?.url ? backEndUrl + formats.small.url : backEndUrl + defaultUrl;
+            return formats.small?.url ? backendUrl + formats.small.url : backendUrl + defaultUrl;
         case "medium":
-            return formats.medium?.url ? backEndUrl + formats.medium.url : backEndUrl + defaultUrl;
+            return formats.medium?.url ? backendUrl + formats.medium.url : backendUrl + defaultUrl;
         case "large":
-            return formats.large?.url ? backEndUrl + formats.large.url : backEndUrl + defaultUrl;
+            return formats.large?.url ? backendUrl + formats.large.url : backendUrl + defaultUrl;
         default:
-            return backEndUrl + defaultUrl;
+            return backendUrl + defaultUrl;
     }
 }
 

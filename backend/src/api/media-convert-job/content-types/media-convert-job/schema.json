@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "media_convert_jobs",
+  "info": {
+    "singularName": "media-convert-job",
+    "pluralName": "media-convert-jobs",
+    "displayName": "MediaConvertJobs"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "jobId": {
+      "type": "string"
+    },
+    "resolution": {
+      "type": "enumeration",
+      "enum": [
+        "res-1080",
+        "res-720",
+        "res-480",
+        "res-360",
+        "res-240"
+      ]
+    },
+    "uploadId": {
+      "type": "string"
+    }
+  }
+}

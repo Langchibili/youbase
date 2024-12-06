@@ -31,7 +31,7 @@ export default function SongFileDisplay({ file, handleRemoveMedia }){
       };
     }
   }, [])
-
+  const backendUrl = file.attributes.provider === "aws-s3"? '' : backEndUrl
   return (
     <div id={"#media-"+file.id} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
       <div style={{ flexGrow: 1 }}>
@@ -39,7 +39,7 @@ export default function SongFileDisplay({ file, handleRemoveMedia }){
         <p><strong>Duration:</strong> {audioDuration ? formatDuration(audioDuration) : 'Loading...'}</p>
       </div>
       <audio ref={audioRef} controls style={{ marginRight: '10px' }}>
-        <source src={backEndUrl+file.attributes.url} type={file.attributes.mime} />
+        <source src={backendUrl+file.attributes.url} type={file.attributes.mime} />
          sorry we are unable to show this audio file
       </audio>
       <button onClick={() => handleRemoveMedia(file.id)} style={{ backgroundColor: 'red', color: 'white', border: 'none', padding: '5px 10px', cursor: 'pointer' }}>

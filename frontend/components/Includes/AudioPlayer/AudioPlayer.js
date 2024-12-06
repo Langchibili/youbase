@@ -40,7 +40,10 @@ export default class AudioPlayer extends React.Component{
     //     console.log(e);
     //   }
       this.setState({
-        playList: getInitialSongs.media.map((song)=>{ return { key: song.id, musicSrc: backEndUrl+song.url, name: song.name, singer: song.name, cover: getImage(null,'thumbnail','music')}})
+        playList: getInitialSongs.media.map((song)=>{ 
+          const backendUrl = song.provider === "aws-s3"? '' : backEndUrl
+          return { key: song.id, musicSrc: backendUrl+song.url, name: song.name, singer: song.name, cover: getImage(null,'thumbnail','music')}
+        })
       },()=>{
         console.log(this.state.playList)
       })
@@ -61,10 +64,11 @@ export default class AudioPlayer extends React.Component{
         if(nowPlayingSongs){ 
             const playList = this.state.playList;
             const newPlayList = nowPlayingSongs.map((song,index)=>{
+               const backendUrl = song.attributes.provider === "aws-s3"? '' : backEndUrl
                if(song.hasOwnProperty('attributes')){
-                return {key: song.id, musicSrc: backEndUrl+song.attributes.url, name: song.attributes.name, singer: song.attributes.name, cover: getImage(post.featuredImages,'thumbnail','music')}
+                return {key: song.id, musicSrc: backendUrl+song.attributes.url, name: song.attributes.name, singer: song.attributes.name, cover: getImage(post.featuredImages,'thumbnail','music')}
                }
-               return {key: song.id, musicSrc: backEndUrl+song.url, name: song.name, singer: song.name, cover: getImage(post.featuredImages,'thumbnail','music')}
+               return {key: song.id, musicSrc: backendUrl+song.url, name: song.name, singer: song.name, cover: getImage(post.featuredImages,'thumbnail','music')}
             })
             this.setState({
                 clearPriorAudioLists: true,
