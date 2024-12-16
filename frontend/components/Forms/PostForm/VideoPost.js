@@ -10,6 +10,7 @@ import PostTitle from "./FormParts/PostTitle"
 import { api_url, getJwt, log } from "@/Constants"
 import { getPostMedia, getVideoMetaFromPostAndId } from "@/Functions"
 import VideoFileDisplay from "@/components/Includes/VideoDisplay/VideoFileDisplay"
+import CategorySelector from "@/components/Includes/CategorySelector/CategorySelector"
 
 export default class VideoPost extends React.Component{
    constructor(props){
@@ -71,6 +72,7 @@ export default class VideoPost extends React.Component{
                   addMediaOnUpload={this.props.addMediaOnUpload}
          />
          {this.renderMedia()}
+         <CategorySelector post={this.props.post} handleCategorySet={this.props.handleCategorySet} parentCategory="videos"/>
          <h4>optional</h4>
          <hr/>
          <PostDescription description={this.props.post.description} setPostDescriptionOrTitle={this.props.setPostDescription} descriptionPlaceholder="Add Video Description" bordered="yes"/>

@@ -100,6 +100,30 @@ export const handleCountsDisplay = (counts) => { // formating counts like: likes
     return text;
 }
 
+export const getVideoThumbnail = (video,post) => {
+  if(video.provider === "aws-s3"){
+    return video.previewUrl? video.previewUrl : null // this is bound to change
+  }
+  else{
+    return video.previewUrl? backEndUrl+video.previewUrl : null // this is bound to change
+  }
+  const videoMeta = getVideoMetaFromPostAndId(post,video.id)
+  // Default URLs for profile pictures and cover photos
+  const defaultProfilePicture = "/default-profile.png"
+  const defaultMusicCover = "/youbase-logo.png"
+  const defaultCoverPhoto = "/no-cover-photo.jpg"
+  return videoMeta
+
+  // Check if the image object is valid and contains necessary attributes
+  if (!videoId) {
+      if(use === "music"){
+        return defaultMusicCover
+      }
+      // If the image is not provided, return the appropriate default image based on the usage context
+      return use === "profilePicture" ? defaultProfilePicture : defaultCoverPhoto;
+  }
+}
+
 export const getImage = (image, size = "normal", use = "normal") => {
     // Default URLs for profile pictures and cover photos
     const defaultProfilePicture = "/default-profile.png"
@@ -158,8 +182,49 @@ export const getImage = (image, size = "normal", use = "normal") => {
     }
 }
 
+export const displayDateOrTime = (createdAt,returnTextOnly=false) => {
+  const contentCreatedAt = new Date(createdAt);
+  const now = new Date();
+  const timeDifference = Math.abs(now - contentCreatedAt); // Difference in milliseconds
 
+  const seconds = Math.floor(timeDifference / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  const weeks = Math.floor(days / 7);
+  const years = Math.floor(days / 365);
   
+  if(returnTextOnly){
+    if (seconds < 60) {
+      return "Just now";
+    } else if (minutes < 60) {
+      return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+    } else if (hours < 24) {
+      return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+    } else if (days < 7) {
+      return `${days} day${days > 1 ? "s" : ""} ago`;
+    } else if (weeks < 52) {
+      return `${weeks} week${weeks > 1 ? "s" : ""} ago`;
+    } else {
+      return `${years} year${years > 1 ? "s" : ""} ago`;
+    }
+  }
+  else{
+    if (seconds < 60) {
+      return <span>Just now</span>;
+    } else if (minutes < 60) {
+      return <span>{minutes} minute{minutes > 1 ? "s" : ""} ago</span>;
+    } else if (hours < 24) {
+      return <span>{hours} hour{hours > 1 ? "s" : ""} ago</span>;
+    } else if (days < 7) {
+      return <span>{days} day{days > 1 ? "s" : ""} ago</span>;
+    } else if (weeks < 52) {
+      return <span>{weeks} week{weeks > 1 ? "s" : ""} ago</span>;
+    } else {
+      return <span>{years} year{years > 1 ? "s" : ""} ago</span>;
+    }
+  }
+}
 
 // POSTS FUNCTIONS
 
@@ -291,6 +356,123 @@ export const getPost = async (title)=>{
         return null
   }
 
+  export const pushCategories = async (categoryNames,existingCategoryNames,parentCategoryName,postId)=>{
+    const parentCategory = await getCategoryByName(parentCategoryName)
+    categoryNames.forEach(async (categoryName) => {
+           const newCategoryObject = {
+              categoryName: categoryName,
+              parentCategories:{connect:[parentCategory.id]},
+              posts:{connect:[postId]}
+           }
+           const updateCategoryObject = {
+              posts:{connect:[postId]}
+           }
+           const category = await getCategoryByName(categoryName)
+           if(category){ // means the category does exist, so push in new post
+                 if(!existingCategoryNames.includes(categoryName)){ // only run an update when the category doesn't exist to the post
+                    updateCategory({data:updateCategoryObject}, category.id)
+                 }
+           }     
+           else{ // otherwise category doesn't exist so create new one and push in new post
+               createNewCategory({data:newCategoryObject})
+           }
+           
+      })
+      // only if the post has existing categories added
+      existingCategoryNames.forEach(async(existingCategoryName)=>{ // remove the post from the category which a user has disselected
+        const updateCategoryObject = {
+          posts:{disconnect:[postId]}
+        }
+        const category = await getCategoryByName(existingCategoryName)
+        if(!categoryNames.includes(existingCategoryName)){
+          updateCategory({data:updateCategoryObject}, category.id)
+        }
+      })
+  }
+
+  export const getCategoryByName = async (categoryName)=>{
+    const category = await fetch(api_url+'/categories?filters[categoryName][$contains]='+categoryName,{
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(response => response.json())
+        .then(data => data)
+        .catch(error => console.error(error))
+         
+        if(category && category.data && category.data[0] && category.data[0].attributes){
+           category.data[0].attributes.id = category.data[0].id
+           return category.data[0].attributes
+        }
+        return null
+  }
+
+
+  
+
+export const createNewCategory = async (data)=>{
+  const category =  await fetch(api_url+'/categories', {
+      method: 'POST',
+      headers: {
+       'Authorization': `Bearer ${getJwt()}`,
+       'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => data)
+  if(category && category.data && category.data.attributes){
+      category.data.attributes.id = category.data.id
+      return category.data.attributes
+  }
+  return null
+}
+
+
+export const updateCategory = async (data,categoryId)=>{
+  const category =  await fetch(api_url+'/categories/'+categoryId, {
+      method: 'PUT',
+      headers: {
+       'Authorization': `Bearer ${getJwt()}`,
+       'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => data)
+  if(category && category.data && category.data.attributes){
+      category.data.attributes.id = category.data.id
+      return category.data.attributes
+   }
+  return null
+}
+  
+  export const getCategoryNames = async (parentCategory=null)=>{
+    const categoryNames = await fetch(api_url+'/category-name',{
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(response => response.json())
+        .then(data => data)
+        .catch(error => console.error(error))
+         
+        if(categoryNames && categoryNames.data && categoryNames.data.attributes){
+           if(parentCategory === 'videos'){
+            return categoryNames.data.attributes.videosCategories
+           }
+           else if(parentCategory === 'music'){
+            return categoryNames.data.attributes.musicCategories
+           }
+           else if(parentCategory === 'images'){
+            return categoryNames.data.attributes.imageCategories
+           }
+           else if(parentCategory === 'text'){
+            return categoryNames.data.attributes.textCategories
+           }
+           return categoryNames.data.attributes.CategoryNamesList
+        }
+        return null
+  }
+
   export const getPostsBySeachAndType = async (search,posttype="all",mediaOnly=false,populateString="")=>{
     let populate = '&populate='+populateString
     if(populateString.length === 0){
@@ -349,21 +531,102 @@ export const getPost = async (title)=>{
       return null
   }
 
-  export const getPostComments = async (title)=>{
-    const postid = getIDFromDashedString(title)
-    const post = await fetch(api_url+'/posts/'+postid+'?populate=comments',{
+  export const getPostParentComments = async (postid)=>{
+    const post = await fetch(api_url+'/posts/'+postid+'?populate=comments,comments.parentComment',{
       headers: {
         'Content-Type': 'application/json'
       }
     }).then(response => response.json())
       .then(data => data)
       .catch(error => console.error(error))
-      log('this is a post with comments',post)
-      
       if(post && post.data && post.data.attributes && post.data.attributes.comments){
-        return post.data.attributes.comments.data
-     }
+        return post.data.attributes.comments.data.filter((comment)=>{ // return only posts without a parentcomment
+            if(!comment.attributes.parentComment.data){
+              return true
+            }
+        })
+      }
       return null
+  }
+
+  export const createNewComment = async (data)=>{
+    const comment =  await fetch(api_url+'/comments', {
+        method: 'POST',
+        headers: {
+         'Authorization': `Bearer ${getJwt()}`,
+         'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+      })
+      .then(response => response.json())
+      .then(data => data)
+    if(comment && comment.data && comment.data.attributes){
+        comment.data.attributes.id = comment.data.id
+        return comment.data.attributes
+     }
+    return null
+}
+
+  export const getCommentReplies = async (commentId)=>{
+    const comment = await fetch(api_url+'/comments/'+commentId+'?populate=replies',{
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(response => response.json())
+      .then(data => data)
+      .catch(error => console.error(error))
+      if(comment && comment.data && comment.data.attributes && comment.data.attributes.replies){
+        return comment.data.attributes.replies.data
+      }
+      return null
+  }
+
+  export const getCommentsCount = async (postId)=>{
+    const post = await fetch(api_url+'/comments?filters[post][id][$eq]='+postId+'&pagination[limit]=0&pagination[withCount]=true',{
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(response => response.json())
+      .then(data => data)
+      .catch(error => console.error(error))
+      if(post && post.meta && post.meta.pagination){
+        return post.meta.pagination.total
+      }
+      return null
+  }
+
+  export const getRepliesCount = async (commentId)=>{
+    const comment = await fetch(api_url+'/comments?filters[parentComment][id][$eq]='+commentId+'&pagination[limit]=0&pagination[withCount]=true',{
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(response => response.json())
+      .then(data => data)
+      .catch(error => console.error(error))
+      if(comment && comment.meta && comment.meta.pagination){
+        return comment.meta.pagination.total
+      }
+      return null
+  }
+
+  export const getCommentFromId = async (commentId,populateString="")=>{
+    let populate = '?populate='+populateString
+    if(populateString.length === 0){
+       populate = "" // it means populate nothing
+    }
+    const comment = await fetch(api_url+'/comments/'+commentId+populate,{
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(response => response.json())
+        .then(data => data)
+        .catch(error => console.error(error))
+         
+        if(comment && comment.data && comment.data.attributes){
+           comment.data.attributes.id = comment.data.id
+           return comment.data.attributes
+        }
+        return null
   }
 
   export const getPostMedia = async (title)=>{

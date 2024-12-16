@@ -103,7 +103,7 @@ export default class MainMenu extends React.Component{
                         </label>
                          <ul className="sub_menu">
                             <li className="sub_menu--item">
-                                <Link href="/categories/Movies" className="sub_menu--link">
+                                <Link href="/categories/movies" className="sub_menu--link">
                                     Movies
                                 </Link>
                             </li>

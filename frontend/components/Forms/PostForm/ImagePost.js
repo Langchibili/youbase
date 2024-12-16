@@ -8,6 +8,7 @@ import PostDescription from "./FormParts/PostDescription"
 import MediaDisplay from "@/components/Parts/MediaDisplay/MediaDisplay"
 import Link from "next/link"
 import { api_url, getJwt } from "@/Constants"
+import CategorySelector from "@/components/Includes/CategorySelector/CategorySelector"
 
 export default class ImagePost extends React.Component{
    constructor(props){
@@ -56,6 +57,9 @@ export default class ImagePost extends React.Component{
         <MediaDisplay post={this.props.post} displayType="mediaOnly" refleshImages={this.state.refleshImages} handleRemoveImage={this.handleRemoveImage} listtype="grid"/>
         <h4>optional</h4>
         <hr/>
+        <h4>optional</h4>
+         <hr/>
+        <CategorySelector post={this.props.post} parentCategory="images"/>
         <PostDescription description={this.props.post.description} setPostDescriptionOrTitle={this.props.setPostDescription} descriptionPlaceholder="Write something..."bordered="no"/>
         <FormFooter {...this.props}/>
         </>

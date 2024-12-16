@@ -17,7 +17,7 @@ export default class FormFooter extends React.Component{
        {/* postSaved={this.postSaved}
        ={this.postSavedAsDraft} */}
        <div style={{minHeight:'50px', marginTop:'100px'}}></div>
-  {this.props.postSavedAsDraft? <></> : <div style={{position:'fixed', bottom:'0',marginBottom:'120px',width:'90%',textAlign:'center'}}>{this.props.post.status === "published" || this.props.postSaved? <Link href={"/posts/"+this.props.post.dashed_title}>View Post</Link> : <></>}</div>}
+  {this.props.postSavedAsDraft? <></> : <div style={{position:'fixed', bottom:'0',marginBottom:'120px',width:'90%',textAlign:'center'}}>{this.props.post.status === "published" || this.props.postSaved? <Link href={"/posts/"+this.props.post.dashed_title} onClick={this.props.handlePostModalClose}>View Post</Link> : <></>}</div>}
   <div id="form-footer" style={{ display: 'flex', justifyContent: 'space-between', position:'fixed', bottom:'0', left:'0', right:'0', width:'100%',marginBottom:'10px', padding:'0px 20px 0px 20px' }}>
   <button 
     disabled={this.props.action === "edit" || (this.props.postSaving && this.props.postSavingAsDraft)}
@@ -36,7 +36,7 @@ export default class FormFooter extends React.Component{
     onClick={()=>{this.props.savePost(false)}}
   >
     
-    {this.props.postSaving && this.props.postSavingAsDraft? "Saving Draft..." : "Save As Draft"}
+  {this.props.postSaving && this.props.postSavingAsDraft? "Saving Draft..." : "Save As Draft"}
   </button>
   <button 
     disabled={this.props.postSaving && !this.props.postSavingAsDraft}

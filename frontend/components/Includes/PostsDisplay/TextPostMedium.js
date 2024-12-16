@@ -3,6 +3,7 @@
 import AvatarWithPostDate from "@/components/Parts/UserDisplay/AvatarWithPostDate";
 import { truncateText } from "@/Functions";
 import Link from "next/link";
+import CommentsModal from "../Modals/CommentsModal";
 
 export default function TextPostMedium(props) {
   return (
@@ -15,6 +16,7 @@ export default function TextPostMedium(props) {
               </p>
             </Link>
             {props.postEngagementsDisplay(props.post)}
+            <div style={{width:'100%', textAlign:'center'}}><CommentsModal loggedInUser={props.loggedInUser} post={props.post} postId={props.post.id} userId={props.loggedInUser.user.id}/></div>
         </div>
     </div>
     

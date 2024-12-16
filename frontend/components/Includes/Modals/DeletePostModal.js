@@ -5,19 +5,36 @@ import { Modal, Box, Typography, Button, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { updatePost } from '@/Functions';
 
-export default function DeletePostModal({ open, handleClose, postId }) {
+export default function DeletePostModal({ open, handleClose, isComment, commentId, postId }) {
  const deletePost = async ()=>{
-      const updateObject = {
-        data:{
-            status: 'draft'
+      if(isComment){ // means it's a comment we are deleting, rather, removing
+        const updateObject = {
+          data:{
+              comments: {disconnect: [commentId]}
+          }
+        }
+  
+        const deleteComment = await updatePost(updateObject,postId) // disconnect the comment from the post
+        if(deleteComment){
+          if(typeof document !== 'undefined'){
+              document.getElementById("comment-"+commentId).style.display = "none"
+              handleClose()
+         }
         }
       }
-      const deletePost = await updatePost(updateObject,postId)
-      if(deletePost && deletePost.status === "draft"){
-        if(typeof document !== 'undefined'){
-            document.getElementById("post-"+deletePost.id).style.display = "none"
-            handleClose()
-       }
+      else{
+        const updateObject = {
+          data:{
+              status: 'draft'
+          }
+        }
+        const deletePost = await updatePost(updateObject,postId)
+        if(deletePost && deletePost.status === "draft"){
+          if(typeof document !== 'undefined'){
+              document.getElementById("post-"+deletePost.id).style.display = "none"
+              handleClose()
+         }
+        }
       }
  }
   return (

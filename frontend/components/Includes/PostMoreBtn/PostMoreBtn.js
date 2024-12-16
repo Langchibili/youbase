@@ -9,8 +9,27 @@ import ShareButton from "@/components/Parts/EngageMents/ShareButton";
 import DeletePostModal from "../Modals/DeletePostModal";
 import ReportPostModal from "../Modals/ReportPostModal";
 
-const MoreOptions = ({ anchorEl, open, loggedInUser, handleDeleteModalOpen, handleReportModalOpen, handleShareModalOpen,handleClose,handlePostModalClickOpen,thisIsMyPost}) => {
-  console.log(thisIsMyPost)
+const MoreOptions = ({ anchorEl, open, loggedInUser, handleDeleteModalOpen, handleReportModalOpen, handleShareModalOpen,handleClose,handlePostModalClickOpen,thisIsMyPost,thisIsMyComment,isComment}) => {
+  if(isComment){
+    return (
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+       <MenuItem onClick={()=>{handleShareModalOpen(true)}}>Share Post</MenuItem>
+       {!thisIsMyComment? null :  <MenuItem onClick={()=>{handleDeleteModalOpen(true)}}>Delete Comment</MenuItem>}
+      </Menu>
+    );
+  }
   return (
     <Menu
       anchorEl={anchorEl}
@@ -70,13 +89,14 @@ export default function PostMoreBtn(props) {
   }
   return (
     <>
-    <DeletePostModal open={openDeleteModal} postId={props.post.id} handleClose={handleDeleteModalClose}/>
+    {/* postId is for comments deletion */}
+    <DeletePostModal open={openDeleteModal} postId={props.isComment? props.postId : props.post.id} isComment={props.isComment} commentId={props.commentId} handleClose={handleDeleteModalClose}/>
     <ReportPostModal open={openReportModal} {...props} handleClose={handleReportModalClose}/>
       <ShareButton hideButton={true} openShareModal={openShareModal} handleShareModalClose={handleShareModalClose} post={props.post} user={props.post.user.data.attributes} {...props} />
       <IconButton onClick={handleClick} sx={{paddingTop: '0px', paddingRight:'0px'}}>
         <MoreVertIcon />
       </IconButton>
-      <MoreOptions loggedInUser={props.loggedInUser} handleDeleteModalOpen={handleDeleteModalOpen} handleReportModalOpen={handleReportModalOpen} handleShareModalOpen={handleShareModalOpen} thisIsMyPost={props.thisIsMyPost} anchorEl={anchorEl} open={open} handleClose={handleClose} handlePostModalClickOpen={handlePostModalClickOpen} handlePostModalClose={handlePostModalClose}/>
+      <MoreOptions loggedInUser={props.loggedInUser} handleDeleteModalOpen={handleDeleteModalOpen} handleReportModalOpen={handleReportModalOpen} handleShareModalOpen={handleShareModalOpen} thisIsMyPost={props.thisIsMyPost} thisIsMyComment={props.thisIsMyComment} isComment={props.isComment} anchorEl={anchorEl} open={open} handleClose={handleClose} handlePostModalClickOpen={handlePostModalClickOpen} handlePostModalClose={handlePostModalClose}/>
       <PostModal open={openModal} onClose={handlePostModalClose} {...props}/>
     </>
   )

@@ -7,7 +7,7 @@ AWS.config.update({
 })
 
 const mediaConvert = new AWS.MediaConvert({
-  endpoint: process.env.MediaConvertEndpoint, // Replace with your MediaConvert endpoint
+  endpoint: process.env.MediaConvertEndpoint, // MediaConvert endpoint
 })
 
 // List of standard resolutions
@@ -38,7 +38,9 @@ const getVideoOrientationAndResolution = (width, height) => {
   if (Math.abs(ratio - 9 / 16) < 0.01) {
     return { orientation: 'portrait', resolution: height }
   }
-  throw new Error('Unsupported aspect ratio. Only 16:9 or 9:16 videos are supported.')
+  // otherwise we shall assume it's a landscape
+  return { orientation: 'landscape', resolution: height }
+ // throw new Error('Unsupported aspect ratio. Only 16:9 or 9:16 videos are supported.')
 }
 
 /**
@@ -260,9 +262,9 @@ const generateThumbnail = async (width, height, filePath, outputBucket, thumbnai
             ],
           },
         ],
-        TimecodeConfig: {
-          Source: 'ZEROBASED', // Use zero-based timecode
-        },
+        // TimecodeConfig: {
+        //   Source: 'ZEROBASED', // Use zero-based timecode
+        // },
       },
       AccelerationSettings: {
         Mode: 'DISABLED', // Adjust if hardware acceleration is available

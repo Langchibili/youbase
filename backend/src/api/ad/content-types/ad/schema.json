@@ -80,6 +80,12 @@
     },
     "extra_payload": {
       "type": "json"
+    },
+    "categories": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::category.category",
+      "mappedBy": "posts"
     }
   }
 }

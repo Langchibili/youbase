@@ -4,6 +4,7 @@ import AvatarWithPostDate from "@/components/Parts/UserDisplay/AvatarWithPostDat
 import Link from "next/link";
 import EmbedDisplay from "../EmbedDisplay/EmbedDisplay";
 import { truncateText } from "@/Functions";
+import CommentsModal from "../Modals/CommentsModal";
 
 export default function EmbedPostMedium(props) {
     return (
@@ -17,6 +18,7 @@ export default function EmbedPostMedium(props) {
           </p>
           </Link>
           {props.postEngagementsDisplay(props.post)}
+          <div style={{width:'100%', textAlign:'center'}}><CommentsModal loggedInUser={props.loggedInUser} post={props.post} postId={props.post.id} userId={props.loggedInUser.user.id}/></div>
         </div>
       </div>
     )

@@ -934,6 +934,11 @@ export interface ApiAdAd extends Schema.CollectionType {
     clicks: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
     userId: Attribute.String;
     extra_payload: Attribute.JSON;
+    categories: Attribute.Relation<
+      'api::ad.ad',
+      'manyToMany',
+      'api::category.category'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -995,6 +1000,87 @@ export interface ApiAuthAuth extends Schema.CollectionType {
     createdBy: Attribute.Relation<'api::auth.auth', 'oneToOne', 'admin::user'> &
       Attribute.Private;
     updatedBy: Attribute.Relation<'api::auth.auth', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
+export interface ApiCategoryCategory extends Schema.CollectionType {
+  collectionName: 'categories';
+  info: {
+    singularName: 'category';
+    pluralName: 'categories';
+    displayName: 'Category';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    childCategories: Attribute.Relation<
+      'api::category.category',
+      'manyToMany',
+      'api::category.category'
+    >;
+    parentCategories: Attribute.Relation<
+      'api::category.category',
+      'manyToMany',
+      'api::category.category'
+    >;
+    categoryName: Attribute.String;
+    posts: Attribute.Relation<
+      'api::category.category',
+      'manyToMany',
+      'api::post.post'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::category.category',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::category.category',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiCategoryNameCategoryName extends Schema.SingleType {
+  collectionName: 'category_names';
+  info: {
+    singularName: 'category-name';
+    pluralName: 'category-names';
+    displayName: 'CategoryNames';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    CategoryNamesList: Attribute.JSON;
+    videosCategories: Attribute.JSON;
+    musicCategories: Attribute.JSON;
+    imageCategories: Attribute.JSON;
+    textCategories: Attribute.JSON;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::category-name.category-name',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::category-name.category-name',
+      'oneToOne',
+      'admin::user'
+    > &
       Attribute.Private;
   };
 }
@@ -1149,6 +1235,7 @@ export interface ApiMediaConvertJobMediaConvertJob
     singularName: 'media-convert-job';
     pluralName: 'media-convert-jobs';
     displayName: 'MediaConvertJobs';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -1159,6 +1246,7 @@ export interface ApiMediaConvertJobMediaConvertJob
       ['res-1080', 'res-720', 'res-480', 'res-360', 'res-240']
     >;
     uploadId: Attribute.String;
+    type: Attribute.Enumeration<['video', 'image']>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1359,6 +1447,11 @@ export interface ApiPostPost extends Schema.CollectionType {
       'oneToMany',
       'api::reported-post.reported-post'
     >;
+    categories: Attribute.Relation<
+      'api::post.post',
+      'manyToMany',
+      'api::category.category'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1481,6 +1574,8 @@ declare module '@strapi/types' {
       'api::ad.ad': ApiAdAd;
       'api::app-feature.app-feature': ApiAppFeatureAppFeature;
       'api::auth.auth': ApiAuthAuth;
+      'api::category.category': ApiCategoryCategory;
+      'api::category-name.category-name': ApiCategoryNameCategoryName;
       'api::comment.comment': ApiCommentComment;
       'api::content.content': ApiContentContent;
       'api::engagement.engagement': ApiEngagementEngagement;

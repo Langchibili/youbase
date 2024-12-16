@@ -1,0 +1,31 @@
+{
+  "kind": "singleType",
+  "collectionName": "category_names",
+  "info": {
+    "singularName": "category-name",
+    "pluralName": "category-names",
+    "displayName": "CategoryNames",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "CategoryNamesList": {
+      "type": "json"
+    },
+    "videosCategories": {
+      "type": "json"
+    },
+    "musicCategories": {
+      "type": "json"
+    },
+    "imageCategories": {
+      "type": "json"
+    },
+    "textCategories": {
+      "type": "json"
+    }
+  }
+}

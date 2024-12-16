@@ -9,7 +9,13 @@ import MediaDisplay from "@/components/Parts/MediaDisplay/MediaDisplay";
 import AvatarWithFollowButton from "@/components/Parts/UserDisplay/AvatarWithFollowButton";
 import SongPlayButton from "../SongPlayButton/SongPlayButton";
 import { useEffect, useState } from "react";
-import { getPostFromId } from "@/Functions";
+import { getPostFromId, truncateText } from "@/Functions";
+import TextPostMedium from "../PostsDisplay/TextPostMedium";
+import ImagePostMedium from "../PostsDisplay/ImagePostMedium";
+import VideoPostMedium from "../PostsDisplay/VideoPostMedium";
+import MusicPostMedium from "../PostsDisplay/MusicPostMedium";
+import EmbedPostMedium from "../PostsDisplay/EmbedPostMedium";
+
 
 export default function SinglePostDisplay(props) {
   const [loadingMusicPost, setLoading] = useState(props.post.type === "music")
@@ -31,14 +37,65 @@ export default function SinglePostDisplay(props) {
 
     fetchMusicPost()
   }, [props.post])
+  
+  const renderPostContent = (post, postEngagementsDisplay) => {
+    switch (post.type) {
+      case 'text':
+        return <TextPostMedium post={post} postEngagementsDisplay={postEngagementsDisplay} {...props} />
+      case 'image':
+        return <ImagePostMedium post={post} postEngagementsDisplay={postEngagementsDisplay} {...props} />
+      case 'video':
+        return <VideoPostMedium post={post} postEngagementsDisplay={postEngagementsDisplay} {...props} />
+      case 'music':
+        return <MusicPostMedium post={post} postEngagementsDisplay={postEngagementsDisplay} {...props} />
+      case 'embed':
+        return <EmbedPostMedium post={post} postEngagementsDisplay={postEngagementsDisplay} {...props} />
+      default:
+        return null
+    }
+  }
+  const postEngagementsDisplay = post => {
+    return (
+      <div className='inline-engagements-display'>
+        <ul>
+          {post.type === 'video' && <ViewsDisplay post={post}  {...props} />}
+        </ul>
+        <ul>
+          {post.type === 'music' && <StreamsDisplay post={post} {...props} />}
+        </ul>
+        <ul>
+          <LikeButton post={post} {...props} />
+        </ul>
+        <ul>
+          <ShareButton post={post} {...props} />
+        </ul>
+      </div>
+    )
+  }
+
   return (
     <>
   <div className="sa4d25">
     <div className="container-fluid">
       <div className="row">
         <div className="col-xl-8 col-lg-8">
+        {renderPostContent(props.post, postEngagementsDisplay)}
           <div className="section3125">
-           <MediaDisplay {...props} displayType="mediaOnly"/>
+          <div style={{backgroundColor:"white",borderRadius:'5px',marginBottom:'10px'}}>
+        <div className="review_item" style={{ position: 'relative'}}>
+          <div style={{minHeight: '10px'}}></div>
+          <MediaDisplay {...props}/>
+          {/* <VideosDisplay postid={props.post.id}/> */}
+          <h4 className="rvds10" style={{ marginTop: '10px' }}>
+          {truncateText(props.post.title,'50')}
+          </h4>
+          <p className="rvds10" style={{ marginTop: '10px' }}>
+          {truncateText(props.post.description,'100')}
+          </p>
+          {/* {props.postEngagementsDisplay(props.post)} */}
+        </div>
+      </div>
+          {props.post.type === "video"? <MediaDisplay {...props}/> : <MediaDisplay {...props} displayType="mediaOnly"/> }
             <div className="user_dt5">
               <div className="user_dt_left">
                 <div className="live_user_dt">

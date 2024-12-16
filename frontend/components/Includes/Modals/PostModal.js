@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -30,7 +30,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+
 export default function PostModal(props) {
+  
   return (
     <Dialog
       fullScreen
@@ -53,7 +55,7 @@ export default function PostModal(props) {
         </Toolbar>
       </StyledAppBar>
       <StyledContent>
-          <PostForm {...props}/>
+          <PostForm {...props} handlePostModalClose={props.onClose}/>
       </StyledContent>
     </Dialog>
   );

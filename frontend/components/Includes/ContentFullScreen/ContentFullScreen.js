@@ -66,11 +66,22 @@ export default function ContentFullScreen(props) {
       if(typeof document !== "undefined"){
         const musicPlayer = document.getElementById('music-player-controller')
         if(musicPlayer){
-          musicPlayer.style.display = "none"
+           musicPlayer.style.display = "block"
         }
       }
     };
   }, [videoRef.current]);
+
+  useEffect(()=>{ // this is because the image full screen content don't run the other useefect due to using the videoref dependency
+    return () => {
+      if(typeof document !== "undefined"){
+        const musicPlayer = document.getElementById('music-player-controller')
+        if(musicPlayer){
+           musicPlayer.style.display = "block"
+        }
+      }
+    }
+  },[])
 
   const renderContent = () => {
     const user = props.post.user.data.attributes;

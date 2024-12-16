@@ -31,3 +31,6 @@ body {
     text-wrap: balance;
   }
 }
+.vjs-poster img{
+  object-fit: cover !important;
+}

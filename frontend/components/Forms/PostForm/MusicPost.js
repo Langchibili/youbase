@@ -10,6 +10,7 @@ import PostTitle from "./FormParts/PostTitle"
 import { api_url, getJwt, log } from "@/Constants"
 import { getPostFromId, getPostMedia } from "@/Functions"
 import SongFileDisplay from "@/components/Includes/SongFileDisplay/SongFileDisplay"
+import CategorySelector from "@/components/Includes/CategorySelector/CategorySelector"
 
 export default class MusicPost extends React.Component{
    constructor(props){
@@ -90,6 +91,7 @@ export default class MusicPost extends React.Component{
             addMediaOnUpload={this.props.addMediaOnUpload}
         />
         {this.renderMedia()}
+        <CategorySelector post={this.props.post} handleCategorySet={this.props.handleCategorySet} parentCategory="music"/>
         <h4>optional</h4>
         <hr/>
         <h3>Music Art</h3>
@@ -102,7 +104,6 @@ export default class MusicPost extends React.Component{
                allowMultiple={false}
          />
         <MediaDisplay post={this.props.post} displayType="mediaOnly" refleshImages={this.state.refleshImages} handleRemoveImage={this.handleRemoveImage} listtype="grid"/>
-        
         <PostDescription description={this.props.post.description} setPostDescriptionOrTitle={this.props.setPostDescription} descriptionPlaceholder="Add Song Description" bordered="yes"/>
         <FormFooter {...this.props}/>
       

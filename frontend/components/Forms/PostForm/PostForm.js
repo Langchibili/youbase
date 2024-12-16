@@ -14,10 +14,9 @@ import MusicPost from "./MusicPost"
 import VideoPost from "./VideoPost"
 import TextPost from "./TextPost"
 import { createNewPost, generateDashedString, getPostFromId, getPostMedia, truncateText } from "@/Functions"
-import { api_url, getJwt, log } from "@/Constants"
+import { api_url, getFeature, getJwt, log } from "@/Constants"
 import { FacebookTwoTone, Twitter, X, YouTube } from "@mui/icons-material"
 import EmbedPost from "./EmbedPost"
-import ContentLoader from "@/components/Includes/Loader/ContentLoader"
 
 export default class PostForm extends React.Component{
    constructor(props){
@@ -34,10 +33,21 @@ export default class PostForm extends React.Component{
          postSaving: false,
          postSavingAsDraft: false,
          postSavedAsDraft: false,
+         categoriesSet: false,
          loadingPost: true, 
          mediaData: null  // just for refrence within post form
       }
    }
+
+   
+   handleCategorySet = (set)=>{
+    if(set){
+       this.setState({
+          categoriesSet: true
+       })
+    }
+}
+
    
    handlePostTypeSelect = (postType)=>{
         if(postType === "text" || postType === "image" || postType === "music" || postType === "video"){
@@ -192,15 +202,50 @@ export default class PostForm extends React.Component{
             })
             return // cannot post song without song file
           }
+          if(this.state.postType === "music" && !this.state.categoriesSet){
+            alert("add at least one genre") 
+            this.setState({
+              postSaving: false
+            })
+            return // cannot post song without at least a genre
+          }
+
+          if(this.state.postType === "music"){
+            const allowMultipleMusicUploadFeature = await getFeature(6) // multiple music upload feature
+            if(!allowMultipleMusicUploadFeature){
+              const post = await getPostFromId(draftPostId,"media")
+              if(post.media.data && post.media.data.length > 1){
+                alert("multiple upload of music is not supported yet. Remove one and post.")
+                return
+              }
+            }
+          }
 
           if(this.state.postType === "video" && !this.state.mediaData){
             alert("you must upload a video") 
             this.setState({
               postSaving: false
             })
-            return // cannot post song without song file
+            return // cannot post video without a video file
           }
-          
+          if(this.state.postType === "video" && !this.state.categoriesSet){
+            alert("add at least one category") 
+            this.setState({
+              postSaving: false
+            })
+            return // cannot post video without at least a category
+          }
+          if(this.state.postType === "video"){
+            const allowMultipleVideosUploadFeature = await getFeature(7) // multiple vidoes upload feature
+            if(!allowMultipleVideosUploadFeature){ 
+              const post = await getPostFromId(draftPostId,"media")
+              if(post.media.data && post.media.data.length > 1){
+                alert("multiple upload of videos is not supported yet. Remove one and post.")
+                return
+              }
+            }
+          }
+
           if(this.state.postType === "video" || this.state.postType === "music" || this.state.postType === "embed"){
             if(postToSaveObject.data.is_title_user_writted){
               if(!postToSaveObject.data.title){ // in which case the dashed title is already added during drafting
@@ -249,6 +294,7 @@ export default class PostForm extends React.Component{
             postSaving: false,
             action: "edit"
           })
+          this.props.handlePostModalClose()
          }
          else{
           this.setState({
@@ -393,6 +439,7 @@ export default class PostForm extends React.Component{
                               postSavedAsDraft={this.state.postSavedAsDraft}
                               postSaving={this.state.postSaving}
                               postSavingAsDraft={this.state.postSavingAsDraft}
+                              handlePostModalClose={this.props.handlePostModalClose}
                               />
         }
         else if(postType === "music"){
@@ -404,11 +451,13 @@ export default class PostForm extends React.Component{
                               setPostTitle={this.setPostTitle}
                               changePostType={this.changePostType}
                               savePost={this.savePost} 
+                              handleCategorySet={this.handleCategorySet}
                               action={this.state.action}
                               postSaved={this.state.postSaved}
                               postSavedAsDraft={this.state.postSavedAsDraft}
                               postSaving={this.state.postSaving}
                               postSavingAsDraft={this.state.postSavingAsDraft}
+                              handlePostModalClose={this.props.handlePostModalClose}
                               />
         }
         if(postType === "video"){
@@ -420,11 +469,13 @@ export default class PostForm extends React.Component{
                               setPostTitle={this.setPostTitle}
                               changePostType={this.changePostType}
                               savePost={this.savePost}
+                              handleCategorySet={this.handleCategorySet}
                               action={this.state.action}
                               postSaved={this.state.postSaved}
                               postSavedAsDraft={this.state.postSavedAsDraft}
                               postSaving={this.state.postSaving}
                               postSavingAsDraft={this.state.postSavingAsDraft}
+                              handlePostModalClose={this.props.handlePostModalClose}
                               />
         }
         if(postType === "text"){
@@ -438,6 +489,7 @@ export default class PostForm extends React.Component{
                               postSavedAsDraft={this.state.postSavedAsDraft}
                               postSaving={this.state.postSaving}
                               postSavingAsDraft={this.state.postSavingAsDraft}
+                              handlePostModalClose={this.props.handlePostModalClose}
                               />
         }
         return <EmbedPost   post={this.state.post}
@@ -452,11 +504,12 @@ export default class PostForm extends React.Component{
                             postSaving={this.state.postSaving}
                             postSavingAsDraft={this.state.postSavingAsDraft}
                             embedType={this.state.embedType}
+                            handlePostModalClose={this.props.handlePostModalClose}
                             />
    }
 
   async componentDidMount(){
-      if(typeof document !== "undefined"){
+     if(typeof document !== "undefined"){
         const musicPlayer = document.getElementById('music-player-controller')
         if(musicPlayer){
           musicPlayer.style.display = "none"

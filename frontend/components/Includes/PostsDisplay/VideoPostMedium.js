@@ -5,6 +5,7 @@ import Link from "next/link";
 import { log } from "@/Constants";
 import VideoFileDisplay from "../VideoDisplay/VideoFileDisplay";
 import { getVideoMetaFromPostAndId, truncateText } from "@/Functions";
+import CommentsModal from "../Modals/CommentsModal";
 
 
 export default function VideoPostMedium(props) {
@@ -25,6 +26,7 @@ export default function VideoPostMedium(props) {
           </p>
           </Link>
           {props.postEngagementsDisplay(props.post)}
+          <div style={{width:'100%', textAlign:'center'}}><CommentsModal loggedInUser={props.loggedInUser} post={props.post} postId={props.post.id} userId={props.loggedInUser.user.id}/></div>
         </div>
       </div>
     )

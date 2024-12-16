@@ -2,8 +2,10 @@
 
 import ViewsDisplay from '@/components/Parts/EngageMents/ViewsDisplay';
 import { backEndUrl, log } from '@/Constants';
-import { getPostMedia } from '@/Functions';
+import { getPostMedia, getVideoThumbnail } from '@/Functions';
 import React, { useState, useEffect, useRef } from 'react';
+import VideojsPlayer from './VideojsPlayer';
+import { maxHeight } from '@mui/system';
 
 // Helper function to format the duration
 const formatDuration = (duration) => {
@@ -56,7 +58,7 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
               ...prevDurations,
               [index]: videoElement.duration,
             }));
-          };
+          }
 
           videoElement.ontimeupdate = (e) => {
             const progress = (e.target.currentTime / e.target.duration) * 100;
@@ -69,7 +71,7 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
             }
           }
         }
-      });
+      })
     }
   }, [videoFile]);
 
@@ -81,7 +83,10 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
     return <PortraitContentSkeleton/> // loading carousel
   }
 
-  const videoWrapperHeight = ()=>{
+  const videoWrapperHeight = (videosLength)=>{
+    if(videosLength === 1){
+       return "100%"
+    }
     if(window.innerWidth > 990){
        return "400px"
     }
@@ -91,11 +96,14 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
   }
   const renderVideoCarousel = (videos) => {
     let backendUrl = ''
-    if (!hideRemoveButton) {
+    if (!hideRemoveButton) {// this is for the small thumbnails shown on the post creation screen(page)
       backendUrl = videos.provider === "aws-s3"? '' : backEndUrl
+      const videoBackGroundStyles = {
+        backgroundImage: "url("+getVideoThumbnail(videos,post)?getVideoThumbnail(videos,post):""+")"
+      }
       return (
         <div>
-          <video ref={(el) => videoRefs.current[0] = el} controls style={{ maxWidth: '280px', maxHeight: '180px' }}>
+          <video ref={(el) => videoRefs.current[0] = el} controls style={{ maxWidth: '280px', maxHeight: '180px',...videoBackGroundStyles }}>
             <source src={backendUrl + videos.url} type={videos.mime} />
             Sorry, we are unable to show this video.
           </video>
@@ -108,7 +116,7 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
         <OwlCarousel margin={10} items={10} dots={true} autoWidth={true} className="owl-theme">
               {videos.data.map((video, index) => {
                 if(video){
-                  if(!video.hasOwnProperty('attributes')){
+                  if(!video.hasOwnProperty('attributes')){ // since we are using video.attributes below, structure the video that way to properly work on it
                     video.attributes = video
                   }
                 }
@@ -116,10 +124,20 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
                   return null
                 }
                 const videoData = video.attributes;
+                videoData.id = video.id
                 backendUrl = videoData.provider === "aws-s3"? '' : backEndUrl
+                const videoBackGroundStyles = {
+                  backgroundImage: "url("+getVideoThumbnail(videoData,post)?getVideoThumbnail(videoData,post):""+")"
+                }
                 return (
-                    <div className="item" key={index} style={{width:videoWrapperHeight()}}>
-                     <div className="stream_1" style={{width:videoWrapperHeight(),padding:'10px'}}>
+                  <div className="item" key={index} style={{width:videoWrapperHeight(videos.data.length)}}>
+                     <div className="stream_1" style={{width:videoWrapperHeight(videos.data.length),padding:'10px'}}>
+                      <VideojsPlayer video={videoData} formats={videoData.formats} poster={getVideoThumbnail(videoData,post)} videoStyles={{ borderRadius: '5px', width: '100%',objectFit: "cover", height: '60vh' }} posterStyles={{objectFit: "cover"}}/>
+                     </div>
+                  </div>)
+                return ( // this is mainly being used to display landscape videos
+                    <div className="item" key={index} style={{width:videoWrapperHeight(videos.data.length),...videoBackGroundStyles}}>
+                     <div className="stream_1" style={{width:videoWrapperHeight(videos.data.length),padding:'10px'}}>
                         <video
                           ref={(el) => videoRefs.current[index] = el}
                           controls
@@ -153,7 +171,7 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
     else{
       return <></>
     }
-  };
+  }
 
   if (!videoFile) return null;
 
@@ -174,7 +192,7 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
             <p><strong>File Name:</strong> {videoFile.name}</p>
           </div>
         )}
-        {renderVideoCarousel(videoFile)}
+        {renderVideoCarousel(videoFile) /* this can be a single file or an array of files */}
       </div>
       {!hideRemoveButton && (
         <button
@@ -195,7 +213,7 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
 }
 
 
-const PortraitContentSkeleton = ()=>{
+const PortraitContentSkeleton = ()=>{ // this is a skeleton to show while content loads
   return (
     <div className="la5lo1" style={{marginBottom:'10px'}}>
         <div className="owl-carousel live_stream owl-theme owl-loaded owl-drag">

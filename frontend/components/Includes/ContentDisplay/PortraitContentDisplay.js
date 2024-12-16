@@ -83,6 +83,9 @@ export default function PortraitContentDisplay(props) {
                      content.attributes.featuredImages.data = content.attributes.featuredImages
                  }
               }
+              if(!content.attributes.featuredImages.data){  // a null check for the data property
+                 return null
+              }
               return content.attributes.featuredImages.data.map((media) => {
                   if(!media.hasOwnProperty("attributes")){
                     media.attributes = media // structure the data such that it can be read by children components

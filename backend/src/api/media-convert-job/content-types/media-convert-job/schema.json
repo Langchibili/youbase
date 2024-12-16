@@ -4,7 +4,8 @@
   "info": {
     "singularName": "media-convert-job",
     "pluralName": "media-convert-jobs",
-    "displayName": "MediaConvertJobs"
+    "displayName": "MediaConvertJobs",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -26,6 +27,13 @@
     },
     "uploadId": {
       "type": "string"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "video",
+        "image"
+      ]
     }
   }
 }

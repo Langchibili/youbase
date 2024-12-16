@@ -5,8 +5,12 @@ import Link from "next/link";
 import SongPlayButton from "../SongPlayButton/SongPlayButton";
 import MediaDisplay from "@/components/Parts/MediaDisplay/MediaDisplay";
 import { truncateText } from "@/Functions";
+import CommentsModal from "../Modals/CommentsModal";
 
 export default function MusicPostMedium(props) {
+    if(!props.post.media){
+      return null
+    }
     return (
       <div style={{backgroundColor:"white",borderRadius:'5px',marginBottom:'10px'}}>
         <div className="review_item" style={{ position: 'relative'}}>
@@ -22,7 +26,6 @@ export default function MusicPostMedium(props) {
                 </p>
                 </Link>
             </div>
-
         <div className="music-post-container" style={{backgroundColor:"lightyellow",marginTop:'10px'}}>
             <div>
               <SongPlayButton {...props} />
@@ -30,6 +33,7 @@ export default function MusicPostMedium(props) {
             {props.postEngagementsDisplay(props.post)}
         </div>
         {props.post.media.data && props.post.media.data.length > 1? <h3>{props.post.media.data.length} Songs</h3> : <></>}
+        <div style={{width:'100%', textAlign:'center'}}><CommentsModal loggedInUser={props.loggedInUser} post={props.post} postId={props.post.id} userId={props.loggedInUser.user.id}/></div>
         </div>
       </div>
     )

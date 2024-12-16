@@ -5,6 +5,7 @@ import FormFooter from "./FormParts/FormFooter"
 import FormHeader from "./FormParts/FormHeader"
 import PostTitle from "./FormParts/PostTitle"
 import PostDescription from "./FormParts/PostDescription"
+import CategorySelector from "@/components/Includes/CategorySelector/CategorySelector"
 
 export default class EmbedPost extends React.Component{
    constructor(props){
@@ -39,6 +40,7 @@ export default class EmbedPost extends React.Component{
             placeholder={this.props.post.embedLink?.length > 0? this.props.post.embedLink : "add video link" }
          />
         </div>
+        <CategorySelector post={this.props.post} handleCategorySet={this.props.handleCategorySet} parentCategory="videos"/>
         <h4>optional</h4>
         <hr/>
         <PostTitle description={this.props.post.title === "untitled"? "" : this.props.post.title} setPostDescriptionOrTitle={this.props.setPostTitle} descriptionPlaceholder="Title" bordered="yes"/>
