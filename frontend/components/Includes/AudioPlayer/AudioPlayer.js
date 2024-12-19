@@ -64,10 +64,11 @@ export default class AudioPlayer extends React.Component{
         if(nowPlayingSongs){ 
             const playList = this.state.playList;
             const newPlayList = nowPlayingSongs.map((song,index)=>{
-               const backendUrl = song.attributes.provider === "aws-s3"? '' : backEndUrl
                if(song.hasOwnProperty('attributes')){
+                const backendUrl = song.attributes.provider === "aws-s3"? '' : backEndUrl
                 return {key: song.id, musicSrc: backendUrl+song.attributes.url, name: song.attributes.name, singer: song.attributes.name, cover: getImage(post.featuredImages,'thumbnail','music')}
                }
+               const backendUrl = song.provider === "aws-s3"? '' : backEndUrl
                return {key: song.id, musicSrc: backendUrl+song.url, name: song.name, singer: song.name, cover: getImage(post.featuredImages,'thumbnail','music')}
             })
             this.setState({

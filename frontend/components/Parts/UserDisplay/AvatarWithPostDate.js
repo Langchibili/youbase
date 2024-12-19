@@ -23,8 +23,10 @@ export default class AvatarWithPostDate extends React.Component{
    
    
    render(){
+    if(!this.props.post && !this.props.post.user && !this.props.post.user.data){
+      return <></>
+    }
     const user = this.props.post.user.data.attributes
-
     return ( 
       <div style={{width:"100%",display:'flex', justifyContent:'space-between'}}>
         <div className="live_user_dt">

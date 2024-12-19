@@ -8,6 +8,9 @@ module.exports = {
         if(!result.id){
             return
         }
+        if(result.type !== "video"){ // for now, we are only transcoding videos
+           return
+        }
         const getMedia = async () => {
             return await strapi.db.query("api::post.post").findOne({
                 where: { id: result.id },

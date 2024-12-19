@@ -69,7 +69,7 @@ export default function UserMiniProfileDisplay(props) {
                   {thisIsMyAccount? <li>
                     <Link
                       className="msg125 btn500 btn-success"
-                      href="/user/manage/profile"
+                      href="/manage/profile"
                       style={{ display:'inline-block',alignContent: 'center'}}
                     >
                       Update Profile
@@ -79,7 +79,7 @@ export default function UserMiniProfileDisplay(props) {
                     {thisIsMyAccount? <li>
                     <Link
                       className="msg125 btn500 btn-info"
-                      href="/user/manage/content"
+                      href="/manage/posts"
                       style={{ display:'inline-block',alignContent: 'center'}}
                     >
                       Edit

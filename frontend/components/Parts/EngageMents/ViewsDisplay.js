@@ -41,6 +41,16 @@ export default class ViewsDisplay extends React.Component{
             requesting: true // to show user something is happening
         })
         logEngagement('views',this.props.post.id,this.props.loggedInUser.user,this) 
+        const userId = this.props.post.user.data? this.props.post.user.data.id : this.props.post.user.id
+        const viewsCount = parseInt(this.props.post.views)
+        if(viewsCount < 5 || viewsCount % 100 === 0){ // determine whether to send a push notification, because cannot be spamming users anyhow with each like
+            const postWithThumbnail = await getPostFromId(postId,"media,featuredImages")
+            const title = "Your video has been viewed "+viewsCount+ " times"
+            const body = "Your video on youbase has been viewed "+viewsCount+ " times"
+            const image = getImage(postWithThumbnail.featuredImages.data,"thumbnail","notifications")
+            const postUrl = clientUrl+"/posts/"+this.props.post.dashed_title
+            sendPushNotification(title,body,[userId],postUrl,image,"")
+         }
    }
 
    handleUnView = async ()=>{

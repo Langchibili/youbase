@@ -6,10 +6,6 @@ module.exports = ({env}) => ({
         }
       }
     },
-    // 'strapi-plugin-fcm': {
-    //   enabled: true,
-    //   //resolve: './src/plugins/strapi-plugin-fcm' // path to plugin folder
-    // },
     upload: {
       config:{
         provider: "aws-s3",
@@ -32,7 +28,11 @@ module.exports = ({env}) => ({
         }
       },
       enabled:true
-    }  
+    },
+    // 'strapi-plugin-fcm': { // faulty plugin so not gonna use it
+    //     enabled: true,
+    //     resolve: './src/plugins/strapi-plugin-fcm' // path to plugin folder
+    // }, 
     // upload: {
     //     provider: "local",
     //     providerOptions: {

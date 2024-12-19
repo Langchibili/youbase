@@ -4,7 +4,7 @@ import React from "react"
 import UserFollowButton from "./UserFollowButton"
 import UserUnFollowButton from "./UserUnFollowButton"
 import { api_url, getJwt } from "@/Constants"
-import { getUserById, logNotification, removeIdFromArray } from "@/Functions"
+import { getImage, getUserById, logNotification, removeIdFromArray, sendPushNotification } from "@/Functions"
 
 export default class UserFollowingButtons extends React.Component{
    constructor(props){
@@ -28,7 +28,7 @@ export default class UserFollowingButtons extends React.Component{
             requesting: true, // to show user something is happening
             requestingText: 'Following...'
         },async()=>{
-            const userId = this.props.userId // the user to be followed
+                const userId = this.props.userId // the user to be followed
                 const loggedInUser = this.props.loggedInUser.user
                 let followingUserIds = this.state.loggedInUser.user.followingUserIds
                 const followingCount = parseInt(this.props.loggedInUser.user.followingCount || 0)
@@ -91,6 +91,28 @@ export default class UserFollowingButtons extends React.Component{
                         ...state,
                         requesting: false
                         })
+                
+                        if(loggedInUser.followersCount > 1000){ // this means you are a worthy user to send another user a notification that you have followed
+                            const userWithThumbnail = await getUserById(loggedInUser.id,"profilePicture")
+                            const title = notificationTitle+" on youbase"
+                            const body = "You have a new follower on youbase"
+                            const image = getImage(userWithThumbnail.profilePicture,'thumbnail','profilePicture')
+                            const postUrl = clientUrl+"/user/"+loggedInUser.username
+                            sendPushNotification(title,body,[userId],postUrl,image,"")
+                        }
+                        
+                        if(otherUser.followersCount === 0){
+                            return
+                        }
+                        // geting the other user's profile because we want him to link back to his profile to see how many followers he has amased
+                        if(otherUser.followersCount < 100 || otherUser.followersCount % 100 === 0){ // determine whether to send a push notification, because cannot be spamming users anyhow with each like
+                            const userWithThumbnail = await getUserById(this.props.userId,"profilePicture")
+                            const title = "You have "+otherUser.followersCount+" followers on youbase"
+                            const body = "Your youbase account has "+otherUser.followersCount+" followers"
+                            const image = getImage(userWithThumbnail.profilePicture,'thumbnail','profilePicture')
+                            const postUrl = clientUrl+"/user/profile"
+                            sendPushNotification(title,body,[userId],postUrl,image,"")
+                         }
                     } 
                 }
             })

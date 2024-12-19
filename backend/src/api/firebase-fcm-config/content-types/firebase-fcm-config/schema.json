@@ -1,0 +1,22 @@
+{
+  "kind": "singleType",
+  "collectionName": "firebase_fcm_configs",
+  "info": {
+    "singularName": "firebase-fcm-config",
+    "pluralName": "firebase-fcm-configs",
+    "displayName": "firebaseFcmConfig",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "serviceAccount": {
+      "type": "json"
+    },
+    "adminUserIds": {
+      "type": "json"
+    }
+  }
+}

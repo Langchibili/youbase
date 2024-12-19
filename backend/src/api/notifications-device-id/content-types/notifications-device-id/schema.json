@@ -1,0 +1,22 @@
+{
+  "kind": "singleType",
+  "collectionName": "notifications_device_ids",
+  "info": {
+    "singularName": "notifications-device-id",
+    "pluralName": "notifications-device-ids",
+    "displayName": "notificationsDeviceIds",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "deviceIds": {
+      "type": "json"
+    },
+    "adminDeviceIds": {
+      "type": "json"
+    }
+  }
+}

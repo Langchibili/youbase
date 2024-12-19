@@ -2,7 +2,7 @@
 
 // UTILITY FUNCTIONS
 
-import { api_url, backEndUrl, getJwt, log } from "./Constants"
+import { api_url, backEndUrl, clientUrl, getJwt, log } from "./Constants"
 import { getJWT } from "./secrets";
 
 export const createYouTubeEmbedLink = (url)=>{
@@ -46,12 +46,20 @@ const getIDFromDashedString = (dashed_title)=>{
     const parts = dashed_title.split('-')
     return parts[parts.length - 1]
 }
-export const generateDashedString = (str)=> {
+
+export const generateDashedString = (str) => {
   // Trim the string to 100 characters if it's longer
   let trimmedStr = str.length > 100 ? str.substring(0, 100) : str;
-  // Replace spaces with dashes and return the result
-  return trimmedStr.trim().replace(/\s+/g, '-');
+
+  // Remove all unwanted characters (anything not a word, digit, or space)
+  let cleanedStr = trimmedStr.replace(/[^a-zA-Z0-9\s-]/g, '');
+
+  // Replace multiple spaces or dashes with a single dash
+  let dashedStr = cleanedStr.trim().replace(/[\s-]+/g, '-');
+
+  return dashedStr.toLowerCase(); // Convert to lowercase for URL friendliness
 }
+
 
 export const generateUniqueText = ()=>{
     const timestamp = Date.now().toString(36); // Convert timestamp to a base-36 string
@@ -132,7 +140,7 @@ export const getImage = (image, size = "normal", use = "normal") => {
 
     // Check if the image object is valid and contains necessary attributes
     if (!image) {
-        if(use === "music"){
+        if(use === "music" || use === "notifications"){
           return defaultMusicCover
         }
         // If the image is not provided, return the appropriate default image based on the usage context
@@ -156,7 +164,7 @@ export const getImage = (image, size = "normal", use = "normal") => {
     // Ensure formats exist before proceeding
     if (!formats) {
         if(!defaultUrl){
-          if(use === "music"){
+          if(use === "music" || use === "notifications"){
             return defaultMusicCover
           }
           return use === "profilePicture" ? defaultProfilePicture : defaultCoverPhoto;
@@ -595,6 +603,21 @@ export const updateCategory = async (data,categoryId)=>{
       return null
   }
 
+  export const getUserPostsCount = async (userId)=>{
+    const post = await fetch(`${api_url}/posts?filters[user][id][$eq]=${userId}&filters[status][$eq]=published&pagination[limit]=0&pagination[withCount]=true`,{
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(response => response.json())
+      .then(data => data)
+      .catch(error => console.error(error))
+      console.log('the posts count',post)
+      if(post && post.meta && post.meta.pagination){
+        return post.meta.pagination.total
+      }
+      return null
+  }
+
   export const getRepliesCount = async (commentId)=>{
     const comment = await fetch(api_url+'/comments?filters[parentComment][id][$eq]='+commentId+'&pagination[limit]=0&pagination[withCount]=true',{
       headers: {
@@ -772,9 +795,6 @@ export const logEngagement = async (type, postId, loggedInUser, ctx,createNotifi
             body: JSON.stringify(updatePostObject)
         }).then(response => response.json());
         if (response2) {
-            if(type === "likes" || type === "shares"){
-                createNotification() // send notification to respective parties
-            }
             ctx.setState(prevState => {
                 return {
                     ...prevState,
@@ -792,6 +812,9 @@ export const logEngagement = async (type, postId, loggedInUser, ctx,createNotifi
                     requesting: false
                 };
             });
+            if(type === "likes" || type === "shares"){
+              createNotification() // send notification to respective parties
+            }
         }
     }
 }
@@ -956,3 +979,26 @@ export const getUserFromDashedId = async (dashedId,populateString)=>{
       .then(response => response.json())
       .then(data => data)
    }
+
+
+   export async function sendPushNotification(title,body,targetUserIds,url="",image="/youbase-logo.png",payload=""){
+   
+    const notificationObject =  {
+          data: {
+              title: title,
+              body: body,
+              image_path: image === "/youbase-logo.png"? clientUrl+"/youbase-logo.png" : image,
+              payload: payload,
+              targetUserIds: targetUserIds,
+              clickAction: url
+          }
+    }
+    fetch(api_url+'/send-fc-mnotifications', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${getJwt()}`
+      },
+      body: JSON.stringify(notificationObject)
+    })
+  }

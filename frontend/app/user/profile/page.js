@@ -40,5 +40,5 @@ export default function User({ params }) {
     return <ContentNotFound />
   }
 
-  return <UserProfileDisplay  user={user} loggedInUser={loggedInUser}/>
+  return <UserProfileDisplay  user={user} loggedInUser={loggedInUser} purpose="profile-view"/>
 }

@@ -7,6 +7,9 @@ import SingleCommentDisplay from "./SingleCommentDisplay";
 class CommentsDisplay extends React.Component {
   render() {
     const { comments, postId, post,loggedInUser, userId, onUpdateReplies } = this.props;
+    if(!comments){
+      return null
+    }
     return (
       <List>
         {comments.length > 0 ? (

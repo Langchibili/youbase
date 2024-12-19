@@ -1,15 +1,17 @@
 "use client"
 
-import { getImage, handleCountsDisplay } from "@/Functions";
+import { getImage, getUserPostsCount, handleCountsDisplay } from "@/Functions";
 import SocialsDisplay from "../SocialsDisplay/SocialsDisplay";
 import Link from "next/link";
 import UserFollowingButtons from "@/components/Parts/UserActionButtons/UserFollowingButtons";
 import { log } from "@/Constants";
 import UserContentDisplay from "../ContentDisplay/UserContentDisplay";
-import { useState } from "react";
-import { FeedOutlined, ImageOutlined, VideocamOutlined } from "@mui/icons-material";
+import { useEffect, useState } from "react";
+import { FeedOutlined, ImageOutlined, MoreVert, VideocamOutlined } from "@mui/icons-material";
+import NoContent from "../NoContent/NoContent";
 
 export default function UserProfileDisplay(props) {
+  const [postsCount, setPostsCount] = useState(null)
   const [feedHasReels, setFeedHasReels] = useState(true)
   const [feedHasCaptures, setFeedHasCaptures] = useState(true)
   const [feedHasExplore, setFeedHasExplore] = useState(true)
@@ -23,7 +25,14 @@ export default function UserProfileDisplay(props) {
   const profilePicture = getImage(props.user?.profilePicture, "thumbnail", "profilePicture");
   const followersCount = user.followersCount ?? "0";
   const followingCount = user.followingCount ?? "0";
-  const postsCount = user.postsCount ?? "0";
+  
+  useEffect(()=>{
+      const runGetPostsCount = async ()=>{
+        const postsCount = await getUserPostsCount(user.id) ?? "0";
+        setPostsCount(postsCount)
+      }
+      runGetPostsCount()
+  },[])
 
   const displaySocials = () => {
     const renderSocial = (url, type) => {
@@ -59,7 +68,7 @@ export default function UserProfileDisplay(props) {
     <div className="container-fluid">
       <div className="row justify-content-md-center">
         <div className="col-md-10">
-          <div className="section3125 rpt145">
+          {props.purpose === "manage-posts"? <div style={{color:'aliceblue', fontWeight:'800'}}>Edit or Delete posts by clicking the {<MoreVert/>} icon</div> : <div className="section3125 rpt145">
             <div className="row">
               <div className="col-lg-7">
                 {thisIsMyAccount? <Link href="#" className="_216b22">
@@ -87,7 +96,7 @@ export default function UserProfileDisplay(props) {
                   <li>
                     <div className="_ttl121">
                       <div className="_ttl122">Posts</div>
-                      <div className="_ttl123">{handleCountsDisplay}</div>
+                      <div className="_ttl123">{!postsCount? <></> : handleCountsDisplay(postsCount)}</div>
                     </div>
                   </li>
                   <li>
@@ -134,7 +143,7 @@ export default function UserProfileDisplay(props) {
                 </ul>
               </div>
             </div>
-          </div>
+          </div>}
         </div>
       </div>
     </div>
@@ -150,7 +159,7 @@ export default function UserProfileDisplay(props) {
                 id="nav-tab"
                 role="tablist"
               >
-                <a
+                {props.purpose === "manage-posts"? <></> : <a
                   className="nav-item nav-link active"
                   id="nav-about-tab"
                   data-toggle="tab"
@@ -159,9 +168,9 @@ export default function UserProfileDisplay(props) {
                   aria-selected="false"
                 >
                   About
-                </a>
+                </a>}
                 <a
-                  className="nav-item nav-link"
+                  className={props.purpose === "manage-posts"? "nav-item nav-link active" : "nav-item nav-link"}
                   id="nav-courses-tab"
                   data-toggle="tab"
                   href="#nav-courses"
@@ -213,19 +222,20 @@ export default function UserProfileDisplay(props) {
         <div className="col-lg-12">
           <div className="course_tab_content">
             <div className="tab-content" id="nav-tabContent">
-              <div className="tab-pane fade show active" id="nav-about" role="tabpanel">
+              {props.purpose === "manage-posts"? <></> : <div className="tab-pane fade show active" id="nav-about" role="tabpanel">
                 <div className="_htg451">
                   <div className="_htg452">
                     {aboutUser.length > 0? <h3>About Me</h3> : <></>}
                     {aboutUser.length > 0? <p>{aboutUser}</p> : <></>}
                   </div>
                 </div>
-              </div>
-              <div className="tab-pane fade" id="nav-courses" role="tabpanel">
+              </div>}
+              
+              <div className={props.purpose === "manage-posts"? "tab-pane fade show active" : "tab-pane fade"} id="nav-courses" role="tabpanel">
                 <div className="crse_content">
                 <div className="row">
                     <div className="col-xl-9 col-lg-8">
-                    {!feedHasCaptures? <></> : <div className="section3125">
+                    {!feedHasCaptures? <NoContent style={{ height: '200px', width: '300px' }}/> : <div className="section3125">
                       <h3>Captures <ImageOutlined sx={{color:'indigo'}}/></h3>
                       <div className="la5lo1">
                         <UserContentDisplay
@@ -239,7 +249,7 @@ export default function UserProfileDisplay(props) {
                             />
                         </div>
                       </div>}
-                      {!feedHasExplore? <></> :
+                      {!feedHasExplore? <NoContent style={{ height: '200px', width: '300px' }}/> :
                       <>
                       <h3>Explore <FeedOutlined sx={{color:'forestgreen'}}/></h3>
                         <div className="section3125 mt-10">
@@ -253,7 +263,7 @@ export default function UserProfileDisplay(props) {
                                 sort="desc"
                             />    
                       </div> </>}
-                      {!feedHasExplore? <></> :
+                      {!feedHasExplore? <NoContent style={{ height: '200px', width: '300px' }}/> :
                       <>
                       <h3>Images <ImageOutlined sx={{color:'green'}}/></h3>
                         <div className="section3125 mt-10">
@@ -292,7 +302,7 @@ export default function UserProfileDisplay(props) {
                 <div className="student_reviews">
                   <div className="row">
                     <div className="col-lg-12">
-                    {!feedHasReels? <></> :  
+                    {!feedHasReels? <NoContent style={{ height: '200px', width: '300px' }}/> :  
                     <div className="section3125">
                      <h3>Reels <VideocamOutlined sx={{color:'crimson'}}/></h3> 
                       <UserContentDisplay
@@ -305,7 +315,7 @@ export default function UserProfileDisplay(props) {
                           sort="desc"
                       />
                     </div>}
-                    {!feedHasExplore? <></> :
+                    {!feedHasExplore? <NoContent style={{ height: '200px', width: '300px' }}/> :
                         <div className="section3125 mt-30">
                         <h3>Videos <VideocamOutlined sx={{color:'red'}}/></h3>
                           <UserContentDisplay 
@@ -318,7 +328,7 @@ export default function UserProfileDisplay(props) {
                             sort="desc"
                           />     
                       </div>}
-                      {!feedHasExplore? <></> :
+                      {!feedHasExplore? <NoContent style={{ height: '200px', width: '300px' }}/> :
                         <div className="section3125 mt-30">
                         <h3>Embeds <VideocamOutlined sx={{color:'brown'}}/></h3>
                           <UserContentDisplay 

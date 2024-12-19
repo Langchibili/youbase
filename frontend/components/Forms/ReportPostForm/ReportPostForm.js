@@ -2,7 +2,7 @@
 
 import Uploader from "@/components/Includes/Uploader/Uploader"
 import { api_url, getJwt, log } from "@/Constants"
-import { getImage, validateUrl } from "@/Functions"
+import { getImage, getPostFromId, sendPushNotification, truncateText, validateUrl } from "@/Functions"
 import React from "react"
 
 export default class ReportPostForm extends React.Component{
@@ -17,7 +17,8 @@ export default class ReportPostForm extends React.Component{
           reasonBody: '',
           showReasonBody: false,
           reported: false,
-          reportReasons: []
+          reportReasons: [],
+          adminUserIds : []
       }
    }
 
@@ -34,6 +35,18 @@ export default class ReportPostForm extends React.Component{
             reportReasons: reportReasons.data.attributes.reasons
          })
       }
+      const firebaseConfig = await fetch(api_url+'/firebase-fcm-config',{
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(response => response.json())
+        .then(data => data)
+        .catch(error => console.error(error))
+        if(firebaseConfig && firebaseConfig.data && firebaseConfig.data.attributes.adminUserIds){
+           this.setState({
+              adminUserIds: firebaseConfig.data.attributes.adminUserIds
+           })
+        }
    }
 
    handleReasonSelect = (event) => {
@@ -104,6 +117,10 @@ export default class ReportPostForm extends React.Component{
         this.setState({
              reported: true
         })
+        const title = "Youbase Reported alert on post with id: "+this.props.post.id
+        const body = "Youbase post report reason: "+truncateText(reason,"50")
+        const postUrl = clientUrl+"/posts/"+this.props.post.dashed_title
+        sendPushNotification(title,body,[this.state.adminUserIds],postUrl,"","")
      }
    }
 

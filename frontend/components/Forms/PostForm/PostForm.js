@@ -17,6 +17,7 @@ import { createNewPost, generateDashedString, getPostFromId, getPostMedia, trunc
 import { api_url, getFeature, getJwt, log } from "@/Constants"
 import { FacebookTwoTone, Twitter, X, YouTube } from "@mui/icons-material"
 import EmbedPost from "./EmbedPost"
+import { useRouter } from "next/navigation"
 
 export default class PostForm extends React.Component{
    constructor(props){
@@ -35,7 +36,9 @@ export default class PostForm extends React.Component{
          postSavedAsDraft: false,
          categoriesSet: false,
          loadingPost: true, 
-         mediaData: null  // just for refrence within post form
+         redirectUser: false,
+         mediaData: null,  // just for refrence within post form
+         postUrlPath: "/"
       }
    }
 
@@ -211,11 +214,19 @@ export default class PostForm extends React.Component{
           }
 
           if(this.state.postType === "music"){
+            const allowMultipleContentThumbnailUpload = await getFeature(8) // multiple feautred images upload feature
             const allowMultipleMusicUploadFeature = await getFeature(6) // multiple music upload feature
             if(!allowMultipleMusicUploadFeature){
               const post = await getPostFromId(draftPostId,"media")
               if(post.media.data && post.media.data.length > 1){
                 alert("multiple upload of music is not supported yet. Remove one and post.")
+                return
+              }
+            }
+            if(!allowMultipleContentThumbnailUpload){
+              const post = await getPostFromId(draftPostId,"featuredImages")
+              if(post.featuredImages && post.featuredImages.data && post.featuredImages.data.length > 1){
+                alert("multiple upload of music art is not supported yet. Remove one and post.")
                 return
               }
             }
@@ -236,16 +247,36 @@ export default class PostForm extends React.Component{
             return // cannot post video without at least a category
           }
           if(this.state.postType === "video"){
+            const allowMultipleContentThumbnailUpload = await getFeature(8) // multiple feautred images upload feature
             const allowMultipleVideosUploadFeature = await getFeature(7) // multiple vidoes upload feature
             if(!allowMultipleVideosUploadFeature){ 
-              const post = await getPostFromId(draftPostId,"media")
-              if(post.media.data && post.media.data.length > 1){
+              const post = await getPostFromId(draftPostId,"media,featuredImages")
+              if(post.media && post.media.data && post.media.data.length > 1){
                 alert("multiple upload of videos is not supported yet. Remove one and post.")
+                return
+              }
+            }
+            if(!allowMultipleContentThumbnailUpload){
+              const post = await getPostFromId(draftPostId,"featuredImages")
+              if(post.featuredImages && post.featuredImages.data && post.featuredImages.data.length > 1){
+                alert("multiple upload of music art is not supported yet. Remove one and post.")
                 return
               }
             }
           }
 
+          if(this.state.postType === "image"){
+            const allowMultipleContentThumbnailUpload = await getFeature(8) // multiple feautred images upload feature
+            if(!allowMultipleContentThumbnailUpload){
+              const post = await getPostFromId(draftPostId,"featuredImages")
+              if(post.featuredImages && post.featuredImages.data && post.featuredImages.data.length > 1){
+                alert("multiple upload of music art is not supported yet. Remove one and post.")
+                return
+              }
+            }
+          }
+
+          // now the upload logic
           if(this.state.postType === "video" || this.state.postType === "music" || this.state.postType === "embed"){
             if(postToSaveObject.data.is_title_user_writted){
               if(!postToSaveObject.data.title){ // in which case the dashed title is already added during drafting
@@ -292,9 +323,13 @@ export default class PostForm extends React.Component{
             postSavedAsDraft: false,
             postSavingAsDraft: false,
             postSaving: false,
-            action: "edit"
+            redirectUser: true,
+            action: "edit",
+            postUrlPath: "/posts/"+response.data.attributes.dashed_title
+          },()=>{
+            this.props.handlePostModalClose()
           })
-          this.props.handlePostModalClose()
+          
          }
          else{
           this.setState({
@@ -606,6 +641,15 @@ export default class PostForm extends React.Component{
    }
 
    render(){
+     if(this.state.redirectUser){
+      return <RedirectUser url={this.state.postUrlPath}/>
+     }
      return <>{this.state.loadingPost? <></> : this.renderPostForm()}</>
    }
+  }
+
+  const RedirectUser = ({url})=>{
+    const router = useRouter()
+    router.push(url)
+    return <></>
   }

@@ -87,12 +87,13 @@ export default function PostMoreBtn(props) {
   const handleClose = () => {
     setAnchorEl(null);
   }
+  console.log('inside the share page',props.post)
   return (
     <>
     {/* postId is for comments deletion */}
     <DeletePostModal open={openDeleteModal} postId={props.isComment? props.postId : props.post.id} isComment={props.isComment} commentId={props.commentId} handleClose={handleDeleteModalClose}/>
     <ReportPostModal open={openReportModal} {...props} handleClose={handleReportModalClose}/>
-      <ShareButton hideButton={true} openShareModal={openShareModal} handleShareModalClose={handleShareModalClose} post={props.post} user={props.post.user.data.attributes} {...props} />
+      {props.post && props.post.user && props.post.user.data && props.post.user.data.attributes && (<ShareButton hideButton={true} openShareModal={openShareModal} handleShareModalClose={handleShareModalClose} post={props.post} user={props.post.user.data.attributes} {...props} />)}
       <IconButton onClick={handleClick} sx={{paddingTop: '0px', paddingRight:'0px'}}>
         <MoreVertIcon />
       </IconButton>

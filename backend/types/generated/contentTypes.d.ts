@@ -834,6 +834,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     >;
     verified: Attribute.Boolean & Attribute.DefaultTo<false>;
     status: Attribute.Enumeration<['published', 'draft']>;
+    notificationsDeviceId: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1228,6 +1229,39 @@ export interface ApiEngagementEngagement extends Schema.CollectionType {
   };
 }
 
+export interface ApiFirebaseFcmConfigFirebaseFcmConfig
+  extends Schema.SingleType {
+  collectionName: 'firebase_fcm_configs';
+  info: {
+    singularName: 'firebase-fcm-config';
+    pluralName: 'firebase-fcm-configs';
+    displayName: 'firebaseFcmConfig';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    serviceAccount: Attribute.JSON;
+    adminUserIds: Attribute.JSON;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::firebase-fcm-config.firebase-fcm-config',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::firebase-fcm-config.firebase-fcm-config',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiMediaConvertJobMediaConvertJob
   extends Schema.CollectionType {
   collectionName: 'media_convert_jobs';
@@ -1306,6 +1340,39 @@ export interface ApiNotificationNotification extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::notification.notification',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiNotificationsDeviceIdNotificationsDeviceId
+  extends Schema.SingleType {
+  collectionName: 'notifications_device_ids';
+  info: {
+    singularName: 'notifications-device-id';
+    pluralName: 'notifications-device-ids';
+    displayName: 'notificationsDeviceIds';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    deviceIds: Attribute.JSON;
+    adminDeviceIds: Attribute.JSON;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::notifications-device-id.notifications-device-id',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::notifications-device-id.notifications-device-id',
       'oneToOne',
       'admin::user'
     > &
@@ -1553,6 +1620,43 @@ export interface ApiReportedPostReportedPost extends Schema.CollectionType {
   };
 }
 
+export interface ApiSendFcMnotificationSendFcMnotification
+  extends Schema.CollectionType {
+  collectionName: 'send_fc_mnotifications';
+  info: {
+    singularName: 'send-fc-mnotification';
+    pluralName: 'send-fc-mnotifications';
+    displayName: 'sendFCMnotification';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Attribute.String;
+    body: Attribute.Text;
+    image_path: Attribute.String;
+    payload: Attribute.JSON;
+    targetUserIds: Attribute.JSON;
+    clickAction: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::send-fc-mnotification.send-fc-mnotification',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::send-fc-mnotification.send-fc-mnotification',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -1579,12 +1683,15 @@ declare module '@strapi/types' {
       'api::comment.comment': ApiCommentComment;
       'api::content.content': ApiContentContent;
       'api::engagement.engagement': ApiEngagementEngagement;
+      'api::firebase-fcm-config.firebase-fcm-config': ApiFirebaseFcmConfigFirebaseFcmConfig;
       'api::media-convert-job.media-convert-job': ApiMediaConvertJobMediaConvertJob;
       'api::notification.notification': ApiNotificationNotification;
+      'api::notifications-device-id.notifications-device-id': ApiNotificationsDeviceIdNotificationsDeviceId;
       'api::playlist.playlist': ApiPlaylistPlaylist;
       'api::post.post': ApiPostPost;
       'api::report-reason.report-reason': ApiReportReasonReportReason;
       'api::reported-post.reported-post': ApiReportedPostReportedPost;
+      'api::send-fc-mnotification.send-fc-mnotification': ApiSendFcMnotificationSendFcMnotification;
     }
   }
 }

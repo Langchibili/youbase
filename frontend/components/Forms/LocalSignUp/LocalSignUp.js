@@ -17,6 +17,22 @@ export default class LocalSignUp extends React.Component{
       }
       this.username = React.createRef()
       this.password = React.createRef()
+      this.topWebsites = [
+        "youbase", "facebook", "youtube", "google", "twitter", "instagram", "linkedin",
+        "pinterest", "snapchat", "tiktok", "whatsapp", "reddit", "tumblr", "quora",
+        "flickr", "vimeo", "dailymotion", "twitch", "medium", "wordpress", "blogspot",
+        "weebly", "wix", "zoom", "slack", "discord", "github", "gitlab", "bitbucket",
+        "paypal", "stripe", "shopify", "ebay", "amazon", "alibaba", "netflix", "hulu",
+        "spotify", "soundcloud", "apple", "microsoft", "adobe", "yahoo", "bing", "duckduckgo",
+        "airbnb", "uber", "lyft", "booking", "expedia", "tripadvisor", "cnn", "bbc",
+        "nytimes", "forbes", "bloomberg", "guardian", "reuters", "aljazeera", "npr",
+        "cnet", "techcrunch", "gizmodo", "engadget", "verge", "mashable", "buzzfeed",
+        "vice", "vox", "wired", "huffpost", "medium", "kickstarter", "indiegogo", "patreon",
+        "deviantart", "dribbble", "behance", "stackexchange", "stackoverflow", "leetcode",
+        "hackerrank", "coursera", "edx", "udemy", "skillshare", "khanacademy", "codeacademy",
+        "pluralsight", "zendesk", "salesforce", "trello", "asana", "jira", "notion",
+        "dropbox", "onedrive", "google-drive", "icloud", "driverbase", "okrarides", "okramall"
+      ]
    }
 
    handleChange = ()=>{
@@ -28,10 +44,22 @@ export default class LocalSignUp extends React.Component{
       })
   }
 
+  
+  containsTopWebsite = (username) => {
+    return this.topWebsites.some((website) => username.toLowerCase().includes(website));
+  }
+
   handleSubmit = async (e)=>{
     e.preventDefault()
     const username = this.username.current.value
     const password = this.password.current.value
+    if(this.containsTopWebsite(username)){ // no user can use the youbase or socials username apart from youbase
+      this.setState({
+        errorExists: true,
+        errorMessage: "To use this username, you must contact us." 
+      })
+      return
+    }
     if(username.length === 0 || password.length === 0){
       this.setState({
         errorExists: true,
@@ -42,12 +70,11 @@ export default class LocalSignUp extends React.Component{
     const response = await signUserUp('local',username,password) 
     if(response.hasOwnProperty('error')){
       if(response.error.message === "userExists"){
-        if(typeof window !== "undefined"){
-           window.location = "/signin"
-        }
-        // this.setState({
-        //   userExists: true
-        // })
+        this.setState({
+          errorExists: true,
+          errorMessage: "user already exists, log in instead or choose another username"
+        })
+        return
       }
       else{
         this.setState({

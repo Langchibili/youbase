@@ -3,31 +3,96 @@
 import Link from "next/link"
 import React from "react"
 import AvatarOnly from "../UserDisplay/AvatarOnly"
-import { getUserById, handleCountsDisplay, truncateText } from "@/Functions"
+import { getCategoryNames, getUserById, handleCountsDisplay, truncateText } from "@/Functions"
 import ContentLoader from "@/components/Includes/Loader/ContentLoader"
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
+import Divider from '@mui/material/Divider'
+import MenuIcon from '@mui/icons-material/Menu'
+import HomeIcon from '@mui/icons-material/Home'
+import SearchIcon from '@mui/icons-material/Search'
+import LayersIcon from '@mui/icons-material/Layers'
+import TheatersIcon from '@mui/icons-material/Theaters'
+import MusicNoteIcon from '@mui/icons-material/MusicNote'
+import PeopleIcon from '@mui/icons-material/People'
+import CategoryIcon from '@mui/icons-material/Category'
+import Collapse from '@mui/material/Collapse'
+import ExpandLess from '@mui/icons-material/ExpandLess'
+import ExpandMore from '@mui/icons-material/ExpandMore'
+import Skeleton from '@mui/material/Skeleton'
 
 export default class MainMenu extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-          following: [],
-          follows: [],
-          loading: true
+            following: [],
+            follows: [],
+            loading: true,
+            followingOpen: false,
+            followersOpen: false,
+            categoriesOpen: false,
+            videosCategoriesOpen: false,
+            musicCategoriesOpen: false,
+            imagesCategoriesOpen: false,
+            textCategoriesOpen: false,
+            videosCategories: [],
+            musicCategories: [],
+            imageCategories: [],
+            textCategories: [],
+            loadingCategories: true,
         }
      }
   
      async componentDidMount(){ 
-      if(!this.props.loggedInUser.status){ // no need to make a request when a user is logged out
-        return
-      }
-      const userFollowing = await getUserById(this.props.loggedInUser.user.id,"profilePicture,following,following.details,follows.details") // the post without populating anything
-      this.setState({
-          following: userFollowing.following,
-          follows: userFollowing.follows,
-          loading: false
-      })
+        const videosCategories = await getCategoryNames('videos')
+        const musicCategories = await getCategoryNames('music')
+        const imageCategories = await getCategoryNames('images')
+        const textCategories = await getCategoryNames('texts')
+
+        this.setState({
+        videosCategories: videosCategories,
+        musicCategories: musicCategories,
+        imageCategories: imageCategories,
+        textCategories: textCategories,
+        loadingCategories: false,
+        })
+        if(!this.props.loggedInUser.status){ // no need to make a request when a user is logged out
+            return
+        }
+        const userFollowing = await getUserById(this.props.loggedInUser.user.id,"profilePicture,following,following.details,follows.details") // the post without populating anything
+        this.setState({
+            following: userFollowing.following,
+            follows: userFollowing.follows,
+            loading: false
+        })
      }
-     
+
+     toggleCollapse = (key) => () => {
+        this.setState((prevState) => ({ [key]: !prevState[key] }))
+     }
+
+     renderCategories = (categories, loading) => {
+        if (loading) {
+          return [...Array(5)].map((_, index) => (
+            <ListItem key={index} style={{ paddingLeft: 32 }}>
+              <Skeleton variant="text" width="80%" />
+            </ListItem>
+          ))
+        }
+    
+        return categories.map((category) => (
+          <ListItem key={category} style={{ paddingLeft: 32 }}>
+            <ListItemText>
+              <Link href={`/categories/${category}`}>
+                {category}
+              </Link>
+            </ListItemText>
+          </ListItem>
+        ))
+      }
+    
      renderFollowing = (following)=>{
             return following.map((user)=>{
                 const fullnames = user.details?.firstname && user.details?.lastname ? `${user.details.firstname} ${user.details.lastname}` : "UnNamed User";
@@ -53,357 +118,144 @@ export default class MainMenu extends React.Component{
             <nav className="vertical_nav">
                 <div className="left_section menu_left" id="js-menu">
                     <div className="left_section">
-                    <ul>
-                        {/* <li className="menu--item">
-                        <Link
-                            href="live_streams.html"
-                            className="menu--link active"
-                            title="Live Streams"
-                        >
-                            <i className="uil uil-kayak menu--icon" />
-                            <span className="menu--label">Live Streams</span>
-                        </Link>
-                        </li> */}
-                        <li className="menu--item">
-                        <Link href="/" className="menu--link" title="Home">
-                            <i className="uil uil-home-alt menu--icon" />
-                            <span className="menu--label">Home</span>
-                        </Link>
-                        </li>
-                        {!this.props.loggedInUser.status? <></> : <li className="menu--item">
-                        <Link href="/feed" className="menu--link" title="Explore">
-                            <i className="uil uil-search menu--icon" />
-                            <span className="menu--label">Explore</span>
-                        </Link>
-                        </li>}
-                        <li className="menu--item">
-                        <Link
-                            className="menu--link"
-                            href="/reels"
-                            title="Reels"
-                        >
-                            <i className="uil uil-kayak menu--icon" />
-                            <span className="menu--label">Reels</span>
-                        </Link>
-                        </li>
-                        <li className="menu--item">
-                        <Link
-                            className="menu--link"
-                            href="/music"
-                            title="music"
-                        >
-                            <i className="uil uil-kayak menu--icon" />
-                            <span className="menu--label">Music</span>
-                        </Link>
-                        </li>
-                        <li className="menu--item menu--item__has_sub_menu">
-                        <label className="menu--link" title="Categories">
-                            <i className="uil uil-layers menu--icon" />
-                            <span className="menu--label">Categories</span>
-                        </label>
-                         <ul className="sub_menu">
-                            <li className="sub_menu--item">
-                                <Link href="/categories/movies" className="sub_menu--link">
-                                    Movies
-                                </Link>
-                            </li>
-                            <li className="sub_menu--item">
-                                <Link href="/categories/Music" className="sub_menu--link">
-                                    Music
-                                </Link>
-                            </li>
-                            <li className="sub_menu--item">
-                                <Link href="/categories/TV%20Shows" className="sub_menu--link">
-                                    TV Shows
-                                </Link>
-                            </li>
-                            <li className="sub_menu--item">
-                                <Link href="/categories/Gaming" className="sub_menu--link">
-                                    Gaming
-                                </Link>
-                            </li>
-                            <li className="sub_menu--item">
-                                <Link href="/categories/Sports" className="sub_menu--link">
-                                    Sports
-                                </Link>
-                            </li>
-                            <li className="sub_menu--item">
-                                <Link href="/categories/Celebrities" className="sub_menu--link">
-                                    Celebrities
-                                </Link>
-                            </li>
-                            <li className="sub_menu--item">
-                                <Link href="/categories/Comedy" className="sub_menu--link">
-                                    Comedy
-                                </Link>
-                            </li>
-                            <li className="sub_menu--item">
-                                <Link href="/categories/Podcasts" className="sub_menu--link">
-                                    Podcasts
-                                </Link>
-                            </li>
-                            <li className="sub_menu--item">
-                                <Link href="/categories/Anime" className="sub_menu--link">
-                                    Anime
-                                </Link>
-                            </li>
-                            <li className="sub_menu--item">
-                                <Link href="/categories/Books" className="sub_menu--link">
-                                    Books
-                                </Link>
-                            </li>
-                            <li className="sub_menu--item">
-                                <Link href="/categories/Events" className="sub_menu--link">
-                                    Events
-                                </Link>
-                            </li>
-                            <li className="sub_menu--item">
-                                <Link href="/categories/Fashion" className="sub_menu--link">
-                                    Fashion
-                                </Link>
-                            </li>
-                        </ul>
-    
-                        </li>
-                        {!this.props.loggedInUser.status? <></> : <li className="menu--item menu--item__has_sub_menu">
-                        <label className="menu--link" title="following">
-                            <i className="uil uil-layers menu--icon" />
-                            <span className="menu--label">Following</span>
-                        </label>
-                        <ul className="sub_menu">
-                            {this.state.loading? <ContentLoader/> : this.renderFollowing(this.state.following)}
-                            <Link href="/users" className="sub_menu--link">
+                   <ul>
+                   <List style={{ width: 250, height: window.innerHeight, overflowY: 'scroll' }}>
+            <ListItem>
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+              <ListItemText>
+                <Link href="/" onClick={this.handleLinkClick}>
+                  Home
+                </Link>
+              </ListItemText>
+            </ListItem>
+            {this.props.loggedInUser.status && (
+              <ListItem>
+                <ListItemIcon>
+                  <SearchIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <Link href="/feed" onClick={this.handleLinkClick}>Explore</Link>
+                </ListItemText>
+              </ListItem>
+            )}
+
+            <ListItem>
+              <ListItemIcon>
+                <TheatersIcon />
+              </ListItemIcon>
+              <ListItemText>
+                <Link href="/reels" onClick={this.handleLinkClick}>Reels</Link>
+              </ListItemText>
+            </ListItem>
+
+            <ListItem>
+              <ListItemIcon>
+                <MusicNoteIcon />
+              </ListItemIcon>
+              <ListItemText>
+                <Link href="/music" onClick={this.handleLinkClick}>Music</Link>
+              </ListItemText>
+            </ListItem>
+            {this.props.loggedInUser.status && (
+              <>
+                <ListItem button onClick={this.toggleCollapse('followingOpen')}>
+                  <ListItemIcon>
+                    <PeopleIcon />
+                  </ListItemIcon>
+                  <ListItemText>Following</ListItemText>
+                  {this.state.followingOpen ? <ExpandLess /> : <ExpandMore />}
+                </ListItem>
+                <Collapse in={this.state.followingOpen} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    {this.state.loading ? (
+                      <ListItem style={{ paddingLeft: 32 }}>
+                        <Skeleton variant="text" width="80%" />
+                      </ListItem>
+                    ) : (
+                      this.renderFollowing(this.state.following)
+                    )}
+                    <Link href="/users" className="mb-3 sub_menu--link" onClick={this.handleLinkClick}>
                                 Follow Users
-                            </Link>
-                        </ul>
-                        </li>}
-                        {!this.props.loggedInUser.status? <></> : <li className="menu--item menu--item__has_sub_menu">
-                        <label className="menu--link" title="followers">
-                            <i className="uil uil-layers menu--icon" />
-                            <span className="menu--label">Followers</span>
-                        </label>
-                        <ul className="sub_menu">
-                            {this.state.loading? <ContentLoader/> : this.renderFollowing(this.state.follows)}
-                            <Link href="/users" className="sub_menu--link">
+                    </Link>
+                    <hr/>
+                  </List>
+                </Collapse>
+
+                <ListItem button onClick={this.toggleCollapse('followersOpen')}>
+                  <ListItemIcon>
+                    <PeopleIcon />
+                  </ListItemIcon>
+                  <ListItemText>Followers</ListItemText>
+                  {this.state.followersOpen ? <ExpandLess /> : <ExpandMore />}
+                </ListItem>
+                <Collapse in={this.state.followersOpen} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    {this.state.loading ? (
+                      <ListItem style={{ paddingLeft: 32 }}>
+                        <Skeleton variant="text" width="80%" />
+                      </ListItem>
+                    ) : (
+                      this.renderFollowing(this.state.follows)
+                    )}
+                    <Link href="/users" className="mb-3 sub_menu--link" onClick={this.handleLinkClick}>
                                 Follow Users
-                            </Link>
-                        </ul>
-                        </li>}
-                       
-                        {/* <li className="menu--item">
-                        <a
-                            href="saved_courses.html"
-                            className="menu--link"
-                            title="Saved Courses"
-                        >
-                            <i className="uil uil-heart-alt menu--icon" />
-                            <span className="menu--label">Saved Courses</span>
-                        </a>
-                        </li> */}
-                        {/* <li className="menu--item menu--item__has_sub_menu">
-                        <label className="menu--link" title="Pages">
-                            <i className="uil uil-file menu--icon" />
-                            <span className="menu--label">More</span>
-                        </label>
-                        <ul className="sub_menu">
-                            <li className="sub_menu--item">
-                            <a href="about_us.html" className="sub_menu--link">
-                                About
-                            </a>
-                            </li>
-                            <li className="sub_menu--item">
-                            <a href="sign_in.html" className="sub_menu--link">
-                                Sign In
-                            </a>
-                            </li>
-                            <li className="sub_menu--item">
-                            <a href="sign_up.html" className="sub_menu--link">
-                                Sign Up
-                            </a>
-                            </li>
-                            <li className="sub_menu--item">
-                            <a href="sign_up_steps.html" className="sub_menu--link">
-                                Sign Up Steps
-                            </a>
-                            </li>
-                            <li className="sub_menu--item">
-                            <a href="membership.html" className="sub_menu--link">
-                                Paid Membership
-                            </a>
-                            </li>
-                            <li className="sub_menu--item">
-                            <a href="course_detail_view.html" className="sub_menu--link">
-                                Course Detail View
-                            </a>
-                            </li>
-                            <li className="sub_menu--item">
-                            <a href="checkout_membership.html" className="sub_menu--link">
-                                Checkout
-                            </a>
-                            </li>
-                            <li className="sub_menu--item">
-                            <a href="invoice.html" className="sub_menu--link">
-                                Invoice
-                            </a>
-                            </li>
-                            <li className="sub_menu--item">
-                            <a href="career.html" className="sub_menu--link">
-                                Career
-                            </a>
-                            </li>
-                            <li className="sub_menu--item">
-                            <a href="apply_job.html" className="sub_menu--link">
-                                Job Apply
-                            </a>
-                            </li>
-                            <li className="sub_menu--item">
-                            <a href="our_blog.html" className="sub_menu--link">
-                                Our Blog
-                            </a>
-                            </li>
-                            <li className="sub_menu--item">
-                            <a href="blog_single_view.html" className="sub_menu--link">
-                                Blog Detail View
-                            </a>
-                            </li>
-                            <li className="sub_menu--item">
-                            <a href="company_details.html" className="sub_menu--link">
-                                Company Details
-                            </a>
-                            </li>
-                            <li className="sub_menu--item">
-                            <a href="press.html" className="sub_menu--link">
-                                Press
-                            </a>
-                            </li>
-                            <li className="sub_menu--item">
-                            <a href="live_output.html" className="sub_menu--link">
-                                Live Stream View
-                            </a>
-                            </li>
-                            <li className="sub_menu--item">
-                            <a href="add_streaming.html" className="sub_menu--link">
-                                Add live Stream
-                            </a>
-                            </li>
-                            <li className="sub_menu--item">
-                            <a href="search_result.html" className="sub_menu--link">
-                                Search Result
-                            </a>
-                            </li>
-                            <li className="sub_menu--item">
-                            <a href="thank_you.html" className="sub_menu--link">
-                                Thank You
-                            </a>
-                            </li>
-                            <li className="sub_menu--item">
-                            <a href="coming_soon.html" className="sub_menu--link">
-                                Coming Soon
-                            </a>
-                            </li>
-                            <li className="sub_menu--item">
-                            <a href="error_404.html" className="sub_menu--link">
-                                Error 404
-                            </a>
-                            </li>
-                        </ul>
-                        </li> */}
-                    </ul>
+                    </Link>
+                  </List>
+                </Collapse>
+              </>
+            )}
+
+            <Divider />
+
+            <ListItem button onClick={this.toggleCollapse('categoriesOpen')}>
+              <ListItemIcon>
+                <CategoryIcon />
+              </ListItemIcon>
+              <ListItemText>Categories</ListItemText>
+              {this.state.categoriesOpen ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={this.state.categoriesOpen} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItem button onClick={this.toggleCollapse('videosCategoriesOpen')} style={{ paddingLeft: 16 }}>
+                  <ListItemText>Videos</ListItemText>
+                  {this.state.videosCategoriesOpen ? <ExpandLess /> : <ExpandMore />}
+                </ListItem>
+                <Collapse in={this.state.videosCategoriesOpen} timeout="auto" unmountOnExit>
+                  {this.renderCategories(this.state.videosCategories, this.state.loadingCategories)}
+                </Collapse>
+
+                <ListItem button onClick={this.toggleCollapse('musicCategoriesOpen')} style={{ paddingLeft: 16 }}>
+                  <ListItemText>Music</ListItemText>
+                  {this.state.musicCategoriesOpen ? <ExpandLess /> : <ExpandMore />}
+                </ListItem>
+                <Collapse in={this.state.musicCategoriesOpen} timeout="auto" unmountOnExit>
+                  {this.renderCategories(this.state.musicCategories, this.state.loadingCategories)}
+                </Collapse>
+
+                <ListItem button onClick={this.toggleCollapse('imagesCategoriesOpen')} style={{ paddingLeft: 16 }}>
+                  <ListItemText>Images</ListItemText>
+                  {this.state.imagesCategoriesOpen ? <ExpandLess /> : <ExpandMore />}
+                </ListItem>
+                <Collapse in={this.state.imagesCategoriesOpen} timeout="auto" unmountOnExit>
+                  {this.renderCategories(this.state.imageCategories, this.state.loadingCategories)}
+                </Collapse>
+
+                <ListItem button onClick={this.toggleCollapse('textCategoriesOpen')} style={{ paddingLeft: 16 }}>
+                  <ListItemText>Text</ListItemText>
+                  {this.state.textCategoriesOpen ? <ExpandLess /> : <ExpandMore />}
+                </ListItem>
+                <Collapse in={this.state.textCategoriesOpen} timeout="auto" unmountOnExit>
+                  {this.renderCategories(this.state.textCategories, this.state.loadingCategories)}
+                </Collapse>
+              </List>
+            </Collapse>
+          </List>
+                   </ul>
                     </div>
-                    {/* <div className="left_section">
-                    <h6 className="left_title">SUBSCRIPTIONS</h6>
-                    <ul>
-                        <li className="menu--item">
-                        <a
-                            href="instructor_profile_view.html"
-                            className="menu--link user_img"
-                        >
-                            <img src="images/left-imgs/img-1.jpg" alt="" />
-                            Rock Smith
-                            <div className="alrt_dot" />
-                        </a>
-                        </li>
-                        <li className="menu--item">
-                        <a
-                            href="instructor_profile_view.html"
-                            className="menu--link user_img"
-                        >
-                            <img src="images/left-imgs/img-2.jpg" alt="" />
-                            Jassica William
-                        </a>
-                        <div className="alrt_dot" />
-                        </li>
-                        <li className="menu--item">
-                        <a
-                            href="all_instructor.html"
-                            className="menu--link"
-                            title="Browse Instructors"
-                        >
-                            <i className="uil uil-plus-circle menu--icon" />
-                            <span className="menu--label">Browse Instructors</span>
-                        </a>
-                        </li>
-                    </ul>
-                    </div> */}
-                    {/* <div className="left_section pt-2">
-                    <ul>
-                        <li className="menu--item">
-                        <a href="setting.html" className="menu--link" title="Setting">
-                            <i className="uil uil-cog menu--icon" />
-                            <span className="menu--label">Setting</span>
-                        </a>
-                        </li>
-                        <li className="menu--item">
-                        <a href="help.html" className="menu--link" title="Help">
-                            <i className="uil uil-question-circle menu--icon" />
-                            <span className="menu--label">Help</span>
-                        </a>
-                        </li>
-                        <li className="menu--item">
-                        <a
-                            href="report_history.html"
-                            className="menu--link"
-                            title="Report History"
-                        >
-                            <i className="uil uil-windsock menu--icon" />
-                            <span className="menu--label">Report History</span>
-                        </a>
-                        </li>
-                        <li className="menu--item">
-                        <a href="feedback.html" className="menu--link" title="Send Feedback">
-                            <i className="uil uil-comment-alt-exclamation menu--icon" />
-                            <span className="menu--label">Send Feedback</span>
-                        </a>
-                        </li>
-                    </ul>
-                    </div> */}
+                  
                     <div className="left_footer">
-                    {/* <ul>
-                        <li>
-                        <a href="about_us.html">About</a>
-                        </li>
-                        <li>
-                        <a href="press.html">Press</a>
-                        </li>
-                        <li>
-                        <a href="contact_us.html">Contact Us</a>
-                        </li>
-                        <li>
-                        <a href="coming_soon.html">Advertise</a>
-                        </li>
-                        <li>
-                        <a href="coming_soon.html">Developers</a>
-                        </li>
-                        <li>
-                        <a href="terms_of_use.html">Copyright</a>
-                        </li>
-                        <li>
-                        <a href="terms_of_use.html">Privacy Policy</a>
-                        </li>
-                        <li>
-                        <a href="terms_of_use.html">Terms</a>
-                        </li>
-                    </ul> */}
                     <div className="left_footer_content">
                         <p>
                         © 2024~ <strong>Youbase</strong>. All Rights Reserved.

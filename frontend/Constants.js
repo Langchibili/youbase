@@ -170,6 +170,7 @@ const updateDefaultUserAccountToLogOut = async ()=>{
   .then(response => response.json())
   .then(data => data)
   if(response.hasOwnProperty("username")){
+     localStorage.removeItem('jwt') // because if someone attempts to log into another account using this client(browser or phone) they can log into this user's account because they have the same jwt
      logOutStatus = true
   }
   return logOutStatus

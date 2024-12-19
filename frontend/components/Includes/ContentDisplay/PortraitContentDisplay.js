@@ -9,7 +9,6 @@ import { useEffect, useState } from 'react';
 
 export default function PortraitContentDisplay(props) {
   const [OwlCarousel, setOwlCarousel] = useState(null);
-
   useEffect(() => {
     // Dynamically import OwlCarousel and the styles only on the client side
     if (typeof window !== 'undefined') {
@@ -39,54 +38,60 @@ export default function PortraitContentDisplay(props) {
             else{
               content.attributes.id = content.id // same as post.attributes.id = post.id
             }
-            if(content.user){ // structure the data such that it can be read by children components
-              if(!content.user.hasOwnProperty('data')){
-                 content.user.data = content.user
-                 content.user.data.id = content.user.id
-                 content.user.data.attributes = content.user.data
-                 content.user.data.attributes.id = content.user.data.id
+
+            /***  handling the content user object ***/
+            if(content.attributes.user){ // structure the data such that it can be read by children components
+              if(!content.attributes.user.hasOwnProperty('data')){ // means the user account is just one straight object not embedded inside a data object, this is usually due to being the logged in user object or so
+                 content.attributes.user.data = content.attributes.user
+                 content.attributes.user.data.id = content.attributes.user.id
+                 content.attributes.user.data.attributes = content.attributes.user.data
+                 content.attributes.user.data.attributes.id = content.attributes.user.data.id
               } 
             }  
-            //STRUCTURING CONTENT END
-
+            if(!content.attributes.user.data){ // if there is no user attached to the post, then we cannot display the post
+                return null
+            }
+            
+            /*** handling the content video type ***/
             if(content.attributes.type === "video" && content.attributes.media) {  // Ensure content has media
               if(content.attributes.media){ // structure the data such that it can be read by children components
                 if(!content.attributes.media.hasOwnProperty('data')){
                     content.attributes.media.data = content.attributes.media
                 }
               }
-              return content.attributes.media.data.map((media) => {
-                    if(!media.hasOwnProperty("attributes")){
-                       media.attributes = media // structure the data such that it can be read by children components
-                    }
-                    media.attributes.id = media.id; // Ensure media.id exists
-                    return (
-                     
+              if(content.attributes.media.data){ // now check if the data object of media is null
+                return content.attributes.media.data.map((media) => {
+                  if(!media.hasOwnProperty("attributes")){
+                     media.attributes = media // structure the data such that it can be read by children components
+                  }
+                  media.attributes.id = media.id; // Ensure media.id exists
+                  return (
                       <div className="item" key={media.id} style={{width:'134px'}}>
-                        <div className="stream_1" style={{width:'134px',padding:'10px'}}>
-                          <VideoThumbnailDisplay
-                             
-                              title={content.attributes.title}
-                              file={media.attributes}
-                              post={content.attributes}
-                              loggedInUser={props.loggedInUser}
-                              avatar={()=>{<AvatarOnly userId={content.attributes.user.data.id} />}}
-                          />
-                           </div>
-                          </div>
-                    )
-              })
+                      <div className="stream_1" style={{width:'134px',padding:'10px'}}>
+                        <VideoThumbnailDisplay
+                           
+                            title={content.attributes.title}
+                            file={media.attributes}
+                            post={content.attributes}
+                            loggedInUser={props.loggedInUser}
+                            avatar={()=>{<AvatarOnly userId={content.attributes.user.data.id} />}}
+                        />
+                         </div>
+                        </div>
+                  )
+               })
+             } 
             }
-            if (content.attributes.type === "image" && content.attributes.featuredImages ) {  // Ensure content has media
+
+            /***  handling the content image type  ***/
+            if (content.attributes.type === "image" && content.attributes.featuredImages) {  // Ensure content has featuredImages if an image
               if(content.attributes.featuredImages){ // structure the data such that it can be read by children components
                  if(!content.attributes.featuredImages.hasOwnProperty('data')){
                      content.attributes.featuredImages.data = content.attributes.featuredImages
                  }
               }
-              if(!content.attributes.featuredImages.data){  // a null check for the data property
-                 return null
-              }
-              return content.attributes.featuredImages.data.map((media) => {
+              if(content.attributes.featuredImages.data){ // check if the data object is not null
+                return content.attributes.featuredImages.data.map((media) => {
                   if(!media.hasOwnProperty("attributes")){
                     media.attributes = media // structure the data such that it can be read by children components
                   }
@@ -105,8 +110,9 @@ export default function PortraitContentDisplay(props) {
                           </div>
                         </div>
                   )
-            })
-          }
+                })
+              }
+            }
             return null; // Return null if not a video or no media
           })}
       </OwlCarousel>

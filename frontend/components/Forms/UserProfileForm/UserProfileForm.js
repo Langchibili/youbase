@@ -127,6 +127,7 @@ export default class UserProfileForm extends React.Component{
                     <div className="col-lg-6">
                     <div className="ui search focus mt-30">
                         <div className="ui left icon input swdh11 swdh19">
+                        
                         <input
                             className="prompt srch_explore"
                             type="text"

@@ -266,6 +266,9 @@
         "published",
         "draft"
       ]
+    },
+    "notificationsDeviceId": {
+      "type": "string"
     }
   }
 }

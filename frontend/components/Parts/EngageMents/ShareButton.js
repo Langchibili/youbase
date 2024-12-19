@@ -1,9 +1,11 @@
 'use client';
 
-import React from "react"
+import React, { useEffect } from "react"
 import { getUserById, handleCountsDisplay, logEngagement, logNotification } from "@/Functions"
 import { Button, Modal, Box, IconButton, Typography } from '@mui/material'
 import { Facebook, Twitter, Instagram, WhatsApp, ContentCopy, TikTok } from '@mui/icons-material'
+import { useSocialSharing } from "@/Contexts/SocialSharingContext";
+import { getImage, getPostFromId } from "../../../Functions";
 
 export default class ShareButton extends React.Component {
     constructor(props) {
@@ -27,12 +29,34 @@ export default class ShareButton extends React.Component {
 
     createShareNotification = async () => {
         const loggedInUserId = this.props.loggedInUser.user.id
-        const userId = this.props.user.id
+        const userId = this.props.post.user.data? this.props.post.user.data.id : this.props.post.user.id
         const postId = this.props.post.id
         const loggedInuserDetails = await getUserById(loggedInUserId, "details")
         const fullnames = loggedInuserDetails.details?.firstname && loggedInuserDetails.details?.lastname ? `${loggedInuserDetails.details.firstname} ${loggedInuserDetails.details.lastname}` : "A user";
         const notificationTitle = fullnames + " shared your post"
         logNotification(notificationTitle, loggedInUserId, [userId], "post", postId) // send notification to the user being followed
+        // send a push notification
+        const followersCount = parseInt(this.props.loggedInUser.user.followersCount)
+        const shares = parseInt(this.props.post.shares)
+        if(followersCount > 1000){ // this means the user has a big enough following, the post's user might need to know 
+           const postWithThumbnail = await getPostFromId(postId,"media,featuredImages")
+           const title = notificationTitle
+           const body = notificationTitle + " on youbase"
+           const image = getImage(postWithThumbnail.featuredImages.data,"thumbnail","notifications")
+           const postUrl = clientUrl+"/posts/"+this.props.post.dashed_title
+           sendPushNotification(title,body,[userId],postUrl,image,"")
+        }
+        if(shares === 0){ // if for any reason it's 0, return
+            return
+        }
+        if(shares < 5 || shares % 10 === 0){ // determine whether to send a push notification, because we cannot be spamming users anyhow with each share
+           const postWithThumbnail = await getPostFromId(postId,"media,featuredImages")
+           const title = "Your post has been shared "+shares+ " times"
+           const body = "Your post on youbase has been shared "+shares+ " times"
+           const image = getImage(postWithThumbnail.featuredImages.data,"thumbnail","notifications")
+           const postUrl = clientUrl+"/posts/"+this.props.post.dashed_title
+           sendPushNotification(title,body,[userId],postUrl,image,"")
+        }
     }
 
     handleShare = async () => {
@@ -108,7 +132,8 @@ export default class ShareButton extends React.Component {
 
         return (
             <Modal open={this.props.openShareModal? this.props.openShareModal : this.state.openShareModal} onClose={this.props.handleShareModalClose? this.props.handleShareModalClose : this.handleModalClose}>
-                <Box sx={style}>
+               <Box sx={style}>
+                <SetPostMetaTags post={this.props.post}/>
                     <Typography variant="h6" component="h2">
                         Share this post
                     </Typography>
@@ -191,4 +216,20 @@ export default class ShareButton extends React.Component {
             </>
         )
     }
+}
+
+
+
+const SetPostMetaTags = ({post})=>{
+    const { setSocialSharingTags } = useSocialSharing()
+    console.log('the post in the share meta tags component', post)
+    useEffect(() => {
+        setSocialSharingTags({
+            title: post.title,
+            description: 'This is an amazing description for my page.',
+            image: 'https://example.com/image.jpg',
+            url: window.location.origin+'/posts/'+post.dashed_title,
+          })
+    }, [])
+    return <></>
 }

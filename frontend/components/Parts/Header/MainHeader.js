@@ -29,13 +29,15 @@ export default class MainHeader extends React.Component{
     return (
         <header className="header clearfix">
             {!this.props.loggedInUser.status? <></> : <CreatePostButton action="create" {...this.props}/>}
-            <button type="button" id="toggleMenu" className="toggle_menu">
-                <i className="uil uil-bars" />
-            </button>
-            <button id="collapse_menu" className="collapse_menu">
-                <i className="uil uil-bars collapse_menu--icon " />
-                <span className="collapse_menu--label" />
-            </button>
+            {this.props.menu? this.props.menu() : <>
+               <button type="button" id="toggleMenu" className="toggle_menu">
+                    <i className="uil uil-bars" />
+                </button>
+                <button id="collapse_menu" className="collapse_menu">
+                    <i className="uil uil-bars collapse_menu--icon " />
+                    <span className="collapse_menu--label" />
+                </button>
+            </>}
             <div className="main_logo" id="logo">
                 <Link href="/">
                 <img id="logo" src="/youbase-logo-with-wordings.png" alt="" />

@@ -5,7 +5,7 @@ import { backEndUrl, log } from '@/Constants';
 import { getPostMedia, getVideoThumbnail } from '@/Functions';
 import React, { useState, useEffect, useRef } from 'react';
 import VideojsPlayer from './VideojsPlayer';
-import { maxHeight } from '@mui/system';
+import { maxHeight, width } from '@mui/system';
 
 // Helper function to format the duration
 const formatDuration = (duration) => {
@@ -85,13 +85,18 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
 
   const videoWrapperHeight = (videosLength)=>{
     if(videosLength === 1){
-       return "100%"
-    }
-    if(window.innerWidth > 990){
-       return "400px"
+       if(window.innerWidth > 990){
+         return "400px"
+       }
+       return (window.innerWidth - 70).toString() + "px"
     }
     else{
-      return (window.innerWidth - 70).toString() + "px"
+      if(window.innerWidth > 990){
+        return "400px"
+     }
+     else{
+       return (window.innerWidth - 70).toString() + "px"
+     }
     }
   }
   const renderVideoCarousel = (videos) => {
@@ -110,8 +115,21 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
         </div>
       )
     }
-    if (!videos.data) return null;
-    if(typeof window !== "undefined"){
+    if (!videos.data) return null; // no video or videos, then don't bother
+    if(videos.data.length === 1){
+          const video = videos.data[0] // the video here is the first video, because it's the only one
+          if(video){
+            if(!video.hasOwnProperty('attributes')){ // since we are using video.attributes below, structure the video that way to properly work on it
+              video.attributes = video
+            }
+          }
+          const videoData = video.attributes;
+          videoData.id = video.id
+          backendUrl = videoData.provider === "aws-s3"? '' : backEndUrl
+
+          return (<VideojsPlayer height="720px" width="1200px"  video={videoData} formats={videoData.formats} poster={getVideoThumbnail(videoData,post)} videoStyles={{ borderRadius: '5px', width: '100%',objectFit: "cover" }} posterStyles={{objectFit: "cover",width:'100%'}}/>)
+    }
+    if(typeof window !== "undefined"){ // bellow is for videos with more than one file, displayed using a corousel
       return (
         <OwlCarousel margin={10} items={10} dots={true} autoWidth={true} className="owl-theme">
               {videos.data.map((video, index) => {

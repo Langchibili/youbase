@@ -10,6 +10,7 @@ import React, { useState, useEffect } from 'react'
 
 // Force the page to be dynamically rendered on every request
 export const dynamic = dynamicConfig();
+
 export default function User({ params }) {
   const [loggedInUser, setLoggedInUser] = useState(null)
   const [user, setUser] = useState(null)
