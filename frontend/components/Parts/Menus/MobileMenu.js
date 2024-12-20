@@ -4,7 +4,6 @@ import React from 'react'
 import Link from 'next/link'
 import AvatarOnly from '../UserDisplay/AvatarOnly'
 import { getCategoryNames, getUserById, handleCountsDisplay, truncateText } from '@/Functions'
-import ContentLoader from '@/components/Includes/Loader/ContentLoader'
 import SwipeableDrawer from '@mui/material/SwipeableDrawer'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
@@ -23,6 +22,7 @@ import Collapse from '@mui/material/Collapse'
 import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
 import Skeleton from '@mui/material/Skeleton'
+import { Help, Info, Policy } from '@mui/icons-material'
 
 export default class MobileMenu extends React.Component {
   constructor(props) {
@@ -280,6 +280,46 @@ export default class MobileMenu extends React.Component {
                 </Collapse>
               </List>
             </Collapse>
+            <ListItem>
+              <ListItemIcon>
+                <Help />
+              </ListItemIcon>
+              <ListItemText>
+                <Link href="/support" onClick={this.handleLinkClick}>Help</Link>
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <Info />
+              </ListItemIcon>
+              <ListItemText>
+                <Link href="/terms_and_conditions" onClick={this.handleLinkClick}>Terms Of Use</Link>
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <Policy />
+              </ListItemIcon>
+              <ListItemText>
+                <Link href="/privacy_policy" onClick={this.handleLinkClick}>Privacy Policy</Link>
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <Policy />
+              </ListItemIcon>
+              <ListItemText>
+                <Link href="/account_deletion_policy" onClick={this.handleLinkClick}>Account Deletion Policy</Link>
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <Policy />
+              </ListItemIcon>
+              <ListItemText>
+                <Link href="/data_deletion_policy" onClick={this.handleLinkClick}>Data Deletion Policy</Link>
+              </ListItemText>
+            </ListItem>
           </List>
         </SwipeableDrawer>
       </>

@@ -14,7 +14,17 @@ export default class AvatarWithUsernameOnly extends React.Component{
    }
    renderUserName = ()=>{
     const textColor = this.props.textColor? this.props.textColor: ''
-    return !this.state.user.details? <h6 style={{color:textColor}}>Unnamed User</h6> : <h6 style={{color:textColor}}>{truncateText(this.state.user.details.firstname+" "+this.state.user.details.lastname,20)}</h6>
+    if(!this.state.user.details){
+        return <h6 style={{color:textColor}}>Unnamed User</h6>  
+    }
+    if(!this.state.user.details && !this.state.user.details.firstname && !this.state.user.details.lastname){
+        return <h6 style={{color:textColor}}>Unnamed User</h6> 
+    }
+    if(!this.state.user.details.firstname || this.state.user.details.lastname){ // if any of the first or last name is not set, then you are an unnamed user
+        return <h6 style={{color:textColor}}>Unnamed User</h6> 
+    }
+    // both of them have to be set for us to display your name
+    return <h6 style={{color:textColor}}>{truncateText(this.state.user.details.firstname+" "+this.state.user.details.lastname,20)}</h6>
    }
   async componentDidMount(){
         const user = await getUserById(this.props.userId,"profilePicture,details")
@@ -28,13 +38,13 @@ export default class AvatarWithUsernameOnly extends React.Component{
     if(!this.state.avatarLoaded){
         return <></>
     }
-    return(<div className="live_user_dt" style={{color:'GrayText'}}> 
+    return(<div className="live_user_dt" style={{color:'GrayText',alignItems:"center"}}> 
                 <Link href={'/user/'+this.state.user.username} style={{fontSize:'smaller'}}>
                     <div className="menu--link user_img">
                             <img id="comments-avatar" src={getImage(this.state.user.profilePicture,'thumbnail','profilePicture') } alt="profile pic" style={{width:'24px !important', height:'24px !important',...this.props.exra_styles}}/>
                     </div>
                 </Link>
-                <Link href={'/user/'+this.state.user.username} style={{color:'GrayText'}}>   
+                <Link href={'/user/'+this.state.user.username} style={{color:'GrayText',fontSize:'16px'}}>   
                     {this.renderUserName()}
                </Link>
                {this.props.postMoreContent()}

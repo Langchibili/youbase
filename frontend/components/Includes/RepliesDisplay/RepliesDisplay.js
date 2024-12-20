@@ -81,6 +81,7 @@ class RepliesDisplay extends React.Component {
         <Divider sx={{ my: 1 }} />
         {showReplyForm ? (
           <ReplyForm
+            loggedInUser={this.props.loggedInUser}
             postId={this.props.postId}
             commentId={this.props.commentId}
             userId={this.props.userId}

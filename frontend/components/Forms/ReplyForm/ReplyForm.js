@@ -3,18 +3,26 @@ import PropTypes from "prop-types";
 import { TextField, Button, Box } from "@mui/material";
 import ReplyIcon from "@mui/icons-material/Reply";
 import { createNewComment } from "@/Functions";
+import LogInFirstModal from "@/components/Includes/Modals/LogInFirstModal";
 
 class ReplyForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       text: "",
-      replying: false
+      replying: false,
+      showLogInFirstModal: false
     };
   }
 
   handleSubmit = async (e) => {
     e.preventDefault();
+    if(!this.props.loggedInUser.status){ // means you are logged out or you have never followed anyone before
+      this.setState({
+         showLogInFirstModal: true
+      })
+      return
+    }
     const { text } = this.state;
     if (!text.trim()) return;
     this.setState({
@@ -39,8 +47,16 @@ class ReplyForm extends React.Component {
     this.setState({ text: e.target.value });
   };
 
+  handleModalClose = ()=>{
+    this.setState({
+        showLogInFirstModal: false
+    })
+   }
+
   render() {
     return (
+      <>
+       {this.state.showLogInFirstModal? <LogInFirstModal open={this.state.showLogInFirstModal} handleClose={this.handleModalClose}/> : <></>}
       <Box component="form" onSubmit={this.handleSubmit} sx={{ display: "flex", gap: 1, alignItems: "center", mt: 1 }}>
         <TextField
           fullWidth
@@ -55,6 +71,7 @@ class ReplyForm extends React.Component {
           Reply
         </Button>
       </Box>
+      </>
     );
   }
 }

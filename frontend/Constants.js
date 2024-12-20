@@ -133,13 +133,20 @@ export const getFeature = async (featureId)=>{
    return false
 }
 
-const updateDefaultUserAccountToSignUp = async (username,password)=>{
+const updateDefaultUserAccountToSignUp = async (username,password,countryCode,phoneNumber,province,town,age)=>{
   const jwt = getJwt()
   const user = await getUserAccount(jwt) // get the user account because you actually have the jwt
   const updateObject = {
     username: username,
     email:user.email,
     password: password,
+    details:{
+      countryCode: countryCode? countryCode: null,
+      phoneNumber: phoneNumber? phoneNumber : null,
+      province: province? province : null,
+      town:town? town : null,
+      age:age? age : null,
+    },
     type:'loggedin',
     status: "published"
   }
@@ -173,6 +180,9 @@ const updateDefaultUserAccountToLogOut = async ()=>{
      localStorage.removeItem('jwt') // because if someone attempts to log into another account using this client(browser or phone) they can log into this user's account because they have the same jwt
      logOutStatus = true
   }
+  if(response && response.accountBlocked){
+    window.location = "/blocked" // means you were logged out forcefully due to your account being blocked 
+  }
   return logOutStatus
 }
 
@@ -193,6 +203,9 @@ const updateDefaultUserAccountToLogIn = async (username,password)=>{
     })
     .then(response => response.json())
     .then(data => data)
+    if(response && response.user && response.user.accountBlocked){
+      logUserOut() // if you are logged in but your account is blocked, then we log you out
+    }
     if(returnObject.hasOwnProperty("username")){
       returnObject = userUpdated
     }
@@ -200,7 +213,7 @@ const updateDefaultUserAccountToLogIn = async (username,password)=>{
   return returnObject
 }
 
-export const signUserUp = async (type,username="",password="") => { // username and password only important if it's a local sign up
+export const signUserUp = async (type,username="",password="", countryCode="", phoneNumber="",province="",town="",age="") => { // username and password only important if it's a local sign up
   if(type === "local"){
       const accountExists = await checkIfUserWithUsernameExists(username)  
       if(accountExists){
@@ -211,7 +224,7 @@ export const signUserUp = async (type,username="",password="") => { // username 
         }
       }
       else{
-         const updatedUserAccount = await updateDefaultUserAccountToSignUp(username,password)
+         const updatedUserAccount = await updateDefaultUserAccountToSignUp(username,password,countryCode,phoneNumber,province,town,age)
          if(updatedUserAccount.hasOwnProperty('error')){
           return {
             error:{
@@ -296,3 +309,25 @@ export const checkUserLogginStatus = async () =>{
    return logginStatusObject
 }
 
+const runPeriodicUserStatusChecks = async () => {
+  // Perform the initial check immediately
+  const loggedInUser = await checkUserLogginStatus()
+  if (loggedInUser.user.accountBlocked) {
+    if(loggedInUser.user.status){
+      logUserOut() // if you are logged in, then we log you out
+    }
+    return // Stop further execution if the user is blocked
+  }
+
+  // Schedule subsequent checks to run every 5 minutes (300000 milliseconds)
+  setInterval(async () => {
+    const updatedUserStatus = await checkUserLogginStatus()
+    if (updatedUserStatus.user.accountBlocked) {
+      if(loggedInUser.user.status){
+        logUserOut() // if you are logged in, then we log you out and redirect you to /blocked page to inform you
+      }
+    }
+  }, 300000) // 5 minutes in milliseconds
+}
+
+runPeriodicUserStatusChecks()

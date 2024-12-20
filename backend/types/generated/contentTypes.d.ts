@@ -835,6 +835,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     verified: Attribute.Boolean & Attribute.DefaultTo<false>;
     status: Attribute.Enumeration<['published', 'draft']>;
     notificationsDeviceId: Attribute.String;
+    accountBlocked: Attribute.Boolean & Attribute.DefaultTo<false>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1657,6 +1658,71 @@ export interface ApiSendFcMnotificationSendFcMnotification
   };
 }
 
+export interface ApiSupportSupport extends Schema.CollectionType {
+  collectionName: 'supports';
+  info: {
+    singularName: 'support';
+    pluralName: 'supports';
+    displayName: 'support';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    body: Attribute.Text;
+    phoneNumber: Attribute.String;
+    email: Attribute.String;
+    fullnames: Attribute.String;
+    issue: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::support.support',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::support.support',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiSupportIssueSupportIssue extends Schema.SingleType {
+  collectionName: 'support_issues';
+  info: {
+    singularName: 'support-issue';
+    pluralName: 'support-issues';
+    displayName: 'supportIssues';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    issues: Attribute.JSON;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::support-issue.support-issue',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::support-issue.support-issue',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -1692,6 +1758,8 @@ declare module '@strapi/types' {
       'api::report-reason.report-reason': ApiReportReasonReportReason;
       'api::reported-post.reported-post': ApiReportedPostReportedPost;
       'api::send-fc-mnotification.send-fc-mnotification': ApiSendFcMnotificationSendFcMnotification;
+      'api::support.support': ApiSupportSupport;
+      'api::support-issue.support-issue': ApiSupportIssueSupportIssue;
     }
   }
 }

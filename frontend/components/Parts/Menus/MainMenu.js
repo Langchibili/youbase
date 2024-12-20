@@ -22,6 +22,7 @@ import Collapse from '@mui/material/Collapse'
 import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
 import Skeleton from '@mui/material/Skeleton'
+import { Help, Info, InfoOutlined, Policy, Support } from "@mui/icons-material"
 
 export default class MainMenu extends React.Component{
     constructor(props){
@@ -251,6 +252,47 @@ export default class MainMenu extends React.Component{
                 </Collapse>
               </List>
             </Collapse>
+            <Divider />
+            <ListItem>
+              <ListItemIcon>
+                <Help />
+              </ListItemIcon>
+              <ListItemText>
+                <Link href="/support" onClick={this.handleLinkClick}>Help</Link>
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <Info />
+              </ListItemIcon>
+              <ListItemText>
+                <Link href="/terms_and_conditions" onClick={this.handleLinkClick}>Terms Of Use</Link>
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <Policy />
+              </ListItemIcon>
+              <ListItemText>
+                <Link href="/privacy_policy" onClick={this.handleLinkClick}>Privacy Policy</Link>
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <Policy />
+              </ListItemIcon>
+              <ListItemText>
+                <Link href="/account_deletion_policy" onClick={this.handleLinkClick}>Account Deletion Policy</Link>
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <Policy />
+              </ListItemIcon>
+              <ListItemText>
+                <Link href="/data_deletion_policy" onClick={this.handleLinkClick}>Data Deletion Policy</Link>
+              </ListItemText>
+            </ListItem>
           </List>
                    </ul>
                     </div>
@@ -265,5 +307,5 @@ export default class MainMenu extends React.Component{
                 </div>
             </nav>
         )
+      }
     }
-  }

@@ -30,47 +30,8 @@ export interface UserProfileDetails extends Schema.Component {
       ]
     > &
       Attribute.DefaultTo<'other'>;
-    city: Attribute.Enumeration<
-      [
-        'Lusaka',
-        'Ndola',
-        'Kitwe',
-        'Kabwe',
-        'Chingola',
-        'Mufulira',
-        'Livingstone',
-        'Luanshya',
-        'Chipata',
-        'Chililabombwe',
-        'Kafue',
-        'Kalulushi',
-        'Mazabuka',
-        'Mansa',
-        'Solwezi',
-        'Choma',
-        'Mongu',
-        'Kasama',
-        'Mpika',
-        'Sesheke',
-        'Kapiri Mposhi',
-        'Nakonde',
-        'Kawambwa',
-        'Petauke',
-        'Samfya',
-        'Kalabo',
-        'Siavonga',
-        'Lundazi',
-        'Mwinilunga',
-        'Kaoma',
-        'Chirundu',
-        'Kabompo',
-        'Isoka',
-        'Mumbwa',
-        'Monze',
-        'other'
-      ]
-    > &
-      Attribute.DefaultTo<'other'>;
+    countryCode: Attribute.String;
+    town: Attribute.String;
   };
 }
 

@@ -81,8 +81,9 @@ export default function Signup() {
 
                 <p className="sgntrm145">
                   By signing up, you agree to our{" "}
-                  <a href="terms_of_use.html">Terms of Use</a> and{" "}
-                  <a href="terms_of_use.html">Privacy Policy</a>.
+                  
+                  <Link href="/terms_and_conditions">Terms of Use</Link> and{" "}
+                  <Link href="/privacy_policy">Privacy Policy</Link>.
                 </p>
                 <p className="mb-0 mt-30">
                   Already have an account? <Link href="/signin">Log In</Link>

@@ -3,6 +3,7 @@
 import LogInFirstModal from "@/components/Includes/Modals/LogInFirstModal"
 import React from "react"
 import { deleteEngagement, getImage, getPostFromId, handleCountsDisplay, logEngagement, sendPushNotification } from "@/Functions"
+import { clientUrl } from "@/Constants"
 
 export default class StreamsDisplay extends React.Component{
    constructor(props){
@@ -27,8 +28,10 @@ export default class StreamsDisplay extends React.Component{
         this.setState({
             requesting: true // to show user something is happening
         })
-        logEngagement('plays',this.props.post.id,this.props.loggedInUser.user,this) 
         const userId = this.props.post.user.data? this.props.post.user.data.id : this.props.post.user.id
+        const postId = this.props.post.id
+
+        logEngagement('plays',postId,this.props.loggedInUser.user,this) 
         const playsCount = parseInt(this.props.post.plays)
         if(playsCount < 5 || playsCount % 100 === 0){ // determine whether to send a push notification, because cannot be spamming users anyhow with each like
             const postWithThumbnail = await getPostFromId(postId,"media,featuredImages")

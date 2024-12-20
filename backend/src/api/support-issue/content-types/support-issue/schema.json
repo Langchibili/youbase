@@ -1,0 +1,18 @@
+{
+  "kind": "singleType",
+  "collectionName": "support_issues",
+  "info": {
+    "singularName": "support-issue",
+    "pluralName": "support-issues",
+    "displayName": "supportIssues"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "issues": {
+      "type": "json"
+    }
+  }
+}

@@ -42,6 +42,18 @@ export const validateUrl = (url) => {
   return null; // No error
 }
 
+export const validateEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+export const textHasPhoneNumber = (text)=>{
+  // Regular expression to match sequences of digits that are 8 characters or longer
+  const phoneNumberRegex = /[0-9]{9,}/;
+  // Use the test method to check if the text contains a phone number
+  return phoneNumberRegex.test(text);
+} 
+
 const getIDFromDashedString = (dashed_title)=>{
     const parts = dashed_title.split('-')
     return parts[parts.length - 1]

@@ -70,7 +70,7 @@ export default function Signin() {
                     <div style={{marginTop:10}}><strong>OR</strong></div>
                      <LocalLogin/>
                     <p className="sgntrm145">
-                        Or <a href="forgot_password.html">Forgot Password</a>.
+                        Or <Link href="/support">Forgot Password</Link>.
                     </p>
                     <p className="mb-0 mt-30 hvsng145">
                       {"  Don't"} have an account? <Link href="/signup">Sign Up</Link>

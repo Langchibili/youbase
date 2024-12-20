@@ -58,7 +58,7 @@ function CommentsModal(props) {
       setCommentCountLoaded(true)
     }
     runGetCommentCount()
-  })
+  },[])
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
@@ -109,7 +109,7 @@ function CommentsModal(props) {
           {/* <Typography sx={{ p: 2, color: 'text.secondary' }}>Comments</Typography> */}
         </StyledBox>
         <StyledBox sx={{ px: 2, pb: 2, height: '100%', overflow: 'auto' }}>
-          <ParentCommentsSection {...props} commentsModalIsOpen={open} commentsCount={renderCommentsCount(commentsCount)}/>
+          {!open? <> </> : <ParentCommentsSection {...props} commentsModalIsOpen={open} commentsCount={renderCommentsCount(commentsCount)}/>}
         </StyledBox>
       </SwipeableDrawer>
     </Root>

@@ -11,10 +11,26 @@ export default class AvatarWithFollowButton extends React.Component{
       super(props)
       this.state = {}
    }
+//    renderUserName = ()=>{
+//     const textColor = this.props.textColor? this.props.textColor: ''
+//     return !this.props.user.details? <h4 style={{color:textColor}}>Unnamed User</h4> : <h4 style={{color:textColor}}>{truncateText(this.props.user.details.firstname+" "+this.props.user.details.lastname,20)}</h4>
+//    }
+
    renderUserName = ()=>{
     const textColor = this.props.textColor? this.props.textColor: ''
-    return !this.props.user.details? <h4 style={{color:textColor}}>Unnamed User</h4> : <h4 style={{color:textColor}}>{truncateText(this.props.user.details.firstname+" "+this.props.user.details.lastname,20)}</h4>
-   }
+    const user = this.props.user
+    if(!user.details){
+       return <h4 style={{color:textColor}}>Unnamed User</h4>  
+    }
+    if(!user.details && !user.details.firstname && !user.details.lastname){
+        return <h4 style={{color:textColor}}>Unnamed User</h4> 
+    }
+    if(!user.details.firstname || user.details.lastname){ // if any of the first or last name is not set, then you are an unnamed user
+        return <h4 style={{color:textColor}}>Unnamed User</h4> 
+    }
+    // both of them have to be set for us to display your name
+    return <h4 style={{color:textColor}}>{truncateText(user.details.firstname+" "+user.details.lastname,20)}</h4>
+ }
 
    render(){
     return ( 

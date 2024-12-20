@@ -7,6 +7,8 @@ import TextFieldsIcon from "@mui/icons-material/TextFields"
 import ImageIcon from "@mui/icons-material/Image"
 import VideocamIcon from "@mui/icons-material/Videocam"
 import MusicNoteIcon from "@mui/icons-material/MusicNote"
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import { blue, red, green, purple } from "@mui/material/colors"
 import { styled } from "@mui/system";
 import ImagePost from "./ImagePost"
@@ -37,19 +39,28 @@ export default class PostForm extends React.Component{
          categoriesSet: false,
          loadingPost: true, 
          redirectUser: false,
+         errorMessage: '',
+         successMessage: '',
+         openSnackBar: false,
          mediaData: null,  // just for refrence within post form
          postUrlPath: "/"
       }
    }
 
+
+   handleSnackBarClose = ()=>{
+    this.setState({
+      openSnackBar: false
+    })
+   }
    
    handleCategorySet = (set)=>{
     if(set){
        this.setState({
-          categoriesSet: true
-       })
+              categoriesSet: true
+          })
+        }
     }
-}
 
    
    handlePostTypeSelect = (postType)=>{
@@ -175,7 +186,7 @@ export default class PostForm extends React.Component{
       if(publish){
         postToSaveObject.data.status = "published"
         if(!postToSaveObject.data.is_title_user_writted){  // means add an automated title from the description, this is usually with texts and images
-          if(postToSaveObject.data.description){
+          if(postToSaveObject.data && postToSaveObject.data.description && postToSaveObject.data.description.trim()){
             if(postToSaveObject.data.description.length > 0){ // only add an automated title if you at least added a description
               postToSaveObject.data.title = truncateText(postToSaveObject.data.description,100)
             }
@@ -183,31 +194,48 @@ export default class PostForm extends React.Component{
         } // otherwise the title has already been addeded by user
         if(action === "create"){ // only can be done once, never when editing
           postToSaveObject.data.type = this.state.postType
+          if(this.state.postType === "text"){
+               if(postToSaveObject.data && postToSaveObject.data.description && !postToSaveObject.data.description.trim()){
+                  this.setState({
+                    errorMessage: 'cannot submit blank post',
+                    successMessage: '',
+                    openSnackBar: true,
+                    postSaving: false
+                  })
+                  return
+               }
+          }
           if(this.state.postType === "embed"){
             postToSaveObject.data.mediaSource = this.state.embedType // source not local
           }
           
-          if(postToSaveObject.data.title !== "untitled" || postToSaveObject.data.title.length > 0){ // this is significant in case of editing
+          if(postToSaveObject.data.title !== "untitled" || postToSaveObject.data.title.trim().length > 0){ // this is significant in case of editing
             postToSaveObject.data.is_title_user_writted = true
           }
           // media type error checks
           if(this.state.postType === "music" && !postToSaveObject.data.is_title_user_writted){
-            alert("song must have a title") 
             this.setState({
+              errorMessage: 'song must have a title',
+              successMessage: '',
+              openSnackBar: true,
               postSaving: false
             })
             return // cannot post song without title
           }
           if(this.state.postType === "music" && !this.state.mediaData){
-            alert("music must have a song, upload a song") 
             this.setState({
+              errorMessage: '"music must have a song, upload a song',
+              successMessage: '',
+              openSnackBar: true,
               postSaving: false
             })
             return // cannot post song without song file
           }
           if(this.state.postType === "music" && !this.state.categoriesSet){
-            alert("add at least one genre") 
             this.setState({
+              errorMessage: 'add at least one genre',
+              successMessage: '',
+              openSnackBar: true,
               postSaving: false
             })
             return // cannot post song without at least a genre
@@ -219,29 +247,43 @@ export default class PostForm extends React.Component{
             if(!allowMultipleMusicUploadFeature){
               const post = await getPostFromId(draftPostId,"media")
               if(post.media.data && post.media.data.length > 1){
-                alert("multiple upload of music is not supported yet. Remove one and post.")
+                this.setState({
+                  errorMessage: 'multiple upload of music is not supported yet. Remove one and post.',
+                  successMessage: '',
+                  openSnackBar: true,
+                  postSaving: false
+                })
                 return
               }
             }
             if(!allowMultipleContentThumbnailUpload){
               const post = await getPostFromId(draftPostId,"featuredImages")
               if(post.featuredImages && post.featuredImages.data && post.featuredImages.data.length > 1){
-                alert("multiple upload of music art is not supported yet. Remove one and post.")
+                this.setState({
+                  errorMessage: 'multiple upload of music art is not supported yet. Remove one and post.',
+                  successMessage: '',
+                  openSnackBar: true,
+                  postSaving: false
+                })
                 return
               }
             }
           }
 
           if(this.state.postType === "video" && !this.state.mediaData){
-            alert("you must upload a video") 
             this.setState({
+              errorMessage: 'you must upload a video',
+              successMessage: '',
+              openSnackBar: true,
               postSaving: false
             })
             return // cannot post video without a video file
           }
           if(this.state.postType === "video" && !this.state.categoriesSet){
-            alert("add at least one category") 
             this.setState({
+              errorMessage: 'add at least one category',
+              successMessage: '',
+              openSnackBar: true,
               postSaving: false
             })
             return // cannot post video without at least a category
@@ -252,14 +294,24 @@ export default class PostForm extends React.Component{
             if(!allowMultipleVideosUploadFeature){ 
               const post = await getPostFromId(draftPostId,"media,featuredImages")
               if(post.media && post.media.data && post.media.data.length > 1){
-                alert("multiple upload of videos is not supported yet. Remove one and post.")
+                this.setState({
+                  errorMessage: 'multiple upload of videos is not supported yet. Remove one and post.',
+                  successMessage: '',
+                  openSnackBar: true,
+                  postSaving: false
+                })
                 return
               }
             }
             if(!allowMultipleContentThumbnailUpload){
               const post = await getPostFromId(draftPostId,"featuredImages")
               if(post.featuredImages && post.featuredImages.data && post.featuredImages.data.length > 1){
-                alert("multiple upload of music art is not supported yet. Remove one and post.")
+                this.setState({
+                  errorMessage: 'multiple upload of music art is not supported yet. Remove one and post.',
+                  successMessage: '',
+                  openSnackBar: true,
+                  postSaving: false
+                })
                 return
               }
             }
@@ -270,7 +322,12 @@ export default class PostForm extends React.Component{
             if(!allowMultipleContentThumbnailUpload){
               const post = await getPostFromId(draftPostId,"featuredImages")
               if(post.featuredImages && post.featuredImages.data && post.featuredImages.data.length > 1){
-                alert("multiple upload of music art is not supported yet. Remove one and post.")
+                this.setState({
+                  errorMessage: 'multiple upload of music art is not supported yet. Remove one and post',
+                  successMessage: '',
+                  openSnackBar: true,
+                  postSaving: false
+                })
                 return
               }
             }
@@ -288,12 +345,24 @@ export default class PostForm extends React.Component{
             }
           }
           else{
-            if(!postToSaveObject.data.description){
+            if(postToSaveObject.data && postToSaveObject.data.description && !postToSaveObject.data.description.trim()){
               if(postToSaveObject.data.description.length < 0){
                 postToSaveObject.data.description = ""
               }
             }
             else{
+              if(this.state.postType === "text"){
+                if(postToSaveObject.data && postToSaveObject.data.description && !postToSaveObject.data.description.trim()){
+                  this.setState({
+                    errorMessage: 'cannot submit blank post',
+                    successMessage: '',
+                    openSnackBar: true,
+                    postSaving: false
+                  })
+                  return
+               }
+              }
+              console.log(postToSaveObject.data.description.trim())
               postToSaveObject.data.dashed_title = generateDashedString(postToSaveObject.data.description) + "-" + draftPostId
             }
           }
@@ -317,23 +386,31 @@ export default class PostForm extends React.Component{
      .then(data => data)
      if(response){
          if(publish){
-          localStorage.removeItem('draftPostId') // remove the draft post id to ensure a new draft post can be created
-          this.setState({
-            postSaved: true,
-            postSavedAsDraft: false,
-            postSavingAsDraft: false,
-            postSaving: false,
-            redirectUser: true,
-            action: "edit",
-            postUrlPath: "/posts/"+response.data.attributes.dashed_title
-          },()=>{
-            this.props.handlePostModalClose()
-          })
-          
+            localStorage.removeItem('draftPostId') // remove the draft post id to ensure a new draft post can be created
+            this.setState({
+              postSaved: true,
+              errorMessage: '',
+              successMessage: 'Post Published!',
+              openSnackBar: true,
+              postSavedAsDraft: false,
+              postSavingAsDraft: false,
+              postSaving: false,
+              action: "edit",
+              postUrlPath: "/posts/"+response.data.attributes.dashed_title
+            },()=>{
+              this.setState({
+                 redirectUser: true,
+              },()=>{
+                this.props.handlePostModalClose()
+              })
+            })
          }
          else{
           this.setState({
             postSaved: true,
+            errorMessage: '',
+            successMessage: 'Draft Saved!',
+            openSnackBar: true,
             postSavedAsDraft: true,
             postSavingAsDraft: false,
             postSaving: false
@@ -644,12 +721,54 @@ export default class PostForm extends React.Component{
      if(this.state.redirectUser){
       return <RedirectUser url={this.state.postUrlPath}/>
      }
-     return <>{this.state.loadingPost? <></> : this.renderPostForm()}</>
+     return <>{this.state.loadingPost? <></> : <>
+                <Snackbar
+                  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                  open={this.state.postSaved && this.state.openSnackBar}
+                  autoHideDuration={6000}
+                  message="Cannot submit blank post"
+                  onClose={this.handleSnackBarClose}
+                >
+                  <Alert
+                    onClose={this.handleSnackBarClose}
+                    severity="success"
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                  >
+                  {this.state.successMessage}
+                </Alert>
+               </Snackbar>
+
+               <Snackbar
+                  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                  open={this.state.errorMessage && this.state.openSnackBar}
+                  autoHideDuration={6000}
+                  message="Cannot submit blank post"
+                  onClose={this.handleSnackBarClose}
+                >
+                  <Alert
+                    onClose={this.handleSnackBarClose}
+                    severity="error"
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                  >
+                  {this.state.errorMessage}
+                </Alert>
+               </Snackbar>
+               
+             {this.renderPostForm()}
+             </>}
+          </>
    }
   }
 
-  const RedirectUser = ({url})=>{
-    const router = useRouter()
-    router.push(url)
-    return <></>
-  }
+ 
+ const RedirectUser = ({ url }) => {
+    const router = useRouter();
+  
+    React.useEffect(() => {
+      router.push(url); // Redirect automatically when the component mounts
+    }, [router, url]);
+  
+    return null; // Nothing visible on the screen
+  };

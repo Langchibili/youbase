@@ -3,7 +3,7 @@
 import React from "react"
 import UserFollowButton from "./UserFollowButton"
 import UserUnFollowButton from "./UserUnFollowButton"
-import { api_url, getJwt } from "@/Constants"
+import { api_url, clientUrl, getJwt } from "@/Constants"
 import { getImage, getUserById, logNotification, removeIdFromArray, sendPushNotification } from "@/Functions"
 
 export default class UserFollowingButtons extends React.Component{

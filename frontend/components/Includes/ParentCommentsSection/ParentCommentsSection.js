@@ -69,6 +69,7 @@ class ParentCommentsSection extends React.Component {
         {/* position:'fixed', bottom:'0',marginBottom:'120px',width:'90%' */}
         
             <CommentForm
+            loggedInUser={this.props.loggedInUser}
             postId={this.props.postId}
             userId={this.props.userId}
             onAddComment={this.handleAddComment}

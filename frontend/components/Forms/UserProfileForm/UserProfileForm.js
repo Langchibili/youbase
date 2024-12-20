@@ -39,7 +39,7 @@ export default class UserProfileForm extends React.Component{
       this.setState((prevState) => ({
          details: { 
             ...prevState.details, 
-            city: newCity
+            town: newCity
          },
          submittingText: 'Save Changes',
          updating: false,
@@ -64,8 +64,8 @@ export default class UserProfileForm extends React.Component{
     if(!updateObject.details.province){
         delete updateObject.details.province
     }
-    if(!updateObject.details.city){
-        delete updateObject.details.city
+    if(!updateObject.details.town){
+        delete updateObject.details.town
     }
     if(!updateObject.details.gender){
         delete updateObject.details.gender
@@ -250,7 +250,7 @@ export default class UserProfileForm extends React.Component{
                         <div className="ui form swdh19">
                             <select
                                         className="prompt srch_explore" 
-                                        value={this.state.details.city} 
+                                        value={this.state.details.town} 
                                         onChange={this.handleCityChange}>
                                             <label>City/Town &nbsp;</label>
                                             <option value="">-- Select a city or town --</option>

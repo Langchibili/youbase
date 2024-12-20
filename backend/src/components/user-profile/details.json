@@ -47,47 +47,11 @@
       ],
       "default": "other"
     },
-    "city": {
-      "type": "enumeration",
-      "enum": [
-        "Lusaka",
-        "Ndola",
-        "Kitwe",
-        "Kabwe",
-        "Chingola",
-        "Mufulira",
-        "Livingstone",
-        "Luanshya",
-        "Chipata",
-        "Chililabombwe",
-        "Kafue",
-        "Kalulushi",
-        "Mazabuka",
-        "Mansa",
-        "Solwezi",
-        "Choma",
-        "Mongu",
-        "Kasama",
-        "Mpika",
-        "Sesheke",
-        "Kapiri Mposhi",
-        "Nakonde",
-        "Kawambwa",
-        "Petauke",
-        "Samfya",
-        "Kalabo",
-        "Siavonga",
-        "Lundazi",
-        "Mwinilunga",
-        "Kaoma",
-        "Chirundu",
-        "Kabompo",
-        "Isoka",
-        "Mumbwa",
-        "Monze",
-        "other"
-      ],
-      "default": "other"
+    "countryCode": {
+      "type": "string"
+    },
+    "town": {
+      "type": "string"
     }
   }
 }

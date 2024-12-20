@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useEffect } from "react"
-import { getUserById, handleCountsDisplay, logEngagement, logNotification } from "@/Functions"
+import { getUserById, handleCountsDisplay, logEngagement, logNotification, sendPushNotification } from "@/Functions"
 import { Button, Modal, Box, IconButton, Typography } from '@mui/material'
 import { Facebook, Twitter, Instagram, WhatsApp, ContentCopy, TikTok } from '@mui/icons-material'
 import { useSocialSharing } from "@/Contexts/SocialSharingContext";
 import { getImage, getPostFromId } from "../../../Functions";
+import { clientUrl } from "@/Constants";
 
 export default class ShareButton extends React.Component {
     constructor(props) {
@@ -65,7 +66,7 @@ export default class ShareButton extends React.Component {
         this.setState({
             openShareModal: true 
         })
-        if(!sharedPostsIds.includes(postId)){
+        if(!sharedPostsIds || !sharedPostsIds.includes(postId)){
             this.setState({
                 requesting: true ,// to show user something is happening
                 openShareModal: true 

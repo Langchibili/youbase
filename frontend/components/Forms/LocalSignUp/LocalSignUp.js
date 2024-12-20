@@ -1,22 +1,33 @@
 'use client'
 
 import React from "react"
-import { Alert } from '@mui/material';
+import { Alert, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import { signUserUp } from "@/Constants";
 import { useRouter } from "next/router";
+import PhoneNumberInput from "@/components/Includes/PhoneNumberInput/PhoneNumberInput";
+import { textHasPhoneNumber } from "@/Functions";
+import { Box } from "@mui/system";
 
 export default class LocalSignUp extends React.Component{
    constructor(props){
       super(props)
       this.state = {
         errorExists: false,
+        showOtherCityInput: false,
         errorMessage: '',
         submitting: false,
         userExists: false,
+        phoneNumber: null,
+        countryCode: null,
+        age: null,
+        otherTown: '',
         submittingText: 'Sign Up' 
       }
       this.username = React.createRef()
       this.password = React.createRef()
+      this.town = React.createRef()
+      this.otherTown = React.createRef()
+      this.province = React.createRef()
       this.topWebsites = [
         "youbase", "facebook", "youtube", "google", "twitter", "instagram", "linkedin",
         "pinterest", "snapchat", "tiktok", "whatsapp", "reddit", "tumblr", "quora",
@@ -49,10 +60,34 @@ export default class LocalSignUp extends React.Component{
     return this.topWebsites.some((website) => username.toLowerCase().includes(website));
   }
 
+  setOtherTown = ()=>{
+    console.log(this.town.current.value)
+    //const otherCityContainer = document.getElementById('other-city-container');
+    if (this.town.current.value === "other") {
+        this.setState({
+          showOtherCityInput: true
+        })
+    } else {
+        this.setState({
+          showOtherCityInput:false
+        })
+    }
+  }
+
+  handleOtherTownSelection = ()=>{
+    const otherTown = this.otherTown.current.value
+    this.setState({otherTown})
+  }
+
   handleSubmit = async (e)=>{
     e.preventDefault()
     const username = this.username.current.value
     const password = this.password.current.value
+    const town = this.town.current.value === "other"? this.state.otherTown : this.town.current.value  
+    const province = this.province.current.value
+    const phoneNumber = this.state.phoneNumber
+    const age = this.state.age
+    
     if(this.containsTopWebsite(username)){ // no user can use the youbase or socials username apart from youbase
       this.setState({
         errorExists: true,
@@ -60,14 +95,52 @@ export default class LocalSignUp extends React.Component{
       })
       return
     }
-    if(username.length === 0 || password.length === 0){
+    if(username.trim().length === 0 || password.trim().length === 0){
       this.setState({
         errorExists: true,
         errorMessage: "username or password can't be empty"
       })
       return
     }
-    const response = await signUserUp('local',username,password) 
+    if(!textHasPhoneNumber(this.state.phoneNumber)){
+      this.setState({
+        errorExists: true,
+        errorMessage: "please enter a valid phone number"
+      })
+      return
+    }
+
+    if(this.state.countryCode === "260" && !province && province.length === 0){
+      this.setState({
+        errorExists: true,
+        errorMessage: "please enter your province"
+      })
+      return
+    }
+    if(this.state.countryCode === "260" && !town && town.trim().length === 0){
+      this.setState({
+        errorExists: true,
+        errorMessage: "please enter your town"
+      })
+      return
+    }
+    // if(this.state.countryCode === "260" && town === "Other" && !this.state.otherTown){
+    //   this.setState({
+    //     errorExists: true,
+    //     errorMessage: "please enter your town"
+    //   })
+    //   return
+    // }
+    if(!age || parseInt(age) < 1){
+      this.setState({
+        errorExists: true,
+        errorMessage: "please enter your age"
+      })
+      return
+    }
+
+    const countryCode = !this.state.countryCode? '260' : this.state.countryCode // default country code is for zambia 
+    const response = await signUserUp('local',username,password,countryCode, phoneNumber,province,town,age) 
     if(response.hasOwnProperty('error')){
       if(response.error.message === "userExists"){
         this.setState({
@@ -87,6 +160,25 @@ export default class LocalSignUp extends React.Component{
       }
     }
   }
+
+  handleCountryCodeSelect = (code)=>{
+    this.setState({
+      countryCode: code
+    })
+  }
+  handlePhoneNumberSelect = (number)=>{
+    this.setState({
+      phoneNumber: number
+    })
+  }
+
+ handleAgeChange = (event) => {
+    const age = event.target.value
+    this.setState({
+      age
+    })
+  }
+
 
    render(){
     return (
@@ -123,6 +215,101 @@ export default class LocalSignUp extends React.Component{
             />
           </div>
         </div>
+        {/* only for the default countrycode for zambia should a user select the location, for now */}
+        {this.state.countryCode === '260'?<Box>
+  <Typography variant="h6" sx={{fontWeight:'light',marginTop:'3px'}} gutterBottom align="left">
+    Location
+  </Typography>
+  <Box display="flex" flexWrap="wrap" gap={2}>
+    <FormControl fullWidth style={{ flex: 1 }}>
+      <InputLabel id="province-label">Province</InputLabel>
+      <Select
+        labelId="province-label"
+        inputRef={this.province}
+        defaultValue=""
+      >
+        <MenuItem value="">-- Select a Province --</MenuItem>
+        <MenuItem value="Central">Central</MenuItem>
+        <MenuItem value="Copperbelt">Copperbelt</MenuItem>
+        <MenuItem value="Eastern">Eastern</MenuItem>
+        <MenuItem value="Luapula">Luapula</MenuItem>
+        <MenuItem value="Lusaka">Lusaka</MenuItem>
+        <MenuItem value="Muchinga">Muchinga</MenuItem>
+        <MenuItem value="North-Western">North-Western</MenuItem>
+        <MenuItem value="Northern">Northern</MenuItem>
+        <MenuItem value="Southern">Southern</MenuItem>
+        <MenuItem value="Western">Western</MenuItem>
+      </Select>
+    </FormControl>
+    <FormControl fullWidth style={{ flex: 1 }}>
+      <InputLabel id="city-label">City/Town</InputLabel>
+      <Select
+        labelId="city-label"
+        inputRef={this.town}
+        defaultValue=""
+        onChange={this.setOtherTown}
+      >
+        <MenuItem value="">-- Select a city or town --</MenuItem>
+        <MenuItem value="Lusaka">Lusaka</MenuItem>
+        <MenuItem value="Ndola">Ndola</MenuItem>
+        <MenuItem value="Kitwe">Kitwe</MenuItem>
+        <MenuItem value="Kabwe">Kabwe</MenuItem>
+        <MenuItem value="Chingola">Chingola</MenuItem>
+        <MenuItem value="Mufulira">Mufulira</MenuItem>
+        <MenuItem value="Livingstone">Livingstone</MenuItem>
+        <MenuItem value="Luanshya">Luanshya</MenuItem>
+        <MenuItem value="Chipata">Chipata</MenuItem>
+        <MenuItem value="Chililabombwe">Chililabombwe</MenuItem>
+        <MenuItem value="Kafue">Kafue</MenuItem>
+        <MenuItem value="Kalulushi">Kalulushi</MenuItem>
+        <MenuItem value="Mazabuka">Mazabuka</MenuItem>
+        <MenuItem value="Mansa">Mansa</MenuItem>
+        <MenuItem value="Solwezi">Solwezi</MenuItem>
+        <MenuItem value="Choma">Choma</MenuItem>
+        <MenuItem value="Mongu">Mongu</MenuItem>
+        <MenuItem value="Kasama">Kasama</MenuItem>
+        <MenuItem value="Mpika">Mpika</MenuItem>
+        <MenuItem value="Sesheke">Sesheke</MenuItem>
+        <MenuItem value="Kapiri Mposhi">Kapiri Mposhi</MenuItem>
+        <MenuItem value="Nakonde">Nakonde</MenuItem>
+        <MenuItem value="Kawambwa">Kawambwa</MenuItem>
+        <MenuItem value="Petauke">Petauke</MenuItem>
+        <MenuItem value="Samfya">Samfya</MenuItem>
+        <MenuItem value="Kalabo">Kalabo</MenuItem>
+        <MenuItem value="Siavonga">Siavonga</MenuItem>
+        <MenuItem value="Lundazi">Lundazi</MenuItem>
+        <MenuItem value="Mwinilunga">Mwinilunga</MenuItem>
+        <MenuItem value="Kaoma">Kaoma</MenuItem>
+        <MenuItem value="Chirundu">Chirundu</MenuItem>
+        <MenuItem value="Kabompo">Kabompo</MenuItem>
+        <MenuItem value="Isoka">Isoka</MenuItem>
+        <MenuItem value="Mumbwa">Mumbwa</MenuItem>
+        <MenuItem value="Monze">Monze</MenuItem>
+        <MenuItem value="other">Other</MenuItem>
+      </Select>
+    </FormControl>
+  </Box>
+  {this.state.showOtherCityInput && (
+          <Box marginTop={2}>
+            <TextField
+              inputRef={this.otherTown}
+              onChange={this.handleOtherTownSelection}
+              label="Enter the name of the city or town"
+              fullWidth
+            />
+          </Box>
+  )}
+</Box>
+ : <></>}
+        <PhoneNumberInput setPhoneNumber={this.handlePhoneNumberSelect} setCountryCode={this.handleCountryCodeSelect}/>
+        <TextField
+            fullWidth
+            label="Your Age"
+            value={this.state.age}
+            onChange={this.handleAgeChange}
+            type="tel"
+            placeholder="Enter your age"
+          />
         <button onClick={this.handleSubmit} className="login-btn" type="submit">
           {this.state.submittingText}
         </button>

@@ -2,7 +2,8 @@
 
 import LogInFirstModal from "@/components/Includes/Modals/LogInFirstModal"
 import React from "react"
-import { deleteEngagement, handleCountsDisplay, logEngagement } from "@/Functions"
+import { deleteEngagement, getImage, getPostFromId, handleCountsDisplay, logEngagement, sendPushNotification } from "@/Functions"
+import { clientUrl } from "@/Constants"
 
 export default class ViewsDisplay extends React.Component{
    constructor(props){
@@ -40,8 +41,10 @@ export default class ViewsDisplay extends React.Component{
         this.setState({
             requesting: true // to show user something is happening
         })
-        logEngagement('views',this.props.post.id,this.props.loggedInUser.user,this) 
         const userId = this.props.post.user.data? this.props.post.user.data.id : this.props.post.user.id
+        const postId = this.props.post.id
+
+        logEngagement('views',postId,this.props.loggedInUser.user,this) 
         const viewsCount = parseInt(this.props.post.views)
         if(viewsCount < 5 || viewsCount % 100 === 0){ // determine whether to send a push notification, because cannot be spamming users anyhow with each like
             const postWithThumbnail = await getPostFromId(postId,"media,featuredImages")
