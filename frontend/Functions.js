@@ -246,6 +246,74 @@ export const displayDateOrTime = (createdAt,returnTextOnly=false) => {
   }
 }
 
+export const fetchContentMetaOnly = async (contentUri, pageSizeOverride = null) => {
+  try {
+      // Fetch the content, requesting no fields to reduce the payload
+      const response = await fetch(`${contentUri}&pagination[withCount]=true&fields=`)
+      const result = await response.json()
+
+      // Extract the meta information
+      const meta = result?.meta?.pagination || {}
+
+      // Calculate pageSize if it's missing
+      const pageSize = meta.pageSize || pageSizeOverride || (meta.total && meta.pageCount ? Math.ceil(meta.total / meta.pageCount) : null)
+
+      // Return only the meta object with the calculated pageSize
+      return {
+          ...meta,
+          pageSize,
+      }
+  } catch (error) {
+      console.error("Error fetching meta:", error)
+      throw new Error("Failed to fetch meta")
+  }
+}
+
+export const getContentCount = async ({
+  contentName,
+  contentToFilterById = null,
+  idField = "user",
+  status = "published",
+  orderByFieldName = "id",
+  orderType = "desc",
+}) => {
+  try {
+      // Construct the base URL
+      let url = `${api_url}/${contentName}?pagination[limit]=0&pagination[withCount]=true&sort=${orderByFieldName}:${orderType}`
+
+      // Add filtering for contentToFilterById if provided
+      if (contentToFilterById) {
+          url += `&filters[${idField}][id][$eq]=${contentToFilterById}`
+      }
+
+      // Add status filter only if the content is 'posts'
+      if (contentName === "posts" && status) {
+          url += `&filters[status][$eq]=${status}`
+      }
+
+      // Fetch the data
+      const response = await fetch(url, {
+          headers: {
+              "Content-Type": "application/json",
+          },
+      })
+
+      const data = await response.json()
+
+      // Return the count if meta and pagination exist
+      if (data?.meta?.pagination) {
+          return data.meta.pagination.total
+      }
+      // Fallback if count is not available
+      return null
+  } catch (error) {
+      console.error("Error fetching content count:", error)
+      return null
+  }
+}
+
+
+
 // POSTS FUNCTIONS
 
 export const createNewPost = async (data)=>{
@@ -664,6 +732,34 @@ export const updateCategory = async (data,categoryId)=>{
         return null
   }
 
+  export const updateCommentEngagement = async (userId,postId)=>{
+    const postUser = getUserById(userId)
+    const post = getPostFromId(postId)
+    const userCommentsCount = postUser.commentsCount
+    const postCommentsCount = postUser.commentsCount
+    const userTotalEngagementCount = post.commentsCount
+    const postTotalEngagementCount = post.commentsCount
+    const userCountUpdateObject = {
+         commentsCount: userCommentsCount + 1,
+         totalEngagement: userTotalEngagementCount + 1
+    }
+    const postCountUpdateObject = {
+      data:{
+        commentsCount: postCommentsCount + 1,
+        totalEngagement: postTotalEngagementCount + 1
+      }
+    } 
+    await fetch(`${api_url}/users/${userId}`, { // update user account
+      method: 'PUT',
+      headers: {
+          'Authorization': `Bearer ${getJwt()}`,
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(userCountUpdateObject)
+     })
+     updatePost(postCountUpdateObject,postId) // update post account
+  }
+
   export const getPostMedia = async (title)=>{
     const postid = getIDFromDashedString(title)
     const post = await fetch(api_url+'/posts/'+postid+'?populate=media',{
@@ -771,6 +867,8 @@ export const logEngagement = async (type, postId, loggedInUser, ctx,createNotifi
     const { action, idArray, postBy } = engagementMappings[type];
 
     let userEngagementIds = ctx.state.loggedInUser.user[idArray] || [];
+    const userEngagementCount = parseInt(ctx.state.loggedInUser.user[type] || 1)
+    const userTotalEngagementCount = parseInt(ctx.state.loggedInUser.totalEngagement || 1)
     
     if (!userEngagementIds.includes(postId)) {
         userEngagementIds.push(postId);
@@ -778,7 +876,9 @@ export const logEngagement = async (type, postId, loggedInUser, ctx,createNotifi
 
     const updateUserObject = {
         [action]: { connect: [postId] },
-        [idArray]: userEngagementIds
+        [idArray]: userEngagementIds,
+        [type]: userEngagementCount + 1,
+        totalEngagement: userTotalEngagementCount
     };
     console.log('the engagement object',updateUserObject)
     const response = await fetch(`${api_url}/users/${loggedInUser.id}`, {
@@ -792,10 +892,13 @@ export const logEngagement = async (type, postId, loggedInUser, ctx,createNotifi
 
     if (response) {
         const postEngagements = parseInt(ctx.state.post[type] || 0);
+        const postTotalEngagementCount = parseInt(ctx.state.post.totalEngagement || 1)
+    
         const updatePostObject = {
             data: {
                 [postBy]: { connect: [loggedInUser.id] },
-                [type]: postEngagements + 1
+                [type]: postEngagements + 1,
+                totalEngagement: postTotalEngagementCount + 1
             }
         };
         const response2 = await fetch(`${api_url}/posts/${postId}`, {
@@ -837,10 +940,14 @@ export const deleteEngagement = async (type, postId, loggedInUser, ctx)=> {
     let userEngagementIds = ctx.state.loggedInUser.user[idArray] || [];
 
     userEngagementIds = userEngagementIds.filter(id => id !== postId);
-
-    const updateUserObject = {
+    const userEngagementCount = parseInt(ctx.state.loggedInUser.user[type] || 1)
+    const userTotalEngagementCount = parseInt(ctx.state.loggedInUser.totalEngagement || 1)
+    
+    const updateUserObject = { // log user engagements count substraction
         [action]: { disconnect: [postId] },
-        [idArray]: userEngagementIds
+        [idArray]: userEngagementIds,
+        [type]: userEngagementCount - 1,
+        totalEngagement: userTotalEngagementCount
     };
 
     const response = await fetch(`${api_url}/users/${loggedInUser.id}`, {
@@ -852,12 +959,15 @@ export const deleteEngagement = async (type, postId, loggedInUser, ctx)=> {
         body: JSON.stringify(updateUserObject)
     }).then(response => response.json());
 
-    if (response) {
+    if (response) { // delete engagement to post
         const postEngagements = parseInt(ctx.state.post[type] || 1)
+        const postTotalEngagementCount = parseInt(ctx.state.post.totalEngagement || 1)
+    
         const updatePostObject = {
             data: {
                 [postBy]: { disconnect: [loggedInUser.id] },
-                [type]: postEngagements - 1
+                [type]: postEngagements - 1,
+                totalEngagement: postTotalEngagementCount - 1
             }
         };
 

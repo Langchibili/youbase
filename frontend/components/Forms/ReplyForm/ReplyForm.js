@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { TextField, Button, Box } from "@mui/material";
 import ReplyIcon from "@mui/icons-material/Reply";
-import { createNewComment } from "@/Functions";
+import { createNewComment, updateCommentEngagement } from "@/Functions";
 import LogInFirstModal from "@/components/Includes/Modals/LogInFirstModal";
 
 class ReplyForm extends React.Component {
@@ -40,7 +40,9 @@ class ReplyForm extends React.Component {
 
     const newReply = await createNewComment({data:newReplyObject});
     this.props.onAddReply(newReply);
-    this.setState({ text: "", replying: false });
+    this.setState({ text: "", replying: false },()=>{
+       updateCommentEngagement(this.props.userId,this.props.postId)
+    })
   };
 
   handleChange = (e) => {

@@ -6,6 +6,7 @@ import { getPostMedia, getVideoThumbnail } from '@/Functions';
 import React, { useState, useEffect, useRef } from 'react';
 import VideojsPlayer from './VideojsPlayer';
 import { maxHeight, width } from '@mui/system';
+import VideoPlayer from './VideoPlayer';
 
 // Helper function to format the duration
 const formatDuration = (duration) => {
@@ -126,7 +127,8 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
           const videoData = video.attributes;
           videoData.id = video.id
           backendUrl = videoData.provider === "aws-s3"? '' : backEndUrl
-
+          
+          return <VideoPlayer poster={getVideoThumbnail(videoData,post)} videoFormats={videoData.formats} originalVideoUrl={videoData.url}/>
           return (<VideojsPlayer height="720px" width="1200px"  video={videoData} formats={videoData.formats} poster={getVideoThumbnail(videoData,post)} videoStyles={{ borderRadius: '5px', width: '100%',objectFit: "cover" }} posterStyles={{objectFit: "cover",width:'100%'}}/>)
     }
     if(typeof window !== "undefined"){ // bellow is for videos with more than one file, displayed using a corousel
@@ -147,9 +149,11 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
                 const videoBackGroundStyles = {
                   backgroundImage: "url("+getVideoThumbnail(videoData,post)?getVideoThumbnail(videoData,post):""+")"
                 }
-                return (
+
+                 return (
                   <div className="item" key={index} style={{width:videoWrapperHeight(videos.data.length)}}>
                      <div className="stream_1" style={{width:videoWrapperHeight(videos.data.length),padding:'10px'}}>
+                      
                       <VideojsPlayer video={videoData} formats={videoData.formats} poster={getVideoThumbnail(videoData,post)} videoStyles={{ borderRadius: '5px', width: '100%',objectFit: "cover", height: '60vh' }} posterStyles={{objectFit: "cover"}}/>
                      </div>
                   </div>)

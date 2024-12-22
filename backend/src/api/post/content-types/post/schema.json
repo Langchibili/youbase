@@ -199,6 +199,12 @@
       "relation": "manyToMany",
       "target": "api::category.category",
       "mappedBy": "posts"
+    },
+    "commentsCount": {
+      "type": "biginteger"
+    },
+    "totalEngagement": {
+      "type": "biginteger"
     }
   }
 }

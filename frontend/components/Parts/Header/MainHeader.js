@@ -46,56 +46,7 @@ export default class MainHeader extends React.Component{
                 <img id="logo" className="logo-inverse" src="/youbase-logo-with-wordings.png" alt="" />
                 </Link>
             </div>
-            {/* <div className="top-category">
-                <div className="ui compact menu cate-dpdwn">
-                <div className="ui simple dropdown item" tabIndex={0}>
-                    <a href="#" className="option_links p-0" title="categories">
-                    <i className="uil uil-apps" />
-                    </a>
-                    <div className="menu dropdown_category5" tabIndex={-1}>
-                    <a href="#" className="item channel_item">
-                        Development
-                    </a>
-                    <a href="#" className="item channel_item">
-                        Business
-                    </a>
-                    <a href="#" className="item channel_item">
-                        Finance &amp; Accounting
-                    </a>
-                    <a href="#" className="item channel_item">
-                        IT &amp; Software
-                    </a>
-                    <a href="#" className="item channel_item">
-                        Office Productivity
-                    </a>
-                    <a href="#" className="item channel_item">
-                        Personal Development
-                    </a>
-                    <a href="#" className="item channel_item">
-                        Design
-                    </a>
-                    <a href="#" className="item channel_item">
-                        Marketing
-                    </a>
-                    <a href="#" className="item channel_item">
-                        Lifestyle
-                    </a>
-                    <a href="#" className="item channel_item">
-                        Photography
-                    </a>
-                    <a href="#" className="item channel_item">
-                        Health &amp; Fitness
-                    </a>
-                    <a href="#" className="item channel_item">
-                        Music
-                    </a>
-                    <a href="#" className="item channel_item">
-                        Teaching &amp; Academics
-                    </a>
-                    </div>
-                </div>
-                </div>
-            </div> */}
+          
             <div className="search120">
                 <div className="ui search">
                 <div className="ui left icon input swdh10">

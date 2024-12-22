@@ -836,6 +836,13 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     status: Attribute.Enumeration<['published', 'draft']>;
     notificationsDeviceId: Attribute.String;
     accountBlocked: Attribute.Boolean & Attribute.DefaultTo<false>;
+    likes: Attribute.BigInteger;
+    shares: Attribute.BigInteger;
+    views: Attribute.BigInteger;
+    plays: Attribute.BigInteger;
+    commentsCount: Attribute.BigInteger;
+    totalEngagement: Attribute.BigInteger;
+    impressions: Attribute.BigInteger;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1520,6 +1527,8 @@ export interface ApiPostPost extends Schema.CollectionType {
       'manyToMany',
       'api::category.category'
     >;
+    commentsCount: Attribute.BigInteger;
+    totalEngagement: Attribute.BigInteger;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

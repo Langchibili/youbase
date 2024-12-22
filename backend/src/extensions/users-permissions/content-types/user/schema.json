@@ -273,6 +273,27 @@
     "accountBlocked": {
       "type": "boolean",
       "default": false
+    },
+    "likes": {
+      "type": "biginteger"
+    },
+    "shares": {
+      "type": "biginteger"
+    },
+    "views": {
+      "type": "biginteger"
+    },
+    "plays": {
+      "type": "biginteger"
+    },
+    "commentsCount": {
+      "type": "biginteger"
+    },
+    "totalEngagement": {
+      "type": "biginteger"
+    },
+    "impressions": {
+      "type": "biginteger"
     }
   }
 }

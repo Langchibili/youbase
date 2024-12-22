@@ -285,6 +285,7 @@ export const checkUserLogginStatus = async () =>{
     status: false
   }
   let userObject = {}
+  console.log(jwt)
   if(!jwt){
       const username = generateUniqueUsername() // generate a unique username
       userObject.username = username
@@ -293,7 +294,7 @@ export const checkUserLogginStatus = async () =>{
       const defaultUser = await submitCreateUserRequest(userObject) // make the user account 
       logginStatusObject.user = defaultUser.user // current account is a default one
       logginStatusObject.status = false // user has not logged in
-       saveJwt(defaultUser.jwt) // save the jwt of the default user
+      saveJwt(defaultUser.jwt) // save the jwt of the default user
   }
   else{
      // check if user is logged in or not, using jwt
@@ -306,7 +307,7 @@ export const checkUserLogginStatus = async () =>{
          logginStatusObject.status = true
      }
   }
-   return logginStatusObject
+  return logginStatusObject
 }
 
 const runPeriodicUserStatusChecks = async () => {
@@ -330,4 +331,7 @@ const runPeriodicUserStatusChecks = async () => {
   }, 300000) // 5 minutes in milliseconds
 }
 
-runPeriodicUserStatusChecks()
+
+if(typeof document !== "undefined"){ // only run the periodic check for login if it's in the
+  runPeriodicUserStatusChecks()  
+}

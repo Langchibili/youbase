@@ -56,7 +56,7 @@ export default function ImagePortraitThumbnails(props) {
           {/* Image element */}
           <img
             style={imageStyles}
-            src={getImage(props.file)}
+            src={getImage(props.file,"small")}
             alt={truncateText(props.title,25)}
             onClick={handleClickOpen}
           />

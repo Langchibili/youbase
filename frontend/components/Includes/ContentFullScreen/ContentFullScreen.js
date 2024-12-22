@@ -9,8 +9,9 @@ import ViewsDisplay from "@/components/Parts/EngageMents/ViewsDisplay";
 import ContentLoader from "../Loader/ContentLoader";
 import AvatarWithFollowButton from "@/components/Parts/UserDisplay/AvatarWithFollowButton";
 import { backEndUrl } from "@/Constants";
-import { getImage, truncateText } from "@/Functions";
+import { getImage, getVideoThumbnail, truncateText } from "@/Functions";
 import { useAudio } from "@/Contexts/AudioContext";
+import VideoPlayer from "../VideoDisplay/VideoPlayer";
 
 export default function ContentFullScreen(props) {
   const [isPlaying, setIsPlaying] = useState(true);
@@ -33,6 +34,7 @@ export default function ContentFullScreen(props) {
 
   // Add buffering event listeners
   useEffect(() => {
+    return
     if(typeof document !== "undefined"){
       const musicPlayer = document.getElementById('music-player-controller')
       if(musicPlayer){
@@ -119,7 +121,10 @@ export default function ContentFullScreen(props) {
             margin: "0 auto"
           }}
         >
-          {props.post.type === "video"? <video
+          {props.post.type === "video"? 
+          <>
+            <VideoPlayer autoPlayVideo={true} poster={getVideoThumbnail(props.file,props.post)} videoFormats={props.file.formats} originalVideoUrl={props.file.url} videoWrapperStyles = {{ width: window.innerWidth > 360 ? "360px" : "100%", margin: "0 auto", maxHeight: "100vh"}}/>
+          {/*<video
             ref={videoRef}
             onClick={handleVideoClick}
             style={{
@@ -133,7 +138,9 @@ export default function ContentFullScreen(props) {
           >
             <source src={backendUrl + props.file.url} type={props.file.mime} />
             Sorry, we are unable to show this video.
-          </video> : 
+          </video>*/}
+          </>
+           : 
                 <img 
                     style={{
                       width: "100%",

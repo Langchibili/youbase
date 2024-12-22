@@ -19,8 +19,7 @@ export default class LocalSignUp extends React.Component{
         userExists: false,
         phoneNumber: null,
         countryCode: null,
-        age: null,
-        otherTown: '',
+        age: '',
         submittingText: 'Sign Up' 
       }
       this.username = React.createRef()
@@ -60,10 +59,8 @@ export default class LocalSignUp extends React.Component{
     return this.topWebsites.some((website) => username.toLowerCase().includes(website));
   }
 
-  setOtherTown = ()=>{
-    console.log(this.town.current.value)
-    //const otherCityContainer = document.getElementById('other-city-container');
-    if (this.town.current.value === "other") {
+  setOtherTown = (e)=>{
+    if (e.target.value === "other") {
         this.setState({
           showOtherCityInput: true
         })
@@ -74,16 +71,11 @@ export default class LocalSignUp extends React.Component{
     }
   }
 
-  handleOtherTownSelection = ()=>{
-    const otherTown = this.otherTown.current.value
-    this.setState({otherTown})
-  }
-
   handleSubmit = async (e)=>{
     e.preventDefault()
     const username = this.username.current.value
     const password = this.password.current.value
-    const town = this.town.current.value === "other"? this.state.otherTown : this.town.current.value  
+    const town = this.town.current.value === "other"? this.otherTown.current.value : this.town.current.value  
     const province = this.province.current.value
     const phoneNumber = this.state.phoneNumber
     const age = this.state.age
@@ -124,13 +116,7 @@ export default class LocalSignUp extends React.Component{
       })
       return
     }
-    // if(this.state.countryCode === "260" && town === "Other" && !this.state.otherTown){
-    //   this.setState({
-    //     errorExists: true,
-    //     errorMessage: "please enter your town"
-    //   })
-    //   return
-    // }
+    
     if(!age || parseInt(age) < 1){
       this.setState({
         errorExists: true,
@@ -293,7 +279,6 @@ export default class LocalSignUp extends React.Component{
           <Box marginTop={2}>
             <TextField
               inputRef={this.otherTown}
-              onChange={this.handleOtherTownSelection}
               label="Enter the name of the city or town"
               fullWidth
             />

@@ -374,6 +374,10 @@ export default class PostForm extends React.Component{
         })
         postToSaveObject.data.status = "draft"
       }
+      if(postToSaveObject.data.status === "published"){
+         const postsCount = (this.props.loggedInUser.user.postsCount || 1)
+         postToSaveObject.data.postCount = postsCount + 1
+      }
       const response =  await fetch(api_url+'/posts/'+draftPostId, {
         method: 'PUT',
         headers: {

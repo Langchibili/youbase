@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { TextField, Button, Box, IconButton } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import { createNewComment } from "@/Functions";
+import { createNewComment, updateCommentEngagement } from "@/Functions";
 import LogInFirstModal from "@/components/Includes/Modals/LogInFirstModal";
 
 class CommentForm extends React.Component {
@@ -28,17 +28,23 @@ class CommentForm extends React.Component {
     this.setState({
       commenting: true
     })
-    const newCommentObject = {
+    // const commentsCount = (this.props.loggedInUser.user.commentsCount || 1)
+   // postToSaveObject.data.postCount = postsCount + 1
+    
+   const newCommentObject = {
       text:text,
       type: "text",
       post:  { connect: [this.props.postId] },
       user:  { connect: [this.props.userId] },
       postId: this.props.postId.toString(),
       userId: this.props.userId.toString(),
+
     };
     const newComment = await createNewComment({data:newCommentObject});
     this.props.onAddComment(newComment);
-    this.setState({ text: "", commenting: false });
+    this.setState({ text: "", commenting: false },()=>{
+      updateCommentEngagement(this.props.userId,this.props.postId) // add the comment count and engagemt up
+    });
   };
 
   handleChange = (e) => {

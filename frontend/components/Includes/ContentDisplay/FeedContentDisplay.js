@@ -14,6 +14,13 @@ import PortraitContentDisplay from './PortraitContentDisplay'
 import { getUserById } from '@/Functions'
 import MoreContentLoader from '../Loader/MoreContentLoader'
 
+
+
+// display of posts by now will be the users with the highest engagement first
+// totalEngagement will be the user field we are interested in
+// if you have seen a post, we shall not show you the post again, unless you go to the user's post page
+
+
 export default function FeedContentDisplay(props) {
   const [posts, setPosts] = useState([])
   const [portraitContent, setPortraitContent] = useState([])
