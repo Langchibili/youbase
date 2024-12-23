@@ -62,7 +62,7 @@ export default function VideoThumbnailDisplay(props) {
               backgroundRepeat:'no-repeat',
               width:'100%',
               backgroundImage:"url("+getVideoThumbnail(props.file, props.post)+")" }}
-              onClick={handleClickOpen}
+              onClick={handleClickOpen} 
               >
           {/* Avatar in the top-left corner */}
           <AvatarOnly 
@@ -88,7 +88,8 @@ export default function VideoThumbnailDisplay(props) {
               zIndex: "1000",
             }}
           />
-
+          {/* clickable field or area */}
+         {/* <div style={{Height:'80%',width:"100%"}}></div> */}
           {/* Video title in the bottom-left corner */}
           <h5 
             className="video-title" 

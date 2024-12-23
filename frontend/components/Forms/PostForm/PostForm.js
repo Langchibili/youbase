@@ -456,10 +456,12 @@ export default class PostForm extends React.Component{
           fontWeight: "bold",
         },
       })
+      console.log(this.props.action,this.props )
     return (
     <CenteredGrid container spacing={1}>
       <Grid item xs={6}>
         <StyledIconButton
+          disabled={this.props.action === "edit" && this.state.postType !== "text"}
           onClick={() => {
             this.handlePostTypeSelect("text");
           }}
@@ -470,6 +472,7 @@ export default class PostForm extends React.Component{
       </Grid>
       <Grid item xs={6}>
         <StyledIconButton
+          disabled={this.props.action === "edit" && this.state.postType !== "image"}
           onClick={() => {
             this.handlePostTypeSelect("image");
           }}
@@ -480,6 +483,7 @@ export default class PostForm extends React.Component{
       </Grid>
       <Grid item xs={6}>
         <StyledIconButton
+          disabled={this.props.action === "edit" && this.state.postType !== "video"}
           onClick={() => {
             this.handlePostTypeSelect("video");
           }}
@@ -490,6 +494,7 @@ export default class PostForm extends React.Component{
       </Grid>
       <Grid item xs={6}>
         <StyledIconButton
+          disabled={this.props.action === "edit" && this.state.postType !== "music"}
           onClick={() => {
             this.handlePostTypeSelect("music");
           }}
@@ -498,8 +503,23 @@ export default class PostForm extends React.Component{
           <span>Song</span>
         </StyledIconButton>
       </Grid>
+      {/* for embeds check the mediaSource attribute to see if it's the one being edited */}
       <Grid item xs={6}>
         <StyledIconButton
+          disabled={this.props.action === "edit" && this.props.post.mediaSource !== "youtube"}
+          onClick={() => {
+            this.handlePostTypeSelect("youtube");
+          }}
+        >
+          <YouTube style={{ fontSize: 40, color: red[500] }} />
+          <span>Link Youtube Video</span>
+        </StyledIconButton>
+      </Grid>
+      {/* for now facebook,tiktok and twitter embeds are disabled until implemented */}
+      <Grid item xs={6}>
+        <StyledIconButton
+          disabled={true}
+          // disabled={this.props.action === "edit" && this.props.post.mediaSource !== "facebook"}
           onClick={() => {
             this.handlePostTypeSelect("facebook");
           }}
@@ -510,6 +530,8 @@ export default class PostForm extends React.Component{
       </Grid>
       <Grid item xs={6}>
         <StyledIconButton
+        disabled={true}
+          // disabled={this.props.action === "edit" && this.props.post.mediaSource !== "tiktok"}
           onClick={() => {
             this.handlePostTypeSelect("tiktok");
           }}
@@ -520,16 +542,8 @@ export default class PostForm extends React.Component{
       </Grid>
       <Grid item xs={6}>
         <StyledIconButton
-          onClick={() => {
-            this.handlePostTypeSelect("youtube");
-          }}
-        >
-          <YouTube style={{ fontSize: 40, color: red[500] }} />
-          <span>Link Youtube Video</span>
-        </StyledIconButton>
-      </Grid>
-      <Grid item xs={6}>
-        <StyledIconButton
+          disabled={true}
+          // disabled={this.props.action === "edit" && this.props.post.mediaSource !== "twitter"}
           onClick={() => {
             this.handlePostTypeSelect("twitter");
           }}

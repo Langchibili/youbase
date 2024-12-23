@@ -6,9 +6,12 @@ const ReadMoreLess = ({ text, length, buttonStyle = {} }) => {
   const handleToggle = () => {
     setIsExpanded(!isExpanded);
   };
+  
+  if(!text){
+    return // there is nothing here, so don't bother
+  }
 
   const displayedText = isExpanded ? text : text.slice(0, length);
-
   return (
     <div>
       <p>
