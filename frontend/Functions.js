@@ -733,20 +733,16 @@ export const updateCategory = async (data,categoryId)=>{
   }
 
   export const updateCommentEngagement = async (userId,postId)=>{
-    const postUser = getUserById(userId)
-    const post = getPostFromId(postId)
-    const userCommentsCount = postUser.commentsCount
-    const postCommentsCount = postUser.commentsCount
-    const userTotalEngagementCount = post.commentsCount
-    const postTotalEngagementCount = post.commentsCount
+    const postUser = await getUserWithOnlySpecifiedFields(userId,"fields=totalEngagement&fields=commentsCount")
+    const post = await getPostWithOnlySpecifiedFields(postId,"fields=totalEngagement&fields=commentsCount")
     const userCountUpdateObject = {
-         commentsCount: userCommentsCount + 1,
-         totalEngagement: userTotalEngagementCount + 1
+         commentsCount: parseInt(postUser.commentsCount || 0) + 1,
+         totalEngagement: parseInt(postUser.totalEngagement || 0)+ 1
     }
     const postCountUpdateObject = {
       data:{
-        commentsCount: postCommentsCount + 1,
-        totalEngagement: postTotalEngagementCount + 1
+        commentsCount: parseInt(post.commentsCount || 0) + 1,
+        totalEngagement: parseInt(post.totalEngagement || 0) + 1
       }
     } 
     await fetch(`${api_url}/users/${userId}`, { // update user account
@@ -832,175 +828,6 @@ export const getVideoMetaFromPostAndId = (post,videoId)=>{
      }
   }
 }
- //  logging and deleting an engagement to a post, like a like or view 
-
-  const engagementMappings = {
-    likes: {
-        action: 'likedPosts',
-        idArray: 'likedPostsIds',
-        postBy: 'postLikedBy'
-    },
-    shares: {
-        action: 'sharedPosts',
-        idArray: 'sharedPostsIds',
-        postBy: 'postSharedBy'
-    },
-    views: {
-        action: 'viewedPosts',
-        idArray: 'viewedPostsIds',
-        postBy: 'postViewedBy'
-    },
-    plays: {
-        action: 'playedPosts',
-        idArray: 'playedPostsIds',
-        postBy: 'postPlayedBy'
-    },
-    impressions: {
-        action: 'seenPosts',
-        idArray: 'seenPostsIds',
-        postBy: 'postSeenBy'
-    }
-};
-
-
-export const logEngagement = async (type, postId, loggedInUser, ctx,createNotification=()=>{})=> {
-    const { action, idArray, postBy } = engagementMappings[type];
-
-    let userEngagementIds = ctx.state.loggedInUser.user[idArray] || [];
-    const userEngagementCount = parseInt(ctx.state.loggedInUser.user[type] || 1)
-    const userTotalEngagementCount = parseInt(ctx.state.loggedInUser.totalEngagement || 1)
-    
-    if (!userEngagementIds.includes(postId)) {
-        userEngagementIds.push(postId);
-    }
-
-    const updateUserObject = {
-        [action]: { connect: [postId] },
-        [idArray]: userEngagementIds,
-        [type]: userEngagementCount + 1,
-        totalEngagement: userTotalEngagementCount
-    };
-    console.log('the engagement object',updateUserObject)
-    const response = await fetch(`${api_url}/users/${loggedInUser.id}`, {
-        method: 'PUT',
-        headers: {
-            'Authorization': `Bearer ${getJwt()}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(updateUserObject)
-    }).then(response => response.json());
-
-    if (response) {
-        const postEngagements = parseInt(ctx.state.post[type] || 0);
-        const postTotalEngagementCount = parseInt(ctx.state.post.totalEngagement || 1)
-    
-        const updatePostObject = {
-            data: {
-                [postBy]: { connect: [loggedInUser.id] },
-                [type]: postEngagements + 1,
-                totalEngagement: postTotalEngagementCount + 1
-            }
-        };
-        const response2 = await fetch(`${api_url}/posts/${postId}`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `Bearer ${getJwt()}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(updatePostObject)
-        }).then(response => response.json());
-        if (response2) {
-            ctx.setState(prevState => {
-                return {
-                    ...prevState,
-                    loggedInUser: {
-                        ...prevState.loggedInUser,
-                        user: {
-                            ...prevState.loggedInUser.user,
-                            [idArray]: response[idArray]
-                        }
-                    },
-                    post: {
-                        ...prevState.post,
-                        [type]: postEngagements + 1
-                    },
-                    requesting: false
-                };
-            });
-            if(type === "likes" || type === "shares"){
-              createNotification() // send notification to respective parties
-            }
-        }
-    }
-}
-
-export const deleteEngagement = async (type, postId, loggedInUser, ctx)=> {
-    const { action, idArray, postBy } = engagementMappings[type];
-
-    let userEngagementIds = ctx.state.loggedInUser.user[idArray] || [];
-
-    userEngagementIds = userEngagementIds.filter(id => id !== postId);
-    const userEngagementCount = parseInt(ctx.state.loggedInUser.user[type] || 1)
-    const userTotalEngagementCount = parseInt(ctx.state.loggedInUser.totalEngagement || 1)
-    
-    const updateUserObject = { // log user engagements count substraction
-        [action]: { disconnect: [postId] },
-        [idArray]: userEngagementIds,
-        [type]: userEngagementCount - 1,
-        totalEngagement: userTotalEngagementCount
-    };
-
-    const response = await fetch(`${api_url}/users/${loggedInUser.id}`, {
-        method: 'PUT',
-        headers: {
-            'Authorization': `Bearer ${getJwt()}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(updateUserObject)
-    }).then(response => response.json());
-
-    if (response) { // delete engagement to post
-        const postEngagements = parseInt(ctx.state.post[type] || 1)
-        const postTotalEngagementCount = parseInt(ctx.state.post.totalEngagement || 1)
-    
-        const updatePostObject = {
-            data: {
-                [postBy]: { disconnect: [loggedInUser.id] },
-                [type]: postEngagements - 1,
-                totalEngagement: postTotalEngagementCount - 1
-            }
-        };
-
-        const response2 = await fetch(`${api_url}/posts/${postId}`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `Bearer ${getJwt()}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(updatePostObject)
-        }).then(response => response.json());
-        if (response2) {
-            ctx.setState(prevState => {
-                return {
-                    ...prevState,
-                    loggedInUser: {
-                        ...prevState.loggedInUser,
-                        user: {
-                            ...prevState.loggedInUser.user,
-                            [idArray]: response[idArray]
-                        }
-                    },
-                    post: {
-                        ...prevState.post,
-                        [type]: postEngagements - 1
-                    },
-                    requesting: false
-                }
-            })
-        }
-    }
-}
- 
 
 
 // USER FUNCTIONS
@@ -1032,6 +859,42 @@ export const getUsers = async (customUri=null)=>{
   }
   return users
  }
+
+ export const getUserWithOnlySpecifiedFields = async (id,fieldString)=>{
+    let fields = "?"+fieldString
+    if(fieldString.length === 0){
+       fields = "*" // it means populate nothing
+    }
+    const response = await fetch(api_url+'/users/'+id+fields,{
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(response => response.json())
+      .then(data => data)
+      .catch(error => console.error(error))
+      if(response){
+         return response
+      }
+      return null
+}
+
+export const getPostWithOnlySpecifiedFields = async (id,fieldString)=>{
+  let fields = "?"+fieldString
+  if(fieldString.length === 0){
+     fields = "*" // it means populate nothing
+  }
+  const post = await fetch(api_url+'/posts/'+id+fields,{
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }).then(response => response.json())
+    .then(data => data)
+    .catch(error => console.error(error))
+    if(post && post.data && post.data.attributes){
+      return post.data.attributes
+    }
+    return null
+}
 
 export const getUserById = async (id,populateString="")=>{
     let populate = '?populate='+populateString
@@ -1074,6 +937,206 @@ export const getUserFromDashedId = async (dashedId,populateString)=>{
 
 
 
+ //  logging and deleting an engagement to a post, like a like or view 
+
+  const engagementMappings = {
+    likes: {
+        action: 'likedPosts',
+        idArray: 'likedPostsIds',
+        postBy: 'postLikedBy'
+    },
+    shares: {
+        action: 'sharedPosts',
+        idArray: 'sharedPostsIds',
+        postBy: 'postSharedBy'
+    },
+    views: {
+        action: 'viewedPosts',
+        idArray: 'viewedPostsIds',
+        postBy: 'postViewedBy'
+    },
+    plays: {
+        action: 'playedPosts',
+        idArray: 'playedPostsIds',
+        postBy: 'postPlayedBy'
+    },
+    impressions: {
+        action: 'seenPosts',
+        idArray: 'seenPostsIds',
+        postBy: 'postSeenBy'
+    }
+};
+
+
+export const logEngagement = async (type, postId, loggedInUser, ctx,createNotification=()=>{})=> {
+  // getting the user's current count, to avoid 2 users who have clicked or engaged concurrently having their engagements added as one
+  // but when updating the logged in user, it's ok to update directly, because it's dependent on you yourself taking an action at a time
+  const postUser = await getUserWithOnlySpecifiedFields(ctx.state.post.user.data.id,"fields=totalEngagement&fields="+type)  
+  const post = await getPostWithOnlySpecifiedFields(postId,"fields=totalEngagement&fields="+type)  
+  
+  const { action, idArray, postBy } = engagementMappings[type];
+    let userEngagementIds = ctx.state.loggedInUser.user[idArray] || [];
+    // the other user or the user who posted should have their engagement count incremented
+    const userEngagementCount = parseInt(postUser[type] || 0)
+    const userTotalEngagementCount = parseInt(postUser.totalEngagement || 0)
+    
+    if (!userEngagementIds.includes(postId)) {
+        userEngagementIds.push(postId);
+    }
+
+    const updateLoggedInUserObject = {
+        [action]: { connect: [postId] },
+        [idArray]: userEngagementIds,
+    }
+    const updatePostUserObject = {
+        [type]: userEngagementCount + 1,
+        totalEngagement: userTotalEngagementCount + 1
+    }
+     
+    const response = await fetch(`${api_url}/users/${loggedInUser.id}`, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${getJwt()}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updateLoggedInUserObject)
+    }).then(response => response.json());
+
+    if (response) {
+        const postEngagements = parseInt(post[type] || 0);
+        const postTotalEngagementCount = parseInt(post.totalEngagement || 0)
+    
+        const updatePostObject = {
+            data: {
+                [postBy]: { connect: [loggedInUser.id] },
+                [type]: postEngagements + 1,
+                totalEngagement: postTotalEngagementCount + 1
+            }
+        };
+        const response2 = await fetch(`${api_url}/posts/${postId}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${getJwt()}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatePostObject)
+        }).then(response => response.json());
+        // update the postUser's engagements count
+        await fetch(`${api_url}/users/${ctx.state.post.user.data.id}`, {
+          method: 'PUT',
+          headers: {
+              'Authorization': `Bearer ${getJwt()}`,
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(updatePostUserObject)
+        }).then(response => response.json());
+  
+        if (response2) { // update the state to show the engagement on the post
+            ctx.setState(prevState => {
+                return {
+                    ...prevState,
+                    loggedInUser: {
+                        ...prevState.loggedInUser,
+                        user: {
+                            ...prevState.loggedInUser.user,
+                            [idArray]: response[idArray]
+                        }
+                    },
+                    post: {
+                        ...prevState.post,
+                        [type]: postEngagements + 1
+                    },
+                    requesting: false
+                };
+            });
+            if(type === "likes" || type === "shares"){
+              createNotification() // send notification to respective parties
+            }
+        }
+    }
+}
+
+export const deleteEngagement = async (type, postId, loggedInUser, ctx)=> {
+    const postUser = await getUserWithOnlySpecifiedFields(ctx.state.post.user.data.id,"fields=totalEngagement&fields="+type)  
+    const post = await getPostWithOnlySpecifiedFields(postId,"fields=totalEngagement&fields="+type)  
+    const { action, idArray, postBy } = engagementMappings[type];
+
+    let userEngagementIds = ctx.state.loggedInUser.user[idArray] || [];
+
+    userEngagementIds = userEngagementIds.filter(id => id !== postId);
+    // the other user or the user who posted should have their engagement count decremented
+    const userEngagementCount = parseInt(postUser[type] || 1)
+    const userTotalEngagementCount = parseInt(postUser.totalEngagement || 1)
+    
+    const updateLoggedInUserObject = {
+      [action]: { disconnect: [postId] },
+      [idArray]: userEngagementIds,
+    }
+    const updatePostUserObject = {
+        [type]: userEngagementCount - 1,
+        totalEngagement: userTotalEngagementCount - 1
+    }
+   
+    const response = await fetch(`${api_url}/users/${loggedInUser.id}`, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${getJwt()}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updateLoggedInUserObject)
+    }).then(response => response.json());
+
+    if (response) { // delete engagement to post
+        const postEngagements = parseInt(post[type] || 0);
+        const postTotalEngagementCount = parseInt(post.totalEngagement || 1)
+        
+        const updatePostObject = {
+            data: {
+                [postBy]: { disconnect: [loggedInUser.id] },
+                [type]: postEngagements - 1,
+                totalEngagement: postTotalEngagementCount - 1
+            }
+        }
+        // update the postUser's engagements count
+        await fetch(`${api_url}/users/${ctx.state.post.user.data.id}`, {
+          method: 'PUT',
+          headers: {
+              'Authorization': `Bearer ${getJwt()}`,
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(updatePostUserObject)
+        }).then(response => response.json())
+
+        const response2 = await fetch(`${api_url}/posts/${postId}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${getJwt()}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatePostObject)
+        }).then(response => response.json());
+        if (response2) {
+            ctx.setState(prevState => {
+                return {
+                    ...prevState,
+                    loggedInUser: {
+                        ...prevState.loggedInUser,
+                        user: {
+                            ...prevState.loggedInUser.user,
+                            [idArray]: response[idArray]
+                        }
+                    },
+                    post: {
+                        ...prevState.post,
+                        [type]: postEngagements - 1
+                    },
+                    requesting: false
+                }
+            })
+        }
+    }
+}
+ 
    // notifications logging
 
    export const logNotification = async(title,userId,notifiedUserIds,contentType="user",contentId="")=>{

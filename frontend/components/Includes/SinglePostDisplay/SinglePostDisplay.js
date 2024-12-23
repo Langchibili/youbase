@@ -5,73 +5,48 @@ import PostImpressions from "@/components/Parts/EngageMents/PostImpressions";
 import ShareButton from "@/components/Parts/EngageMents/ShareButton";
 import StreamsDisplay from "@/components/Parts/EngageMents/StreamsDisplay";
 import ViewsDisplay from "@/components/Parts/EngageMents/ViewsDisplay";
-import MediaDisplay from "@/components/Parts/MediaDisplay/MediaDisplay";
-import AvatarWithFollowButton from "@/components/Parts/UserDisplay/AvatarWithFollowButton";
-import SongPlayButton from "../SongPlayButton/SongPlayButton";
-import { useEffect, useState } from "react";
-import { getPostFromId, truncateText } from "@/Functions";
 import TextPostMedium from "../PostsDisplay/TextPostMedium";
 import ImagePostMedium from "../PostsDisplay/ImagePostMedium";
 import VideoPostMedium from "../PostsDisplay/VideoPostMedium";
 import MusicPostMedium from "../PostsDisplay/MusicPostMedium";
 import EmbedPostMedium from "../PostsDisplay/EmbedPostMedium";
 
-
 export default function SinglePostDisplay(props) {
-  const [loadingMusicPost, setLoading] = useState(props.post.type === "music")
-  const [musicPost,setMusicPost] = useState(null)
 
-  useEffect(() => {
-    if(props.post.type !== "music"){
-      return
-    }
-    const fetchMusicPost = async () => {
-      try {
-        setMusicPost(await getPostFromId(props.post.id,'media,user')) // the post with music media
-      } catch (error) {
-        console.error('Error fetching post:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchMusicPost()
-  }, [props.post])
-  
-  const renderPostContent = (post, postEngagementsDisplay) => {
-    switch (post.type) {
-      case 'text':
-        return <TextPostMedium post={post} postEngagementsDisplay={postEngagementsDisplay} {...props} />
-      case 'image':
-        return <ImagePostMedium post={post} postEngagementsDisplay={postEngagementsDisplay} {...props} />
-      case 'video':
-        return <VideoPostMedium post={post} postEngagementsDisplay={postEngagementsDisplay} {...props} />
-      case 'music':
-        return <MusicPostMedium post={post} postEngagementsDisplay={postEngagementsDisplay} {...props} />
-      case 'embed':
-        return <EmbedPostMedium post={post} postEngagementsDisplay={postEngagementsDisplay} {...props} />
-      default:
-        return null
-    }
-  }
   const postEngagementsDisplay = post => {
-    return (
-      <div className='inline-engagements-display'>
-        <ul>
-          {post.type === 'video' && <ViewsDisplay post={post}  {...props} />}
-        </ul>
-        <ul>
-          {post.type === 'music' && <StreamsDisplay post={post} {...props} />}
-        </ul>
-        <ul>
-          <LikeButton post={post} {...props} />
-        </ul>
-        <ul>
-          <ShareButton post={post} {...props} />
-        </ul>
-      </div>
-    )
-  }
+      return (
+        <div className='inline-engagements-display'>
+          <ul>
+            {post.type === 'video' && <ViewsDisplay post={post} user={post.user.data.attributes} {...props} />}
+          </ul>
+          <ul>
+            {post.type === 'music' && <StreamsDisplay post={post} user={post.user.data.attributes} {...props} />}
+          </ul>
+          <ul>
+            <LikeButton post={post} user={post.user.data.attributes} {...props} />
+          </ul>
+          <ul>
+            <ShareButton post={post} user={post.user.data.attributes} {...props} />
+          </ul>
+        </div>
+      )
+    }
+    const renderPostContent = (post, postEngagementsDisplay) => {
+        switch (post.type) {
+          case 'text':
+            return <TextPostMedium post={post} postEngagementsDisplay={postEngagementsDisplay} {...props} onSinglePostDisplayPage={true}/>
+          case 'image':
+            return <ImagePostMedium post={post} postEngagementsDisplay={postEngagementsDisplay} {...props} onSinglePostDisplayPage={true}/>
+          case 'video':
+            return <VideoPostMedium post={post} postEngagementsDisplay={postEngagementsDisplay} {...props} onSinglePostDisplayPage={true}/>
+          case 'music':
+            return <MusicPostMedium post={post} postEngagementsDisplay={postEngagementsDisplay} {...props} onSinglePostDisplayPage={true}/>
+          case 'embed':
+            return <EmbedPostMedium post={post} postEngagementsDisplay={postEngagementsDisplay} {...props} onSinglePostDisplayPage={true}/>
+          default:
+            return null
+        }
+    }
 
   return (
     <>
@@ -80,51 +55,7 @@ export default function SinglePostDisplay(props) {
       <div className="row">
         <div className="col-xl-8 col-lg-8">
         {renderPostContent(props.post, postEngagementsDisplay)}
-          <div className="section3125">
-          <div style={{backgroundColor:"white",borderRadius:'5px',marginBottom:'10px'}}>
-        <div className="review_item" style={{ position: 'relative'}}>
-          <div style={{minHeight: '10px'}}></div>
-          <MediaDisplay {...props}/>
-          {/* <VideosDisplay postid={props.post.id}/> */}
-          <h4 className="rvds10" style={{ marginTop: '10px' }}>
-          {truncateText(props.post.title,'50')}
-          </h4>
-          <p className="rvds10" style={{ marginTop: '10px' }}>
-          {truncateText(props.post.description,'100')}
-          </p>
-          {/* {props.postEngagementsDisplay(props.post)} */}
-        </div>
-      </div>
-          {props.post.type === "video"? <MediaDisplay {...props}/> : <MediaDisplay {...props} displayType="mediaOnly"/> }
-            <div className="user_dt5">
-              <div className="user_dt_left">
-                <div className="live_user_dt">
-                  <AvatarWithFollowButton {...props}/>
-                </div>
-              </div>
-              <div className="user_dt_right">
-                <ul>
-                  {props.post.type === "video"? <ViewsDisplay {...props}/> : <></>}
-                  
-                  {props.post.type === "music"? <StreamsDisplay {...props}/> : <></>}
-                  {/* <SongPlayButton {...props} /> */}
-                  <LikeButton {...props}/>
-                  <ShareButton {...props}/>
-                  <PostImpressions {...props}/>
-                </ul>
-              </div>
-            </div>
-            {!loadingMusicPost? <div className="user_dt5">
-              <div className="user_dt_left">
-                <div className="live_user_dt">
-                {props.post.type === "music"? <SongPlayButton post={musicPost}  loggedInUser={props.loggedInUser}/> : <></>}
-                </div>
-              </div>
-              <div className="user_dt_right">
-                {props.post.type === "music"? <button className="btn btn-danger">Download</button> : <></>}
-              </div>
-            </div> : <>Loading...</>}
-          </div>
+        <PostImpressions {...props}/> {/* log the impression on the post when a user views the post */}
         </div>
         
         
@@ -389,3 +320,53 @@ export default function SinglePostDisplay(props) {
   
   );
 }
+
+
+
+// <div className="section3125">
+// <div style={{backgroundColor:"white",borderRadius:'5px',marginBottom:'10px'}}>
+// <div className="review_item" style={{ position: 'relative'}}>
+// <div style={{minHeight: '10px'}}></div>
+// <MediaDisplay {...props}/>
+// {/* <VideosDisplay postid={props.post.id}/> */}
+// <Link href={"/posts/"+props.post.dashed_title}>
+// <h4 className="rvds10" style={{ marginTop: '10px' }}>
+// {truncateText(props.post.title,'50')}
+// </h4>
+// <p className="rvds10" style={{ marginTop: '10px' }}>
+// {truncateText(props.post.description,'100')}
+// </p>
+// </Link>
+// {props.postEngagementsDisplay(props.post)}
+// </div>
+// </div>
+// {props.post.type === "video"? <MediaDisplay {...props}/> : <MediaDisplay {...props} displayType="mediaOnly"/> }
+//   <div className="user_dt5">
+//     <div className="user_dt_left">
+//       <div className="live_user_dt">
+//         <AvatarWithFollowButton {...props}/>
+//       </div>
+//     </div>
+//     <div className="user_dt_right">
+//       <ul>
+//         {props.post.type === "video"? <ViewsDisplay {...props}/> : <></>}
+        
+//         {props.post.type === "music"? <StreamsDisplay {...props}/> : <></>}
+//         {/* <SongPlayButton {...props} /> */}
+//         <LikeButton {...props}/>
+//         <ShareButton {...props}/>
+//         <PostImpressions {...props}/>
+//       </ul>
+//     </div>
+//   </div>
+//   {!loadingMusicPost? <div className="user_dt5">
+//     <div className="user_dt_left">
+//       <div className="live_user_dt">
+//       {props.post.type === "music"? <SongPlayButton post={musicPost}  loggedInUser={props.loggedInUser}/> : <></>}
+//       </div>
+//     </div>
+//     <div className="user_dt_right">
+//       {props.post.type === "music"? <button className="btn btn-danger">Download</button> : <></>}
+//     </div>
+//   </div> : <>Loading...</>}
+// </div>

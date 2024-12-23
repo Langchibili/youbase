@@ -1,5 +1,6 @@
 'use client'
 
+import FullScreenContentModal from "@/components/Includes/Modals/FullScreenContentModal";
 import { getImage } from "@/Functions";
 import React from "react";
 // import 'bootstrap/dist/css/bootstrap.min.css';
@@ -11,7 +12,8 @@ export default class FeaturedImages extends React.Component {
         super(props);
         this.state = {
             images: [],
-            imagesLoading: true
+            imagesLoading: true,
+            openFullScreenModal: false
         }
     }
 
@@ -22,6 +24,18 @@ export default class FeaturedImages extends React.Component {
         }
     }
 
+    handleOpenFullScreenModal = () => {
+       this.setState({
+        openFullScreenModal: true
+       })
+    }
+  
+    handleFullScreenModalClose = (e) => {
+       this.setState({
+        openFullScreenModal: false
+       })
+    }
+
     renderImage(image) {
       let url = null
         if(this.props.imageType === "medium"){
@@ -30,7 +44,10 @@ export default class FeaturedImages extends React.Component {
         else{
           url = getImage(image, "normal"); // Use getImage function
         }
-        return <img key={image.id} src={url} alt={image.attributes.name} style={{ width: "100%", borderRadius:'5px' }} />;
+        
+       return (<> <FullScreenContentModal open={this.state.openFullScreenModal} onClose={this.handleFullScreenModalClose} post={this.props.post} loggedInUser={this.props.loggedInUser} user={this.props.post.user} file={image}/>
+       <img onClick={this.handleOpenFullScreenModal}  key={image.id} src={url} alt={image.attributes.name} style={{ width: "100%", borderRadius:'5px' }} />
+       </>);
     }
 
     render() {

@@ -40,10 +40,9 @@ class ReplyForm extends React.Component {
 
     const newReply = await createNewComment({data:newReplyObject});
     this.props.onAddReply(newReply);
-    this.setState({ text: "", replying: false },()=>{
-       updateCommentEngagement(this.props.userId,this.props.postId)
-    })
-  };
+    updateCommentEngagement(this.props.postUserId,this.props.postId)
+    this.setState({ text: "", replying: false })
+  }
 
   handleChange = (e) => {
     this.setState({ text: e.target.value });

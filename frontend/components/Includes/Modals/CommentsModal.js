@@ -79,10 +79,11 @@ function CommentsModal(props) {
           },
         }}
       />
-      <Button onClick={toggleDrawer(true)}>
+      <Button onClick={toggleDrawer(true)} sx={{color:'gray'}}>
         <Comment />Comments{commentCountLoaded? " "+renderCommentsCount(commentsCount): <></>}
         </Button>
       <SwipeableDrawer
+        sx={{zIndex:1800}}
         container={container}
         anchor="bottom"
         open={open}

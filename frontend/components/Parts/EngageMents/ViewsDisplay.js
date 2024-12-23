@@ -75,7 +75,7 @@ export default class ViewsDisplay extends React.Component{
        const postId = this.state.post.id
     
        if(!viewedPostsIds){ // meaning you have followed no-one before
-         return  <li>
+         return  <li style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
                     <button disabled className="lkcm152">
                         <i className="uil uil-eye" />
                         <span>{handleCountsDisplay(this.state.post.views)}</span>
@@ -83,7 +83,7 @@ export default class ViewsDisplay extends React.Component{
                 </li>
        }
        if(viewedPostsIds.length === 0){ // meaning it's empty
-         return  <li>
+         return  <li style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
                     <button disabled className="lkcm152">
                         <i className="uil uil-eye" />
                         <span>{handleCountsDisplay(this.state.post.views)}</span>
@@ -91,7 +91,7 @@ export default class ViewsDisplay extends React.Component{
                 </li>
        }
        if(viewedPostsIds.includes(postId)){ // it means you are already following this user, you can only unfollow the user
-         return  <li>
+         return  <li style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
                     <button disabled className="lkcm152">
                         <i className="uil uil-eye" style={{color: "#1e7193"}}/>
                         <span>{handleCountsDisplay(this.state.post.views)}</span>
@@ -99,7 +99,7 @@ export default class ViewsDisplay extends React.Component{
                 </li>
        }
        if(!viewedPostsIds.includes(postId)){ // it means you are already following this user, you can only unfollow the user
-        return  <li>
+        return  <li style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
                     <button disabled className="lkcm152">
                         <i className="uil uil-eye" />
                         <span>{handleCountsDisplay(this.state.post.views)}</span>

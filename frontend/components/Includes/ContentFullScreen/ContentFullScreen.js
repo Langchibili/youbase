@@ -12,6 +12,8 @@ import { backEndUrl } from "@/Constants";
 import { getImage, getVideoThumbnail, truncateText } from "@/Functions";
 import { useAudio } from "@/Contexts/AudioContext";
 import VideoPlayer from "../VideoDisplay/VideoPlayer";
+import CommentsModal from "../Modals/CommentsModal";
+import PostMoreModal from "../Modals/PostMoreModal";
 
 export default function ContentFullScreen(props) {
   const [isPlaying, setIsPlaying] = useState(true);
@@ -21,7 +23,7 @@ export default function ContentFullScreen(props) {
   const [logViewHandler, setLogViewHandler] = useState(null)
   const [logView, setLogView] = useState(false)
   const { audioInstance } = useAudio();
-
+  console.log('in the content full screen')
   // Handle video play/pause toggle on tap
   const handleVideoClick = () => {
     if (isPlaying) {
@@ -34,7 +36,6 @@ export default function ContentFullScreen(props) {
 
   // Add buffering event listeners
   useEffect(() => {
-    return
     if(typeof document !== "undefined"){
       const musicPlayer = document.getElementById('music-player-controller')
       if(musicPlayer){
@@ -42,6 +43,7 @@ export default function ContentFullScreen(props) {
         audioInstance.audioinstance.pause()
       }
     }
+    return
     if(props.post.type !== "video"){
       return
     }
@@ -208,17 +210,73 @@ export default function ContentFullScreen(props) {
             textAlign: "center",
           }}
         >
-          <h5 className="video-title" style={{ zIndex: "1000", color: "lightgray" }}>
+          
+          {/* <ul>
+              <li>
+                <ul>
+                  <ViewsDisplay post={props.post} loggedInUser={props.loggedInUser} logView={logView} autoLogView={true}/>
+                  {props.post.type === "video" ? <ViewsDisplay {...props} user={user} /> : null}
+                  {props.post.type === "music" ? <StreamsDisplay {...props} user={user} /> : null}
+                  <LikeButton {...props} user={user} />
+                  <ShareButton {...props} user={user} />
+                  <PostImpressions {...props} user={user} />
+                </ul>
+              </li>
+              <br/>
+              <li>
+                <div style={{
+                      width: "100%",
+                      margin: '0 auto',
+                      display: 'flex',
+                      justifyContent: 'space-around',
+                      alignItems: 'center',
+                      padding: '1rem 0',
+                      borderTop: '1px solid #e0e0e0', // Optional for a separator
+                  }}>
+                    <CommentsModal loggedInUser={props.loggedInUser} post={props.post} postId={props.post.id} userId={props.loggedInUser.user.id}/>
+                    <PostMoreModal {...props}/>
+                </div>
+              </li>
+          </ul> */}
+          <ul style={{ listStyleType: 'none', padding: 0 }}>
+  <li style={{display:'block',float: "left"}}>
+    <ul
+      style={{
+        display: 'block',
+        justifyContent: 'center', // Horizontally center items
+        alignItems: 'center', // Vertically center items
+        gap: '1rem', // Space between items
+        padding: 0,
+        margin: 0,
+      }}
+    >
+      <ViewsDisplay inFullScreen={true} post={props.post} loggedInUser={props.loggedInUser} logView={logView} autoLogView={true} />
+      {props.post.type === "video" ? <ViewsDisplay inFullScreen={true}  {...props} user={user} /> : null}
+      {props.post.type === "music" ? <StreamsDisplay inFullScreen={true}  {...props} user={user} /> : null}
+      <LikeButton inFullScreen={true}  {...props} user={user} />
+      <ShareButton inFullScreen={true}  {...props} user={user} />
+      <PostImpressions {...props} user={user} />
+    </ul>
+  </li>
+  <h5 className="video-title" style={{ zIndex: "1000", color: "lightgray", clear: "both" }}>
             {truncateText(props.post.title, 25)}
-          </h5>
-          <ul>
-           <ViewsDisplay post={props.post} loggedInUser={props.loggedInUser} logView={logView} autoLogView={true}/>
-            {props.post.type === "video" ? <ViewsDisplay {...props} user={user} /> : null}
-            {props.post.type === "music" ? <StreamsDisplay {...props} user={user} /> : null}
-            <LikeButton {...props} user={user} />
-            <ShareButton {...props} user={user} />
-            <PostImpressions {...props} user={user} />
-          </ul>
+  </h5>
+  <li style={{width:'100%'}}>
+  <div style={{
+                width: "100%",
+                margin: '0 auto',
+                display: 'flex',
+                justifyContent: 'space-around',
+                alignItems: 'center',
+                padding: '1rem 0',
+                borderTop: '1px solid #e0e0e0', // Optional for a separator
+            }}>
+      <CommentsModal loggedInUser={props.loggedInUser} post={props.post} postId={props.post.id} userId={props.loggedInUser.user.id} />
+      <PostMoreModal {...props} />
+    </div>
+  </li>
+</ul>
+
         </div>
       </div>
     );

@@ -171,7 +171,7 @@ export default class ShareButton extends React.Component {
 
         if (!sharedPostsIds) {
             return (
-                <li>
+                <li style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
                     <button disabled={this.state.requesting} className="lkcm152" onClick={this.handleShare}>
                         <i className="uil uil-share-alt" />
                         <span>{handleCountsDisplay(this.state.post.shares)}</span>
@@ -181,7 +181,7 @@ export default class ShareButton extends React.Component {
         }
         if (sharedPostsIds.length === 0) {
             return (
-                <li>
+                <li style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
                     <button disabled={this.state.requesting} className="lkcm152" onClick={this.handleShare}>
                         <i className="uil uil-share-alt" />
                         <span>{handleCountsDisplay(this.state.post.shares)}</span>
@@ -191,7 +191,7 @@ export default class ShareButton extends React.Component {
         }
         if (sharedPostsIds.includes(postId)) {
             return (
-                <li>
+                <li style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
                     <button disabled={this.state.requesting} className="lkcm152" onClick={this.handleShare}>
                         <i className="uil uil-share-alt" style={{ color: "blue" }} />
                         <span>{handleCountsDisplay(this.state.post.shares)}</span>
@@ -200,7 +200,7 @@ export default class ShareButton extends React.Component {
             )
         }
         return (
-            <li>
+            <li style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
                 <button disabled={this.state.requesting} className="lkcm152" onClick={this.handleShare}>
                     <i className="uil uil-share-alt" />
                     <span>{handleCountsDisplay(this.state.post.shares)}</span>

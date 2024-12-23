@@ -58,9 +58,10 @@ class ParentCommentsSection extends React.Component {
 
   render() {
     const { comments,commentsLoading } = this.state;
-    if(commentsLoading){
-        return <Skeleton sx={{ mt: 5, mb:10, p: 2, height:"40%", border: "1px solid #ddd", borderRadius: 1 }} variant="rectangular" height="100%" />
-    }
+    // if(commentsLoading){
+    //     return <Skeleton sx={{ mt: 5, mb:10, p: 2, height:"40%", border: "1px solid #ddd", borderRadius: 1 }} variant="rectangular" height="100%" />
+    // }
+    console.log('the comments props',this.props)
     return (
       <Box sx={{ mt: 5, p: 2, borderRadius: 1 }}>
         <Typography variant="h6" sx={{ mb: 2 }}>
@@ -69,16 +70,18 @@ class ParentCommentsSection extends React.Component {
         {/* position:'fixed', bottom:'0',marginBottom:'120px',width:'90%' */}
         
             <CommentForm
-            loggedInUser={this.props.loggedInUser}
-            postId={this.props.postId}
-            userId={this.props.userId}
-            onAddComment={this.handleAddComment}
+              loggedInUser={this.props.loggedInUser}
+              postId={this.props.postId}
+              userId={this.props.userId}
+              postUserId={this.props.post.user.data.id}
+              onAddComment={this.handleAddComment}
             />
             <Divider sx={{ my: 2 }} />
             <CommentsDisplay
                 loggedInUser={this.props.loggedInUser}
                 post={this.props.post}
                 comments={comments}
+                postUserId={this.props.post.user.data.id}
                 postId={this.props.postId}
                 userId={this.props.userId}
                 onUpdateReplies={this.handleUpdateReplies}

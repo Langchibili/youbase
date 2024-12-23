@@ -84,6 +84,7 @@ class RepliesDisplay extends React.Component {
             loggedInUser={this.props.loggedInUser}
             postId={this.props.postId}
             commentId={this.props.commentId}
+            postUserId={this.props.postUserId}
             userId={this.props.userId}
             onAddReply={this.handleAddReply} // Pass down handleAddReply as a prop
           />

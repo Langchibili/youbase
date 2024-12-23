@@ -49,7 +49,7 @@ export default class MediaDisplay extends React.Component{
             if(this.state.featuredImages === null) { // this means there is just text description, that's all
                 return
             }
-            return <FeaturedImages images={this.state.featuredImages} handleRemoveImage={this.props.handleRemoveImage} listtype={this.props.listtype || "carousel"} imageType={this.props.imageType}/>
+            return <FeaturedImages {...this.props} images={this.state.featuredImages} handleRemoveImage={this.props.handleRemoveImage} listtype={this.props.listtype || "carousel"} imageType={this.props.imageType}/>
         }
 
     }

@@ -27,17 +27,17 @@ const Support = () => {
       loggedInUser={loggedInUser}
       contentDisplay={(props)=><PortraitContentDisplay content={props.content} loggedInUser={props.loggedInUser} />}
       contentUri={api_url+"/posts"}
-      totalPages={10}
+      totalPages={8}
       limit={10}
-      nextSectionToDisplay={(props)=> nextComponent(props)}
+      // nextSectionToDisplay={(props)=> nextComponent(props)}
       contentQueryFilters='populate=user,featuredImages,media'
     />
-    {/* <ContentDisplaySection
+    <ContentDisplaySection
       loggedInUser={loggedInUser}
       contentDisplay={(props)=><LandscapeContent content={props.content} loggedInUser={props.loggedInUser} />}
       contentUri={api_url+"/posts"}
       contentQueryFilters='populate=user,featuredImages,media'
-    /> */}
+    />
     
     </>
   );

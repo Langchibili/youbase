@@ -37,7 +37,7 @@ export default function PostModal(props) {
     <Dialog
       fullScreen
       open={props.open}
-      onClose={props.onClose}
+      onClose={props.onPostModalClose}
       TransitionComponent={Transition}
       color="secondary"
     >
@@ -46,7 +46,7 @@ export default function PostModal(props) {
           <IconButton
             edge="start"
             color="inherit"
-            onClick={props.onClose}
+            onClick={props.onPostModalClose}
             aria-label="close"
           >
             <CloseIcon />
@@ -55,7 +55,7 @@ export default function PostModal(props) {
         </Toolbar>
       </StyledAppBar>
       <StyledContent>
-          <PostForm {...props} handlePostModalClose={props.onClose}/>
+          <PostForm {...props} handlePostModalClose={props.onPostModalClose}/>
       </StyledContent>
     </Dialog>
   );

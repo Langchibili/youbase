@@ -4,6 +4,8 @@ import LogInFirstModal from "@/components/Includes/Modals/LogInFirstModal"
 import React from "react"
 import { deleteEngagement, getImage, getUserById, getPostFromId, handleCountsDisplay, logEngagement, logNotification, sendPushNotification } from "@/Functions"
 import { clientUrl, log } from "@/Constants"
+import { ThumbUpSharp } from "@mui/icons-material"
+import { Zoom } from "@material-ui/core"
 
 export default class LikeButton extends React.Component{
    constructor(props){
@@ -81,7 +83,7 @@ export default class LikeButton extends React.Component{
        const postId = this.state.post.id
        console.log('post likes', this.state.post)
        if(!likedPostsIds){ // meaning you have followed no-one before
-         return  <li>
+         return  <li className="fullscreen-engagement-btn" style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
                     <button disabled={this.state.requesting} className="lkcm152" onClick={this.handleLike}>
                         <i className="uil uil-thumbs-up" />
                         <span>{handleCountsDisplay(this.state.post.likes)}</span>
@@ -89,7 +91,7 @@ export default class LikeButton extends React.Component{
                 </li>
        }
        if(likedPostsIds.length === 0){ // meaning it's empty
-         return  <li>
+         return  <li className="fullscreen-engagement-btn" style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
                     <button disabled={this.state.requesting} className="lkcm152" onClick={this.handleLike}>
                         <i className="uil uil-thumbs-up" />
                         <span>{handleCountsDisplay(this.state.post.likes)}</span>
@@ -97,15 +99,16 @@ export default class LikeButton extends React.Component{
                 </li>
        }
        if(likedPostsIds.includes(postId)){ // it means you are already following this user, you can only unfollow the user
-         return  <li>
+         return  <li className="fullscreen-engagement-btn" style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
                     <button disabled={this.state.requesting} className="lkcm152" onClick={this.handleUnLike} >
-                        <i className="uil uil-thumbs-up" style={{color: "red"}}/>
+                    <small><Zoom in={true}><ThumbUpSharp sx={{color: "crimson"}}/></Zoom></small>
+                        {/* <i className="uil uil-thumbs-up" style={{color: "red"}}/> */}
                         <span>{handleCountsDisplay(this.state.post.likes)}</span>
                     </button>
                 </li>
        }
        if(!likedPostsIds.includes(postId)){ // it means you are already following this user, you can only unfollow the user
-        return  <li>
+        return  <li className="fullscreen-engagement-btn" style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
                     <button disabled={this.state.requesting} className="lkcm152" onClick={this.handleLike}>
                         <i className="uil uil-thumbs-up" />
                         <span>{handleCountsDisplay(this.state.post.likes)}</span>

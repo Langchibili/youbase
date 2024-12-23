@@ -5,17 +5,17 @@ import React, { useEffect, useState, useRef } from "react";
 import MoreContentLoader from "../Loader/MoreContentLoader";
 
 
+
 const ContentDisplaySection = ({
   contentUri,
   contentQueryFilters = "",
-  populate="",
   limit = 10,
   totalPages = 1000000,
   loggedInUser,
-  contentDisplay = (props) =>{ console.log(props); return <></>},
+  contentDisplay = (props) =><></>,
   nextSectionToDisplay = (props) => <></>,
 }) => {
-  const [content, setContent] = useState([]);
+  const [sections, setSections] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMoreContent, setHasMoreContent] = useState(true);
@@ -37,6 +37,10 @@ const ContentDisplaySection = ({
       setIsLoading(false);
     }
   };
+
+ const updateSections = (newPage, newContent) => {
+    setSections((prev) => [...prev, { page: newPage, content: newContent }]);
+};
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -66,18 +70,23 @@ const ContentDisplaySection = ({
       if (newContent.length === 0 || currentPage >= totalPages) {
         setHasMoreContent(false);
       } else {
-        setContent((prevContent) => [...prevContent, ...newContent]);
+        updateSections(currentPage,newContent)
       }
     };
 
     runFetchContent();
   }, [currentPage, totalPages, hasMoreContent]);
 
-  //console.log("section-" + currentPage, content);
 
   return (
     <div>
-      {contentDisplay({content:content,loggedInUser:loggedInUser})}
+      {sections.map((section)=>{
+        
+  console.log("section-" + section);
+           return (<div key={section.page}>
+                     {contentDisplay({content:section.content,loggedInUser:loggedInUser})}
+                  </div>)
+      })}
       {hasMoreContent ? (
         <div
           ref={loaderRef}

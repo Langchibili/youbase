@@ -5,6 +5,7 @@ import { displayDateOrTime, getCommentFromId, getRepliesCount, handleCountsDispl
 import AvatarWithUsernameOnly from "@/components/Parts/UserDisplay/AvatarWithUsernameOnly";
 import PostMoreBtn from "../PostMoreBtn/PostMoreBtn";
 import { ArrowDropUp, ArrowUpward, Reply } from "@mui/icons-material";
+import ReadMoreLess from "../ReadMoreLess/ReadMoreLess";
 
 export default class SingleCommentDisplay extends React.Component {
   constructor(props){
@@ -45,7 +46,7 @@ export default class SingleCommentDisplay extends React.Component {
     if(!this.state.commentLoaded){
         return <Skeleton variant="text"/>
     }
-    const { postId, post,loggedInUser, userId, onUpdateReplies } = this.props;
+    const { postId, post,loggedInUser, userId, postUserId, onUpdateReplies } = this.props;
     const comment = this.state.comment
     if(!comment){
         return null
@@ -55,8 +56,9 @@ export default class SingleCommentDisplay extends React.Component {
             <Box key={comment.id} sx={{ mb: 2 }}>
                 <AvatarWithUsernameOnly userId={comment.user.data.id} extra_styles={  {width:'24px !important', height:'24px !important'}} postMoreContent={()=><PostMoreBtn loggedInUser={loggedInUser} post={post} isComment={true} commentId={comment.id} action="delete" thisIsMyComment={this.state.thisIsMyComment} postId={postId}/>}/>
                 <ListItem alignItems="flex-start">
+                
                 <ListItemText
-                    primary={comment.text}
+                    primary={<ReadMoreLess text={comment.text} length={100}/>}
                     secondary={`${displayDateOrTime(comment.createdAt,true)}`}
                 />
                 
@@ -67,6 +69,7 @@ export default class SingleCommentDisplay extends React.Component {
                     loggedInUser={loggedInUser} 
                     commentId={comment.id}
                     post={post}
+                    postUserId={postUserId}
                     postId={postId}
                     userId={userId}
                     onAddReply={(newReply) => onUpdateReplies(comment.id, newReply)}

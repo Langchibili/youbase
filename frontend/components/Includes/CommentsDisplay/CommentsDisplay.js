@@ -1,12 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Box, Typography, List, ListItem, ListItemText, Divider } from "@mui/material";
-import RepliesDisplay from "../RepliesDisplay/RepliesDisplay";
+import { Typography, List } from "@mui/material";
 import SingleCommentDisplay from "./SingleCommentDisplay";
 
 class CommentsDisplay extends React.Component {
   render() {
-    const { comments, postId, post,loggedInUser, userId, onUpdateReplies } = this.props;
+    const { comments, postId, post,loggedInUser, userId, postUserId, onUpdateReplies } = this.props;
     if(!comments){
       return null
     }
@@ -29,6 +28,7 @@ class CommentsDisplay extends React.Component {
                     comment={comment}
                     post={post}
                     postId={postId}
+                    postUserId={postUserId}
                     userId={userId}
                     onUpdateReplies={onUpdateReplies}
                 />

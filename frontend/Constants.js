@@ -285,7 +285,6 @@ export const checkUserLogginStatus = async () =>{
     status: false
   }
   let userObject = {}
-  console.log(jwt)
   if(!jwt){
       const username = generateUniqueUsername() // generate a unique username
       userObject.username = username
@@ -330,7 +329,6 @@ const runPeriodicUserStatusChecks = async () => {
     }
   }, 300000) // 5 minutes in milliseconds
 }
-
 
 if(typeof document !== "undefined"){ // only run the periodic check for login if it's in the
   runPeriodicUserStatusChecks()  

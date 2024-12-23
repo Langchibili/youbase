@@ -28,8 +28,8 @@ export default class AvatarOnly extends React.Component{
      if(!this.props.profileOnly){
       return (!this.state.avatarLoaded? <></> :
          <Link href={'/user/'+this.state.user.username}>
-         <div className="user_img5">
-                  <img src={getImage(this.state.user.profilePicture,'thumbnail','profilePicture') } alt="profile pic" style={this.props.exra_styles}/>
+         <div className={this.props.custom_styles? "" : "user_img5"}>
+                  <img src={getImage(this.state.user.profilePicture,'thumbnail','profilePicture') } alt="profile pic" style={{...this.props.custom_styles,...this.props.exra_styles}}/>
          </div>
          </Link>)
      }

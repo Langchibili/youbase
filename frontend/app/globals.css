@@ -34,3 +34,7 @@ body {
 .vjs-poster img{
   object-fit: cover !important;
 }
+
+.fullscreen-engagement-btn > button > i{
+  color: white !important;
+}

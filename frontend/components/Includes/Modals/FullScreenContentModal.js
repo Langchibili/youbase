@@ -11,6 +11,7 @@ import Box from "@mui/material/Box";
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/system";
 import ContentFullScreen from "../ContentFullScreen/ContentFullScreen";
+import { useUser } from "@/Contexts/UserContext";
 
 const StyledAppBar = styled(AppBar)({
   position: "relative",
@@ -31,6 +32,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function FullScreenContentModal(props) {
+   const loggedInUser = props.loggedInUser? props.loggedInUser : useUser() // sometimes the user prop is undefined in fullscreen mode, so get from context
   return (
     <Dialog
       fullScreen
@@ -40,7 +42,7 @@ export default function FullScreenContentModal(props) {
       sx={{backgroundColor:'black !important', paddingTop:'24px', borderTop:'none'}}
 
     >
-        <Toolbar sx={{backgroundColor:'black'}}>
+        <Toolbar sx={{backgroundColor:'black',border:"none"}}>
           <IconButton
             edge="start"
             sx={{color:'gray',backgroundColor:'black'}}
@@ -51,7 +53,7 @@ export default function FullScreenContentModal(props) {
           </IconButton>
         </Toolbar>
       <StyledContent sx={{backgroundColor:'black', height:'100%', padding:'0px'}}>
-          <ContentFullScreen {...props} />
+          <ContentFullScreen {...props} loggedInUser={loggedInUser}/>
       </StyledContent>
     </Dialog>
   );

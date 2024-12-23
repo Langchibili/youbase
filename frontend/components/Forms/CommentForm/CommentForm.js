@@ -43,8 +43,8 @@ class CommentForm extends React.Component {
     const newComment = await createNewComment({data:newCommentObject});
     this.props.onAddComment(newComment);
     this.setState({ text: "", commenting: false },()=>{
-      updateCommentEngagement(this.props.userId,this.props.postId) // add the comment count and engagemt up
-    });
+      updateCommentEngagement(this.props.postUserId,this.props.postId) // add the comment count and engagemt up
+    })
   };
 
   handleChange = (e) => {
