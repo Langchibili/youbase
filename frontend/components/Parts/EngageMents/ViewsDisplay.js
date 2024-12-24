@@ -41,6 +41,7 @@ export default class ViewsDisplay extends React.Component{
         this.setState({
             requesting: true // to show user something is happening
         })
+        console.log('the views page',this.props.post)
         const userId = this.props.post.user.data? this.props.post.user.data.id : this.props.post.user.id
         const postId = this.props.post.id
 

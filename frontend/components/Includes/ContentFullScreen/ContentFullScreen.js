@@ -23,7 +23,8 @@ export default function ContentFullScreen(props) {
   const [logViewHandler, setLogViewHandler] = useState(null)
   const [logView, setLogView] = useState(false)
   const { audioInstance } = useAudio();
-  console.log('in the content full screen')
+  
+  console.log(props)
   // Handle video play/pause toggle on tap
   const handleVideoClick = () => {
     if (isPlaying) {
@@ -125,7 +126,7 @@ export default function ContentFullScreen(props) {
         >
           {props.post.type === "video"? 
           <>
-            <VideoPlayer autoPlayVideo={true} poster={getVideoThumbnail(props.file,props.post)} videoFormats={props.file.formats} originalVideoUrl={props.file.url} videoWrapperStyles = {{ width: window.innerWidth > 360 ? "360px" : "100%", margin: "0 auto", maxHeight: "100vh"}}/>
+            <VideoPlayer autoPlayVideo={true} poster={getVideoThumbnail(props.file,props.post)} post={props.post} loggedInUser={props.loggedInUser} videoFormats={props.file.formats} originalVideoUrl={props.file.url} videoWrapperStyles = {{ width: window.innerWidth > 360 ? "360px" : "100%", margin: "0 auto", maxHeight: "100vh"}}/>
           {/*<video
             ref={videoRef}
             onClick={handleVideoClick}

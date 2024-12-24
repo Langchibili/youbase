@@ -3,23 +3,28 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import MoreContentLoader from "../Loader/MoreContentLoader";
+import NoContent from "../NoContent/NoContent";
 
 
 
 const ContentDisplaySection = ({
   contentUri,
   contentQueryFilters = "",
-  limit = 10,
+  limit = typeof window !== "undefined" && window.innerWidth < 700 ? 5 : 10, // smaller screens 5, larger 10 default
   totalPages = 1000000,
   loggedInUser,
-  contentDisplay = (props) =><></>,
-  nextSectionToDisplay = (props) => <></>,
+  showEmptyContentMessage = false,
+  emptyContentMessage = "",
+  contentDisplay = (props) => <></>,
+  nextSectionToDisplay = (props) => <></>
 }) => {
   const [sections, setSections] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMoreContent, setHasMoreContent] = useState(true);
+  const [canShowEmptyContentMessage,setCanShowEmptyContentMessage] = useState(false)
   const loaderRef = useRef(null);
+  
 
   const fetchContent = async (page) => {
     try {
@@ -40,7 +45,7 @@ const ContentDisplaySection = ({
 
  const updateSections = (newPage, newContent) => {
     setSections((prev) => [...prev, { page: newPage, content: newContent }]);
-};
+ };
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -66,7 +71,9 @@ const ContentDisplaySection = ({
       if (!hasMoreContent) return;
 
       const newContent = await fetchContent(currentPage);
-
+      if(showEmptyContentMessage && newContent.length === 0 && currentPage === 1){
+        setCanShowEmptyContentMessage(true)
+      }
       if (newContent.length === 0 || currentPage >= totalPages) {
         setHasMoreContent(false);
       } else {
@@ -77,13 +84,16 @@ const ContentDisplaySection = ({
     runFetchContent();
   }, [currentPage, totalPages, hasMoreContent]);
 
-
+  
+  if(canShowEmptyContentMessage){
+    return <NoContent message={emptyContentMessage}/>
+  }
   return (
     <div>
       {sections.map((section)=>{
         
   console.log("section-" + section);
-           return (<div key={section.page}>
+           return (<div key={section.page} style={{marginBottom:'10px'}}>
                      {contentDisplay({content:section.content,loggedInUser:loggedInUser})}
                   </div>)
       })}

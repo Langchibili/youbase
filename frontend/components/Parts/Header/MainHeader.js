@@ -5,6 +5,7 @@ import React from "react"
 import AvatarOnly from "../UserDisplay/AvatarOnly"
 import Link from "next/link"
 import { getUserById, handleCountsDisplay, truncateText } from "@/Functions"
+import SearchModal from "@/components/Includes/Modals/SearchModal"
 
 export default class MainHeader extends React.Component{
     constructor(props){
@@ -47,7 +48,7 @@ export default class MainHeader extends React.Component{
                 </Link>
             </div>
           
-            <div className="search120">
+            {/* <div className="search120">
                 <div className="ui search">
                 <div className="ui left icon input swdh10">
                     <input
@@ -58,7 +59,7 @@ export default class MainHeader extends React.Component{
                     <i className="uil uil-search-alt icon icon1" />
                 </div>
                 </div>
-            </div>
+            </div> */}
             <div className="header_right">
                 <ul>
                 {/* <li>
@@ -76,7 +77,9 @@ export default class MainHeader extends React.Component{
                     <span className="noti_count">2</span>
                     </a>
                 </li> */}
-                {!this.props.loggedInUser.status? <li><Link className="btn btn-danger mr-2" href="/signin">Login</Link></li> : <li className="ui dropdown" tabIndex={0}>
+                 {!this.props.loggedInUser.status? <></> : <li><SearchModal loggedInUser={this.props.loggedInUser}/></li>}
+                {/* {!this.props.loggedInUser.status? <li>
+                    <Link className="btn btn-danger mr-2" href="/signin">Login</Link></li> : <li className="ui dropdown" tabIndex={0}>
                  <a href="#" className="option_links" title="Messages">
                     <i className="uil uil-envelope-alt" />
                     <span className="noti_count">3</span>
@@ -119,9 +122,9 @@ export default class MainHeader extends React.Component{
                     View All <i className="uil uil-arrow-right" />
                     </a>
                 </div>
-                </li>}
-
-                {!this.props.loggedInUser.status? <li><Link className="btn btn-danger" href="/signup">Signup</Link></li> : <li className="ui dropdown" tabIndex={0}>
+                </li>} */}
+                {/* I will handle notifications later */}
+                {/* {!this.props.loggedInUser.status? <li><Link className="btn btn-danger" href="/signup">Signup</Link></li> : <li className="ui dropdown" tabIndex={0}>
                     <a href="#" className="option_links" title="Notifications">
                     <i className="uil uil-bell" />
                     <span className="noti_count">3</span>
@@ -169,7 +172,7 @@ export default class MainHeader extends React.Component{
                         View All <i className="uil uil-arrow-right" />
                     </a>
                     </div>
-                </li> }
+                </li> } */}
                 {!this.props.loggedInUser.status? <></> : <li className="ui dropdown" tabIndex={0}>
                     <a href="#" className="opts_account" title="Account">
                     {/* <img src="/theme/images/hd_dp.jpg" alt="" /> */}

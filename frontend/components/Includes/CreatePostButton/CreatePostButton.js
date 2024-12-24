@@ -38,7 +38,7 @@ export default function CreatePostButton(props) {
       </Zoom>
 
       {/* Render the PostModal component */}
-      <PostModal open={open} onPostModalClose={handleClose} {...props}/>
+      <PostModal openPostModal={open} onPostModalClose={handleClose} {...props}/>
     </div>
   );
 }

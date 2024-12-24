@@ -10,7 +10,7 @@ export default class FormFooter extends React.Component{
          ...props
       }
    }
-
+  
    render(){
     return (
       <>
@@ -38,6 +38,24 @@ export default class FormFooter extends React.Component{
     
   {this.props.postSaving && this.props.postSavingAsDraft? "Saving Draft..." : "Save As Draft"}
   </button>
+  {this.props.action === "edit"? <> </> : <button 
+    disabled={this.props.action === "edit" || (this.props.postSaving && this.props.postSavingAsDraft)}
+    style={{
+      textTransform:'uppercase',
+      flex: '1',
+      padding: '10px 20px',
+      fontSize: '16px',
+      marginRight: '10px',
+      border: 'none',
+      cursor: 'pointer',
+      backgroundColor: '#f0f0f0',
+      color: '#333',
+      borderRadius: '5px'
+    }}
+    onClick={()=>{localStorage.removeItem('draftPostId'); this.props.handlePostModalClose() /* remove the draft post id to ensure a new draft post can be created*/ }}
+  >
+    Clear
+  </button>}
   <button 
     disabled={this.props.postSaving && !this.props.postSavingAsDraft}
     style={{

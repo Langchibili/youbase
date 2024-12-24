@@ -5,7 +5,7 @@ import { Modal, Box, Typography, Button, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { updatePost } from '@/Functions';
 
-export default function DeletePostModal({ open, handleClose, isComment, commentId, postId }) {
+export default function DeletePostModal({ openDeletePostModal, handleClose, isComment, commentId, postId }) {
  const deletePost = async ()=>{
       if(isComment){ // means it's a comment we are deleting, rather, removing
         const updateObject = {
@@ -39,7 +39,7 @@ export default function DeletePostModal({ open, handleClose, isComment, commentI
  }
   return (
     <Modal
-      open={open}
+      open={openDeletePostModal}
       onClose={handleClose}
       aria-labelledby="login-modal-title"
       aria-describedby="login-modal-description"

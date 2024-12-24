@@ -35,7 +35,7 @@ export default function ReportPostModal(props) {
   return (
     <Dialog
       fullScreen
-      open={props.open}
+      open={props.openReportModal}
       onClose={props.handleClose}
       TransitionComponent={Transition}
       color="secondary"

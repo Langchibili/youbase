@@ -4,8 +4,6 @@ import ViewsDisplay from '@/components/Parts/EngageMents/ViewsDisplay';
 import { backEndUrl, log } from '@/Constants';
 import { getPostMedia, getVideoThumbnail } from '@/Functions';
 import React, { useState, useEffect, useRef } from 'react';
-import VideojsPlayer from './VideojsPlayer';
-import { maxHeight, width } from '@mui/system';
 import VideoPlayer from './VideoPlayer';
 
 // Helper function to format the duration
@@ -17,10 +15,9 @@ const formatDuration = (duration) => {
 
 export default function VideoFileDisplay({ file, post, loggedInUser, handleRemoveMedia, videoMeta, hideRemoveButton, getMedia, postTitle }) {
   const [videoDurations, setVideoDurations] = useState({}); // Object to store durations per video
-  const [currentTime, setCurrentTime] = useState({});
+
   const [videoFile, setVideoFile] = useState(null);
   const videoRefs = useRef([]); // Array to store refs for multiple video elements
-  const [logView, setLogView] = useState(false)
   const [OwlCarousel, setOwlCarousel] = useState(null);
 
   useEffect(() => {
@@ -31,8 +28,6 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
       }
       (async () => {
         const { default: Owl } = await import('react-owl-carousel');
-        // await import('owl.carousel/dist/assets/owl.carousel.css');
-        // await import('owl.carousel/dist/assets/owl.theme.default.css');
         setOwlCarousel(() => Owl)
       })();
     }
@@ -128,9 +123,8 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
           videoData.id = video.id
           backendUrl = videoData.provider === "aws-s3"? '' : backEndUrl
           
-          return <VideoPlayer poster={getVideoThumbnail(videoData,post)} videoFormats={videoData.formats} originalVideoUrl={videoData.url}/>
-          return (<VideojsPlayer height="720px" width="1200px"  video={videoData} formats={videoData.formats} poster={getVideoThumbnail(videoData,post)} videoStyles={{ borderRadius: '5px', width: '100%',objectFit: "cover" }} posterStyles={{objectFit: "cover",width:'100%'}}/>)
-    }
+          return <VideoPlayer poster={getVideoThumbnail(videoData,post)} videoFormats={videoData.formats} originalVideoUrl={videoData.url} post={post} loggedInUser={loggedInUser}/>
+     }
     if(typeof window !== "undefined"){ // bellow is for videos with more than one file, displayed using a corousel
       return (
         <OwlCarousel margin={10} items={10} dots={true} autoWidth={true} className="owl-theme">
@@ -154,24 +148,9 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
                   <div className="item" key={index} style={{width:videoWrapperHeight(videos.data.length)}}>
                      <div className="stream_1" style={{width:videoWrapperHeight(videos.data.length),padding:'10px'}}>
                       
-                      <VideojsPlayer video={videoData} formats={videoData.formats} poster={getVideoThumbnail(videoData,post)} videoStyles={{ borderRadius: '5px', width: '100%',objectFit: "cover", height: '60vh' }} posterStyles={{objectFit: "cover"}}/>
+                      <VideoPlayer video={videoData} formats={videoData.formats} post={post} loggedInUser={loggedInUser} poster={getVideoThumbnail(videoData,post)} videoStyles={{ borderRadius: '5px', width: '100%',objectFit: "cover", height: '60vh' }} posterStyles={{objectFit: "cover"}}/>
                      </div>
                   </div>)
-                return ( // this is mainly being used to display landscape videos
-                    <div className="item" key={index} style={{width:videoWrapperHeight(videos.data.length),...videoBackGroundStyles}}>
-                     <div className="stream_1" style={{width:videoWrapperHeight(videos.data.length),padding:'10px'}}>
-                        <video
-                          ref={(el) => videoRefs.current[index] = el}
-                          controls
-                          style={{ borderRadius: '5px', width: '100%', maxHeight: '500px' }}
-                        >
-                          <source src={backendUrl + videoData.url} type={videoData.mime} />
-                          Sorry, we are unable to show this video.
-                        </video>
-                        <small>Duration: {videoDurations[index] ? formatDuration(videoDurations[index]) : 'Loading...'}</small>
-                      </div>
-                    </div>
-                )
               })}
               {/* {
                 videos.data.map((video, index) => {
@@ -207,7 +186,6 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
         borderBottom: '1px solid ghostwhite',
       }}
     >
-      <ViewsDisplay post={post} loggedInUser={loggedInUser} logView={logView} autoLogView={true}/>
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
         {!hideRemoveButton && (
           <div style={{ flexGrow: 1, paddingRight: '5px', marginBottom: '5px' }}>

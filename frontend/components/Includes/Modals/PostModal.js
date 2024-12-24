@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -31,12 +31,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 
+
 export default function PostModal(props) {
-  
   return (
     <Dialog
       fullScreen
-      open={props.open}
+      open={props.openPostModal}
       onClose={props.onPostModalClose}
       TransitionComponent={Transition}
       color="secondary"

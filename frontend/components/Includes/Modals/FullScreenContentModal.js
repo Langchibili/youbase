@@ -6,33 +6,24 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import Slide from "@mui/material/Slide";
 import Box from "@mui/material/Box";
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/system";
 import ContentFullScreen from "../ContentFullScreen/ContentFullScreen";
 import { useUser } from "@/Contexts/UserContext";
+import { Zoom } from "@mui/material";
 
-const StyledAppBar = styled(AppBar)({
-  position: "relative",
-  backgroundColor:'black'
-});
-
-const StyledTitle = styled(Typography)({
-  marginLeft: 16,
-  flex: 1,
-});
 
 const StyledContent = styled(Box)({
   padding: 24,
 });
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
+  return <Zoom in={true} ref={ref} {...props} />;
 });
 
 export default function FullScreenContentModal(props) {
-   const loggedInUser = props.loggedInUser? props.loggedInUser : useUser() // sometimes the user prop is undefined in fullscreen mode, so get from context
+  const loggedInUser = props.loggedInUser? props.loggedInUser : useUser() // sometimes the user prop is undefined in fullscreen mode, so get from context
   return (
     <Dialog
       fullScreen

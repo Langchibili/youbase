@@ -96,6 +96,7 @@ export default class MusicPost extends React.Component{
         <hr/>
         <h3>Music Art</h3>
         <Uploader 
+               isAttachementToPost={true}
                displayType="circular"
                refId={this.props.post.id}
                refName="api::post.post"

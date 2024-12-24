@@ -5,6 +5,7 @@ import Link from "next/link";
 import CommentsModal from "../Modals/CommentsModal";
 import PostMoreModal from "../Modals/PostMoreModal";
 import ReadMoreLess from "../ReadMoreLess/ReadMoreLess";
+import { useState } from "react";
 
 export default function TextPostMedium(props) {
   return (
@@ -22,7 +23,10 @@ export default function TextPostMedium(props) {
             </Link>)
             }
             {props.postEngagementsDisplay(props.post)}
-            {props.onSinglePostDisplayPage? <div style={{width:'100%', textAlign:'center'}}><CommentsModal loggedInUser={props.loggedInUser} post={props.post} postId={props.post.id} userId={props.loggedInUser.user.id}/></div> :
+            {props.onSinglePostDisplayPage? 
+            <div style={{width:'100%', textAlign:'center'}}>
+              <CommentsModal loggedInUser={props.loggedInUser} post={props.post} postId={props.post.id} userId={props.loggedInUser.user.id}/>
+            </div> :
             (<div style={{
                 width: "100%",
                 margin: '0 auto',
@@ -35,7 +39,7 @@ export default function TextPostMedium(props) {
               <CommentsModal loggedInUser={props.loggedInUser} post={props.post} postId={props.post.id} userId={props.loggedInUser.user.id}/>
               <PostMoreModal {...props}/>
              </div>)}
-        </div>
+            </div>
     </div>
     
   )

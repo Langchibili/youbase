@@ -159,8 +159,9 @@ export default class MobileMenu extends React.Component {
                 </Link>
               </ListItemText>
             </ListItem>
-            {this.props.loggedInUser.status && (
-              <ListItem>
+            {/* to build this later, the feed stuff */}
+            {/* {this.props.loggedInUser.status && (
+              <ListItem> 
                 <ListItemIcon>
                   <SearchIcon />
                 </ListItemIcon>
@@ -168,25 +169,7 @@ export default class MobileMenu extends React.Component {
                   <Link href="/feed" onClick={this.handleLinkClick}>Explore</Link>
                 </ListItemText>
               </ListItem>
-            )}
-
-            <ListItem>
-              <ListItemIcon>
-                <TheatersIcon />
-              </ListItemIcon>
-              <ListItemText>
-                <Link href="/reels" onClick={this.handleLinkClick}>Reels</Link>
-              </ListItemText>
-            </ListItem>
-
-            <ListItem>
-              <ListItemIcon>
-                <MusicNoteIcon />
-              </ListItemIcon>
-              <ListItemText>
-                <Link href="/music" onClick={this.handleLinkClick}>Music</Link>
-              </ListItemText>
-            </ListItem>
+            )} */}
             {this.props.loggedInUser.status && (
               <>
                 <ListItem button onClick={this.toggleCollapse('followingOpen')}>

@@ -42,6 +42,9 @@ export default class PostForm extends React.Component{
          errorMessage: '',
          successMessage: '',
          openSnackBar: false,
+         postHasImage: false,
+         postHasSong: false,
+         postHasVideo: false,
          mediaData: null,  // just for refrence within post form
          postUrlPath: "/"
       }
@@ -332,7 +335,25 @@ export default class PostForm extends React.Component{
               }
             }
           }
-
+          if(!this.shouldPostBeCreated(draftPostId)){
+            let errorMessage = ''
+            if(this.state.postHasImage){
+              errorMessage = 'This post already has an image, go back and publish it as an image or clear it and post another one'
+            }
+            if(this.state.postHasSong){
+              errorMessage = 'This post already has a song, go back and publish it as a song or clear it and post another one'
+            }
+            if(this.state.postHasVideo){
+              errorMessage = 'This post already has a video, go back and publish it as a video or clear it and post another one'
+            }
+            this.setState({
+              errorMessage: errorMessage,
+              successMessage: '',
+              openSnackBar: true,
+              postSaving: false
+            })
+            return
+          }
           // now the upload logic
           if(this.state.postType === "video" || this.state.postType === "music" || this.state.postType === "embed"){
             if(postToSaveObject.data.is_title_user_writted){
@@ -422,7 +443,64 @@ export default class PostForm extends React.Component{
          }
      }
    }
- 
+  
+   shouldPostBeCreated = async (draftPostId)=>{
+          const post = await getPostFromId(draftPostId,"media,featuredImages")
+          let postHasImage = false
+          let postHasVideo = false
+          let postHasSong = false
+          
+          if(!post){
+            return false
+          }
+          if(post.featuredImages.data){ // means this post has an image already added to it
+              postHasImage = true
+          }
+          if(post.media.data){ // means this post has a video or song already added to it
+            if(post.media.data[0].attributes.mime.startsWith('video/')){
+              postHasVideo = true
+            }
+            else{
+              postHasSong = true
+            }
+          }
+          if(this.props.action === "create" && this.state.postType !== "image" && postHasImage){
+            this.setState({
+              postHasImage: true
+            })
+            return false
+          }
+          if(this.props.action === "create" && this.state.postType !== "music" && postHasSong){
+            this.setState({
+              postHasSong:true
+            })
+            return false
+          }
+          if(this.props.action === "create" && this.state.postType !== "video" && postHasVideo){
+            this.setState({
+              postHasVideo:true
+            })
+            return false
+          }
+          return true
+   }
+
+   isCreateDisabled = (postType)=>{
+    console.log(this.state.postType, this.props.action, this.state.postHasImage, this.state.postHasSong, this.state.postHasVideo)
+    if(this.props.action === "edit" && this.state.postType !== postType){
+      return true
+    }
+    if(this.props.action === "edit" && this.state.postType === "embed" && this.props.post.mediaSource !== "youtube"){
+      return true
+    }
+    if(this.props.action === "edit" && this.state.postType === "embed" && this.props.post.mediaSource !== "facebook"){
+      return true
+    }
+    if(this.props.action === "edit" && this.state.postType === "embed" && this.props.post.mediaSource !== "tiktok"){
+      return true
+    }
+    return false
+   }
 
    postTypeSelector = ()=>{
     if(!this.state.dummyPostCreated){
@@ -461,7 +539,7 @@ export default class PostForm extends React.Component{
     <CenteredGrid container spacing={1}>
       <Grid item xs={6}>
         <StyledIconButton
-          disabled={this.props.action === "edit" && this.state.postType !== "text"}
+          disabled={this.isCreateDisabled("text")}
           onClick={() => {
             this.handlePostTypeSelect("text");
           }}
@@ -472,7 +550,7 @@ export default class PostForm extends React.Component{
       </Grid>
       <Grid item xs={6}>
         <StyledIconButton
-          disabled={this.props.action === "edit" && this.state.postType !== "image"}
+          disabled={this.isCreateDisabled("image")}
           onClick={() => {
             this.handlePostTypeSelect("image");
           }}
@@ -483,7 +561,7 @@ export default class PostForm extends React.Component{
       </Grid>
       <Grid item xs={6}>
         <StyledIconButton
-          disabled={this.props.action === "edit" && this.state.postType !== "video"}
+          disabled={this.isCreateDisabled("video")}
           onClick={() => {
             this.handlePostTypeSelect("video");
           }}
@@ -494,7 +572,7 @@ export default class PostForm extends React.Component{
       </Grid>
       <Grid item xs={6}>
         <StyledIconButton
-          disabled={this.props.action === "edit" && this.state.postType !== "music"}
+          disabled={this.isCreateDisabled("music")}
           onClick={() => {
             this.handlePostTypeSelect("music");
           }}
@@ -506,7 +584,7 @@ export default class PostForm extends React.Component{
       {/* for embeds check the mediaSource attribute to see if it's the one being edited */}
       <Grid item xs={6}>
         <StyledIconButton
-          disabled={this.props.action === "edit" && this.props.post.mediaSource !== "youtube"}
+          disabled={this.isCreateDisabled("youtube")}
           onClick={() => {
             this.handlePostTypeSelect("youtube");
           }}
@@ -519,7 +597,7 @@ export default class PostForm extends React.Component{
       <Grid item xs={6}>
         <StyledIconButton
           disabled={true}
-          // disabled={this.props.action === "edit" && this.props.post.mediaSource !== "facebook"}
+          // disabled={this.isCreateDisabled("facebook")}
           onClick={() => {
             this.handlePostTypeSelect("facebook");
           }}
@@ -531,7 +609,7 @@ export default class PostForm extends React.Component{
       <Grid item xs={6}>
         <StyledIconButton
         disabled={true}
-          // disabled={this.props.action === "edit" && this.props.post.mediaSource !== "tiktok"}
+          // disabled={this.isCreateDisabled("tiktok")}
           onClick={() => {
             this.handlePostTypeSelect("tiktok");
           }}
@@ -687,12 +765,12 @@ export default class PostForm extends React.Component{
             }
           }
           else{
-              const post = await getPostFromId(parseInt(draftPostId))
-              log('in the post form',post)
-              this.setState({
-                 dummyPostCreated: true,
-                 post:post
-              })
+                const post = await getPostFromId(parseInt(draftPostId),"media,featuredImages")
+                log('in the post form create phase',post)
+                this.setState({
+                   dummyPostCreated: true,
+                   post:post
+                })
           }
           
        }

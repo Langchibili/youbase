@@ -80,19 +80,22 @@
 // export default VideoPlayer
 
 "use client";
-import React, { useEffect, useRef } from "react";
+import ViewsDisplay from "@/components/Parts/EngageMents/ViewsDisplay";
+import React, { useEffect, useRef, useState } from "react";
 
 const VideoPlayer = ({
     videoFormats,
     originalVideoUrl,
     poster,
+    post,
+    loggedInUser,
     title = "Video",
     autoPlayVideo = false,
-    logView = () => {},
     videoWrapperStyles = { width: "100%" },
 }) => {
     const playerRef = useRef(null);
-
+    const [logView, setLogView] = useState(false)
+    
     useEffect(() => {
         if (typeof document !== "undefined") {
             // Dynamically import Plyr only when document is available
@@ -140,7 +143,7 @@ const VideoPlayer = ({
                         const playedPercentage =
                             (player.currentTime / player.duration) * 100;
                         if (playedPercentage >= 30) {
-                            logView();
+                            setLogView(true)
                             player.off("timeupdate", handleTimeUpdate); // Remove listener after logging
                         }
                     };
@@ -158,6 +161,7 @@ const VideoPlayer = ({
 
     return (
         <div style={videoWrapperStyles}>
+             <ViewsDisplay post={post} loggedInUser={loggedInUser} logView={logView} autoLogView={true}/>
             <video ref={playerRef} className="plyr" />
         </div>
     );

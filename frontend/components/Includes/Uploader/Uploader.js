@@ -109,6 +109,20 @@ export default function Uploader(props) {
           try {
             const post = await getPostFromId(props.refId)
             log(post)
+            if(!post){ // in this unlikely situation, just return
+              if (props.addMediaOnUpload) {
+                props.addMediaOnUpload();
+              }
+              load(request.responseText)
+              return
+            }
+            if(props.isAttachementToPost){ // means post might be a song looking to have a thumbnail, we don't have to add any media display type to the post here
+              if (props.addMediaOnUpload) {
+                props.addMediaOnUpload();
+              }
+              load(request.responseText)
+              return
+            }
             if(post.mediaDisplayType){
               if(post.mediaDisplayType === "portrait"){ // means one of the video files is portrait, so entire post cannot be displayed as landscape
                 mediaDisplayType = "portrait"

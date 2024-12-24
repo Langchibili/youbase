@@ -1,8 +1,7 @@
 'use client'
 
-import Uploader from "@/components/Includes/Uploader/Uploader"
-import { api_url, getJwt, log } from "@/Constants"
-import { getImage, getPostFromId, sendPushNotification, truncateText, validateUrl } from "@/Functions"
+import { api_url, clientUrl, getJwt } from "@/Constants"
+import { sendPushNotification, truncateText } from "@/Functions"
 import React from "react"
 
 export default class ReportPostForm extends React.Component{
@@ -118,7 +117,7 @@ export default class ReportPostForm extends React.Component{
              reported: true
         })
         const title = "Youbase Reported alert on post with id: "+this.props.post.id
-        const body = "Youbase post report reason: "+truncateText(reason,"50")
+        const body = "Youbase post report reason: "+truncateText(this.state.reason,"50")
         const postUrl = clientUrl+"/posts/"+this.props.post.dashed_title
         sendPushNotification(title,body,[this.state.adminUserIds],postUrl,"","")
      }

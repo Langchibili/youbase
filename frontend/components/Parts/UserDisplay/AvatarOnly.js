@@ -20,14 +20,16 @@ export default class AvatarOnly extends React.Component{
             avatarLoaded: true
         })
   }      
-
+  
   renderAvatar = ()=>{
      if(!this.state.user){ 
       return <img style={{width:'36px !important', height:'36px !important'}} src={getImage(this.state.user,'thumbnail','profilePicture')} />
      }
      if(!this.props.profileOnly){
       return (!this.state.avatarLoaded? <></> :
-         <Link href={'/user/'+this.state.user.username}>
+         <Link href={'/user/'+this.state.user.username} onClick={(event) => {
+            event.stopPropagation(); // Prevent parent click handler
+           }}>
          <div className={this.props.custom_styles? "" : "user_img5"}>
                   <img src={getImage(this.state.user.profilePicture,'thumbnail','profilePicture') } alt="profile pic" style={{...this.props.custom_styles,...this.props.exra_styles}}/>
          </div>

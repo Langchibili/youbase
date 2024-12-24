@@ -24,7 +24,7 @@ export default class AudioPlayer extends React.Component{
 
     
     getDefaultPlaylist = async ()=>{
-      const getInitialSongs = await getPostsByType('music',true,'media')
+        const posts = await getPostsByType('music',true,'media')
         if(!this.audioinstance){
             return
         }
@@ -39,8 +39,10 @@ export default class AudioPlayer extends React.Component{
     //     }
     //     console.log(e);
     //   }
+
+      /* null because we are getting songs only and looping throgh them one by one, just the media */
       this.setState({
-        playList: getInitialSongs.media.map((song)=>{ 
+        playList: posts.media.map((song)=>{ 
           const backendUrl = song.provider === "aws-s3"? '' : backEndUrl
           return { key: song.id, musicSrc: backendUrl+song.url, name: song.name, singer: song.name, cover: getImage(null,'thumbnail','music')}
         })
@@ -64,12 +66,13 @@ export default class AudioPlayer extends React.Component{
         if(nowPlayingSongs){ 
             const playList = this.state.playList;
             const newPlayList = nowPlayingSongs.map((song,index)=>{
+               /// post.featuredImages.data[0] this is bount to change when multiple images and songs are allowed
                if(song.hasOwnProperty('attributes')){
                 const backendUrl = song.attributes.provider === "aws-s3"? '' : backEndUrl
-                return {key: song.id, musicSrc: backendUrl+song.attributes.url, name: song.attributes.name, singer: song.attributes.name, cover: getImage(post.featuredImages,'thumbnail','music')}
+                return {key: song.id, musicSrc: backendUrl+song.attributes.url, name: post.title?  post.title : song.attributes.name, singer: song.attributes.name, cover: getImage(post.featuredImages.data[0],'thumbnail','music')}
                }
                const backendUrl = song.provider === "aws-s3"? '' : backEndUrl
-               return {key: song.id, musicSrc: backendUrl+song.url, name: song.name, singer: song.name, cover: getImage(post.featuredImages,'thumbnail','music')}
+               return {key: song.id, musicSrc: backendUrl+song.url, name: post.title? post.title : song.name, singer: song.name, cover: getImage(post.featuredImages.data[0],'thumbnail','music')}
             })
             this.setState({
                 clearPriorAudioLists: true,
@@ -174,7 +177,7 @@ export default class AudioPlayer extends React.Component{
                 <ReactJkMusicPlayer
                 onAudioPlay={this.logPlay}
                 autoPlay={this.state.autoPlay || false}
-                 defaultPosition = {{right: "15px", bottom: "10px"}}
+                 defaultPosition = {{right: "4px", bottom: "170px"}}
                 {...this.options} 
                 clearPriorAudioLists = {this.state.clearPriorAudioLists}
                 audioLists = {this.state.playList || []}

@@ -101,7 +101,7 @@ export default class LikeButton extends React.Component{
        if(likedPostsIds.includes(postId)){ // it means you are already following this user, you can only unfollow the user
          return  <li className="fullscreen-engagement-btn" style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
                     <button disabled={this.state.requesting} className="lkcm152" onClick={this.handleUnLike} >
-                    <small><Zoom in={true}><ThumbUpSharp sx={{color: "crimson"}}/></Zoom></small>
+                    <small><Zoom in={true}><ThumbUpSharp sx={{color: "crimson",marginLeft:'4px'}}/></Zoom></small>
                         {/* <i className="uil uil-thumbs-up" style={{color: "red"}}/> */}
                         <span>{handleCountsDisplay(this.state.post.likes)}</span>
                     </button>

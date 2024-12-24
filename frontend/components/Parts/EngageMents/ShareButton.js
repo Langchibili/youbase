@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect } from "react"
-import { getUserById, handleCountsDisplay, logEngagement, logNotification, sendPushNotification } from "@/Functions"
+import { getUserById, getVideoThumbnail, handleCountsDisplay, logEngagement, logNotification, sendPushNotification, truncateText } from "@/Functions"
 import { Button, Modal, Box, IconButton, Typography } from '@mui/material'
 import { Facebook, Twitter, Instagram, WhatsApp, ContentCopy, TikTok } from '@mui/icons-material'
 import { useSocialSharing } from "@/Contexts/SocialSharingContext";
@@ -60,7 +60,8 @@ export default class ShareButton extends React.Component {
         }
     }
 
-    handleShare = async () => {
+    handleShare = async (e) => {
+        event.stopPropagation(); // Prevent parent click handler
         const sharedPostsIds = this.state.loggedInUser.user.sharedPostsIds
         const postId = this.state.post.id
         this.setState({
@@ -220,15 +221,15 @@ export default class ShareButton extends React.Component {
 }
 
 
-
+/* NOTE: post.media.data[0] and post.featuredImages.data[0]; this is only like this bacause we have not yet allowed multiple video uploads, when we do, it shall need to be different */
 const SetPostMetaTags = ({post})=>{
     const { setSocialSharingTags } = useSocialSharing()
     console.log('the post in the share meta tags component', post)
     useEffect(() => {
         setSocialSharingTags({
-            title: post.title,
-            description: 'This is an amazing description for my page.',
-            image: 'https://example.com/image.jpg',
+            title: post.title? post.title : "A post on youbase",
+            description:  truncateText(post.description? post.description : "View this post on youbase."),
+            image: post.type === "video"? getVideoThumbnail(post.media.data[0].attributes,post) : getImage(post.featuredImages.data[0] || null, "thumbnail", "notifications"),
             url: window.location.origin+'/posts/'+post.dashed_title,
           })
     }, [])

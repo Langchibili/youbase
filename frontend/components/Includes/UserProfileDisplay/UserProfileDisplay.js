@@ -4,14 +4,19 @@ import { getImage, getUserPostsCount, handleCountsDisplay } from "@/Functions";
 import SocialsDisplay from "../SocialsDisplay/SocialsDisplay";
 import Link from "next/link";
 import UserFollowingButtons from "@/components/Parts/UserActionButtons/UserFollowingButtons";
-import { log } from "@/Constants";
+import { api_url, log } from "@/Constants";
 import UserContentDisplay from "../ContentDisplay/UserContentDisplay";
 import { useEffect, useState } from "react";
 import { FeedOutlined, ImageOutlined, MoreVert, VideocamOutlined } from "@mui/icons-material";
 import NoContent from "../NoContent/NoContent";
+import ContentDisplaySection from "../ContentDisplay/ContentDisplaySection";
+import LandscapeContent from "../ContentDisplay/LandscapeContent";
+import PortraitContentDisplay from "../ContentDisplay/PortraitContentDisplay";
+import { useUser } from "@/Contexts/UserContext";
 
 export default function UserProfileDisplay(props) {
   const [postsCount, setPostsCount] = useState(null)
+  const loggedInUser = useUser();
   const [feedHasReels, setFeedHasReels] = useState(true)
   const [feedHasCaptures, setFeedHasCaptures] = useState(true)
   const [feedHasExplore, setFeedHasExplore] = useState(true)
@@ -171,9 +176,9 @@ export default function UserProfileDisplay(props) {
                 </a>}
                 <a
                   className={props.purpose === "manage-posts"? "nav-item nav-link active" : "nav-item nav-link"}
-                  id="nav-courses-tab"
+                  id="nav-posts-tab"
                   data-toggle="tab"
-                  href="#nav-courses"
+                  href="#nav-posts"
                   role="tab"
                   aria-selected="false"
                 >
@@ -181,24 +186,57 @@ export default function UserProfileDisplay(props) {
                 </a>
                 <a
                   className="nav-item nav-link"
-                  id="nav-purchased-tab"
+                  id="nav-videos-tab"
                   data-toggle="tab"
-                  href="#nav-purchased"
-                  role="tab"
-                  aria-selected="false"
-                >
-                  Music
-                </a>
-                <a
-                  className="nav-item nav-link"
-                  id="nav-reviews-tab"
-                  data-toggle="tab"
-                  href="#nav-reviews"
+                  href="#nav-videos"
                   role="tab"
                   aria-selected="false"
                 >
                   Videos
                 </a>
+
+                <a
+                  className="nav-item nav-link"
+                  id="nav-music-tab"
+                  data-toggle="tab"
+                  href="#nav-music"
+                  role="tab"
+                  aria-selected="false"
+                >
+                  Music
+                </a>
+               
+                <a
+                  className="nav-item nav-link"
+                  id="nav-reels-tab"
+                  data-toggle="tab"
+                  href="#nav-reels"
+                  role="tab"
+                  aria-selected="false"
+                >
+                  Reels
+                </a>
+                <a
+                  className="nav-item nav-link"
+                  id="nav-captures-tab"
+                  data-toggle="tab"
+                  href="#nav-captures"
+                  role="tab"
+                  aria-selected="false"
+                >
+                  Captures
+                </a>
+                <a
+                  className="nav-item nav-link"
+                  id="nav-texts-tab"
+                  data-toggle="tab"
+                  href="#nav-texts"
+                  role="tab"
+                  aria-selected="false"
+                >
+                  Texts
+                </a>
+
                 {/* <a
                   className="nav-item nav-link active"
                   id="nav-subscriptions-tab"
@@ -231,118 +269,112 @@ export default function UserProfileDisplay(props) {
                 </div>
               </div>}
               
-              <div className={props.purpose === "manage-posts"? "tab-pane fade show active" : "tab-pane fade"} id="nav-courses" role="tabpanel">
-                <div className="crse_content">
+              <div className={props.purpose === "manage-posts"? "tab-pane fade show active" : "tab-pane fade"} id="nav-posts" role="tabpanel">
+              
                 <div className="row">
                     <div className="col-xl-9 col-lg-8">
-                    {!feedHasCaptures? <NoContent style={{ height: '200px', width: '300px' }}/> : <div className="section3125">
-                      <h3>Captures <ImageOutlined sx={{color:'indigo'}}/></h3>
-                      <div className="la5lo1">
-                        <UserContentDisplay
-                            setFeedHasCaptures={setFeedHasCaptures}
-                            contentToView = "portrait-images"
-                            loggedInUser={props.loggedInUser} 
-                            user={thisIsMyAccount? props.loggedInUser.user : user}
-                            limit="10"
-                            sort="desc"
-                            portraitsContentType = "video"
-                            />
-                        </div>
-                      </div>}
-                      {!feedHasExplore? <NoContent style={{ height: '200px', width: '300px' }}/> :
-                      <>
-                      <h3>Explore <FeedOutlined sx={{color:'forestgreen'}}/></h3>
-                        <div className="section3125 mt-10">
-                            <UserContentDisplay 
-                                setFeedHasExplore={setFeedHasExplore}
-                                contentToView = "all"
-                                postTypeToDisplay="text"
-                                loggedInUser={props.loggedInUser} 
-                                user={thisIsMyAccount? props.loggedInUser.user : user}
-                                limit="10"
-                                sort="desc"
-                            />    
-                      </div> </>}
-                      {!feedHasExplore? <NoContent style={{ height: '200px', width: '300px' }}/> :
-                      <>
-                      <h3>Images <ImageOutlined sx={{color:'green'}}/></h3>
-                        <div className="section3125 mt-10">
-                            <UserContentDisplay 
-                                setFeedHasExplore={setFeedHasExplore}
-                                contentToView = "all"
-                                postTypeToDisplay="image"
-                                loggedInUser={props.loggedInUser}
-                                user={thisIsMyAccount? props.loggedInUser.user : user} 
-                                limit="10"
-                                sort="desc"
-                              />     
-                      </div></>}
-                      </div>
-                  </div>
+                    <ContentDisplaySection
+                      key="nav-posts-tab"
+                      loggedInUser={loggedInUser}
+                      emptyContentMessage="User has no posts yet."
+                      showEmptyContentMessage={true}
+                      contentDisplay={(props) => <LandscapeContent content={props.content} loggedInUser={loggedInUser} />
+                      }
+                      contentUri={`${api_url}/posts`}
+                      limit={10}
+                      contentQueryFilters={`filters[$and][0][$or][0][type][$eq]=image&filters[$and][0][$or][0][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=text&filters[$and][0][$or][2][$and][0][type][$eq]=video&filters[$and][0][$or][2][$and][1][mediaDisplayType][$eq]=landscape&filters[$and][0][$or][3][type][$eq]=embed&filters[$and][0][$or][4][type][$eq]=music&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${user.id}&populate=user,featuredImages,media` }
+                    />
+                    </div>
                 </div>
               </div>
-              <div className="tab-pane fade" id="nav-purchased" role="tabpanel">
+              <div className="tab-pane fade" id="nav-videos" role="tabpanel">
                 <div className="_htg451">
                   <div className="_htg452">
                   <div className="section3125">
-                      <UserContentDisplay 
-                            setFeedHasExplore={setFeedHasExplore}
-                            contentToView = "all"
-                            postTypeToDisplay="music"
-                            loggedInUser={props.loggedInUser}
-                            user={thisIsMyAccount? props.loggedInUser.user : user} 
-                            limit="10"
-                            sort="desc"
-                        />   
+                      <ContentDisplaySection
+                      key="nav-videos-tab"
+                      loggedInUser={loggedInUser}
+                      emptyContentMessage="User has no videos yet."
+                      showEmptyContentMessage={true}
+                      contentDisplay={(props) => <LandscapeContent content={props.content} loggedInUser={loggedInUser} />
+                      }
+                      contentUri={`${api_url}/posts`}
+                      limit={10}
+                      contentQueryFilters={`filters[$and][0][$or][0][$and][0][type][$eq]=video&filters[$and][0][$or][0][$and][1][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=embed&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${user.id}&populate=user,featuredImages,media`}
+                    />
                   </div>
                   </div>
                 </div>
               </div>
-              <div className="tab-pane fade" id="nav-reviews" role="tabpanel">
-                <div className="student_reviews">
+              <div className="tab-pane fade" id="nav-music" role="tabpanel">
                   <div className="row">
                     <div className="col-lg-12">
-                    {!feedHasReels? <NoContent style={{ height: '200px', width: '300px' }}/> :  
-                    <div className="section3125">
-                     <h3>Reels <VideocamOutlined sx={{color:'crimson'}}/></h3> 
-                      <UserContentDisplay
-                          setFeedHasReels={setFeedHasReels}
-                          contentLimit={100}
-                          contentToView = "portrait-videos"
-                          loggedInUser={props.loggedInUser} 
-                          user={thisIsMyAccount? props.loggedInUser.user : user}
-                          limit="10"
-                          sort="desc"
-                      />
-                    </div>}
-                    {!feedHasExplore? <NoContent style={{ height: '200px', width: '300px' }}/> :
-                        <div className="section3125 mt-30">
-                        <h3>Videos <VideocamOutlined sx={{color:'red'}}/></h3>
-                          <UserContentDisplay 
-                            setFeedHasExplore={setFeedHasExplore}
-                            contentToView = "all"
-                            postTypeToDisplay="video"
-                            loggedInUser={props.loggedInUser} 
-                            user={thisIsMyAccount? props.loggedInUser.user : user}
-                            limit="10"
-                            sort="desc"
-                          />     
-                      </div>}
-                      {!feedHasExplore? <NoContent style={{ height: '200px', width: '300px' }}/> :
-                        <div className="section3125 mt-30">
-                        <h3>Embeds <VideocamOutlined sx={{color:'brown'}}/></h3>
-                          <UserContentDisplay 
-                            setFeedHasExplore={setFeedHasExplore}
-                            contentToView = "all"
-                            postTypeToDisplay="embed"
-                            loggedInUser={props.loggedInUser} 
-                            user={thisIsMyAccount? props.loggedInUser.user : user}
-                            limit="10"
-                            sort="desc"
-                          />     
-                      </div>}
+                    <ContentDisplaySection
+                      key="nav-music-tab"
+                      loggedInUser={loggedInUser}
+                      emptyContentMessage="User has no music yet."
+                      showEmptyContentMessage={true}
+                      contentDisplay={(props) => <LandscapeContent content={props.content} loggedInUser={loggedInUser} />
+                      }
+                      contentUri={`${api_url}/posts`}
+                      limit={10}
+                      contentQueryFilters={`filters[$and][0][type][$eq]=music&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${user.id}&populate=user,featuredImages,media`}
+                    />
                     </div>
                   </div>
+              </div>
+              <div className="tab-pane fade" id="nav-reels" role="tabpanel">
+                  <div className="row">
+                    <div className="col-lg-12">
+                    <ContentDisplaySection
+                      key="nav-reels-tab"
+                      loggedInUser={loggedInUser}
+                      emptyContentMessage="User has no reels yet."
+                      showEmptyContentMessage={true}
+                      contentDisplay={(props) => <PortraitContentDisplay content={props.content} loggedInUser={loggedInUser} />
+                      }
+                      contentUri={`${api_url}/posts`}
+                      limit={10}
+                      contentQueryFilters={`filters[$and][0][type][$eq]=video&filters[$and][1][mediaDisplayType][$eq]=portrait&filters[$and][2][status][$eq]=published&filters[$and][3][user][id][$eq]=${user.id}&populate=user,featuredImages,media`}
+                    />
+                    
+                    </div>
+                </div>
+              </div>
+
+              <div className="tab-pane fade" id="nav-captures" role="tabpanel">
+                  <div className="row">
+                    <div className="col-lg-12">
+                    <ContentDisplaySection
+                      key="nav-captures-tab"
+                      loggedInUser={loggedInUser}
+                      emptyContentMessage="User has no captures yet."
+                      showEmptyContentMessage={true}
+                      contentDisplay={(props) => <PortraitContentDisplay content={props.content} loggedInUser={loggedInUser} />
+                      }
+                      contentUri={`${api_url}/posts`}
+                      limit={10}
+                      contentQueryFilters={`filters[$and][0][type][$eq]=image&filters[$and][1][mediaDisplayType][$eq]=portrait&filters[$and][2][status][$eq]=published&filters[$and][3][user][id][$eq]=${user.id}&populate=user,featuredImages,media`}
+                    />
+                    
+                    </div>
+                </div>
+              </div>
+              <div className="tab-pane fade" id="nav-texts" role="tabpanel">
+                  <div className="row">
+                    <div className="col-lg-12">
+                    <ContentDisplaySection
+                      key="nav-texts-tab"
+                      loggedInUser={loggedInUser}
+                      emptyContentMessage="User has no text posts yet."
+                      showEmptyContentMessage={true}
+                      contentDisplay={(props) => <LandscapeContent content={props.content} loggedInUser={loggedInUser} />
+                      }
+                      contentUri={`${api_url}/posts`}
+                      limit={10}
+                      contentQueryFilters={`filters[$and][0][type][$eq]=text&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${user.id}&populate=user,featuredImages,media`}
+                    />
+                    </div>
                 </div>
               </div>
               <div

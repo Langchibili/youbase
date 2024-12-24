@@ -45,9 +45,9 @@ const MoreOptions = ({ anchorEl, open, loggedInUser, handleDeleteModalOpen, hand
       }}
     >
       {!thisIsMyPost?  null: <MenuItem onClick={() => { handleClose(); handlePostModalClickOpen(); }}>Edit</MenuItem>}
-      <MenuItem onClick={()=>{handleShareModalOpen(true)}}>Share</MenuItem>
+      <MenuItem onClick={(e)=>{e.stopPropagation(); handleShareModalOpen(true)}}>Share</MenuItem>
       {!thisIsMyPost? null :  <MenuItem onClick={()=>{handleDeleteModalOpen(true)}}>Delete</MenuItem>}
-      {!loggedInUser.status? null : <MenuItem onClick={()=>{handleReportModalOpen(true)}}>Report</MenuItem>}
+      {!loggedInUser.status? null : <MenuItem onClick={(e)=>{e.stopPropagation(); handleReportModalOpen(true)}}>Report</MenuItem>}
     </Menu>
   );
 };
@@ -68,7 +68,8 @@ export default function PostMoreBtn(props) {
     setOpen(false);
   }
 
-  const handleShareModalClose = ()=>{
+  const handleShareModalClose = (e)=>{
+    e.stopPropagation(); 
     handleShareModalOpen(false)
   }
 
@@ -76,29 +77,34 @@ export default function PostMoreBtn(props) {
     handleDeleteModalOpen(false)
   }
 
-  const handleReportModalClose = ()=>{
+  const handleReportModalClose = (e)=>{
+    e.stopPropagation(); 
     handleReportModalOpen(false)
   }
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
+    event.stopPropagation(); // Prevent parent click handler
   }
 
-  const handleClose = () => {
+  const handleClose = (e) => {
+    if(e){
+      e.stopPropagation(); // Prevent parent click handler
+    }
     setAnchorEl(null);
   }
   console.log('inside the share page',props.post)
   return (
     <>
     {/* postId is for comments deletion */}
-    <DeletePostModal open={openDeleteModal} postId={props.isComment? props.postId : props.post.id} isComment={props.isComment} commentId={props.commentId} handleClose={handleDeleteModalClose}/>
-    <ReportPostModal open={openReportModal} {...props} handleClose={handleReportModalClose}/>
+    <DeletePostModal openDeletePostModal={openDeleteModal} postId={props.isComment? props.postId : props.post.id} isComment={props.isComment} commentId={props.commentId} handleClose={handleDeleteModalClose}/>
+    <ReportPostModal openReportModal={openReportModal} {...props} handleClose={handleReportModalClose}/>
       {props.post && props.post.user && props.post.user.data && props.post.user.data.attributes && (<ShareButton hideButton={true} openShareModal={openShareModal} handleShareModalClose={handleShareModalClose} post={props.post} user={props.post.user.data.attributes} {...props} />)}
       <IconButton onClick={handleClick} sx={{paddingTop: '0px', paddingRight:'0px',...props.moreStyles}}>
         <MoreVertIcon />
       </IconButton>
       <MoreOptions loggedInUser={props.loggedInUser} handleDeleteModalOpen={handleDeleteModalOpen} handleReportModalOpen={handleReportModalOpen} handleShareModalOpen={handleShareModalOpen} thisIsMyPost={props.thisIsMyPost} thisIsMyComment={props.thisIsMyComment} isComment={props.isComment} anchorEl={anchorEl} open={open} handleClose={handleClose} handlePostModalClickOpen={handlePostModalClickOpen} handlePostModalClose={handlePostModalClose}/>
-      <PostModal open={openModal} onClose={handlePostModalClose} {...props}/>
+      <><PostModal openPostModal={openModal} onPostModalClose={handlePostModalClose} {...props}/></>
     </>
   )
 }
