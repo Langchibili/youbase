@@ -95,7 +95,10 @@ function RootLayoutContent({ children }) {
 
 const HeaderPart = ()=>{
   const loggedInUser = useUser()
-  if(typeof window !== undefined){
+  if(typeof window !== "undefined"){
+    if(!loggedInUser){
+      return <></>
+    }
     if( window.innerWidth >= 991){ // for larger screens
       return (<>
               {/* Main Header */}
@@ -134,6 +137,9 @@ const HeaderPart = ()=>{
 
 const FooterPart = ()=>{
   const loggedInUser = useUser()
+  if(!loggedInUser){
+    return <></>
+  }
   return (<>
               {/* Main Footer */}
               <MainFooter loggedInUser={loggedInUser}/>

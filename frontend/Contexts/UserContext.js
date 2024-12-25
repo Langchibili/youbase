@@ -30,6 +30,9 @@ export function UserProvider({ children }) {
   if (loading) {
     return <ImagePageLoader/> // Show a loading state if needed
   }
+  if (!loggedInUser) {
+    return <ImagePageLoader/> // Show a loading state if needed
+  }
 
   return (
     <UserContext.Provider value={loggedInUser}>
