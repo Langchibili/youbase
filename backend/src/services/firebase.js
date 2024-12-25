@@ -35,7 +35,8 @@ const initializeFirebaseAdmin = async () => {
       const firebaseConfig = await strapi.db.query('api::firebase-fcm-config.firebase-fcm-config').findOne();
 
       if (!firebaseConfig || !firebaseConfig.serviceAccount) {
-        throw new Error('Service account not found in FirebaseFcmConfig.');
+        console.error("firebaseconfig not found")
+        return 
       }
       // Initialize Firebase Admin
       admin.initializeApp({
@@ -48,6 +49,7 @@ const initializeFirebaseAdmin = async () => {
       console.log('Firebase Admin initialized successfully.');
     } catch (error) {
       console.error('Error initializing Firebase Admin:', error);
+      return
       throw error;
     }
   }

@@ -139,6 +139,7 @@ module.exports = {
               return response;
             } catch (error) {
               console.error('Error sending multicast notification:', error);
+              return
               throw error;
             }
           };

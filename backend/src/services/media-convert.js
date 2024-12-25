@@ -276,6 +276,7 @@ const generateThumbnail = async (width, height, filePath, outputBucket, thumbnai
     return response.Job.Id
   } catch (error) {
     console.error('Error creating MediaConvert thumbnail job:', error)
+    return
     throw error
   }
 }

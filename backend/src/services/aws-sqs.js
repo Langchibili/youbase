@@ -38,6 +38,7 @@ async function deleteFileFromS3(fileUrl) {
     console.log(`File deleted successfully from S3: ${key}`);
   } catch (error) {
     console.error('Error deleting file from S3:', error);
+    return
     throw error;
   }
 }
