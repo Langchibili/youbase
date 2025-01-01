@@ -1,0 +1,36 @@
+{
+  "kind": "singleType",
+  "collectionName": "artists",
+  "info": {
+    "singularName": "artist",
+    "pluralName": "artists",
+    "displayName": "artists"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "zambian": {
+      "type": "json"
+    },
+    "zimbabwean": {
+      "type": "json"
+    },
+    "tanzanian": {
+      "type": "json"
+    },
+    "malawian": {
+      "type": "json"
+    },
+    "southafrican": {
+      "type": "json"
+    },
+    "nigerian": {
+      "type": "json"
+    },
+    "international": {
+      "type": "json"
+    }
+  }
+}

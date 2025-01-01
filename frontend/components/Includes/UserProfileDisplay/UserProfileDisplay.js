@@ -76,12 +76,12 @@ export default function UserProfileDisplay(props) {
           {props.purpose === "manage-posts"? <div style={{color:'aliceblue', fontWeight:'800'}}>Edit or Delete posts by clicking the {<MoreVert/>} icon</div> : <div className="section3125 rpt145">
             <div className="row">
               <div className="col-lg-7">
-                {thisIsMyAccount? <Link href="#" className="_216b22">
+                {/* {thisIsMyAccount? <Link href="#" className="_216b22">
                   <span>
                     <i className="uil uil-cog" />
                   </span>
                   Setting
-                </Link> : <></>}
+                </Link> : <></>} */}
                 <div className="dp_dt150">
                   <div className="img148">
                     <img src={profilePicture} alt="profile pic" />
@@ -114,12 +114,12 @@ export default function UserProfileDisplay(props) {
                 </ul>
               </div>
               <div className="col-lg-5">
-                {thisIsMyAccount? <Link href="/manage/account" className="_216b12">
+                {/* {thisIsMyAccount? <Link href="/manage/account" className="_216b12">
                   <span>
                     <i className="uil uil-cog" />
                   </span>
                   Setting
-                </Link> : <></>}
+                </Link> : <></>} */}
                 <div className="rgt-145">
                   <ul className="tutor_social_links">
                     {displaySocials()}
@@ -139,7 +139,7 @@ export default function UserProfileDisplay(props) {
                     {thisIsMyAccount? <li>
                     <Link
                       className="msg125 btn500"
-                      href="/user/manage/content"
+                      href="/manage/posts"
                       style={{ display:'inline-block',alignContent: 'center'}}
                     >
                       Edit
@@ -206,6 +206,16 @@ export default function UserProfileDisplay(props) {
                   Music
                 </a>
                
+                <a
+                  className="nav-item nav-link"
+                  id="nav-images-tab"
+                  data-toggle="tab"
+                  href="#nav-images"
+                  role="tab"
+                  aria-selected="false"
+                >
+                  Reels
+                </a>
                 <a
                   className="nav-item nav-link"
                   id="nav-reels-tab"
@@ -322,6 +332,24 @@ export default function UserProfileDisplay(props) {
                     />
                     </div>
                   </div>
+              </div>
+              <div className="tab-pane fade" id="nav-images" role="tabpanel">
+                  <div className="row">
+                    <div className="col-lg-12">
+                    <ContentDisplaySection
+                      key="nav-images-tab"
+                      loggedInUser={loggedInUser}
+                      emptyContentMessage="User has no images yet."
+                      showEmptyContentMessage={true}
+                      contentDisplay={(props) => <PortraitContentDisplay content={props.content} loggedInUser={loggedInUser} />
+                      }
+                      contentUri={`${api_url}/posts`}
+                      limit={10}
+                      contentQueryFilters={`filters[$and][0][$or][0][$and][0][type][$eq]=image&filters[$and][0][$or][0][$and][1][mediaDisplayType][$not][$eq]=portrait&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${user.id}&populate=user,featuredImages,media`}
+                    />
+                    
+                    </div>
+                </div>
               </div>
               <div className="tab-pane fade" id="nav-reels" role="tabpanel">
                   <div className="row">

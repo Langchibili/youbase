@@ -15,6 +15,7 @@ const ContentDisplaySection = ({
   loggedInUser,
   showEmptyContentMessage = false,
   emptyContentMessage = "",
+  contentTitle="",
   contentDisplay = (props) => <></>,
   nextSectionToDisplay = (props) => <></>
 }) => {
@@ -27,6 +28,9 @@ const ContentDisplaySection = ({
   
 
   const fetchContent = async (page) => {
+    if(isLoading){
+      return
+    }
     try {
       setIsLoading(true);
       const queryFilters = contentQueryFilters? contentQueryFilters+"&" : ""
@@ -64,14 +68,19 @@ const ContentDisplaySection = ({
         observer.unobserve(loaderRef.current);
       }
     };
-  }, [hasMoreContent, isLoading]);
+  }, [loaderRef]);
 
   useEffect(() => {
     const runFetchContent = async () => {
-      if (!hasMoreContent) return;
-
+      if (!hasMoreContent) { 
+        return 
+      }
       const newContent = await fetchContent(currentPage);
+      if(!newContent){
+        return
+      }
       if(showEmptyContentMessage && newContent.length === 0 && currentPage === 1){
+        setHasMoreContent(false);
         setCanShowEmptyContentMessage(true)
       }
       if (newContent.length === 0 || currentPage >= totalPages) {
@@ -79,20 +88,19 @@ const ContentDisplaySection = ({
       } else {
         updateSections(currentPage,newContent)
       }
-    };
+    } 
 
     runFetchContent();
-  }, [currentPage, totalPages, hasMoreContent]);
+  }, [currentPage, hasMoreContent]);
 
-  
+ 
   if(canShowEmptyContentMessage){
     return <NoContent message={emptyContentMessage}/>
   }
   return (
     <div>
+      {contentTitle && sections.length > 0? <h3>{contentTitle}</h3> : <></>}
       {sections.map((section)=>{
-        
-  console.log("section-" + section);
            return (<div key={section.page} style={{marginBottom:'10px'}}>
                      {contentDisplay({content:section.content,loggedInUser:loggedInUser})}
                   </div>)
@@ -106,6 +114,7 @@ const ContentDisplaySection = ({
         nextSectionToDisplay()
       )}
       {isLoading && <MoreContentLoader />}
+      <div style={{minHeight:'70px'}}></div>
     </div>
   );
 };

@@ -248,10 +248,28 @@ export default class PostForm extends React.Component{
             const allowMultipleContentThumbnailUpload = await getFeature(8) // multiple feautred images upload feature
             const allowMultipleMusicUploadFeature = await getFeature(6) // multiple music upload feature
             if(!allowMultipleMusicUploadFeature){
-              const post = await getPostFromId(draftPostId,"media")
+              const post = await getPostFromId(draftPostId,"media,featuredImages")
               if(post.media.data && post.media.data.length > 1){
                 this.setState({
                   errorMessage: 'multiple upload of music is not supported yet. Remove one and post.',
+                  successMessage: '',
+                  openSnackBar: true,
+                  postSaving: false
+                })
+                return
+              }
+              if(post.featuredImages.data && post.featuredImages.data.length > 1){
+                this.setState({
+                  errorMessage: 'multiple upload of thumbnails is not supported yet. Remove one and post.',
+                  successMessage: '',
+                  openSnackBar: true,
+                  postSaving: false
+                })
+                return
+              }
+              if(post.featuredImages.data || post.featuredImages.data.length === 0){
+                this.setState({
+                  errorMessage: 'please upload a music thumbnail or music art.',
                   successMessage: '',
                   openSnackBar: true,
                   postSaving: false

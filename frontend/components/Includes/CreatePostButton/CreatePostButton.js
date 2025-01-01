@@ -29,6 +29,7 @@ export default function CreatePostButton(props) {
     <div id="create-post-btn">
       <Zoom in={!open}>
         <StyledFab
+          sx={{bottom:70}}
           color="secondary"
           aria-label="edit"
           onClick={handleClickOpen}

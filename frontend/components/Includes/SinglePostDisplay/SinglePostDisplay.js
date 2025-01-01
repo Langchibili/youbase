@@ -10,6 +10,10 @@ import ImagePostMedium from "../PostsDisplay/ImagePostMedium";
 import VideoPostMedium from "../PostsDisplay/VideoPostMedium";
 import MusicPostMedium from "../PostsDisplay/MusicPostMedium";
 import EmbedPostMedium from "../PostsDisplay/EmbedPostMedium";
+import ContentDisplaySection from "../ContentDisplay/ContentDisplaySection";
+import PortraitContentDisplay from "../ContentDisplay/PortraitContentDisplay";
+import LandscapeContent from "../ContentDisplay/LandscapeContent";
+import { api_url } from "@/Constants";
 
 export default function SinglePostDisplay(props) {
 
@@ -48,6 +52,57 @@ export default function SinglePostDisplay(props) {
         }
     }
 
+const moreFromUserFilters = {
+      // Videos: Excludes portrait videos, includes embeds
+      'videos':`filters[$and][0][$or][0][$and][0][type][$eq]=video&filters[$and][0][$or][0][$and][1][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=embed&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${props.post.user.data.id}&populate=user,featuredImages,media`, 
+      
+      // Music: Only music content
+      'music':`filters[$and][0][type][$eq]=music&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${props.post.user.data.id}&populate=user,featuredImages,media`, 
+      
+      // Images: Excludes portrait images
+      'images':`filters[$and][0][$or][0][$and][0][type][$eq]=image&filters[$and][0][$or][0][$and][1][mediaDisplayType][$not][$eq]=portrait&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${props.post.user.data.id}&populate=user,featuredImages,media`, 
+      
+      // Reels: Portrait videos only
+     // '':'filters[$and][0][type][$eq]=video&filters[$and][1][mediaDisplayType][$eq]=portrait', 
+      
+      // Captures: Portrait images only
+      //'filters[$and][0][type][$eq]=image&filters[$and][1][mediaDisplayType][$eq]=portrait', 
+      
+      // Text: Only text content
+      'text':`filters[$and][0][type][$eq]=text&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${props.post.user.data.id}&populate=user,featuredImages,media`
+}  
+
+const relatedPostsFilters = {
+        // Videos: Excludes portrait videos, includes embeds
+        'videos':'filters[$and][0][$or][0][$and][0][type][$eq]=video&filters[$and][0][$or][0][$and][1][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=embed', 
+        
+        // Music: Only music content
+        'music':'filters[$and][0][type][$eq]=music', 
+        
+        // Images: Excludes portrait images
+        'images':'filters[$and][0][$and][0][type][$eq]=image&filters[$and][0][$and][1][mediaDisplayType][$not][$eq]=portrait', 
+        
+        // Reels: Portrait videos only
+       // '':'filters[$and][0][type][$eq]=video&filters[$and][1][mediaDisplayType][$eq]=portrait', 
+        
+        // Captures: Portrait images only
+        //'filters[$and][0][type][$eq]=image&filters[$and][1][mediaDisplayType][$eq]=portrait', 
+        
+        // Text: Only text content
+        'text':'filters[$and][0][type][$eq]=text'
+     }  
+
+const nextSectionToDisplay = ()=>{
+  return <ContentDisplaySection
+            loggedInUser={props.loggedInUser}
+            contentDisplay={(props) =><LandscapeContent content={props.content} loggedInUser={props.loggedInUser} />}
+            contentUri={`${api_url}/posts`}
+            contentTitle="Related Posts"
+            limit={10}
+            contentQueryFilters={moreFromUserFilters[props.post.type]}  />
+}
+
+
   return (
     <>
   <div className="sa4d25">
@@ -56,10 +111,19 @@ export default function SinglePostDisplay(props) {
         <div className="col-xl-8 col-lg-8">
         {renderPostContent(props.post, postEngagementsDisplay)}
         <PostImpressions {...props}/> {/* log the impression on the post when a user views the post */}
+        <ContentDisplaySection
+          loggedInUser={props.loggedInUser}
+          contentDisplay={(props) =><LandscapeContent content={props.content} loggedInUser={props.loggedInUser} />}
+          contentUri={`${api_url}/posts`}
+          contentTitle="More From User"
+          limit={10}
+          contentQueryFilters={moreFromUserFilters[props.post.type]}      
+          nextSectionToDisplay={()=> nextSectionToDisplay()}
+          />
         </div>
         
-        
-        <div className="col-xl-4 col-lg-4">
+   
+        {/* <div className="col-xl-4 col-lg-4">
           <div className="right_side">
             <div className="fcrse_3">
               <div className="cater_ttle">
@@ -312,7 +376,7 @@ export default function SinglePostDisplay(props) {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   </div>

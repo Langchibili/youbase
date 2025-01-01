@@ -3,6 +3,7 @@
 import ContentNotFound from '@/components/Includes/ContentNotFound/ContentNotFound'
 import PageLoader from '@/components/Includes/Loader/PageLoader'
 import SinglePostDisplay from '@/components/Includes/SinglePostDisplay/SinglePostDisplay'
+import PostPageSkeleton from '@/components/Includes/Skeletons/PostPageSkeleton'
 import { useUser } from '@/Contexts/UserContext'
 import { dynamicConfig, getPost, getPostFromId } from '@/Functions'
 import React, { useState, useEffect } from 'react'
@@ -31,7 +32,7 @@ export default function Post({ params }) {
   }, [params.title])
 
   if (loading) {
-    return <PageLoader/>
+    return <><PageLoader/><PostPageSkeleton onSinglePostDisplayPage={true}/></>
   }
 
   if (!post) {

@@ -59,11 +59,16 @@ async function processMessages() {
         try {
           const body = JSON.parse(message.Body)
           const { detail } = body
-
           // Log job ID and status from the message
           const job = await Strapi.db.query('api::media-convert-job.media-convert-job').findOne({
             where: { jobId: detail.jobId },
           })
+          if(!job){
+            return // it means no need to do anything, coz we shall receive the message again and delete it when the job is done
+          }
+          if(!job.uploadId){
+            return // it means no need to do anything, coz we shall receive the message again and delete it when the job is done
+          }
           const upload = await Strapi.db.query('plugin::upload.file').findOne({
             where: { id: job.uploadId },
           })

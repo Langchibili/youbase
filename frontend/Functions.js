@@ -95,7 +95,10 @@ export const dynamicConfig = (config="auto")=>{
 }
 
 export const handleCountsDisplay = (counts) => { // formating counts like: likes, views, shares, etc
-    if(counts === null) return "0"
+   if(!counts){
+     return <></>
+   } 
+   if(counts === null) return "0"
     if (parseInt(counts) >= 1_000_000_000) {
       return (parseInt(counts) / 1_000_000_000).toFixed(2).replace(/\.00$/, '') + 'B'
     } else if (parseInt(counts) >= 1_000_000) {
@@ -154,6 +157,9 @@ export const getImage = (image, size = "normal", use = "normal") => {
     if (!image) {
         if(use === "music" || use === "notifications"){
           return defaultMusicCover
+        }
+        if(use === "blank"){
+          return '' // then return a blank url if no url exists for the image 
         }
         // If the image is not provided, return the appropriate default image based on the usage context
         return use === "profilePicture" ? defaultProfilePicture : defaultCoverPhoto;
@@ -334,6 +340,17 @@ export const createNewPost = async (data)=>{
     return null
 }
 
+export const createBugReport = async (data)=>{
+   await fetch(api_url+'/bug-reports', {
+      method: 'POST',
+      headers: {
+       'Authorization': `Bearer ${getJwt()}`,
+       'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+    })
+}
+
 export const updatePost = async (data,postId)=>{
   const post =  await fetch(api_url+'/posts/'+postId, {
       method: 'PUT',
@@ -477,6 +494,8 @@ export const getPost = async (title)=>{
         }
       })
   }
+
+  
 
   export const getCategoryByName = async (categoryName)=>{
     const category = await fetch(api_url+'/categories?filters[categoryName][$contains]='+categoryName,{

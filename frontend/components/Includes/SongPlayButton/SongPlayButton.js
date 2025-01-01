@@ -21,26 +21,43 @@ export default function SongPlayButton(props) {
    }
   },[audioInstance?.nowPlayingSongId])
 
-  const handlePlayClick = () => {
+  const handlePlayClick = (e) => {
+    if(e){
+      e.preventDefault()
+      e.stopPropagation(); // Prevent parent click handler
+    }
     if(audioInstance){
+      console.log(audioInstance)
         audioInstance.audioinstance.ontimeupdate = (e)=>{
             const progress = (e.target.currentTime / e.target.duration) * 100;
             // log play after 30 percent of playing
-            if (progress >= 30) {
+            if (progress >= 10) {
             setLogPlay(true)
             }
         }
-        audioInstance.addSongToPlaylist(props.post.media.data,props.post)
-        audioInstance.audioinstance.play()
-        setAudioInstance({...audioInstance,nowPlayingSongId:props.post.id})
-        setSongIsPlaying(true)
+        
+        if(audioInstance.nowPlayingSongId === props.post.id){ // if this is the same song which was playing before you paused the audio
+          audioInstance.audioinstance.play()
+          setSongIsPlaying(true)
+          return
+        }
+        else{
+          audioInstance.addSongToPlaylist(props.post.media.data,props.post)
+          audioInstance.audioinstance.play()
+          setAudioInstance({...audioInstance,nowPlayingSongId:props.post.id})
+          setSongIsPlaying(true)
+        }
     }
     else{
         alert('something went wrong playing this audio')
     }
   }
   
-  const handlePauseClick = () => {
+  const handlePauseClick = (e) => {
+    if(e){
+      e.preventDefault()
+      e.stopPropagation(); // Prevent parent click handler
+    }
     if(audioInstance){
         audioInstance.audioinstance.pause()
      }
@@ -48,7 +65,7 @@ export default function SongPlayButton(props) {
   }
 
   return (
-    <div>
+    <div key={props.post.id}>
       <StreamsDisplay post={props.post} loggedInUser={props.loggedInUser} logPlay={logPlay} autoLogPlay={true}/>
       {songIsPlaying? <button className="play-button" onClick={handlePauseClick}>
         <i className="uil uil-pause"></i>

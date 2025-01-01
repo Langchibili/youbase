@@ -257,8 +257,7 @@
       "mappedBy": "reportedPostUser"
     },
     "verified": {
-      "type": "boolean",
-      "default": false
+      "type": "boolean"
     },
     "status": {
       "type": "enumeration",
@@ -294,6 +293,10 @@
     },
     "impressions": {
       "type": "biginteger"
+    },
+    "monetized": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

@@ -20,10 +20,10 @@ let apiurl, backendUrl, clienturl
    /*localhost: */  apiurl = 'http://localhost:1340/api'
  }
  else if(environment === 'live'){
-   /*liveserver1: */ apiurl = 'https://api.youbase.com/api' // for production's sake
+   /*liveserver1: */ apiurl = 'https://api.youbase.app/api' // for production's sake
  }
  else if(environment === 'live2'){
-  /*liveserver2: */ apiurl = 'https://api.youbase.app/api' // for production's sake
+  /*liveserver2: */ apiurl = 'https://api.youbase.com/api' // for production's sake
  }
  else{ // if environment is default, it means it's a test server
   /*testserver: */  apiurl = 'https://youbaseapi.driverbase.app/api' // the api to be used when deployed to the test site
@@ -299,7 +299,7 @@ export const checkUserLogginStatus = async () =>{
      // check if user is logged in or not, using jwt
      const user = await getUserAccount(jwt) // get the user account because you actually have the jwt
      logginStatusObject.user = user 
-     if(user.type === "default"){
+     if(user.type && user.type === "default"){
          logginStatusObject.status = false
      }
      else{

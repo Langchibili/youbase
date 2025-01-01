@@ -205,6 +205,9 @@
     },
     "totalEngagement": {
       "type": "biginteger"
+    },
+    "monetized": {
+      "type": "boolean"
     }
   }
 }

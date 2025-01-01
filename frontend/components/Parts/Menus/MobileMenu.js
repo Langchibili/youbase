@@ -144,11 +144,12 @@ export default class MobileMenu extends React.Component {
 
         <SwipeableDrawer
           anchor="left"
+          sx={{height:"100vh !important"}}
           open={this.state.isDrawerOpen}
           onClose={this.toggleDrawer(false)}
           onOpen={this.toggleDrawer(true)}
         >
-          <List style={{ width: 250, height: window.innerHeight, overflowY: 'auto' }}>
+          <List style={{ width: 250, height: "100vh", overflowY: 'auto' }}>
             <ListItem>
               <ListItemIcon>
                 <HomeIcon />

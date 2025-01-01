@@ -177,7 +177,7 @@ export default class AudioPlayer extends React.Component{
                 <ReactJkMusicPlayer
                 onAudioPlay={this.logPlay}
                 autoPlay={this.state.autoPlay || false}
-                 defaultPosition = {{right: "4px", bottom: "170px"}}
+                 defaultPosition = {{right: "4px", bottom: "140px"}}
                 {...this.options} 
                 clearPriorAudioLists = {this.state.clearPriorAudioLists}
                 audioLists = {this.state.playList || []}

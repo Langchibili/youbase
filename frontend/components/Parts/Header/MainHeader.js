@@ -77,7 +77,8 @@ export default class MainHeader extends React.Component{
                     <span className="noti_count">2</span>
                     </a>
                 </li> */}
-                 {!this.props.loggedInUser.status? <></> : <li><SearchModal loggedInUser={this.props.loggedInUser}/></li>}
+                 {!this.props.loggedInUser.status? (<><li><Link className="btn btn-danger mr-2" href="/signin">Login</Link></li> <li><Link className="btn btn-danger" href="/signup">Signup</Link></li></>)
+                 : <li><SearchModal loggedInUser={this.props.loggedInUser}/></li>}
                 {/* {!this.props.loggedInUser.status? <li>
                     <Link className="btn btn-danger mr-2" href="/signin">Login</Link></li> : <li className="ui dropdown" tabIndex={0}>
                  <a href="#" className="option_links" title="Messages">

@@ -223,13 +223,17 @@ export default class ShareButton extends React.Component {
 
 /* NOTE: post.media.data[0] and post.featuredImages.data[0]; this is only like this bacause we have not yet allowed multiple video uploads, when we do, it shall need to be different */
 const SetPostMetaTags = ({post})=>{
+    const renderThumbNail = ()=>{
+    if(post.featuredImages && post.featuredImages.data && post.featuredImages.data[0]){
+          return getImage(post.featuredImages.data[0] || null, "thumbnail", "notifications")
+        }
+    }
     const { setSocialSharingTags } = useSocialSharing()
-    console.log('the post in the share meta tags component', post)
     useEffect(() => {
         setSocialSharingTags({
             title: post.title? post.title : "A post on youbase",
             description:  truncateText(post.description? post.description : "View this post on youbase."),
-            image: post.type === "video"? getVideoThumbnail(post.media.data[0].attributes,post) : getImage(post.featuredImages.data[0] || null, "thumbnail", "notifications"),
+            image: post.type === "video"? getVideoThumbnail(post.media && post.media.data? post.media[0].attributes : null,post) : renderThumbNail(),
             url: window.location.origin+'/posts/'+post.dashed_title,
           })
     }, [])

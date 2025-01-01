@@ -832,7 +832,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::reported-post.reported-post'
     >;
-    verified: Attribute.Boolean & Attribute.DefaultTo<false>;
+    verified: Attribute.Boolean;
     status: Attribute.Enumeration<['published', 'draft']>;
     notificationsDeviceId: Attribute.String;
     accountBlocked: Attribute.Boolean & Attribute.DefaultTo<false>;
@@ -843,6 +843,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     commentsCount: Attribute.BigInteger;
     totalEngagement: Attribute.BigInteger;
     impressions: Attribute.BigInteger;
+    monetized: Attribute.Boolean & Attribute.DefaultTo<false>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -990,6 +991,42 @@ export interface ApiAppFeatureAppFeature extends Schema.CollectionType {
   };
 }
 
+export interface ApiArtistArtist extends Schema.SingleType {
+  collectionName: 'artists';
+  info: {
+    singularName: 'artist';
+    pluralName: 'artists';
+    displayName: 'artists';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    zambian: Attribute.JSON;
+    zimbabwean: Attribute.JSON;
+    tanzanian: Attribute.JSON;
+    malawian: Attribute.JSON;
+    southafrican: Attribute.JSON;
+    nigerian: Attribute.JSON;
+    international: Attribute.JSON;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::artist.artist',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::artist.artist',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiAuthAuth extends Schema.CollectionType {
   collectionName: 'auths';
   info: {
@@ -1009,6 +1046,43 @@ export interface ApiAuthAuth extends Schema.CollectionType {
     createdBy: Attribute.Relation<'api::auth.auth', 'oneToOne', 'admin::user'> &
       Attribute.Private;
     updatedBy: Attribute.Relation<'api::auth.auth', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
+export interface ApiBugReportBugReport extends Schema.CollectionType {
+  collectionName: 'bug_reports';
+  info: {
+    singularName: 'bug-report';
+    pluralName: 'bug-reports';
+    displayName: 'bugReports';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    location: Attribute.String;
+    error_data: Attribute.Text;
+    user: Attribute.Relation<
+      'api::bug-report.bug-report',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::bug-report.bug-report',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::bug-report.bug-report',
+      'oneToOne',
+      'admin::user'
+    > &
       Attribute.Private;
   };
 }
@@ -1529,6 +1603,7 @@ export interface ApiPostPost extends Schema.CollectionType {
     >;
     commentsCount: Attribute.BigInteger;
     totalEngagement: Attribute.BigInteger;
+    monetized: Attribute.Boolean;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1752,7 +1827,9 @@ declare module '@strapi/types' {
       'plugin::i18n.locale': PluginI18NLocale;
       'api::ad.ad': ApiAdAd;
       'api::app-feature.app-feature': ApiAppFeatureAppFeature;
+      'api::artist.artist': ApiArtistArtist;
       'api::auth.auth': ApiAuthAuth;
+      'api::bug-report.bug-report': ApiBugReportBugReport;
       'api::category.category': ApiCategoryCategory;
       'api::category-name.category-name': ApiCategoryNameCategoryName;
       'api::comment.comment': ApiCommentComment;

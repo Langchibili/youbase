@@ -92,9 +92,7 @@ export default class MusicPost extends React.Component{
         />
         {this.renderMedia()}
         <CategorySelector post={this.props.post} handleCategorySet={this.props.handleCategorySet} parentCategory="music"/>
-        <h4>optional</h4>
-        <hr/>
-        <h3>Music Art</h3>
+        <h3>Music Art (cover art)</h3>
         <Uploader 
                isAttachementToPost={true}
                displayType="circular"
@@ -105,6 +103,8 @@ export default class MusicPost extends React.Component{
                allowMultiple={false}
          />
         <MediaDisplay post={this.props.post} displayType="mediaOnly" refleshImages={this.state.refleshImages} handleRemoveImage={this.handleRemoveImage} listtype="grid"/>
+        <h4>optional</h4>
+        <hr/>
         <PostDescription description={this.props.post.description} setPostDescriptionOrTitle={this.props.setPostDescription} descriptionPlaceholder="Add Song Description" bordered="yes"/>
         <FormFooter {...this.props}/>
       

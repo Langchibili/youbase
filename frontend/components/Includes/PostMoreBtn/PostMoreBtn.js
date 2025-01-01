@@ -94,6 +94,7 @@ export default function PostMoreBtn(props) {
     setAnchorEl(null);
   }
   console.log('inside the share page',props.post)
+  const iconColor = props.iconColor? props.iconColor: ''
   return (
     <>
     {/* postId is for comments deletion */}
@@ -101,7 +102,7 @@ export default function PostMoreBtn(props) {
     <ReportPostModal openReportModal={openReportModal} {...props} handleClose={handleReportModalClose}/>
       {props.post && props.post.user && props.post.user.data && props.post.user.data.attributes && (<ShareButton hideButton={true} openShareModal={openShareModal} handleShareModalClose={handleShareModalClose} post={props.post} user={props.post.user.data.attributes} {...props} />)}
       <IconButton onClick={handleClick} sx={{paddingTop: '0px', paddingRight:'0px',...props.moreStyles}}>
-        <MoreVertIcon />
+        <MoreVertIcon sx={{color:iconColor}}/>
       </IconButton>
       <MoreOptions loggedInUser={props.loggedInUser} handleDeleteModalOpen={handleDeleteModalOpen} handleReportModalOpen={handleReportModalOpen} handleShareModalOpen={handleShareModalOpen} thisIsMyPost={props.thisIsMyPost} thisIsMyComment={props.thisIsMyComment} isComment={props.isComment} anchorEl={anchorEl} open={open} handleClose={handleClose} handlePostModalClickOpen={handlePostModalClickOpen} handlePostModalClose={handlePostModalClose}/>
       <><PostModal openPostModal={openModal} onPostModalClose={handlePostModalClose} {...props}/></>

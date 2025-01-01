@@ -15,10 +15,10 @@ export default function SearchForm(props) {
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
 
-  // Filters for each tab
+
   const tabFilters = [
-    'filters[$and][0][$or][0][type][$eq]=image&filters[$and][0][$or][1][type][$eq]=text&filters[$and][0][$or][2][$and][0][type][$eq]=video&filters[$and][0][$or][2][$and][1][mediaDisplayType][$eq]=landscape', // Combined filter for "posts"
-    'filters[$and][0][type][$eq]=video', // Videos
+    'filters[$and][0][$or][0][type][$eq]=image&filters[$and][0][$or][0][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=text&filters[$and][0][$or][2][$and][0][type][$eq]=video&filters[$and][0][$or][2][$and][1][mediaDisplayType][$eq]=landscape&filters[$and][0][$or][3][type][$eq]=embed&filters[$and][0][$or][4][type][$eq]=music', // Combined filter for "posts"
+    'filters[$and][0][$and][0][type][$eq]=image&filters[$and][0][$and][1][mediaDisplayType][$not][$eq]=portrait', // Videos
     'filters[$and][0][type][$eq]=music', // Music
     'filters[$and][0][type][$eq]=image', // Images
     'filters[$and][0][type][$eq]=text', // Text
