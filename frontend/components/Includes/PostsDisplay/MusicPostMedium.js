@@ -39,7 +39,7 @@ export default function MusicPostMedium(props) {
               {props.post.type === "music"? <button className="btn btn-danger">Download</button> : <></>}
             </div>
           </div>
-        </div>) : <MusicPlayerCardType {...props}/>
+        </div>) : <MusicPlayerCardType loggedInUser={props.loggedInUser} {...props}/>
         }
       </>
     )

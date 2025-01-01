@@ -1,6 +1,6 @@
 
 import React from 'react'
-import { displayDateOrTime, getImage } from '@/Functions'
+import { displayDateOrTime, getImage, truncateText } from '@/Functions'
 import SongPlayButton from '../../SongPlayButton/SongPlayButton'
 import AvatarWithPostDate from '@/components/Parts/UserDisplay/AvatarWithPostDate'
 import StreamsDisplay from '@/components/Parts/EngageMents/StreamsDisplay'
@@ -80,7 +80,7 @@ export default function MusicPlayerCardType(props) {
       >
         <div style={{ marginLeft: '20px' }}>
           <Link href={`/posts/${props.post.dashed_title}`}>
-            <h5 className="text-truncate mb-1" style={{color:'white'}}>{props.post.title}</h5>
+            <h5 className="mb-1" style={{color:'white'}}>{truncateText(props.post.title,'50')}</h5>
           
           <p className="mb-2 text-muted small">
           <span className="time_145" style={{color:'white'}}> posted {displayDateOrTime(props.post.createdAt)}</span>
@@ -88,7 +88,7 @@ export default function MusicPlayerCardType(props) {
           </Link>
         </div>
         <div>
-          <SongPlayButton post={props.post} />
+           <SongPlayButton {...props} />
         </div>
       </div>
     </div>

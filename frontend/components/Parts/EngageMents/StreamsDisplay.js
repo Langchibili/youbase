@@ -18,6 +18,7 @@ export default class StreamsDisplay extends React.Component{
  
 
  handlePlay= async ()=>{
+    console.log('in the song play',this.props)
         // if(!this.props.loggedInUser.status){ // means you are logged out or you have never followed anyone before
         //     this.setState({
         //        showLogInFirstModal: true
