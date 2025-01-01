@@ -114,7 +114,7 @@ const VideoPlayer = ({
                                   {
                                       src: originalVideoUrl,
                                       type: "video/mp4",
-                                      size: 720, // Default size for fallback
+                                      size: 480, // Default size for fallback
                                   },
                               ];
 
