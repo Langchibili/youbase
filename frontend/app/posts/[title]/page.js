@@ -2,6 +2,7 @@
 
 import ContentNotFound from '@/components/Includes/ContentNotFound/ContentNotFound'
 import PageLoader from '@/components/Includes/Loader/PageLoader'
+import NoContent from '@/components/Includes/NoContent/NoContent'
 import SinglePostDisplay from '@/components/Includes/SinglePostDisplay/SinglePostDisplay'
 import PostPageSkeleton from '@/components/Includes/Skeletons/PostPageSkeleton'
 import { useUser } from '@/Contexts/UserContext'
@@ -36,15 +37,15 @@ export default function Post({ params }) {
   }
 
   if (!post) {
-    return <ContentNotFound />
+    return <div style={{padding:'10px'}}><NoContent message="Post Not Found"/></div>
   }
 
   if (!post.status) {
-    return <ContentNotFound />
+    return <div style={{padding:'10px'}}><NoContent message="Post Not Found"/></div>
   }
   
   if (post.status === "draft") {
-    return <ContentNotFound />
+    return <div style={{padding:'10px'}}><NoContent message="Post Not Found"/></div>
   }
   
 

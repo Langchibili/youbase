@@ -268,8 +268,21 @@ export default class PostForm extends React.Component{
           if(this.state.postType === "music"){
             const allowMultipleContentThumbnailUpload = await getFeature(8) // multiple feautred images upload feature
             const allowMultipleMusicUploadFeature = await getFeature(6) // multiple music upload feature
+            const post = await getPostFromId(draftPostId,"media,featuredImages")
+            const title = postToSaveObject.data?.title
+            if (!title || (typeof title === "string" && !title.trim())) {
+              if(!post.title || post.title === "untitled"){ // the draft saved post might have a title
+                this.setState({
+                  errorMessage: 'a song must have a title',
+                  successMessage: '',
+                  openSnackBar: true,
+                  postSaving: false
+                })
+                return
+              }
+            }
+             console.log('the post with a title',postToSaveObject.data)
             if(!allowMultipleMusicUploadFeature){
-              const post = await getPostFromId(draftPostId,"media,featuredImages")
               if(post.media.data && post.media.data.length > 1){
                 this.setState({
                   errorMessage: 'multiple upload of music is not supported yet. Remove one and post.',
@@ -288,7 +301,7 @@ export default class PostForm extends React.Component{
                 })
                 return
               }
-              if(post.featuredImages.data || post.featuredImages.data.length === 0){
+              if(!post.featuredImages || !post.featuredImages.data || post.featuredImages.data.length === 0){
                 this.setState({
                   errorMessage: 'please upload a music thumbnail or music art.',
                   successMessage: '',
@@ -299,7 +312,6 @@ export default class PostForm extends React.Component{
               }
             }
             if(!allowMultipleContentThumbnailUpload){
-              const post = await getPostFromId(draftPostId,"featuredImages")
               if(post.featuredImages && post.featuredImages.data && post.featuredImages.data.length > 1){
                 this.setState({
                   errorMessage: 'multiple upload of music art is not supported yet. Remove one and post.',

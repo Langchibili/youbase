@@ -217,7 +217,7 @@ export default class MainHeader extends React.Component{
                     <Link href="/manage/account" className="item channel_item">
                         Settings
                     </Link>
-                    <Link href="/help" className="item channel_item">
+                    <Link href="/support" className="item channel_item">
                         Help
                     </Link>
                     <Link href="/logout" className="item channel_item">
