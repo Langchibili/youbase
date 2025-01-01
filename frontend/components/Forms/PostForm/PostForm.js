@@ -829,6 +829,10 @@ export default class PostForm extends React.Component{
           }
           else{
                 const post = await getPostFromId(parseInt(draftPostId),"media,featuredImages")
+                if(!post){
+                  localStorage.removeItem('draftPostId') // remove the draft post id bacause draft post doesn't exist anymore
+                  this.props.handlePostModalClose() // close the modal
+                }
                 log('in the post form create phase',post)
                 this.setState({
                    dummyPostCreated: true,
