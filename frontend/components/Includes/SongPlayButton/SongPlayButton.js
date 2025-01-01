@@ -65,7 +65,7 @@ export default function SongPlayButton(props) {
   }
 
   return (
-    <div key={props.post.id}>
+    <div>
       <StreamsDisplay post={props.post} loggedInUser={props.loggedInUser} logPlay={logPlay} autoLogPlay={true}/>
       {songIsPlaying? <button className="play-button" onClick={handlePauseClick}>
         <i className="uil uil-pause"></i>

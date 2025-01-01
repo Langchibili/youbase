@@ -142,7 +142,7 @@ const VideoPlayer = ({
                     const handleTimeUpdate = () => {
                         const playedPercentage =
                             (player.currentTime / player.duration) * 100;
-                        if (playedPercentage >= 30) {
+                        if (playedPercentage >= 10) {
                             setLogView(true)
                             player.off("timeupdate", handleTimeUpdate); // Remove listener after logging
                         }
