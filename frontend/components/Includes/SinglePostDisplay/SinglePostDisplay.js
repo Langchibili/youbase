@@ -52,45 +52,76 @@ export default function SinglePostDisplay(props) {
         }
     }
 
+// const moreFromUserFilters = {
+//       // Videos: Excludes portrait videos, includes embeds
+//       'videos':`filters[$and][0][$or][0][$and][0][type][$eq]=video&filters[$and][0][$or][0][$and][1][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=embed&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${props.post.user.data.id}&populate=user,featuredImages,media`, 
+      
+//       // Music: Only music content
+//       'music':`filters[$and][0][type][$eq]=music&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${props.post.user.data.id}&populate=user,featuredImages,media`, 
+      
+//       // Images: Excludes portrait images
+//       'images':`filters[$and][0][$or][0][$and][0][type][$eq]=image&filters[$and][0][$or][0][$and][1][mediaDisplayType][$not][$eq]=portrait&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${props.post.user.data.id}&populate=user,featuredImages,media`, 
+      
+//       // Reels: Portrait videos only
+//      // '':'filters[$and][0][type][$eq]=video&filters[$and][1][mediaDisplayType][$eq]=portrait', 
+      
+//       // Captures: Portrait images only
+//       //'filters[$and][0][type][$eq]=image&filters[$and][1][mediaDisplayType][$eq]=portrait', 
+      
+//       // Text: Only text content
+//       'text':`filters[$and][0][type][$eq]=text&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${props.post.user.data.id}&populate=user,featuredImages,media`
+// }  
+
+// const relatedPostsFilters = {
+//         // Videos: Excludes portrait videos, includes embeds
+//         'videos':'filters[$and][0][$or][0][$and][0][type][$eq]=video&filters[$and][0][$or][0][$and][1][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=embed', 
+        
+//         // Music: Only music content
+//         'music':'filters[$and][0][type][$eq]=music', 
+        
+//         // Images: Excludes portrait images
+//         'images':'filters[$and][0][$and][0][type][$eq]=image&filters[$and][0][$and][1][mediaDisplayType][$not][$eq]=portrait', 
+        
+//         // Reels: Portrait videos only
+//        // '':'filters[$and][0][type][$eq]=video&filters[$and][1][mediaDisplayType][$eq]=portrait', 
+        
+//         // Captures: Portrait images only
+//         //'filters[$and][0][type][$eq]=image&filters[$and][1][mediaDisplayType][$eq]=portrait', 
+        
+//         // Text: Only text content
+//         'text':'filters[$and][0][type][$eq]=text'
+//      }  
+
+
 const moreFromUserFilters = {
-      // Videos: Excludes portrait videos, includes embeds
-      'videos':`filters[$and][0][$or][0][$and][0][type][$eq]=video&filters[$and][0][$or][0][$and][1][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=embed&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${props.post.user.data.id}&populate=user,featuredImages,media`, 
-      
-      // Music: Only music content
-      'music':`filters[$and][0][type][$eq]=music&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${props.post.user.data.id}&populate=user,featuredImages,media`, 
-      
-      // Images: Excludes portrait images
-      'images':`filters[$and][0][$or][0][$and][0][type][$eq]=image&filters[$and][0][$or][0][$and][1][mediaDisplayType][$not][$eq]=portrait&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${props.post.user.data.id}&populate=user,featuredImages,media`, 
-      
-      // Reels: Portrait videos only
-     // '':'filters[$and][0][type][$eq]=video&filters[$and][1][mediaDisplayType][$eq]=portrait', 
-      
-      // Captures: Portrait images only
-      //'filters[$and][0][type][$eq]=image&filters[$and][1][mediaDisplayType][$eq]=portrait', 
-      
-      // Text: Only text content
-      'text':`filters[$and][0][type][$eq]=text&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${props.post.user.data.id}&populate=user,featuredImages,media`
-}  
+  // Videos: Excludes portrait videos, includes embeds
+  'videos': `filters[$and][0][$or][0][$and][0][type][$eq]=video&filters[$and][0][$or][0][$and][1][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=embed&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${props.post.user.data.id}&filters[$and][3][id][$not][$eq]=${props.post.id}&populate=user,featuredImages,media`, 
+  
+  // Music: Only music content
+  'music': `filters[$and][0][type][$eq]=music&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${props.post.user.data.id}&filters[$and][3][id][$not][$eq]=${props.post.id}&populate=user,featuredImages,media`, 
+  
+  // Images: Excludes portrait images
+  'images': `filters[$and][0][$or][0][$and][0][type][$eq]=image&filters[$and][0][$or][0][$and][1][mediaDisplayType][$not][$eq]=portrait&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${props.post.user.data.id}&filters[$and][3][id][$not][$eq]=${props.post.id}&populate=user,featuredImages,media`, 
+  
+  // Text: Only text content
+  'text': `filters[$and][0][type][$eq]=text&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${props.post.user.data.id}&filters[$and][3][id][$not][$eq]=${props.post.id}&populate=user,featuredImages,media`
+}
 
 const relatedPostsFilters = {
-        // Videos: Excludes portrait videos, includes embeds
-        'videos':'filters[$and][0][$or][0][$and][0][type][$eq]=video&filters[$and][0][$or][0][$and][1][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=embed', 
-        
-        // Music: Only music content
-        'music':'filters[$and][0][type][$eq]=music', 
-        
-        // Images: Excludes portrait images
-        'images':'filters[$and][0][$and][0][type][$eq]=image&filters[$and][0][$and][1][mediaDisplayType][$not][$eq]=portrait', 
-        
-        // Reels: Portrait videos only
-       // '':'filters[$and][0][type][$eq]=video&filters[$and][1][mediaDisplayType][$eq]=portrait', 
-        
-        // Captures: Portrait images only
-        //'filters[$and][0][type][$eq]=image&filters[$and][1][mediaDisplayType][$eq]=portrait', 
-        
-        // Text: Only text content
-        'text':'filters[$and][0][type][$eq]=text'
-     }  
+  // Videos: Excludes portrait videos, includes embeds
+  'videos': 'filters[$and][0][$or][0][$and][0][type][$eq]=video&filters[$and][0][$or][0][$and][1][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=embed&filters[$and][1][id][$not][$eq]=' + props.post.id + '&filters[$and][2][status][$eq]=published&filters[$and][3][user][id][$not][$eq]=' + props.post.user.data.id + '&populate=user,featuredImages,media&_sort=user.totalEngagement:desc', 
+  
+  // Music: Only music content
+  'music': 'filters[$and][0][type][$eq]=music&filters[$and][1][id][$not][$eq]=' + props.post.id + '&filters[$and][2][status][$eq]=published&filters[$and][3][user][id][$not][$eq]=' + props.post.user.data.id + '&populate=user,featuredImages,media&_sort=user.totalEngagement:desc', 
+  
+  // Images: Excludes portrait images
+  'images': 'filters[$and][0][$and][0][type][$eq]=image&filters[$and][0][$and][1][mediaDisplayType][$not][$eq]=portrait&filters[$and][1][id][$not][$eq]=' + props.post.id + '&filters[$and][2][status][$eq]=published&filters[$and][3][user][id][$not][$eq]=' + props.post.user.data.id + '&populate=user,featuredImages,media&_sort=user.totalEngagement:desc', 
+  
+  // Text: Only text content
+  'text': 'filters[$and][0][type][$eq]=text&filters[$and][1][id][$not][$eq]=' + props.post.id + '&filters[$and][2][status][$eq]=published&filters[$and][3][user][id][$not][$eq]=' + props.post.user.data.id + '&populate=user,featuredImages,media&_sort=user.totalEngagement:desc'
+}
+
+
 
 const nextSectionToDisplay = ()=>{
   return <ContentDisplaySection
@@ -99,7 +130,7 @@ const nextSectionToDisplay = ()=>{
             contentUri={`${api_url}/posts`}
             contentTitle="Related Posts"
             limit={10}
-            contentQueryFilters={moreFromUserFilters[props.post.type]}  />
+            contentQueryFilters={relatedPostsFilters[props.post.type]}  />
 }
 
 
