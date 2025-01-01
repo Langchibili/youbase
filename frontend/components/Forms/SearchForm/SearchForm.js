@@ -18,9 +18,9 @@ export default function SearchForm(props) {
 
   const tabFilters = [
     'filters[$and][0][$or][0][type][$eq]=image&filters[$and][0][$or][0][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=text&filters[$and][0][$or][2][$and][0][type][$eq]=video&filters[$and][0][$or][2][$and][1][mediaDisplayType][$eq]=landscape&filters[$and][0][$or][3][type][$eq]=embed&filters[$and][0][$or][4][type][$eq]=music', // Combined filter for "posts"
-    'filters[$and][0][$and][0][type][$eq]=image&filters[$and][0][$and][1][mediaDisplayType][$not][$eq]=portrait', // Videos
+    'filters[$and][0][$or][0][$and][0][type][$eq]=video&filters[$and][0][$or][0][$and][1][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=embed', // Videos
     'filters[$and][0][type][$eq]=music', // Music
-    'filters[$and][0][type][$eq]=image', // Images
+    'filters[$and][0][$and][0][type][$eq]=image&filters[$and][0][$and][1][mediaDisplayType][$not][$eq]=portrait', // Images
     'filters[$and][0][type][$eq]=text', // Text
     'filters[$and][0][type][$eq]=user', // Users
     'filters[$and][0][type][$eq]=video&filters[$and][1][mediaDisplayType][$eq]=portrait', // Reels
@@ -117,7 +117,7 @@ export default function SearchForm(props) {
           emptyContentMessage="No results found"
           showEmptyContentMessage={true}
           contentDisplay={(props) =>
-            value === 1 || value === 6 || value === 7 ? (
+            value === 6 || value === 7 ? (
               <PortraitContentDisplay content={props.content} loggedInUser={props.loggedInUser} />
             ) : (
               <LandscapeContent content={props.content} loggedInUser={props.loggedInUser} />
