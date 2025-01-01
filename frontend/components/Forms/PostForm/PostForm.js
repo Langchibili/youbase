@@ -15,7 +15,7 @@ import ImagePost from "./ImagePost"
 import MusicPost from "./MusicPost"
 import VideoPost from "./VideoPost"
 import TextPost from "./TextPost"
-import { createNewPost, generateDashedString, getPostFromId, getPostMedia, truncateText } from "@/Functions"
+import { createNewPost, generateDashedString, getPostFromId, getPostMedia, truncateText, validateUrl } from "@/Functions"
 import { api_url, getFeature, getJwt, log } from "@/Constants"
 import { FacebookTwoTone, Twitter, X, YouTube } from "@mui/icons-material"
 import EmbedPost from "./EmbedPost"
@@ -197,18 +197,39 @@ export default class PostForm extends React.Component{
         } // otherwise the title has already been addeded by user
         if(action === "create"){ // only can be done once, never when editing
           postToSaveObject.data.type = this.state.postType
-          if(this.state.postType === "text"){
-               if(postToSaveObject.data && postToSaveObject.data.description && !postToSaveObject.data.description.trim()){
-                  this.setState({
-                    errorMessage: 'cannot submit blank post',
-                    successMessage: '',
-                    openSnackBar: true,
-                    postSaving: false
-                  })
-                  return
-               }
+          if (this.state.postType === "text") {
+            const description = postToSaveObject.data?.description
+            if (!description || (typeof description === "string" && !description.trim())) {
+              this.setState({
+                errorMessage: 'cannot submit a blank post',
+                successMessage: '',
+                openSnackBar: true,
+                postSaving: false
+              })
+              return
+            }
           }
           if(this.state.postType === "embed"){
+            const embedLink = postToSaveObject.data?.embedLink
+            if(!embedLink || (typeof embedLink === "string" && !embedLink.trim())){
+              this.setState({
+                errorMessage: 'cannot submit a blank post',
+                successMessage: '',
+                openSnackBar: true,
+                postSaving: false
+              })
+              return
+            }
+            if(validateUrl(embedLink)){
+              this.setState({
+                errorMessage: validateUrl(embedLink),
+                successMessage: '',
+                openSnackBar: true,
+                postSaving: false
+              })
+              return
+            }
+            
             postToSaveObject.data.mediaSource = this.state.embedType // source not local
           }
           
@@ -339,9 +360,18 @@ export default class PostForm extends React.Component{
           }
 
           if(this.state.postType === "image"){
+            const post = await getPostFromId(draftPostId,"featuredImages")
+            if(!post.featuredImages || !post.featuredImages.data || post.featuredImages.data.length === 0){
+              this.setState({
+                errorMessage: 'Upload an image to post.',
+                successMessage: '',
+                openSnackBar: true,
+                postSaving: false
+              })
+              return
+            }
             const allowMultipleContentThumbnailUpload = await getFeature(8) // multiple feautred images upload feature
             if(!allowMultipleContentThumbnailUpload){
-              const post = await getPostFromId(draftPostId,"featuredImages")
               if(post.featuredImages && post.featuredImages.data && post.featuredImages.data.length > 1){
                 this.setState({
                   errorMessage: 'multiple upload of music art is not supported yet. Remove one and post',
@@ -390,19 +420,22 @@ export default class PostForm extends React.Component{
               }
             }
             else{
-              if(this.state.postType === "text"){
-                if(postToSaveObject.data && postToSaveObject.data.description && !postToSaveObject.data.description.trim()){
+              if (this.state.postType === "text") {
+                const description = postToSaveObject.data?.description
+                if (!description || (typeof description === "string" && !description.trim())) {
                   this.setState({
-                    errorMessage: 'cannot submit blank post',
+                    errorMessage: 'cannot submit a blank post',
                     successMessage: '',
                     openSnackBar: true,
                     postSaving: false
                   })
                   return
-               }
+                }
               }
-              console.log(postToSaveObject.data.description.trim())
-              postToSaveObject.data.dashed_title = generateDashedString(postToSaveObject.data.description) + "-" + draftPostId
+              // console.log(postToSaveObject.data.description.trim())
+              if(postToSaveObject.data && postToSaveObject.data.description && postToSaveObject.data.description.trim()){
+                 postToSaveObject.data.dashed_title = generateDashedString(postToSaveObject.data.description) + "-" + draftPostId
+              }
             }
           }
         }

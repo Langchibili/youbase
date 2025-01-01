@@ -21,11 +21,6 @@ export const createYouTubeEmbedLink = (url)=>{
   }
 }
 
-// Example usage:
-const youtubeUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-const embedLink = createYouTubeEmbedLink(youtubeUrl);
-log(embedLink); // Outputs: https://www.youtube.com/embed/dQw4w9WgXcQ
-
 export const validateUrl = (url) => {
   const urlRegex = /^(https?:\/\/)?([a-z0-9-]+\.)+[a-z]{2,}(:\d+)?(\/.*)?$/i;
 
@@ -60,6 +55,9 @@ const getIDFromDashedString = (dashed_title)=>{
 }
 
 export const generateDashedString = (str) => {
+  if(!str){
+    return 
+  }
   // Trim the string to 100 characters if it's longer
   let trimmedStr = str.length > 100 ? str.substring(0, 100) : str;
 

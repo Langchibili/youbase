@@ -55,8 +55,7 @@ export default class ImagePost extends React.Component{
                allowMultiple={false}
          />
         <MediaDisplay post={this.props.post} displayType="mediaOnly" refleshImages={this.state.refleshImages} handleRemoveImage={this.handleRemoveImage} listtype="grid"/>
-        <h4>optional</h4>
-        <hr/>
+      
         <h4>optional</h4>
          <hr/>
         <CategorySelector post={this.props.post} parentCategory="images"/>
