@@ -48,7 +48,7 @@ export default function PortraitContentDisplay(props) {
                  content.attributes.user.data.attributes.id = content.attributes.user.data.id
               } 
             }  
-            if(!content.attributes.user.data){ // if there is no user attached to the post, then we cannot display the post
+            if(!content.attributes.user || !content.attributes.user.data){ // if there is no user attached to the post, then we cannot display the post
                 return null
             }
             
@@ -118,6 +118,7 @@ export default function PortraitContentDisplay(props) {
       </OwlCarousel>
   );
 }
+
 
 const PortraitContentSkeleton = ()=>{
   return (

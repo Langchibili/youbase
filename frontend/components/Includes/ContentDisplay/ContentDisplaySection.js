@@ -28,6 +28,7 @@ const ContentDisplaySection = ({
   
 
   const fetchContent = async (page) => {
+    console.log('the pages',page)
     if(isLoading){
       return
     }
@@ -37,6 +38,8 @@ const ContentDisplaySection = ({
       const response = await fetch(
         `${contentUri}?${queryFilters}pagination[page]=${page}&pagination[pageSize]=${limit}`
       );
+      console.log('page now: ',page)
+      console.log('content uri', `${contentUri}?${queryFilters}pagination[page]=${page}&pagination[pageSize]=${limit}`)
       const data = await response.json();
       return data.data || [];
     } catch (error) {
@@ -52,10 +55,13 @@ const ContentDisplaySection = ({
  };
 
   useEffect(() => {
+    if(isLoading){
+      return
+    }
     const observer = new IntersectionObserver((entries) => {
       const entry = entries[0];
       if (entry.isIntersecting && hasMoreContent && !isLoading) {
-        setCurrentPage((prev) => prev + 1);
+        setCurrentPage((prev)=> prev + 1);
       }
     });
 
@@ -68,7 +74,7 @@ const ContentDisplaySection = ({
         observer.unobserve(loaderRef.current);
       }
     };
-  }, [loaderRef]);
+  }, [loaderRef,isLoading]);
 
   useEffect(() => {
     const runFetchContent = async () => {
@@ -97,6 +103,7 @@ const ContentDisplaySection = ({
   if(canShowEmptyContentMessage){
     return <NoContent message={emptyContentMessage}/>
   }
+  
   return (
     <div>
       {contentTitle && sections.length > 0? <h3>{contentTitle}</h3> : <></>}
@@ -116,8 +123,8 @@ const ContentDisplaySection = ({
       {isLoading && <MoreContentLoader />}
       <div style={{minHeight:'70px'}}></div>
     </div>
-  );
-};
+  )
+}
 
 export default ContentDisplaySection;
 

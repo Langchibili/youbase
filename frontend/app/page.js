@@ -78,7 +78,7 @@ const Home = () =>{
         
         // Text: Only text content
         'filters[$and][0][type][$eq]=text', 
-      ];
+      ]
       
 
    if(typeof document !== "undefined"){

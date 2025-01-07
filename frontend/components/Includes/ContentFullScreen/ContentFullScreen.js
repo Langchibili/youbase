@@ -24,7 +24,7 @@ export default function ContentFullScreen(props) {
   const [logView, setLogView] = useState(false)
   const { audioInstance } = useAudio();
   
-  console.log(props)
+  console.log('the video file',props)
   // Handle video play/pause toggle on tap
   const handleVideoClick = () => {
     if (isPlaying) {

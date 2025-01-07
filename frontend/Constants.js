@@ -5,10 +5,11 @@ import { getJWT, saveJwt } from "./secrets"
 export const youtubeApiKey = 'AIzaSyCpjeIW-IKAUQSZuc5bb0Ncx1ksxEB5J_8'
 
 
- /*localhost: */ export const environment = 'local'
+ ///*localhost: */ export const environment = 'local'
  ///*liveserver1: */ export const environment = 'live'
  ///*liveserver2: */ export const environment = 'live2'
  ///*testserver: */ export const environment = 'test' // mvp will run here
+ /*local-liveserver-testing: */ export const environment = 'local-liveserver-testing' // testing the live server locally
 
 // export the client side stuff
 
@@ -24,6 +25,9 @@ let apiurl, backendUrl, clienturl
  }
  else if(environment === 'live2'){
   /*liveserver2: */ apiurl = 'https://api.youbase.com/api' // for production's sake
+ }
+ else if(environment === 'local-liveserver-testing'){
+  /*local-liveserver-testing: */  apiurl = 'https://api.youbase.app/api'
  }
  else{ // if environment is default, it means it's a test server
   /*testserver: */  apiurl = 'https://youbaseapi.driverbase.app/api' // the api to be used when deployed to the test site
@@ -43,6 +47,9 @@ let apiurl, backendUrl, clienturl
  else if(environment === 'live2'){
   /*liveserver: */ backendUrl =  apiurl.replace('youbase.com/api','youbase.com') // for production's sake
  }
+ else if(environment === 'local-liveserver-testing'){
+  /*liveserver: */ backendUrl =  apiurl.replace('youbase.app/api','youbase.app') // for testing the production environment api's sake
+ }
  else{ // if environment is default, it means it's a test server
   /*testserver: */ backendUrl =  apiurl.replace('youbaseapi.driverbase.app/api','youbaseapi.driverbase.app') // the api to be used when deployed to the test site
  }
@@ -57,9 +64,13 @@ else if(environment === 'live'){
 else if(environment === 'live2'){
    /*liveserver2: */ clienturl = 'https://youbase.com' // for production's sake
 }
+else if(environment === 'local-liveserver-testing'){
+  /*local-liveserver-testing: */  clienturl = 'http://localhost:3002' // this is because we are testing the live server on our local machine
+}
 else{ // if environment is default, it means it's a test server
   /*testserver: */  clienturl = 'https://youbase.driverbase.app' // the api to be used when deployed to the test site
 }
+
  
 
  export let api_url = apiurl
@@ -68,7 +79,7 @@ else{ // if environment is default, it means it's a test server
  
 
  export function log(...args) {
-    if (environment === "local") {
+    if (environment === "local" || environment === 'local-liveserver-testing') {
       console.log(...args)
     } else {
       return // Do nothing on live or test servers unless environment is set to local

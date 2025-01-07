@@ -496,6 +496,7 @@ export const getPost = async (title)=>{
   
 
   export const getCategoryByName = async (categoryName)=>{
+    console.log('the category name',api_url+'/categories?filters[categoryName][$contains]='+categoryName)
     const category = await fetch(api_url+'/categories?filters[categoryName][$contains]='+categoryName,{
         headers: {
           'Content-Type': 'application/json'
@@ -503,7 +504,7 @@ export const getPost = async (title)=>{
       }).then(response => response.json())
         .then(data => data)
         .catch(error => console.error(error))
-         
+        console.log('the category name',category) 
         if(category && category.data && category.data[0] && category.data[0].attributes){
            category.data[0].attributes.id = category.data[0].id
            return category.data[0].attributes
