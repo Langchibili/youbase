@@ -11,6 +11,7 @@ import { AudioProvider } from '@/Contexts/AudioContext';
 import ImagePageLoader from '@/components/Includes/Loader/ImagePageLoader';
 import MobileMenu from '@/components/Parts/Menus/MobileMenu';
 import { SocialSharingProvider, useSocialSharing } from '@/Contexts/SocialSharingContext';
+import Notifications from '@/components/Includes/Notifications/Notifications';
 
 export default function RootLayout({ children }) { // wrap the layout content to enable insertion of meta tags via the SocialSharingContext and provider
   return (<SocialSharingProvider><RootLayoutContent children={children}/></SocialSharingProvider>)
@@ -51,7 +52,7 @@ function RootLayoutContent({ children }) {
             content={tag.content}
           />
         ))}
-        <meta name="description" content="the biggest african content sharing platform" />
+        <meta name="description" content="Africa's biggest content sharing platform" />
         <meta name="author" content="youbase" />
         <link rel="icon" type="image/png" href="favicon.ico" />
         {/* Stylesheets */}
@@ -105,6 +106,7 @@ const HeaderPart = ()=>{
               <MainHeader loggedInUser={loggedInUser}/>
               {/* Menu */}
               <MainMenu loggedInUser={loggedInUser}/>
+              {loggedInUser.status? <Notifications loggedInUser={loggedInUser}/> : <></> /* only for logged in users */}
               </>)
     }
     else{
@@ -120,6 +122,7 @@ const HeaderPart = ()=>{
       return (<>
         {/* Main Header */}
         <MainHeader loggedInUser={loggedInUser} menu={()=><MobileMenu loggedInUser={loggedInUser}/>}/>
+        {loggedInUser.status? <Notifications loggedInUser={loggedInUser}/> : <></> /* only for logged in users */}
          {/* Menu */}
      </>)
     }
@@ -130,6 +133,7 @@ const HeaderPart = ()=>{
             <MainHeader loggedInUser={loggedInUser}/>
             {/* Menu */}
             <MainMenu loggedInUser={loggedInUser}/>
+            {loggedInUser.status && typeof window !== "undefined"? <Notifications loggedInUser={loggedInUser}/> : <></> /* only for logged in users */}
           </>)
    }
 }

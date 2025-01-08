@@ -849,9 +849,21 @@ export const getVideoMetaFromPostAndId = (post,videoId)=>{
 
 
 // USER FUNCTIONS
+export const updateUserAccount = async (updateObject,userId,customJwt=null)=>{
+  const jwt = customJwt || getJwt()
+  return await fetch(api_url+'/users/'+userId, {
+    method: 'PUT',
+    headers: {
+     'Authorization': `Bearer ${jwt}`,
+     'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(updateObject),
+  })
+  .then(response => response.json())
+  .then(data => data)
+}
 
 export const getUsers = async (customUri=null)=>{
-  console.log(customUri)
   let users = null
   if(customUri){
     users = await fetch(customUri,{
@@ -1154,7 +1166,8 @@ export const deleteEngagement = async (type, postId, loggedInUser, ctx)=> {
         }
     }
 }
- 
+
+
    // notifications logging
 
    export const logNotification = async(title,userId,notifiedUserIds,contentType="user",contentId="")=>{
@@ -1185,7 +1198,7 @@ export const deleteEngagement = async (type, postId, loggedInUser, ctx)=> {
 
 
    export async function sendPushNotification(title,body,targetUserIds,url="",image="/youbase-logo.png",payload=""){
-   
+    // we are not checking if the user accounts have notificationsDeviceId, because we can rely on the backend doing so
     const notificationObject =  {
           data: {
               title: title,

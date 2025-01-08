@@ -5,11 +5,11 @@ import { getJWT, saveJwt } from "./secrets"
 export const youtubeApiKey = 'AIzaSyCpjeIW-IKAUQSZuc5bb0Ncx1ksxEB5J_8'
 
 
- ///*localhost: */ export const environment = 'local'
+ /*localhost: */ export const environment = 'local'
  ///*liveserver1: */ export const environment = 'live'
  ///*liveserver2: */ export const environment = 'live2'
  ///*testserver: */ export const environment = 'test' // mvp will run here
- /*local-liveserver-testing: */ export const environment = 'local-liveserver-testing' // testing the live server locally
+ ///*local-liveserver-testing: */ export const environment = 'local-liveserver-testing' // testing the live server locally
 
 // export the client side stuff
 
@@ -146,6 +146,10 @@ export const getFeature = async (featureId)=>{
 
 const updateDefaultUserAccountToSignUp = async (username,password,countryCode,phoneNumber,province,town,age)=>{
   const jwt = getJwt()
+  if(!jwt){
+    alert('could not create your account, reload the page and try again.')
+    return
+  }
   const user = await getUserAccount(jwt) // get the user account because you actually have the jwt
   const updateObject = {
     username: username,
@@ -283,41 +287,60 @@ export const logUserOut = async ()=>{
   return await updateDefaultUserAccountToLogOut()
 }
 
-const generateUniqueUsername = ()=>{
-  const timestamp = Date.now().toString(36); // Convert timestamp to a base-36 string
-  const randomPart = Math.random().toString(36).substr(2, 9); // Random base-36 string
-  return `User${timestamp}-${randomPart}`;
-}
+let lastGeneratedTime = 0; // Debounce timer for username generation
+const generateUniqueUsername = () => {
+  // debouncing to ensure only one unique username is made in 5 minutes
+  const now = Date.now();
+  const debounceTime = 5 * 60 * 1000; // 5 minutes in milliseconds
 
-export const checkUserLogginStatus = async () =>{
-  const jwt = getJwt()
+  // If the last username was generated within the debounce time, reuse the last username
+  if (now - lastGeneratedTime < debounceTime && sessionStorage.getItem("generatedUsername")) {
+    return sessionStorage.getItem("generatedUsername");
+  }
+
+  // Generate a new unique username
+  const timestamp = now.toString(36); // Convert timestamp to a base-36 string
+  const randomPart = Math.random().toString(36).substr(2, 9); // Random base-36 string
+  const newUsername = `User${timestamp}-${randomPart}`;
+
+  // Save the username in session storage and update the timer
+  sessionStorage.setItem("generatedUsername", newUsername);
+  lastGeneratedTime = now;
+
+  return newUsername;
+};
+
+export const checkUserLogginStatus = async () => {
+  const jwt = getJwt();
   const logginStatusObject = {
     user: null,
-    status: false
+    status: false,
+  };
+  let userObject = {};
+
+  if (!jwt) {
+    const username = generateUniqueUsername(); // Generate a unique username
+    userObject.username = username;
+    userObject.email = `unset_${username}@email.com`;
+    userObject.password = username;
+
+    const defaultUser = await submitCreateUserRequest(userObject); // Make the user account
+    logginStatusObject.user = defaultUser.user; // Current account is a default one
+    logginStatusObject.status = false; // User has not logged in
+    saveJwt(defaultUser.jwt); // Save the JWT of the default user
+  } else {
+    // Check if user is logged in or not, using JWT
+    const user = await getUserAccount(jwt); // Get the user account because you actually have the JWT
+    logginStatusObject.user = user;
+
+    if (user.type && user.type === "default") {
+      logginStatusObject.status = false;
+    } else {
+      logginStatusObject.status = true;
+    }
   }
-  let userObject = {}
-  if(!jwt){
-      const username = generateUniqueUsername() // generate a unique username
-      userObject.username = username
-      userObject.email = "unset_"+username+"@email.com"
-      userObject.password = username
-      const defaultUser = await submitCreateUserRequest(userObject) // make the user account 
-      logginStatusObject.user = defaultUser.user // current account is a default one
-      logginStatusObject.status = false // user has not logged in
-      saveJwt(defaultUser.jwt) // save the jwt of the default user
-  }
-  else{
-     // check if user is logged in or not, using jwt
-     const user = await getUserAccount(jwt) // get the user account because you actually have the jwt
-     logginStatusObject.user = user 
-     if(user.type && user.type === "default"){
-         logginStatusObject.status = false
-     }
-     else{
-         logginStatusObject.status = true
-     }
-  }
-  return logginStatusObject
+
+  return logginStatusObject;
 }
 
 const runPeriodicUserStatusChecks = async () => {
