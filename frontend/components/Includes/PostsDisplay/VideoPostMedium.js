@@ -8,9 +8,12 @@ import { getVideoMetaFromPostAndId, truncateText } from "@/Functions";
 import CommentsModal from "../Modals/CommentsModal";
 import PostMoreModal from "../Modals/PostMoreModal";
 import ReadMoreLess from "../ReadMoreLess/ReadMoreLess";
+import { useSearchModalOpen } from "@/Contexts/SearchModalContext";
 
 
 export default function VideoPostMedium(props) {
+    const useSearchModalOpenContext = useSearchModalOpen()
+
     log(props.post.media? props.post.media : 'nothing here')
     return (
       <div style={{backgroundColor:"white",borderRadius:'5px',marginBottom:'10px'}}>
@@ -33,7 +36,7 @@ export default function VideoPostMedium(props) {
           <AvatarWithPostDate {...props} />
           <div style={{minHeight: '10px'}}></div>
           <VideoFileDisplay post={props.post} loggedInUser={props.loggedInUser} videoMeta={getVideoMetaFromPostAndId(props.post,props.post.media.id)} file={props.post.media} hideRemoveButton={true}/>
-          <Link href={"/posts/"+props.post.dashed_title}>
+          <Link href={"/posts/"+props.post.dashed_title} onClick={()=>{useSearchModalOpenContext.setOpenSearchModal(false)}}>
           <h4 className="rvds10" style={{ marginTop: '10px' }}>
           <ReadMoreLess text={props.post.title} length={50}/>
           </h4>

@@ -5,9 +5,11 @@ import Link from "next/link";
 import CommentsModal from "../Modals/CommentsModal";
 import PostMoreModal from "../Modals/PostMoreModal";
 import ReadMoreLess from "../ReadMoreLess/ReadMoreLess";
-import { useState } from "react";
+import { useSearchModalOpen } from "@/Contexts/SearchModalContext";
 
 export default function TextPostMedium(props) {
+  const useSearchModalOpenContext = useSearchModalOpen()
+
   return (
     <div style={{backgroundColor:"white",borderRadius:'5px',marginBottom:'10px'}}>
       <div className="review_item" style={{ position: 'relative'}}>
@@ -16,7 +18,7 @@ export default function TextPostMedium(props) {
               (<p className="rvds10" style={{ marginTop: '10px' }}>
                     <ReadMoreLess text={props.post.description} length={150}/>
               </p>) : 
-              (<Link href={"/posts/"+props.post.dashed_title}>
+              (<Link href={"/posts/"+props.post.dashed_title} onClick={()=>{useSearchModalOpenContext.setOpenSearchModal(false)}}>
                     <p className="rvds10" style={{ marginTop: '10px' }}>
                     <ReadMoreLess text={props.post.description} length={150}/>
               </p>

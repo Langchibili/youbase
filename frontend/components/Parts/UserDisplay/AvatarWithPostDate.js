@@ -5,12 +5,14 @@ import AvatarOnly from "./AvatarOnly"
 import Link from "next/link"
 import PostMoreBtn from "@/components/Includes/PostMoreBtn/PostMoreBtn"
 import { displayDateOrTime, getPostUser } from "@/Functions"
+import { useSearchModalOpen } from "@/Contexts/SearchModalContext"
 
 export default class AvatarWithPostDate extends React.Component{
    constructor(props){
       super(props)
       this.state = {
-        thisIsMyPost: false
+        thisIsMyPost: false,
+        redirectUser: false
       }
    }
 
@@ -46,10 +48,11 @@ export default class AvatarWithPostDate extends React.Component{
    
     return ( 
       <div style={{width:"100%",display:'flex', justifyContent:'space-between'}}>
-        <div className="live_user_dt">
+        {this.state.redirectUser? <RedirectUser/> : <></>}
+        <div className="live_user_dt" onClick={()=>{ this.setState({redirectUser:true}) }}>
             <AvatarOnly {...this.props} userId={this.props.post.user.data.id}/>
             <div className="user_cntnt">
-            <Link href={'/user/'+user.username}>   
+            <Link href={'/user/'+user.username} >  
             {this.renderUserName()}
             </Link>
             <Link href={"/posts/"+this.props.post.dashed_title}>
@@ -62,4 +65,9 @@ export default class AvatarWithPostDate extends React.Component{
       </div> 
     )
    }
+  }
+
+  const RedirectUser = ()=>{
+    const useSearchModalOpenContext = useSearchModalOpen()
+    useSearchModalOpenContext.setOpenSearchModal(false)
   }

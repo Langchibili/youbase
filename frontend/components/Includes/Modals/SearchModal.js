@@ -5,11 +5,11 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
-import Zoom from '@mui/material/Zoom';
 import { ArrowBack, Search, Visibility } from '@mui/icons-material';
 import Box from '@mui/material/Box';
 import SearchForm from '@/components/Forms/SearchForm/SearchForm';
 import { Slide } from '@mui/material';
+import { useSearchModalOpen } from '@/Contexts/SearchModalContext';
 
 const StyledContent = styled(Box)({
   backgroundColor: 'white',
@@ -22,21 +22,19 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 function SearchModal(props) {
-  const [open, setOpen] = React.useState(false);
-
-  const toggleDrawer = (newOpen) => {
-    setOpen(newOpen);
-  };
+  const useSearchModalOpenContext = useSearchModalOpen()
+  const open = useSearchModalOpenContext.openSearchModal
+ 
 
   return (
     <>
-      <Button onClick={() => toggleDrawer(true)} sx={{ color: 'gray' }}>
-        <Search />
+      <Button onClick={() =>  useSearchModalOpenContext.setOpenSearchModal(true)} sx={{ color: 'gray' }}>
+        <Search /> {props.text? props.text : ""}
       </Button>
       <Dialog
         fullScreen
         open={open}
-        onClose={() => toggleDrawer(false)}
+        onClose={() => useSearchModalOpenContext.setOpenSearchModal(false)}
         TransitionComponent={Transition}
         sx={{
           '& .MuiDialog-paper': {
@@ -48,7 +46,7 @@ function SearchModal(props) {
           <IconButton
             edge="start"
             sx={{ color: 'gray' }}
-            onClick={() => toggleDrawer(false)}
+            onClick={() =>  useSearchModalOpenContext.setOpenSearchModal(false)}
             aria-label="close"
           >
             <ArrowBack />

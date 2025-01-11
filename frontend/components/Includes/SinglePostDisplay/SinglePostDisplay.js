@@ -128,7 +128,7 @@ const nextSectionToDisplay = ()=>{
             loggedInUser={props.loggedInUser}
             contentDisplay={(props) =><LandscapeContent content={props.content} loggedInUser={props.loggedInUser} />}
             contentUri={`${api_url}/posts`}
-            contentTitle="Related Posts"
+            contentTitle="Related Content"
             limit={10}
             contentQueryFilters={relatedPostsFilters[props.post.type]}  />
 }

@@ -3,6 +3,7 @@
 import ContentNotFound from '@/components/Includes/ContentNotFound/ContentNotFound'
 import PageLoader from '@/components/Includes/Loader/PageLoader'
 import LogInFirstModal from '@/components/Includes/Modals/LogInFirstModal'
+import NoContent from '@/components/Includes/NoContent/NoContent'
 import UserProfileDisplay from '@/components/Includes/UserProfileDisplay/UserProfileDisplay'
 import { checkUserLogginStatus } from '@/Constants'
 import { dynamicConfig, getUserById } from '@/Functions'
@@ -31,13 +32,13 @@ export default function User({ params }) {
   }, [params.username])
  
   if (loading) {
-    return <PageLoader/>
+    return <><PageLoader/><PostPageSkeleton/></>
   }
   if(!loggedInUser.status){
     return <LogInFirstModal open={true} />
   }
   if (!user) {
-    return <ContentNotFound />
+    return <div style={{padding:'10px'}}><NoContent message="User Not Found"/></div>
   }
 
   return <UserProfileDisplay  user={user} loggedInUser={loggedInUser} purpose="profile-view"/>

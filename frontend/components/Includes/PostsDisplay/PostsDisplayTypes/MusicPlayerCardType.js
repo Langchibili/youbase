@@ -13,8 +13,11 @@ import PostMoreModal from '../../Modals/PostMoreModal'
 import AvatarWithUsernameOnly from '@/components/Parts/UserDisplay/AvatarWithUsernameOnly'
 import PostMoreBtn from '../../PostMoreBtn/PostMoreBtn'
 import { Headphones } from '@mui/icons-material'
+import { useSearchModalOpen } from '@/Contexts/SearchModalContext'
 
 export default function MusicPlayerCardType(props) {
+  const useSearchModalOpenContext = useSearchModalOpen()
+
   const renderThumbNail = () => {
     if (props.post.featuredImages && props.post.featuredImages.data && props.post.featuredImages.data[0]) {
       return getImage(props.post.featuredImages.data[0] || null, 'thumbnail', 'blank')
@@ -67,7 +70,7 @@ export default function MusicPlayerCardType(props) {
         }}
       >
         <AvatarWithUsernameOnly userId={props.post.user.data.id} textColor="white" extra_styles={  {color:"white !important",width:'24px !important', height:'24px !important'}} postMoreContent={()=>{}}/>
-        <Headphones sx={{color:'indigo',opacity:'0.7'}}/>
+        <Headphones sx={{color:'white',opacity:'0.8'}}/>
         <PostMoreBtn {...props} iconColor="white" action="edit" post={props.post}/>
         </div>
       
@@ -82,7 +85,7 @@ export default function MusicPlayerCardType(props) {
         }}
       >
         <div style={{ marginLeft: '20px' }}>
-          <Link href={`/posts/${props.post.dashed_title}`}>
+          <Link href={`/posts/${props.post.dashed_title}`} onClick={()=>{useSearchModalOpenContext.setOpenSearchModal(false)}}>
             <h5 className="mb-1" style={{color:'white'}}>{truncateText(props.post.title,'50')}</h5>
           
           <p className="mb-2 text-muted small">

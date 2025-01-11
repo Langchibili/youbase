@@ -1,5 +1,6 @@
 'use client'
 
+import { useSearchModalOpen } from "@/Contexts/SearchModalContext"
 import { getImage, getUserById } from "@/Functions"
 import Link from "next/link"
 import React from "react"
@@ -9,6 +10,7 @@ export default class AvatarOnly extends React.Component{
       super(props)
       this.state = {
         avatarLoaded: false,
+        redirectUser: false,
         user: null
       }
    }
@@ -29,6 +31,7 @@ export default class AvatarOnly extends React.Component{
       return (!this.state.avatarLoaded? <></> :
          <Link href={'/user/'+this.state.user.username} onClick={(event) => {
             event.stopPropagation(); // Prevent parent click handler
+            this.setState({redirectUser:true}) 
            }}>
          <div className={this.props.custom_styles? "" : "user_img5"}>
                   <img src={getImage(this.state.user.profilePicture,'thumbnail','profilePicture') } alt="profile pic" style={{...this.props.custom_styles,...this.props.exra_styles}}/>
@@ -40,6 +43,12 @@ export default class AvatarOnly extends React.Component{
      }
   }
    render(){
-    return this.renderAvatar()
+    return (<>
+          {this.state.redirectUser? <RedirectUser/> : <></>}
+          {this.renderAvatar()}</>)
    }
   }
+  const RedirectUser = ()=>{
+   const useSearchModalOpenContext = useSearchModalOpen()
+   useSearchModalOpenContext.setOpenSearchModal(false)
+ }

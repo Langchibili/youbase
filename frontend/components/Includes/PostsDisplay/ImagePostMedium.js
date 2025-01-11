@@ -6,8 +6,11 @@ import MediaDisplay from "@/components/Parts/MediaDisplay/MediaDisplay";
 import CommentsModal from "../Modals/CommentsModal";
 import PostMoreModal from "../Modals/PostMoreModal";
 import ReadMoreLess from "../ReadMoreLess/ReadMoreLess";
+import { useSearchModalOpen } from "@/Contexts/SearchModalContext";
 
 export default function ImagePostMedium(props) {
+    const useSearchModalOpenContext = useSearchModalOpen()
+
     return (
       <div style={{backgroundColor:"white",borderRadius:'5px',marginBottom:'10px'}}>
         <div className="review_item" style={{ position: 'relative' }}>
@@ -17,7 +20,7 @@ export default function ImagePostMedium(props) {
             (<p className="rvds10" style={{ marginTop: '10px' }}>
                <ReadMoreLess text={props.post.description} length={100}/>
             </p>): 
-          (<Link href={"/posts/"+props.post.dashed_title}>
+          (<Link href={"/posts/"+props.post.dashed_title} onClick={()=>{useSearchModalOpenContext.setOpenSearchModal(false)}}>
             <p className="rvds10" style={{ marginTop: '10px' }}>
                <ReadMoreLess text={props.post.description} length={100}/>
             </p>

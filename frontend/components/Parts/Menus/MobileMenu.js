@@ -23,6 +23,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
 import Skeleton from '@mui/material/Skeleton'
 import { Help, Info, Policy } from '@mui/icons-material'
+import SearchModal from '@/components/Includes/Modals/SearchModal'
 
 export default class MobileMenu extends React.Component {
   constructor(props) {
@@ -304,6 +305,10 @@ export default class MobileMenu extends React.Component {
                 <Link href="/data_deletion_policy" onClick={this.handleLinkClick}>Data Deletion Policy</Link>
               </ListItemText>
             </ListItem>
+            <ListItem>
+            {this.props.loggedInUser.status?<></>:<SearchModal loggedInUser={this.props.loggedInUser} text="Search"/>}
+            </ListItem>
+            
           </List>
         </SwipeableDrawer>
       </>

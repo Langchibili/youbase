@@ -106,7 +106,7 @@ const ContentDisplaySection = ({
   
   return (
     <div>
-      {contentTitle && sections.length > 0? <h3>{contentTitle}</h3> : <></>}
+      {contentTitle && sections.length >= 1? <h4>{contentTitle}</h4> : <></>}
       {sections.map((section)=>{
            return (<div key={section.page} style={{marginBottom:'10px'}}>
                      {contentDisplay({content:section.content,loggedInUser:loggedInUser})}

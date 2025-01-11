@@ -6,8 +6,11 @@ import EmbedDisplay from "../EmbedDisplay/EmbedDisplay";
 import CommentsModal from "../Modals/CommentsModal";
 import PostMoreModal from "../Modals/PostMoreModal";
 import ReadMoreLess from "../ReadMoreLess/ReadMoreLess";
+import { useSearchModalOpen } from "@/Contexts/SearchModalContext";
 
 export default function EmbedPostMedium(props) {
+    const useSearchModalOpenContext = useSearchModalOpen()
+    
     return (
       <div style={{backgroundColor:"white",borderRadius:'5px',marginBottom:'10px'}}>
         {props.onSinglePostDisplayPage? 
@@ -22,7 +25,7 @@ export default function EmbedPostMedium(props) {
         </div>) : (<div className="review_item" style={{ position: 'relative'}}>
           <AvatarWithPostDate {...props} /><br/>
           <EmbedDisplay url={props.post.embedLink}/>
-          <Link href={"/posts/"+props.post.dashed_title}>
+          <Link href={"/posts/"+props.post.dashed_title} onClick={()=>{useSearchModalOpenContext.setOpenSearchModal(false)}}>
           <p className="rvds10" style={{ marginTop: '10px' }}>
           <ReadMoreLess text={props.post.description} length={100}/>
           </p>

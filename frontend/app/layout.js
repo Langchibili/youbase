@@ -12,9 +12,10 @@ import ImagePageLoader from '@/components/Includes/Loader/ImagePageLoader';
 import MobileMenu from '@/components/Parts/Menus/MobileMenu';
 import { SocialSharingProvider, useSocialSharing } from '@/Contexts/SocialSharingContext';
 import Notifications from '@/components/Includes/Notifications/Notifications';
+import { SearchModalProvider } from '@/Contexts/SearchModalContext';
 
 export default function RootLayout({ children }) { // wrap the layout content to enable insertion of meta tags via the SocialSharingContext and provider
-  return (<SocialSharingProvider><RootLayoutContent children={children}/></SocialSharingProvider>)
+  return (<SocialSharingProvider><SearchModalProvider><RootLayoutContent children={children}/></SearchModalProvider></SocialSharingProvider>)
 }
 
 function RootLayoutContent({ children }) {
