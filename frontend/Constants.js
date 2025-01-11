@@ -332,11 +332,16 @@ export const checkUserLogginStatus = async () => {
     // Check if user is logged in or not, using JWT
     const user = await getUserAccount(jwt); // Get the user account because you actually have the JWT
     logginStatusObject.user = user;
-
-    if (user.type && user.type === "default") {
+    console.log('logged in user here',user)
+    if(!user || user.hasOwnProperty('error')){ // means user account is null
       logginStatusObject.status = false;
-    } else {
-      logginStatusObject.status = true;
+    }
+    else{
+      if (user.type && user.type === "default") {
+        logginStatusObject.status = false;
+      } else {
+        logginStatusObject.status = true;
+      }
     }
   }
 

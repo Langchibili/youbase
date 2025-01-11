@@ -97,6 +97,7 @@ function RootLayoutContent({ children }) {
 const HeaderPart = ()=>{
   const loggedInUser = useUser()
   if(typeof window !== "undefined"){
+    console.log('user logged in',loggedInUser)
     if(!loggedInUser){
       return <></>
     }

@@ -72,7 +72,6 @@ class ParentCommentsSection extends React.Component {
             <CommentForm
               loggedInUser={this.props.loggedInUser}
               postId={this.props.postId}
-              userId={this.props.userId}
               postUserId={this.props.post.user.data.id}
               onAddComment={this.handleAddComment}
             />
@@ -83,7 +82,6 @@ class ParentCommentsSection extends React.Component {
                 comments={comments}
                 postUserId={this.props.post.user.data.id}
                 postId={this.props.postId}
-                userId={this.props.userId}
                 onUpdateReplies={this.handleUpdateReplies}
             />
       </Box>
@@ -92,8 +90,7 @@ class ParentCommentsSection extends React.Component {
 }
 
 ParentCommentsSection.propTypes = {
-  postId: PropTypes.string.isRequired,
-  userId: PropTypes.number.isRequired,
+  postId: PropTypes.string.isRequired
 };
 
 export default ParentCommentsSection;

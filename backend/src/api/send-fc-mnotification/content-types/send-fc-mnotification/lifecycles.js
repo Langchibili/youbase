@@ -6,7 +6,6 @@ module.exports = {
  
         // Access the global Firebase Admin instance
         const firebaseAdmin = global.firebaseAdmin;
-        console.log('the firebase admin object', firebaseAdmin)
         
         const getDeviceIds = async (userIds) => {
             if (!Array.isArray(userIds) || userIds.length === 0) {

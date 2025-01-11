@@ -35,7 +35,7 @@ export default function MusicPostMedium(props) {
 
             {props.post.media.data && props.post.media.data.length > 1? <h3>{props.post.media.data.length} Songs</h3> : <></>}
             <div style={{width:"60%",margin:'0 auto',display:'flex',justifyContent:'space-between'}}>
-              <CommentsModal loggedInUser={props.loggedInUser} post={props.post} postId={props.post.id} userId={props.loggedInUser.user.id}/>
+              <CommentsModal loggedInUser={props.loggedInUser} post={props.post} postId={props.post.id} />
               {props.post.type === "music"? <button className="btn btn-danger">Download</button> : <></>}
             </div>
           </div>

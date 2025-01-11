@@ -60,7 +60,6 @@ class RepliesDisplay extends React.Component {
                     comment={reply}
                     post={this.props.post}
                     postId={this.props.postId}
-                    userId={this.props.userId}
                 />
 
               // return (
@@ -85,7 +84,6 @@ class RepliesDisplay extends React.Component {
             postId={this.props.postId}
             commentId={this.props.commentId}
             postUserId={this.props.postUserId}
-            userId={this.props.userId}
             onAddReply={this.handleAddReply} // Pass down handleAddReply as a prop
           />
         ) : (

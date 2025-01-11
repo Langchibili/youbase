@@ -12,6 +12,7 @@ import CommentsModal from '../../Modals/CommentsModal'
 import PostMoreModal from '../../Modals/PostMoreModal'
 import AvatarWithUsernameOnly from '@/components/Parts/UserDisplay/AvatarWithUsernameOnly'
 import PostMoreBtn from '../../PostMoreBtn/PostMoreBtn'
+import { Headphones } from '@mui/icons-material'
 
 export default function MusicPlayerCardType(props) {
   const renderThumbNail = () => {
@@ -61,10 +62,12 @@ export default function MusicPlayerCardType(props) {
           display: 'flex',
           marginRight:'20px',
           alignItems:'center',
+          alignItems:'baseline',
           justifyContent: 'space-between',
         }}
       >
         <AvatarWithUsernameOnly userId={props.post.user.data.id} textColor="white" extra_styles={  {color:"white !important",width:'24px !important', height:'24px !important'}} postMoreContent={()=>{}}/>
+        <Headphones sx={{color:'indigo',opacity:'0.7'}}/>
         <PostMoreBtn {...props} iconColor="white" action="edit" post={props.post}/>
         </div>
       
@@ -139,7 +142,7 @@ export default function MusicPlayerCardType(props) {
         alignItems: 'center',
         padding: '1rem 0',
      }}>
-      <CommentsModal loggedInUser={props.loggedInUser} post={props.post} postId={props.post.id} userId={props.loggedInUser.user.id}/>
+      <CommentsModal loggedInUser={props.loggedInUser} post={props.post} postId={props.post.id} />
       <PostMoreModal {...props}/>
     </div>
       </div>

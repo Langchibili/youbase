@@ -35,9 +35,9 @@ class CommentForm extends React.Component {
       text:text,
       type: "text",
       post:  { connect: [this.props.postId] },
-      user:  { connect: [this.props.userId] },
+      user:  { connect: [this.props.loggedInUser.user.id] },
       postId: this.props.postId.toString(),
-      userId: this.props.userId.toString(),
+      userId: this.props.loggedInUser.user.id.toString(),
 
     };
     const newComment = await createNewComment({data:newCommentObject});
@@ -84,7 +84,6 @@ class CommentForm extends React.Component {
 
 CommentForm.propTypes = {
   postId: PropTypes.string.isRequired,
-  userId: PropTypes.number.isRequired,
   onAddComment: PropTypes.func.isRequired,
 };
 

@@ -18,7 +18,7 @@ export default function EmbedPostMedium(props) {
           </p>
           <AvatarWithPostDate {...props} /><br/>
           {props.postEngagementsDisplay(props.post)}
-          <div style={{width:'100%', textAlign:'center'}}><CommentsModal loggedInUser={props.loggedInUser} post={props.post} postId={props.post.id} userId={props.loggedInUser.user.id}/></div>
+          <div style={{width:'100%', textAlign:'center'}}><CommentsModal loggedInUser={props.loggedInUser} post={props.post} postId={props.post.id} /></div>
         </div>) : (<div className="review_item" style={{ position: 'relative'}}>
           <AvatarWithPostDate {...props} /><br/>
           <EmbedDisplay url={props.post.embedLink}/>
@@ -28,7 +28,7 @@ export default function EmbedPostMedium(props) {
           </p>
           </Link>
           {props.postEngagementsDisplay(props.post)}
-          {props.onSinglePostDisplayPage? <div style={{width:'100%', textAlign:'center'}}><CommentsModal loggedInUser={props.loggedInUser} post={props.post} postId={props.post.id} userId={props.loggedInUser.user.id}/></div> :
+          {props.onSinglePostDisplayPage? <div style={{width:'100%', textAlign:'center'}}><CommentsModal loggedInUser={props.loggedInUser} post={props.post} postId={props.post.id} /></div> :
             (<div style={{
                 width: "100%",
                 margin: '0 auto',
@@ -38,7 +38,7 @@ export default function EmbedPostMedium(props) {
                 padding: '1rem 0',
                 borderTop: '2px solid whitesmoke', // Optional for a separator
             }}>
-              <CommentsModal loggedInUser={props.loggedInUser} post={props.post} postId={props.post.id} userId={props.loggedInUser.user.id}/>
+              <CommentsModal loggedInUser={props.loggedInUser} post={props.post} postId={props.post.id} />
               <PostMoreModal {...props}/>
              </div>)}
         </div>)}

@@ -12,6 +12,7 @@ export default function LogInFirstModal({ open, handleClose }) {
       onClose={handleClose}
       aria-labelledby="login-modal-title"
       aria-describedby="login-modal-description"
+      sx={{zIndex:2000}}
     >
       <Box
         sx={{
@@ -27,6 +28,7 @@ export default function LogInFirstModal({ open, handleClose }) {
           textAlign: 'center',
           borderRadius: 1,
           outline: 'none',
+          zIndex:2000
         }}
       >
         {/* Close Button */}

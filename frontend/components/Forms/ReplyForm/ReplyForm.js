@@ -32,9 +32,9 @@ class ReplyForm extends React.Component {
       text:text,
       type: "text",
       post:  { connect: [this.props.postId] },
-      user:  { connect: [this.props.userId] },
+      user:  { connect: [this.props.loggedInUser.user.id] },
       postId: this.props.postId.toString(),
-      userId: this.props.userId.toString(),
+      userId: this.props.loggedInUser.user.id.toString(),
       parentComment: { connect: [this.props.commentId] },
     };
 
@@ -80,7 +80,6 @@ class ReplyForm extends React.Component {
 ReplyForm.propTypes = {
   postId: PropTypes.string.isRequired,
   commentId: PropTypes.string.isRequired,
-  userId: PropTypes.number.isRequired,
   onAddReply: PropTypes.func.isRequired,
 };
 

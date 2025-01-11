@@ -26,7 +26,7 @@ export default class SingleCommentDisplay extends React.Component {
       this.setState({
         comment:comment,
         commentLoaded: true,
-        thisIsMyComment: this.props.userId === comment.user.data.id,
+        thisIsMyComment: this.props.loggedInUser.user.id === comment.user.data.id,
         repliesCount: repliesCount
       })
   }
@@ -46,7 +46,7 @@ export default class SingleCommentDisplay extends React.Component {
     if(!this.state.commentLoaded){
         return <Skeleton variant="text"/>
     }
-    const { postId, post,loggedInUser, userId, postUserId, onUpdateReplies } = this.props;
+    const { postId, post, loggedInUser, postUserId, onUpdateReplies } = this.props;
     const comment = this.state.comment
     if(!comment){
         return null
@@ -71,7 +71,6 @@ export default class SingleCommentDisplay extends React.Component {
                     post={post}
                     postUserId={postUserId}
                     postId={postId}
-                    userId={userId}
                     onAddReply={(newReply) => onUpdateReplies(comment.id, newReply)}
                 />
                 <Divider sx={{ my: 1 }} />
