@@ -59,7 +59,7 @@ export default class StreamsDisplay extends React.Component{
    }
 
    renderPlayButton = ()=>{
-       const playedPostsIds = this.state.loggedInUser.user.playedPostsIds
+       const playedPostsIds = this.state.loggedInUser.status? this.state.loggedInUser.user.playedPostsIds : [] // if logged out, then just display the likes only
        const postId = this.state.post.id
     
        if(!playedPostsIds){ // meaning you have followed no-one before

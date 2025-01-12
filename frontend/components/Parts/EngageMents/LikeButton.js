@@ -79,9 +79,8 @@ export default class LikeButton extends React.Component{
    }
 
    renderLikeButton = ()=>{
-       const likedPostsIds = this.state.loggedInUser.user.likedPostsIds
+       const likedPostsIds = this.state.loggedInUser.status? this.state.loggedInUser.user.likedPostsIds : [] // if logged out, then just display the likes only
        const postId = this.state.post.id
-       console.log('post likes', this.state.post)
        if(!likedPostsIds){ // meaning you have followed no-one before
          return  <li className="fullscreen-engagement-btn" style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
                     <button disabled={this.state.requesting} className="lkcm152" onClick={this.handleLike}>

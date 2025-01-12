@@ -167,7 +167,7 @@ export default class ShareButton extends React.Component {
     }
 
     renderShareButton = () => {
-        const sharedPostsIds = this.state.loggedInUser.user.sharedPostsIds
+        const sharedPostsIds = this.state.loggedInUser.status? this.state.loggedInUser.user.sharedPostsIds : [] // if logged out, then just display the shares only
         const postId = this.state.post.id
 
         if (!sharedPostsIds) {

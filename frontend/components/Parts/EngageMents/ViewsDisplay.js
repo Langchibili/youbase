@@ -72,7 +72,7 @@ export default class ViewsDisplay extends React.Component{
    }
 
    renderViewButton = ()=>{
-       const viewedPostsIds = this.state.loggedInUser.user.viewedPostsIds
+       const viewedPostsIds = this.state.loggedInUser.status? this.state.loggedInUser.user.viewedPostsIds : [] // if logged out, then just display the views only
        const postId = this.state.post.id
     
        if(!viewedPostsIds){ // meaning you have followed no-one before

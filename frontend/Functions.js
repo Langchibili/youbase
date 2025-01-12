@@ -998,13 +998,13 @@ export const getUserFromDashedId = async (dashedId,populateString)=>{
 };
 
 
-export const logEngagement = async (type, postId, loggedInUser, ctx,createNotification=()=>{})=> {
-  // getting the user's current count, to avoid 2 users who have clicked or engaged concurrently having their engagements added as one
-  // but when updating the logged in user, it's ok to update directly, because it's dependent on you yourself taking an action at a time
-  const postUser = await getUserWithOnlySpecifiedFields(ctx.state.post.user.data.id,"fields=totalEngagement&fields="+type)  
-  const post = await getPostWithOnlySpecifiedFields(postId,"fields=totalEngagement&fields="+type)  
+export const logEngagement = async (type, postId, loggedInUser, ctx, createNotification=()=>{})=> {
+    // getting the user's current count, to avoid 2 users who have clicked or engaged concurrently having their engagements added as one
+    // but when updating the logged in user, it's ok to update directly, because it's dependent on you yourself taking an action at a time
+    const postUser = await getUserWithOnlySpecifiedFields(ctx.state.post.user.data.id,"fields=totalEngagement&fields="+type)  
+    const post = await getPostWithOnlySpecifiedFields(postId,"fields=totalEngagement&fields="+type)  
   
-  const { action, idArray, postBy } = engagementMappings[type];
+    const { action, idArray, postBy } = engagementMappings[type];
     let userEngagementIds = ctx.state.loggedInUser.user[idArray] || [];
     // the other user or the user who posted should have their engagement count incremented
     const userEngagementCount = parseInt(postUser[type] || 0)

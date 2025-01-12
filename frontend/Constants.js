@@ -102,7 +102,7 @@ export const getFeature = async (featureId)=>{
  
   
 
-  const getUserAccount = async (jwt)=>{
+  export const getUserAccount = async (jwt)=>{
     return await fetch(api_url+'/users/me',{
      headers: {
        'Authorization': `Bearer ${jwt}`,
@@ -206,7 +206,7 @@ const updateDefaultUserAccountToLogIn = async (username,password)=>{
   const response = await getUserAccountWithUsernameAndPassword(username,password)
   let returnObject = response
   if(response.hasOwnProperty('jwt')){
-    //localStorage.setItem('jwt') // remove whatever existing jwt
+    localStorage.removeItem('jwt') // remove whatever existing jwt
     saveJwt(response.jwt) // save new jwt
     const userUpdated = await fetch(api_url+'/users/'+response.user.id, {
       method: 'PUT',

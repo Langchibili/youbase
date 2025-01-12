@@ -3,7 +3,9 @@
 'use client'
 
 import { logEngagement } from "@/Functions"
+
 import React from "react"
+import { getJwt, getUserAccount } from "../../../Constants"
 
 export default class PostImpressions extends React.Component{
    constructor(props){
@@ -13,9 +15,16 @@ export default class PostImpressions extends React.Component{
       }
    }
 
-   componentDidMount(){
+   async componentDidMount(){
+      let loggedInUser = null
+      if(this.props.loggedInUser.status){
+         loggedInUser = this.props.loggedInUser.user
+      }
+      else{
+         loggedInUser = await getUserAccount(getJwt());
+      }
       // on component mounting, log the impression // no time constraints at the moment
-      logEngagement('impressions',this.props.post.id,this.props.loggedInUser.user,this) 
+      logEngagement('impressions',this.props.post.id,loggedInUser,this) 
    }
 
    render(){
