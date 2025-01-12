@@ -3,7 +3,9 @@ import React, { useState } from "react";
 const ReadMoreLess = ({ text, length, buttonStyle = {} }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const handleToggle = () => {
+  const handleToggle = (e) => {
+    e.preventDefault()
+    e.stopPropagation(); // Prevent parent click handler
     setIsExpanded(!isExpanded);
   };
   

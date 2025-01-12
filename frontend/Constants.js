@@ -206,7 +206,7 @@ const updateDefaultUserAccountToLogIn = async (username,password)=>{
   const response = await getUserAccountWithUsernameAndPassword(username,password)
   let returnObject = response
   if(response.hasOwnProperty('jwt')){
-    localStorage.removeItem('jwt') // remove whatever existing jwt
+    //localStorage.setItem('jwt') // remove whatever existing jwt
     saveJwt(response.jwt) // save new jwt
     const userUpdated = await fetch(api_url+'/users/'+response.user.id, {
       method: 'PUT',
