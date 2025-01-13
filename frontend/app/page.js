@@ -104,12 +104,14 @@ const Home = () =>{
           nextSectionToDisplay={()=> lastPostsDisplay()}
         />
       }
-      const lastPostsDisplay = ()=>{ // all pagesm so exlcude totalPages prop
+      const lastPostsDisplay = ()=>{ // all pages so exlcude totalPages prop and startPage={2} because we have already shown the first page
         return <ContentDisplaySection
           loggedInUser={loggedInUser}
           contentDisplay={(props) =><LandscapeContent content={props.content} loggedInUser={loggedInUser} />}
           contentUri={`${api_url}/posts`}
           limit={5}
+          startPage={2}
+          removeBottomPadding={true}
           contentQueryFilters="filters[$and][0][$or][0][type][$eq]=image&filters[$and][0][$or][0][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=text&filters[$and][0][$or][2][$and][0][type][$eq]=video&filters[$and][0][$or][2][$and][1][mediaDisplayType][$eq]=landscape&filters[$and][0][$or][3][type][$eq]=embed&filters[$and][0][$or][4][type][$eq]=music&filters[$and][1][status][$eq]=published&populate=user,featuredImages,media&_sort=user.totalEngagement:desc"     
         />
       }

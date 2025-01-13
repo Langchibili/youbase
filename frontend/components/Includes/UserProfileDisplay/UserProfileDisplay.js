@@ -214,7 +214,7 @@ export default function UserProfileDisplay(props) {
                   role="tab"
                   aria-selected="false"
                 >
-                  Reels
+                  Images
                 </a>
                 <a
                   className="nav-item nav-link"
@@ -341,7 +341,7 @@ export default function UserProfileDisplay(props) {
                       loggedInUser={loggedInUser}
                       emptyContentMessage="User has no images yet."
                       showEmptyContentMessage={true}
-                      contentDisplay={(props) => <PortraitContentDisplay content={props.content} loggedInUser={loggedInUser} />
+                      contentDisplay={(props) => <LandscapeContent content={props.content} loggedInUser={loggedInUser} />
                       }
                       contentUri={`${api_url}/posts`}
                       limit={10}

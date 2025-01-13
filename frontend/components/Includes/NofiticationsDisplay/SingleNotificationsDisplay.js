@@ -57,7 +57,6 @@ export default class SingleNotificationsDisplay extends React.Component {
       return "/user/"+this.props.notification.attributes.notifier.data.attributes.username
     }
     return "#"
-    
   }    
 
   render() {
