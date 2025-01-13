@@ -80,8 +80,54 @@ const Home = () =>{
         'filters[$and][0][type][$eq]=text', 
       ]
       
+    const AllPostTypesContent = ()=>{
+      // 20 reels then 5 posts then 20 captures then all posts
+      const firstPostsDisplay = ()=>{ // limit to one page totalPages={1}
+        return <ContentDisplaySection
+          loggedInUser={loggedInUser}
+          contentDisplay={(props) =><LandscapeContent content={props.content} loggedInUser={loggedInUser} />}
+          contentUri={`${api_url}/posts`}
+          limit={5}
+          totalPages={1}
+          contentQueryFilters="filters[$and][0][$or][0][type][$eq]=image&filters[$and][0][$or][0][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=text&filters[$and][0][$or][2][$and][0][type][$eq]=video&filters[$and][0][$or][2][$and][1][mediaDisplayType][$eq]=landscape&filters[$and][0][$or][3][type][$eq]=embed&filters[$and][0][$or][4][type][$eq]=music&filters[$and][1][status][$eq]=published&populate=user,featuredImages,media&_sort=user.totalEngagement:desc"     
+          nextSectionToDisplay={()=> CapturesSection()}
+        />
+      }
+      const CapturesSection = ()=>{ // limit to one page totalPages={1}
+        return <ContentDisplaySection
+          loggedInUser={loggedInUser}
+          contentDisplay={(props) =><PortraitContentDisplay content={props.content} loggedInUser={loggedInUser} />}
+          contentUri={`${api_url}/posts`}
+          limit={15}
+          totalPages={1}
+          contentQueryFilters="filters[$and][0][type][$eq]=image&filters[$and][1][mediaDisplayType][$eq]=portrait&filters[$and][1][status][$eq]=published&populate=user,featuredImages,media&_sort=user.totalEngagement:desc"     
+          nextSectionToDisplay={()=> lastPostsDisplay()}
+        />
+      }
+      const lastPostsDisplay = ()=>{ // all pagesm so exlcude totalPages prop
+        return <ContentDisplaySection
+          loggedInUser={loggedInUser}
+          contentDisplay={(props) =><LandscapeContent content={props.content} loggedInUser={loggedInUser} />}
+          contentUri={`${api_url}/posts`}
+          limit={5}
+          contentQueryFilters="filters[$and][0][$or][0][type][$eq]=image&filters[$and][0][$or][0][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=text&filters[$and][0][$or][2][$and][0][type][$eq]=video&filters[$and][0][$or][2][$and][1][mediaDisplayType][$eq]=landscape&filters[$and][0][$or][3][type][$eq]=embed&filters[$and][0][$or][4][type][$eq]=music&filters[$and][1][status][$eq]=published&populate=user,featuredImages,media&_sort=user.totalEngagement:desc"     
+        />
+      }
 
+      // reels section (first section we are displaying here)
+      return <ContentDisplaySection
+              loggedInUser={loggedInUser}
+              contentDisplay={(props) =><PortraitContentDisplay content={props.content} loggedInUser={loggedInUser} />}
+              contentUri={`${api_url}/posts`}
+              limit={15}
+              totalPages={1}
+              contentQueryFilters="filters[$and][0][type][$eq]=video&filters[$and][1][mediaDisplayType][$eq]=portrait&filters[$and][1][status][$eq]=published&populate=user,featuredImages,media&_sort=user.totalEngagement:desc"     
+              nextSectionToDisplay={()=> firstPostsDisplay()}
+          />
+    }  
+     
    if(typeof document !== "undefined"){
+    console.log('on tab',value)
     return (
             <>
 
@@ -99,7 +145,7 @@ const Home = () =>{
                     >
                     <Box>
                     {/* Content inside parent div */}
-                    <ContentDisplaySection
+                    {value === 0? AllPostTypesContent() : <ContentDisplaySection
                         key={value}
                         loggedInUser={loggedInUser}
                         emptyContentMessage="No content available for this tab."
@@ -115,7 +161,7 @@ const Home = () =>{
                         contentUri={`${api_url}/posts`}
                         limit={10}
                         contentQueryFilters={`${tabFilters[value]}&filters[$and][1][status][$eq]=published&populate=user,featuredImages,media&_sort=user.totalEngagement:desc`}
-                        />
+                        />}
 
                     {/* Fixed Tabs */}
                     <Box

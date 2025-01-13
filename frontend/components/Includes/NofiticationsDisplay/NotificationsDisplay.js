@@ -55,7 +55,7 @@ export default class NotificationsDisplay extends React.Component {
                           totalPages={1}
                           limit={5}
                           removeBottomPadding={true}
-                          contentQueryFilters={`filters[notifiedUsers][id][$eq]=${this.props.loggedInUser.user.id}&populate=notifier,notifier.details,post&_sort=id:desc`}
+                          contentQueryFilters={`filters[notifiedUsers][id][$eq]=${this.props.loggedInUser.user.id}&populate=notifier,notifier.details,post&sort=id:desc`}
                           />
                     <Link className="vbm_btn" href="/notifications">
                         View All <i className="uil uil-arrow-right" />

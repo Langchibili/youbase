@@ -12,6 +12,7 @@ const ContentDisplaySection = ({
   contentQueryFilters = "",
   limit = typeof window !== "undefined" && window.innerWidth < 700 ? 5 : 10, // smaller screens 5, larger 10 default
   totalPages = 1000000,
+  startPage = 1,
   loggedInUser,
   showEmptyContentMessage = false,
   removeBottomPadding = false,
@@ -21,7 +22,7 @@ const ContentDisplaySection = ({
   nextSectionToDisplay = (props) => <></>
 }) => {
   const [sections, setSections] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(startPage);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMoreContent, setHasMoreContent] = useState(true);
   const [canShowEmptyContentMessage,setCanShowEmptyContentMessage] = useState(false)

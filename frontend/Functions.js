@@ -1171,7 +1171,10 @@ export const deleteEngagement = async (type, postId, loggedInUser, ctx)=> {
    // notifications logging
 
    export const logNotification = async(title,userId,notifiedUserIds,contentType="user",contentId="")=>{
-       const notificationObject = {
+    if(notifiedUserIds.length === 1 && notifiedUserIds.includes(userId)){
+      return
+    } // if this post is for the logged in user   
+    const notificationObject = {
           data:{
             title: title,
             notifier: {connect: [parseInt(userId)]},

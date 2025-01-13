@@ -20,7 +20,7 @@ export default function Notifications() {
             contentDisplay={(props) => <RenderNotifications notifications={props.content} loggedInUser={loggedInUser}/>}
             contentUri={`${api_url}/notifications`}
             limit={10}
-            contentQueryFilters={`filters[notifiedUsers][id][$eq]=${loggedInUser.user.id}&populate=notifier,notifier.details,post&_sort=id:desc`}
+            contentQueryFilters={`filters[notifiedUsers][id][$eq]=${loggedInUser.user.id}&populate=notifier,notifier.details,post&sort=id:desc`}
         />
     )
 }
