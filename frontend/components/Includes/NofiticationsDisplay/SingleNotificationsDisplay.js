@@ -49,23 +49,20 @@ export default class SingleNotificationsDisplay extends React.Component {
   
   renderNotificationLink = ()=>{
     if(this.props.notification.attributes.type === "post"){
-      if(!this.props.notification.attributes.post){
-        return "#"
+      if(this.props.notification.attributes.post && this.props.notification.attributes.post.data && this.props.notification.attributes.post.data.attributes){
+        return "/posts/"+this.props.notification.attributes.post.data.attributes.dashed_title
       }
-      return "/posts/"+this.props.notification.attributes.post.data.attributes.dashed_title
     }
-    if(!this.props.notification.attributes.notifier){
-      return "#"
+    else{ // user notification type checks already checked in render method
+      return "/user/"+this.props.notification.attributes.notifier.data.attributes.username
     }
-    return "/user/"+this.props.notification.attributes.notifier.data.attributes.username
+    return "#"
+    
   }    
 
   render() {
-    console.log('the notifications',this.props)
-    if(!this.props.notification.attributes.notifier){
-       return <></>
-    }
-    return (
+    if(this.props.notification.attributes.notifier && this.props.notification.attributes.notifier.data && this.props.notification.attributes.notifier.data.attributes){
+      return (
         <div style={this.state.seen === "seen"? {paddingLeft:'10px',paddingRight:'3px'} : {backgroundColor:'aliceblue',paddingLeft:'10px',paddingRight:'3px'}}>
           <Link href={this.renderNotificationLink()} className="channel_my item" onClick={this.handleNotificationClick}>
             <div className="profile_link">
@@ -80,6 +77,10 @@ export default class SingleNotificationsDisplay extends React.Component {
             </div>
          </Link>
         </div>
-    )
+     )
+    }
+    else{
+       return <></>
+    }
   }
 }

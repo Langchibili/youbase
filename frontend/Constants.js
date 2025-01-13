@@ -5,11 +5,11 @@ import { getJWT, saveJwt } from "./secrets"
 export const youtubeApiKey = 'AIzaSyCpjeIW-IKAUQSZuc5bb0Ncx1ksxEB5J_8'
 
 
- /*localhost: */ export const environment = 'local'
+ ///*localhost: */ export const environment = 'local'
  ///*liveserver1: */ export const environment = 'live'
  ///*liveserver2: */ export const environment = 'live2'
  ///*testserver: */ export const environment = 'test' // mvp will run here
- ///*local-liveserver-testing: */ export const environment = 'local-liveserver-testing' // testing the live server locally
+ /*local-liveserver-testing: */ export const environment = 'local-liveserver-testing' // testing the live server locally
 
 // export the client side stuff
 
