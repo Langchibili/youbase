@@ -1411,6 +1411,8 @@ export interface ApiNotificationNotification extends Schema.CollectionType {
       'oneToOne',
       'api::post.post'
     >;
+    status: Attribute.Enumeration<['seen', 'unseen']> &
+      Attribute.DefaultTo<'unseen'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

@@ -6,6 +6,7 @@ import AvatarOnly from "../UserDisplay/AvatarOnly"
 import Link from "next/link"
 import { getUserById, handleCountsDisplay, truncateText } from "@/Functions"
 import SearchModal from "@/components/Includes/Modals/SearchModal"
+import NotificationsDisplay from "@/components/Includes/NofiticationsDisplay/NotificationsDisplay"
 
 export default class MainHeader extends React.Component{
     constructor(props){
@@ -124,56 +125,8 @@ export default class MainHeader extends React.Component{
                     </a>
                 </div>
                 </li>} */}
-                {/* I will handle notifications later */}
-                {/* {!this.props.loggedInUser.status? <li><Link className="btn btn-danger" href="/signup">Signup</Link></li> : <li className="ui dropdown" tabIndex={0}>
-                    <a href="#" className="option_links" title="Notifications">
-                    <i className="uil uil-bell" />
-                    <span className="noti_count">3</span>
-                    </a>
-                    <div className="menu dropdown_mn" tabIndex={-1}>
-                    <a href="#" className="channel_my item">
-                        <div className="profile_link">
-                        <img src="/theme/images/left-imgs/img-1.jpg" alt="" />
-                        <div className="pd_content">
-                            <h6>Rock William</h6>
-                            <p>
-                            Like Your Comment On Video{" "}
-                            <strong>How to create sidebar menu</strong>.
-                            </p>
-                            <span className="nm_time">2 min ago</span>
-                        </div>
-                        </div>
-                    </a>
-                    <a href="#" className="channel_my item">
-                        <div className="profile_link">
-                        <img src="/theme/images/left-imgs/img-2.jpg" alt="" />
-                        <div className="pd_content">
-                            <h6>Jassica Smith</h6>
-                            <p>
-                            Added New Review In Video{" "}
-                            <strong>Full Stack PHP Developer</strong>.
-                            </p>
-                            <span className="nm_time">12 min ago</span>
-                        </div>
-                        </div>
-                    </a>
-                    <a href="#" className="channel_my item">
-                        <div className="profile_link">
-                        <img src="/theme/images/left-imgs/img-9.jpg" alt="" />
-                        <div className="pd_content">
-                            <p>
-                            {" "}
-                            Your Membership Approved <strong>Upload Video</strong>.
-                            </p>
-                            <span className="nm_time">20 min ago</span>
-                        </div>
-                        </div>
-                    </a>
-                    <a className="vbm_btn" href="instructor_notifications.html">
-                        View All <i className="uil uil-arrow-right" />
-                    </a>
-                    </div>
-                </li> } */}
+                {/*  notifications  */}
+                 {!this.props.loggedInUser.status? <></> : <NotificationsDisplay loggedInUser={this.props.loggedInUser}/> } 
                 {!this.props.loggedInUser.status? <></> : <li className="ui dropdown" tabIndex={0}>
                     <a href="#" className="opts_account" title="Account">
                     {/* <img src="/theme/images/hd_dp.jpg" alt="" /> */}

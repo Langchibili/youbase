@@ -14,6 +14,7 @@ const ContentDisplaySection = ({
   totalPages = 1000000,
   loggedInUser,
   showEmptyContentMessage = false,
+  removeBottomPadding = false,
   emptyContentMessage = "",
   contentTitle="",
   contentDisplay = (props) => <></>,
@@ -89,7 +90,7 @@ const ContentDisplaySection = ({
         setHasMoreContent(false);
         setCanShowEmptyContentMessage(true)
       }
-      if (newContent.length === 0 || currentPage >= totalPages) {
+      if (newContent.length === 0 || currentPage > totalPages) {
         setHasMoreContent(false);
       } else {
         updateSections(currentPage,newContent)
@@ -121,7 +122,7 @@ const ContentDisplaySection = ({
         nextSectionToDisplay()
       )}
       {isLoading && <MoreContentLoader />}
-      <div style={{minHeight:'70px'}}></div>
+      {removeBottomPadding? <></> : <div style={{minHeight:'70px'}}></div>}
     </div>
   )
 }

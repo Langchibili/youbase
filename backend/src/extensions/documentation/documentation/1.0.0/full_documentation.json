@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2025-01-12T09:47:10.262Z"
+    "x-generation-date": "2025-01-13T12:28:36.068Z"
   },
   "x-strapi-config": {
     "path": "/documentation",
@@ -3185,6 +3185,13 @@
                                           }
                                         }
                                       }
+                                    },
+                                    "status": {
+                                      "type": "string",
+                                      "enum": [
+                                        "seen",
+                                        "unseen"
+                                      ]
                                     },
                                     "createdAt": {
                                       "type": "string",
@@ -7933,6 +7940,13 @@
                                         }
                                       }
                                     },
+                                    "status": {
+                                      "type": "string",
+                                      "enum": [
+                                        "seen",
+                                        "unseen"
+                                      ]
+                                    },
                                     "createdAt": {
                                       "type": "string",
                                       "format": "date-time"
@@ -10388,6 +10402,13 @@
                                                                       }
                                                                     }
                                                                   }
+                                                                },
+                                                                "status": {
+                                                                  "type": "string",
+                                                                  "enum": [
+                                                                    "seen",
+                                                                    "unseen"
+                                                                  ]
                                                                 },
                                                                 "createdAt": {
                                                                   "type": "string",
@@ -14273,6 +14294,13 @@
                                                       }
                                                     }
                                                   }
+                                                },
+                                                "status": {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "seen",
+                                                    "unseen"
+                                                  ]
                                                 },
                                                 "createdAt": {
                                                   "type": "string",
@@ -18286,6 +18314,13 @@
                                                     }
                                                   }
                                                 },
+                                                "status": {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "seen",
+                                                    "unseen"
+                                                  ]
+                                                },
                                                 "createdAt": {
                                                   "type": "string",
                                                   "format": "date-time"
@@ -20370,6 +20405,13 @@
                   }
                 ],
                 "example": "string or id"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "seen",
+                  "unseen"
+                ]
               }
             }
           }
@@ -23368,6 +23410,13 @@
                                         }
                                       }
                                     },
+                                    "status": {
+                                      "type": "string",
+                                      "enum": [
+                                        "seen",
+                                        "unseen"
+                                      ]
+                                    },
                                     "createdAt": {
                                       "type": "string",
                                       "format": "date-time"
@@ -23651,6 +23700,13 @@
                 }
               }
             }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "seen",
+              "unseen"
+            ]
           },
           "createdAt": {
             "type": "string",
@@ -26290,6 +26346,13 @@
                                                         }
                                                       }
                                                     }
+                                                  },
+                                                  "status": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                      "seen",
+                                                      "unseen"
+                                                    ]
                                                   },
                                                   "createdAt": {
                                                     "type": "string",
@@ -30759,6 +30822,13 @@
                                         }
                                       }
                                     },
+                                    "status": {
+                                      "type": "string",
+                                      "enum": [
+                                        "seen",
+                                        "unseen"
+                                      ]
+                                    },
                                     "createdAt": {
                                       "type": "string",
                                       "format": "date-time"
@@ -35142,6 +35212,13 @@
                                           }
                                         }
                                       }
+                                    },
+                                    "status": {
+                                      "type": "string",
+                                      "enum": [
+                                        "seen",
+                                        "unseen"
+                                      ]
                                     },
                                     "createdAt": {
                                       "type": "string",

@@ -40,6 +40,14 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::post.post"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "seen",
+        "unseen"
+      ],
+      "default": "unseen"
     }
   }
 }
