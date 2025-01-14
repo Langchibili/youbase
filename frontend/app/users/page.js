@@ -22,7 +22,7 @@ export default function Users() {
                 contentDisplay={(props) =><UsersMiniDisplay users={props.content} loggedInUser={loggedInUser} />}
                 contentUri={`${api_url}/filtered-users`}
                 limit={10}
-                contentQueryFilters="populate=details&sort=id:desc"     
+                contentQueryFilters="populate=profilePicture,details,socials&sort=id:desc"     
               />
              </div>
              </div>

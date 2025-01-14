@@ -120,7 +120,7 @@ export default function SearchForm(props) {
                         contentDisplay={(props) =><UsersMiniDisplay users={props.content} loggedInUser={props.loggedInUser} />}
                         contentUri={`${api_url}/filtered-users`}
                         limit={10}
-                        contentQueryFilters={`SearchTerm=${debouncedSearchTerm}&populate=details&sort=id:desc`}     
+                        contentQueryFilters={`SearchTerm=${debouncedSearchTerm}&populate=profilePicture,details,socials&sort=id:desc`}     
                       />: <ContentDisplaySection
                               key={contentKey}
                               loggedInUser={props.loggedInUser}
