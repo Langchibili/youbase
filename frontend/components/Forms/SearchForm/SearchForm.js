@@ -9,6 +9,7 @@ import ContentDisplaySection from '@/components/Includes/ContentDisplay/ContentD
 import PortraitContentDisplay from '@/components/Includes/ContentDisplay/PortraitContentDisplay';
 import LandscapeContent from '@/components/Includes/ContentDisplay/LandscapeContent';
 import { api_url } from '@/Constants';
+import UsersMiniDisplay from '@/components/Includes/ContentDisplay/UsersMiniDisplay';
 
 export default function SearchForm(props) {
   const [value, setValue] = useState(0); // Active tab index
@@ -18,11 +19,11 @@ export default function SearchForm(props) {
 
   const tabFilters = [
     'filters[$and][0][$or][0][type][$eq]=image&filters[$and][0][$or][0][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=text&filters[$and][0][$or][2][$and][0][type][$eq]=video&filters[$and][0][$or][2][$and][1][mediaDisplayType][$eq]=landscape&filters[$and][0][$or][3][type][$eq]=embed&filters[$and][0][$or][4][type][$eq]=music', // Combined filter for "posts"
+    'filters[$and][0][type][$eq]=user', // Users
     'filters[$and][0][$or][0][$and][0][type][$eq]=video&filters[$and][0][$or][0][$and][1][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=embed', // Videos
     'filters[$and][0][type][$eq]=music', // Music
     'filters[$and][0][$and][0][type][$eq]=image&filters[$and][0][$and][1][mediaDisplayType][$not][$eq]=portrait', // Images
     'filters[$and][0][type][$eq]=text', // Text
-    'filters[$and][0][type][$eq]=user', // Users
     'filters[$and][0][type][$eq]=video&filters[$and][1][mediaDisplayType][$eq]=portrait', // Reels
     'filters[$and][0][type][$eq]=image&filters[$and][1][mediaDisplayType][$eq]=portrait', // Captures
     'filters[$and][0][type][$eq]=embed', // Embeds
@@ -111,22 +112,31 @@ export default function SearchForm(props) {
           padding: 2,
         }}
       >
-        <ContentDisplaySection
-          key={contentKey}
-          loggedInUser={props.loggedInUser}
-          emptyContentMessage="No results found"
-          showEmptyContentMessage={true}
-          contentDisplay={(props) =>
-            value === 6 || value === 7 ? (
-              <PortraitContentDisplay content={props.content} loggedInUser={props.loggedInUser} />
-            ) : (
-              <LandscapeContent content={props.content} loggedInUser={props.loggedInUser} />
-            )
-          }
-          contentUri={`${api_url}/posts`}
-          limit={10}
-          contentQueryFilters={`${tabFilters[value]}&filters[$and][2][$or][0][title][$containsi]=${debouncedSearchTerm}&filters[$and][2][$or][1][description][$containsi]=${debouncedSearchTerm}&filters[$and][3][status][$eq]=published&populate=user,featuredImages,media`}
-        />
+         {value == 1? <ContentDisplaySection
+                        key={contentKey}
+                        loggedInUser={props.loggedInUser}
+                        emptyContentMessage="No Users found"
+                        customPagination={true}
+                        contentDisplay={(props) =><UsersMiniDisplay users={props.content} loggedInUser={props.loggedInUser} />}
+                        contentUri={`${api_url}/filtered-users`}
+                        limit={10}
+                        contentQueryFilters={`SearchTerm=${debouncedSearchTerm}&populate=details&sort=id:desc`}     
+                      />: <ContentDisplaySection
+                              key={contentKey}
+                              loggedInUser={props.loggedInUser}
+                              emptyContentMessage="No results found"
+                              showEmptyContentMessage={true}
+                              contentDisplay={(props) =>
+                                value === 6 || value === 7 ? (
+                                  <PortraitContentDisplay content={props.content} loggedInUser={props.loggedInUser} />
+                                ) : (
+                                  <LandscapeContent content={props.content} loggedInUser={props.loggedInUser} />
+                                )
+                              }
+                              contentUri={`${api_url}/posts`}
+                              limit={10}
+                              contentQueryFilters={`${tabFilters[value]}&filters[$and][2][$or][0][title][$containsi]=${debouncedSearchTerm}&filters[$and][2][$or][1][description][$containsi]=${debouncedSearchTerm}&filters[$and][3][status][$eq]=published&populate=user,featuredImages,media`}
+                        />}
       </Box>
 
       {/* Tabs */}
@@ -150,11 +160,11 @@ export default function SearchForm(props) {
           aria-label="scrollable force tabs example"
         >
           <Tab label="Posts" />
+          <Tab label="Users" />
           <Tab label="Videos" />
           <Tab label="Music" />
           <Tab label="Images" />
           <Tab label="Text" />
-          <Tab label="Users" />
           <Tab label="Reels" />
           <Tab label="Captures" />
           <Tab label="Embeds" />

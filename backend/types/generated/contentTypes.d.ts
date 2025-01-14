@@ -1311,6 +1311,36 @@ export interface ApiEngagementEngagement extends Schema.CollectionType {
   };
 }
 
+export interface ApiFilteredUserFilteredUser extends Schema.CollectionType {
+  collectionName: 'filtered_users';
+  info: {
+    singularName: 'filtered-user';
+    pluralName: 'filtered-users';
+    displayName: 'filteredUsers';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    AboutRoute: Attribute.Blocks & Attribute.Private;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::filtered-user.filtered-user',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::filtered-user.filtered-user',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiFirebaseFcmConfigFirebaseFcmConfig
   extends Schema.SingleType {
   collectionName: 'firebase_fcm_configs';
@@ -1837,6 +1867,7 @@ declare module '@strapi/types' {
       'api::comment.comment': ApiCommentComment;
       'api::content.content': ApiContentContent;
       'api::engagement.engagement': ApiEngagementEngagement;
+      'api::filtered-user.filtered-user': ApiFilteredUserFilteredUser;
       'api::firebase-fcm-config.firebase-fcm-config': ApiFirebaseFcmConfigFirebaseFcmConfig;
       'api::media-convert-job.media-convert-job': ApiMediaConvertJobMediaConvertJob;
       'api::notification.notification': ApiNotificationNotification;

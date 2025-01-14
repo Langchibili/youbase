@@ -1,0 +1,19 @@
+{
+  "kind": "collectionType",
+  "collectionName": "filtered_users",
+  "info": {
+    "singularName": "filtered-user",
+    "pluralName": "filtered-users",
+    "displayName": "filteredUsers"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "AboutRoute": {
+      "type": "blocks",
+      "private": true
+    }
+  }
+}

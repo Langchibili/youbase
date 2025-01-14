@@ -89,7 +89,7 @@ const Home = () =>{
           contentUri={`${api_url}/posts`}
           limit={5}
           totalPages={1}
-          contentQueryFilters="filters[$and][0][$or][0][type][$eq]=image&filters[$and][0][$or][0][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=text&filters[$and][0][$or][2][$and][0][type][$eq]=video&filters[$and][0][$or][2][$and][1][mediaDisplayType][$eq]=landscape&filters[$and][0][$or][3][type][$eq]=embed&filters[$and][0][$or][4][type][$eq]=music&filters[$and][1][status][$eq]=published&populate=user,featuredImages,media&_sort=user.totalEngagement:desc"     
+          contentQueryFilters="filters[$and][0][$or][0][type][$eq]=image&filters[$and][0][$or][0][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=text&filters[$and][0][$or][2][$and][0][type][$eq]=video&filters[$and][0][$or][2][$and][1][mediaDisplayType][$eq]=landscape&filters[$and][0][$or][3][type][$eq]=embed&filters[$and][0][$or][4][type][$eq]=music&filters[$and][1][status][$eq]=published&populate=user,featuredImages,media&sort=user.totalEngagement:desc,id:desc"     
           nextSectionToDisplay={()=> CapturesSection()}
         />
       }
@@ -100,7 +100,7 @@ const Home = () =>{
           contentUri={`${api_url}/posts`}
           limit={15}
           totalPages={1}
-          contentQueryFilters="filters[$and][0][type][$eq]=image&filters[$and][1][mediaDisplayType][$eq]=portrait&filters[$and][1][status][$eq]=published&populate=user,featuredImages,media&_sort=user.totalEngagement:desc"     
+          contentQueryFilters="filters[$and][0][type][$eq]=image&filters[$and][1][mediaDisplayType][$eq]=portrait&filters[$and][1][status][$eq]=published&populate=user,featuredImages,media&sort=user.totalEngagement:desc,id:desc"     
           nextSectionToDisplay={()=> lastPostsDisplay()}
         />
       }
@@ -111,8 +111,7 @@ const Home = () =>{
           contentUri={`${api_url}/posts`}
           limit={5}
           startPage={2}
-          removeBottomPadding={true}
-          contentQueryFilters="filters[$and][0][$or][0][type][$eq]=image&filters[$and][0][$or][0][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=text&filters[$and][0][$or][2][$and][0][type][$eq]=video&filters[$and][0][$or][2][$and][1][mediaDisplayType][$eq]=landscape&filters[$and][0][$or][3][type][$eq]=embed&filters[$and][0][$or][4][type][$eq]=music&filters[$and][1][status][$eq]=published&populate=user,featuredImages,media&_sort=user.totalEngagement:desc"     
+          contentQueryFilters="filters[$and][0][$or][0][type][$eq]=image&filters[$and][0][$or][0][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=text&filters[$and][0][$or][2][$and][0][type][$eq]=video&filters[$and][0][$or][2][$and][1][mediaDisplayType][$eq]=landscape&filters[$and][0][$or][3][type][$eq]=embed&filters[$and][0][$or][4][type][$eq]=music&filters[$and][1][status][$eq]=published&populate=user,featuredImages,media&sort=user.totalEngagement:desc,id:desc"     
         />
       }
 
@@ -123,13 +122,13 @@ const Home = () =>{
               contentUri={`${api_url}/posts`}
               limit={15}
               totalPages={1}
-              contentQueryFilters="filters[$and][0][type][$eq]=video&filters[$and][1][mediaDisplayType][$eq]=portrait&filters[$and][1][status][$eq]=published&populate=user,featuredImages,media&_sort=user.totalEngagement:desc"     
+              removeBottomPadding={true}
+              contentQueryFilters="filters[$and][0][type][$eq]=video&filters[$and][1][mediaDisplayType][$eq]=portrait&filters[$and][1][status][$eq]=published&populate=user,featuredImages,media&sort=user.totalEngagement:desc,id:desc"     
               nextSectionToDisplay={()=> firstPostsDisplay()}
           />
     }  
      
    if(typeof document !== "undefined"){
-    console.log('on tab',value)
     return (
             <>
 
@@ -162,7 +161,7 @@ const Home = () =>{
                         }
                         contentUri={`${api_url}/posts`}
                         limit={10}
-                        contentQueryFilters={`${tabFilters[value]}&filters[$and][1][status][$eq]=published&populate=user,featuredImages,media&_sort=user.totalEngagement:desc`}
+                        contentQueryFilters={`${tabFilters[value]}&filters[$and][1][status][$eq]=published&populate=user,featuredImages,media&sort=user.totalEngagement:desc,id:desc`}
                         />}
 
                     {/* Fixed Tabs */}

@@ -16,6 +16,7 @@ const ContentDisplaySection = ({
   loggedInUser,
   showEmptyContentMessage = false,
   removeBottomPadding = false,
+  customPagination = false,
   emptyContentMessage = "",
   contentTitle="",
   contentDisplay = (props) => <></>,
@@ -37,11 +38,10 @@ const ContentDisplaySection = ({
     try {
       setIsLoading(true);
       const queryFilters = contentQueryFilters? contentQueryFilters+"&" : ""
-      const response = await fetch(
-        `${contentUri}?${queryFilters}pagination[page]=${page}&pagination[pageSize]=${limit}`
-      );
+      const pagination = customPagination? `page=${page}&pageSize=${limit}` : `pagination[page]=${page}&pagination[pageSize]=${limit}`
+      const response = await fetch(`${contentUri}?${queryFilters}${pagination}`);
       console.log('page now: ',page)
-      console.log('content uri', `${contentUri}?${queryFilters}pagination[page]=${page}&pagination[pageSize]=${limit}`)
+      console.log('content uri', `${contentUri}?${queryFilters}${pagination}`)
       const data = await response.json();
       return data.data || [];
     } catch (error) {
