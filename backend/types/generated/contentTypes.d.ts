@@ -836,6 +836,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     totalEngagement: Attribute.BigInteger;
     impressions: Attribute.BigInteger;
     monetized: Attribute.Boolean & Attribute.DefaultTo<false>;
+    hasBeenLoggedIntoBefore: Attribute.Boolean & Attribute.DefaultTo<false>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<

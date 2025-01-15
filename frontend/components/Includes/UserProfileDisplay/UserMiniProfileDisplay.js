@@ -1,12 +1,14 @@
 "use client"
 
-import { getImage, handleCountsDisplay, truncateText } from "@/Functions";
+import { getImage, getUserPostsCount, handleCountsDisplay, truncateText } from "@/Functions";
 import SocialsDisplay from "../SocialsDisplay/SocialsDisplay";
 import Link from "next/link";
 import UserFollowingButtons from "@/components/Parts/UserActionButtons/UserFollowingButtons";
 import { log } from "@/Constants";
+import { useEffect, useState } from "react";
 
 export default function UserMiniProfileDisplay(props) {
+  const [postsCount, setPostsCount] = useState(null)
   const user = props.user
   const thisIsMyAccount = props.thisIsMyAccount
   log('in the mini profile display page',user)
@@ -15,7 +17,14 @@ export default function UserMiniProfileDisplay(props) {
   const profilePicture = getImage(props.user?.profilePicture, "thumbnail", "profilePicture");
   const followersCount = user.followersCount ?? "0";
   const followingCount = user.followingCount ?? "0";
-  const postsCount = user.postsCount ?? "0";
+  
+  useEffect(()=>{
+      const runGetPostsCount = async ()=>{
+        const postsCount = await getUserPostsCount(user.id) ?? "0";
+        setPostsCount(postsCount)
+      }
+      runGetPostsCount()
+  },[])
 
   const displaySocials = () => {
     const renderSocial = (url, type) => {
@@ -109,7 +118,7 @@ export default function UserMiniProfileDisplay(props) {
                   </ul> */}
                   <div className="tut1250">
                     <span className="vdt15">{handleCountsDisplay(followersCount)} Followers</span>
-                    <span className="vdt15">{handleCountsDisplay(postsCount)} Posts</span>
+                    <span className="vdt15">{!postsCount? <></> : handleCountsDisplay(postsCount)} Posts</span>
                     </div>
 
                   <Link href={"/user/"+user.username} className="prfle12link">

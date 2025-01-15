@@ -273,6 +273,10 @@
     "monetized": {
       "type": "boolean",
       "default": false
+    },
+    "hasBeenLoggedIntoBefore": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

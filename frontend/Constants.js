@@ -163,7 +163,8 @@ const updateDefaultUserAccountToSignUp = async (username,password,countryCode,ph
       age:age? age : null,
     },
     type:'loggedin',
-    status: "published"
+    status: "published",
+    hasBeenLoggedIntoBefore: true
   }
   return await fetch(api_url+'/users/'+user.id, {
     method: 'PUT',
@@ -192,7 +193,6 @@ const updateDefaultUserAccountToLogOut = async ()=>{
   .then(response => response.json())
   .then(data => data)
   if(response.hasOwnProperty("username")){
-     localStorage.removeItem('jwt') // because if someone attempts to log into another account using this client(browser or phone) they can log into this user's account because they have the same jwt
      logOutStatus = true
   }
   if(response && response.accountBlocked){
@@ -206,8 +206,8 @@ const updateDefaultUserAccountToLogIn = async (username,password)=>{
   const response = await getUserAccountWithUsernameAndPassword(username,password)
   let returnObject = response
   if(response.hasOwnProperty('jwt')){
-    localStorage.removeItem('jwt') // remove whatever existing jwt
-    saveJwt(response.jwt) // save new jwt
+    localStorage.removeItem('jwt') // remove whatever existing jwt from localstorage to avoid mixups
+    saveJwt(response.jwt) // save new jwt from backend into localstorage
     const userUpdated = await fetch(api_url+'/users/'+response.user.id, {
       method: 'PUT',
       headers: {
@@ -228,6 +228,18 @@ const updateDefaultUserAccountToLogIn = async (username,password)=>{
   return returnObject
 }
 
+const checkIfAccountHasBeenLoggedIntoBefore = async ()=>{
+  const account = await getUserAccount(getJwt()) // Get the user account with current jwt
+  if(account.hasBeenLoggedIntoBefore == null || account.hasBeenLoggedIntoBefore){ // because old accounts before this update will have null values
+    localStorage.removeItem('jwt') // because if someone attempts to log into another account using this client(browser or phone) they can log into this user's account because they have the same jwt
+    const defaultAccount = await checkUserLogginStatus() // this will create another default account
+    if(defaultAccount.user){
+      return true // to show that check is complete
+    }
+  }
+  return true // to show that check is complete
+}
+
 export const signUserUp = async (type,username="",password="", countryCode="", phoneNumber="",province="",town="",age="") => { // username and password only important if it's a local sign up
   if(type === "local"){
       const accountExists = await checkIfUserWithUsernameExists(username)  
@@ -239,15 +251,18 @@ export const signUserUp = async (type,username="",password="", countryCode="", p
         }
       }
       else{
-         const updatedUserAccount = await updateDefaultUserAccountToSignUp(username,password,countryCode,phoneNumber,province,town,age)
-         if(updatedUserAccount.hasOwnProperty('error')){
-          return {
-            error:{
-                message:  updatedUserAccount.error.message
+         if(await checkIfAccountHasBeenLoggedIntoBefore()){ // this checks if account hasBeenLoggedInBefore and creates another default account if has been, which's new jwt is what we shall use to sign user into
+          const updatedUserAccount = await updateDefaultUserAccountToSignUp(username,password,countryCode,phoneNumber,province,town,age)
+          console.log(updatedUserAccount)
+          if(updatedUserAccount.hasOwnProperty('error')){
+            return {
+              error:{
+                  message:  updatedUserAccount.error.message
+              }
             }
           }
-         }
-         window.location = "/" // means you are logged in
+          window.location = "/" // means you are logged in
+       }
       }
     }
     else if(type === "facebook"){

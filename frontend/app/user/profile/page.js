@@ -1,9 +1,9 @@
 'use client'
 
-import ContentNotFound from '@/components/Includes/ContentNotFound/ContentNotFound'
 import PageLoader from '@/components/Includes/Loader/PageLoader'
 import LogInFirstModal from '@/components/Includes/Modals/LogInFirstModal'
 import NoContent from '@/components/Includes/NoContent/NoContent'
+import PostPageSkeleton from '@/components/Includes/Skeletons/PostPageSkeleton'
 import UserProfileDisplay from '@/components/Includes/UserProfileDisplay/UserProfileDisplay'
 import { checkUserLogginStatus } from '@/Constants'
 import { dynamicConfig, getUserById } from '@/Functions'

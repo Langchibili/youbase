@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2025-01-15T02:08:38.764Z"
+    "x-generation-date": "2025-01-15T11:56:58.526Z"
   },
   "x-strapi-config": {
     "path": "/documentation",
@@ -3382,6 +3382,9 @@
                         "example": "123456789"
                       },
                       "monetized": {
+                        "type": "boolean"
+                      },
+                      "hasBeenLoggedIntoBefore": {
                         "type": "boolean"
                       },
                       "createdAt": {
@@ -8130,6 +8133,9 @@
                       "monetized": {
                         "type": "boolean"
                       },
+                      "hasBeenLoggedIntoBefore": {
+                        "type": "boolean"
+                      },
                       "createdAt": {
                         "type": "string",
                         "format": "date-time"
@@ -10688,6 +10694,9 @@
                                                     "example": "123456789"
                                                   },
                                                   "monetized": {
+                                                    "type": "boolean"
+                                                  },
+                                                  "hasBeenLoggedIntoBefore": {
                                                     "type": "boolean"
                                                   },
                                                   "createdAt": {
@@ -15346,6 +15355,9 @@
                                   "monetized": {
                                     "type": "boolean"
                                   },
+                                  "hasBeenLoggedIntoBefore": {
+                                    "type": "boolean"
+                                  },
                                   "createdAt": {
                                     "type": "string",
                                     "format": "date-time"
@@ -19355,6 +19367,9 @@
                                     "example": "123456789"
                                   },
                                   "monetized": {
+                                    "type": "boolean"
+                                  },
+                                  "hasBeenLoggedIntoBefore": {
                                     "type": "boolean"
                                   },
                                   "createdAt": {
@@ -24726,6 +24741,9 @@
                       "monetized": {
                         "type": "boolean"
                       },
+                      "hasBeenLoggedIntoBefore": {
+                        "type": "boolean"
+                      },
                       "createdAt": {
                         "type": "string",
                         "format": "date-time"
@@ -27758,6 +27776,9 @@
                                       "example": "123456789"
                                     },
                                     "monetized": {
+                                      "type": "boolean"
+                                    },
+                                    "hasBeenLoggedIntoBefore": {
                                       "type": "boolean"
                                     },
                                     "createdAt": {
@@ -32120,6 +32141,9 @@
                         "example": "123456789"
                       },
                       "monetized": {
+                        "type": "boolean"
+                      },
+                      "hasBeenLoggedIntoBefore": {
                         "type": "boolean"
                       },
                       "createdAt": {
@@ -36503,6 +36527,9 @@
                         "example": "123456789"
                       },
                       "monetized": {
+                        "type": "boolean"
+                      },
+                      "hasBeenLoggedIntoBefore": {
                         "type": "boolean"
                       },
                       "createdAt": {
