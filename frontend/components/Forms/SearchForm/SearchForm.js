@@ -116,6 +116,7 @@ export default function SearchForm(props) {
                         key={contentKey}
                         loggedInUser={props.loggedInUser}
                         emptyContentMessage="No Users found"
+                        showEmptyContentMessage={true}
                         customPagination={true}
                         contentDisplay={(props) =><UsersMiniDisplay users={props.content} loggedInUser={props.loggedInUser} />}
                         contentUri={`${api_url}/filtered-users`}

@@ -4,7 +4,7 @@ import React from "react"
 import UserFollowButton from "./UserFollowButton"
 import UserUnFollowButton from "./UserUnFollowButton"
 import { api_url, clientUrl, getJwt } from "@/Constants"
-import { getImage, getUserById, logNotification, removeIdFromArray, sendPushNotification } from "@/Functions"
+import { checkUserFollowing, getImage, getUserById, logNotification, removeIdFromArray, sendPushNotification } from "@/Functions"
 
 export default class UserFollowingButtons extends React.Component{
    constructor(props){
@@ -12,7 +12,8 @@ export default class UserFollowingButtons extends React.Component{
       this.state = {
         ...props,
         requesting: false,
-        requestingText: ''
+        requestingText: '',
+        userFollowsThisUser: false
       }
    }
    
@@ -30,18 +31,10 @@ export default class UserFollowingButtons extends React.Component{
         },async()=>{
                 const userId = this.props.userId // the user to be followed
                 const loggedInUser = this.props.loggedInUser.user
-                let followingUserIds = this.state.loggedInUser.user.followingUserIds
                 const followingCount = parseInt(this.props.loggedInUser.user.followingCount || 0)
-              
-                if(!followingUserIds){  // means you have no people you are following at all
-                    followingUserIds = [userId] // means this is the first following you are doing
-                }
-                else{
-                    followingUserIds.push(userId) // add the userId
-                }
+            
                 const updateObject = {
                     following: { connect: [userId] },
-                    followingUserIds: followingUserIds,
                     followingCount: followingCount+1
                 }
 
@@ -86,9 +79,9 @@ export default class UserFollowingButtons extends React.Component{
                     if(response2){
                         this.createFollowNotification(loggedInUser.id,userId)
                         const state = this.state
-                        state.loggedInUser.user.followingUserIds = response.followingUserIds // update user following
                         this.setState({ // reflesh the button to show follow
                         ...state,
+                        userFollowsThisUser: true,
                         requesting: false
                         })
                 
@@ -126,18 +119,10 @@ export default class UserFollowingButtons extends React.Component{
             },async ()=>{
                 const userId = this.props.userId // the user to be unfollowed
                 const loggedInUser = this.props.loggedInUser.user
-                let followingUserIds = this.state.loggedInUser.user.followingUserIds
                 const followingCount = parseInt(this.state.loggedInUser.user.followingCount || 0)
                 
-                if(!followingUserIds){  // means there was an error that caused a null value on the followingids
-                    followingUserIds = followingUserIds // leave as is, the null value
-                }
-                else{
-                    followingUserIds = removeIdFromArray(followingUserIds,userId) // add the userId
-                }
                 const updateObject = {
                     following: { disconnect: [userId] },
-                    followingUserIds: followingUserIds,
                     followingCount: followingCount-1
                 }
     
@@ -181,9 +166,9 @@ export default class UserFollowingButtons extends React.Component{
     
                     if(response2){
                         const state = this.state
-                        state.loggedInUser.user.followingUserIds = response.followingUserIds // update user following
                         this.setState({ // reflesh the button to show unfollow
                         ...state,
+                        userFollowsThisUser: false,
                         requesting: false
                     })
                    } 
@@ -192,31 +177,21 @@ export default class UserFollowingButtons extends React.Component{
    }
 
    renderFollowingButton = ()=>{
-       const followingUserIds = this.state.loggedInUser.user.followingUserIds
-       const isUserLoggedIn = this.state.loggedInUser.status
-       const userId = this.state.userId
-       
-       if(userId === this.state.loggedInUser.user.id){
-        return null
+       const userFollowsThisUser = this.state.userFollowsThisUser
+       if(userFollowsThisUser){ // it means you are already following this user, you can only unfollow the user
+          return <UserUnFollowButton {...this.state} handleUserUnfollow={this.handleUserUnfollow}/>
        }
-       if(!isUserLoggedIn){ // meaning user is logged out
+       else{ // it means you are already following this user, you can only unfollow the user
           return <UserFollowButton {...this.state} handleUserFollow={this.handleUserFollow}/>
        }
-       if(!followingUserIds){ // meaning you have followed no-one before
-         return <UserFollowButton {...this.state} handleUserFollow={this.handleUserFollow}/>
-       }
-       if(followingUserIds.length === 0){ // meaning it's empty
-        return <UserFollowButton {...this.state} handleUserFollow={this.handleUserFollow}/>
-       }
-       if(!followingUserIds.includes(userId)){ // it means you are already following this user, you can only unfollow the user
-        return <UserFollowButton {...this.state} handleUserFollow={this.handleUserFollow}/>
-       }
-       if(followingUserIds.includes(userId)){ // it means you are already following this user, you can only unfollow the user
-        return <UserUnFollowButton {...this.state} handleUserUnfollow={this.handleUserUnfollow}/>
-       }
-       return <></>
-       
    }
+   async componentDidMount(){
+           const userFollowingCheck = await checkUserFollowing(this.props.loggedInUser, this.props.userId)
+           this.setState({
+              userFollowsThisUser: userFollowingCheck
+           })
+   }
+   
    render(){
     return (
         <>

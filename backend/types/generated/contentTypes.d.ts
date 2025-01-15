@@ -797,13 +797,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToMany',
       'api::post.post'
     >;
-    likedPostsIds: Attribute.JSON;
-    sharedPostsIds: Attribute.JSON;
-    viewedPostsIds: Attribute.JSON;
-    playedPostsIds: Attribute.JSON;
-    seenPostsIds: Attribute.JSON;
-    followsUserIds: Attribute.JSON;
-    followingUserIds: Attribute.JSON;
     profilePicture: Attribute.Media;
     details: Attribute.Component<'user-profile.details'>;
     followersCount: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
@@ -825,7 +818,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::notification.notification'
     >;
-    seenNotificationsIds: Attribute.JSON;
     socials: Attribute.Component<'user-profile.socials'>;
     reportedPosts: Attribute.Relation<
       'plugin::users-permissions.user',
@@ -1161,6 +1153,68 @@ export interface ApiCategoryNameCategoryName extends Schema.SingleType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::category-name.category-name',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiCheckEngagementCheckEngagement
+  extends Schema.CollectionType {
+  collectionName: 'check_engagements';
+  info: {
+    singularName: 'check-engagement';
+    pluralName: 'check-engagements';
+    displayName: 'checkEngagement';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    AboutRoute: Attribute.Blocks & Attribute.Private;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::check-engagement.check-engagement',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::check-engagement.check-engagement',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiCheckUserFollowingCheckUserFollowing
+  extends Schema.CollectionType {
+  collectionName: 'check_user_followings';
+  info: {
+    singularName: 'check-user-following';
+    pluralName: 'check-user-followings';
+    displayName: 'checkUserFollowing';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    AboutRoute: Attribute.Blocks & Attribute.Private;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::check-user-following.check-user-following',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::check-user-following.check-user-following',
       'oneToOne',
       'admin::user'
     > &
@@ -1839,6 +1893,36 @@ export interface ApiSupportIssueSupportIssue extends Schema.SingleType {
   };
 }
 
+export interface ApiUserFeedUserFeed extends Schema.CollectionType {
+  collectionName: 'get_user_feed';
+  info: {
+    singularName: 'user-feed';
+    pluralName: 'get-user-feed';
+    displayName: 'getUserFeed';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    AboutRoute: Attribute.Blocks;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::user-feed.user-feed',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::user-feed.user-feed',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -1864,6 +1948,8 @@ declare module '@strapi/types' {
       'api::bug-report.bug-report': ApiBugReportBugReport;
       'api::category.category': ApiCategoryCategory;
       'api::category-name.category-name': ApiCategoryNameCategoryName;
+      'api::check-engagement.check-engagement': ApiCheckEngagementCheckEngagement;
+      'api::check-user-following.check-user-following': ApiCheckUserFollowingCheckUserFollowing;
       'api::comment.comment': ApiCommentComment;
       'api::content.content': ApiContentContent;
       'api::engagement.engagement': ApiEngagementEngagement;
@@ -1879,6 +1965,7 @@ declare module '@strapi/types' {
       'api::send-fc-mnotification.send-fc-mnotification': ApiSendFcMnotificationSendFcMnotification;
       'api::support.support': ApiSupportSupport;
       'api::support-issue.support-issue': ApiSupportIssueSupportIssue;
+      'api::user-feed.user-feed': ApiUserFeedUserFeed;
     }
   }
 }

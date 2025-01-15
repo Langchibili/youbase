@@ -972,31 +972,53 @@ export const getUserFromDashedId = async (dashedId,populateString)=>{
   const engagementMappings = {
     likes: {
         action: 'likedPosts',
-        idArray: 'likedPostsIds',
         postBy: 'postLikedBy'
     },
     shares: {
         action: 'sharedPosts',
-        idArray: 'sharedPostsIds',
         postBy: 'postSharedBy'
     },
     views: {
         action: 'viewedPosts',
-        idArray: 'viewedPostsIds',
         postBy: 'postViewedBy'
     },
     plays: {
         action: 'playedPosts',
-        idArray: 'playedPostsIds',
         postBy: 'postPlayedBy'
     },
     impressions: {
         action: 'seenPosts',
-        idArray: 'seenPostsIds',
         postBy: 'postSeenBy'
     }
-};
+}
 
+export const checkIfUserHasEngagedWithPost = async (loggedInUser, postId, engagementType) => {
+  if(!loggedInUser.status){ // if user is logged out
+    return false
+  }
+  const response = await fetch(api_url+"/check-engagements?userId="+loggedInUser.user.id+"&postId="+postId+"&engagementType="+engagementType,{
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }).then(response => response.json())
+    .then(data => data)
+    .catch(error => console.error(error))
+  return response.hasEngaged
+}
+
+export const checkUserFollowing = async (loggedInUser, otherUserId) => {
+  if(!loggedInUser.status){ // if user is logged out
+    return false
+  }
+  const response = await fetch(api_url+"/check-user-followings?loggedInUserId="+loggedInUser.user.id+"&otherUserId="+otherUserId,{
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }).then(response => response.json())
+    .then(data => data)
+    .catch(error => console.error(error))
+  return response.isFollowing
+}
 
 export const logEngagement = async (type, postId, loggedInUser, ctx, createNotification=()=>{})=> {
     // getting the user's current count, to avoid 2 users who have clicked or engaged concurrently having their engagements added as one
@@ -1004,19 +1026,13 @@ export const logEngagement = async (type, postId, loggedInUser, ctx, createNotif
     const postUser = await getUserWithOnlySpecifiedFields(ctx.state.post.user.data.id,"fields=totalEngagement&fields="+type)  
     const post = await getPostWithOnlySpecifiedFields(postId,"fields=totalEngagement&fields="+type)  
   
-    const { action, idArray, postBy } = engagementMappings[type];
-    let userEngagementIds = ctx.state.loggedInUser.user[idArray] || [];
+    const { action, postBy } = engagementMappings[type];
     // the other user or the user who posted should have their engagement count incremented
     const userEngagementCount = parseInt(postUser[type] || 0)
     const userTotalEngagementCount = parseInt(postUser.totalEngagement || 0)
-    
-    if (!userEngagementIds.includes(postId)) {
-        userEngagementIds.push(postId);
-    }
-
+  
     const updateLoggedInUserObject = {
-        [action]: { connect: [postId] },
-        [idArray]: userEngagementIds,
+        [action]: { connect: [postId] }
     }
     const updatePostUserObject = {
         [type]: userEngagementCount + 1,
@@ -1068,15 +1084,15 @@ export const logEngagement = async (type, postId, loggedInUser, ctx, createNotif
                     loggedInUser: {
                         ...prevState.loggedInUser,
                         user: {
-                            ...prevState.loggedInUser.user,
-                            [idArray]: response[idArray]
+                            ...prevState.loggedInUser.user
                         }
                     },
                     post: {
                         ...prevState.post,
                         [type]: postEngagements + 1
                     },
-                    requesting: false
+                    requesting: false,
+                    userHasEngagedWithPost: true
                 };
             });
             if(type === "likes" || type === "shares"){
@@ -1089,18 +1105,14 @@ export const logEngagement = async (type, postId, loggedInUser, ctx, createNotif
 export const deleteEngagement = async (type, postId, loggedInUser, ctx)=> {
     const postUser = await getUserWithOnlySpecifiedFields(ctx.state.post.user.data.id,"fields=totalEngagement&fields="+type)  
     const post = await getPostWithOnlySpecifiedFields(postId,"fields=totalEngagement&fields="+type)  
-    const { action, idArray, postBy } = engagementMappings[type];
+    const { action, postBy } = engagementMappings[type];
 
-    let userEngagementIds = ctx.state.loggedInUser.user[idArray] || [];
-
-    userEngagementIds = userEngagementIds.filter(id => id !== postId);
     // the other user or the user who posted should have their engagement count decremented
     const userEngagementCount = parseInt(postUser[type] || 1)
     const userTotalEngagementCount = parseInt(postUser.totalEngagement || 1)
     
     const updateLoggedInUserObject = {
-      [action]: { disconnect: [postId] },
-      [idArray]: userEngagementIds,
+      [action]: { disconnect: [postId] }
     }
     const updatePostUserObject = {
         [type]: userEngagementCount - 1,
@@ -1146,21 +1158,21 @@ export const deleteEngagement = async (type, postId, loggedInUser, ctx)=> {
             body: JSON.stringify(updatePostObject)
         }).then(response => response.json());
         if (response2) {
-            ctx.setState(prevState => {
+            ctx.setState(prevState => { // update state to show engagement removal
                 return {
                     ...prevState,
                     loggedInUser: {
                         ...prevState.loggedInUser,
                         user: {
-                            ...prevState.loggedInUser.user,
-                            [idArray]: response[idArray]
+                            ...prevState.loggedInUser.user
                         }
                     },
                     post: {
                         ...prevState.post,
                         [type]: postEngagements - 1
                     },
-                    requesting: false
+                    requesting: false,
+                    userHasEngagedWithPost: false
                 }
             })
         }

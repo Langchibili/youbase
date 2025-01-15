@@ -78,7 +78,7 @@ function RootLayoutContent({ children }) {
               <AudioProvider>
                  <HeaderPart/>
                 {/* Main content */}
-                <div className="wrapper" style={{paddingTop:"45px"}}>
+                <div className="wrapper" style={{paddingTop:"65px"}}>
                   <PageLoader2 />
                   {children}
                   {/* Footer */}

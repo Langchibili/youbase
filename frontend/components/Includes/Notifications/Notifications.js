@@ -41,5 +41,5 @@ export default function Notifications({loggedInUser}) {
     }
   }, [])
 
-  return <div>Enable Notifications</div>
+  return <div></div>
 }

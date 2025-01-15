@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect } from "react"
-import { getUserById, getVideoThumbnail, handleCountsDisplay, logEngagement, logNotification, sendPushNotification, truncateText } from "@/Functions"
+import { checkIfUserHasEngagedWithPost, getUserById, getVideoThumbnail, handleCountsDisplay, logEngagement, logNotification, sendPushNotification, truncateText } from "@/Functions"
 import { Button, Modal, Box, IconButton, Typography } from '@mui/material'
 import { Facebook, Twitter, Instagram, WhatsApp, ContentCopy, TikTok } from '@mui/icons-material'
 import { useSocialSharing } from "@/Contexts/SocialSharingContext";
@@ -16,6 +16,7 @@ export default class ShareButton extends React.Component {
             requesting: false,
             showLogInFirstModal: false,
             linkCopied: false,
+            userHasEngagedWithPost: false,
             openShareModal: false // to control share modal visibility
         }
     }
@@ -39,6 +40,10 @@ export default class ShareButton extends React.Component {
         // send a push notification
         const followersCount = parseInt(this.props.loggedInUser.user.followersCount)
         const shares = parseInt(this.props.post.shares)
+        if(shares === 0){ // if for any reason it's 0, return
+            return
+        }
+        
         if(followersCount > 1000){ // this means the user has a big enough following, the post's user might need to know 
            const postWithThumbnail = await getPostFromId(postId,"media,featuredImages")
            const title = notificationTitle
@@ -46,9 +51,6 @@ export default class ShareButton extends React.Component {
            const image = getImage(postWithThumbnail.featuredImages.data,"thumbnail","notifications")
            const postUrl = clientUrl+"/posts/"+this.props.post.dashed_title
            sendPushNotification(title,body,[userId],postUrl,image,"")
-        }
-        if(shares === 0){ // if for any reason it's 0, return
-            return
         }
         if(shares < 5 || shares % 10 === 0){ // determine whether to send a push notification, because we cannot be spamming users anyhow with each share
            const postWithThumbnail = await getPostFromId(postId,"media,featuredImages")
@@ -62,12 +64,12 @@ export default class ShareButton extends React.Component {
 
     handleShare = async (e) => {
         event.stopPropagation(); // Prevent parent click handler
-        const sharedPostsIds = this.state.loggedInUser.user.sharedPostsIds
+        const userHasEngagedWithPost = this.state.userHasEngagedWithPost
         const postId = this.state.post.id
         this.setState({
             openShareModal: true 
         })
-        if(!sharedPostsIds || !sharedPostsIds.includes(postId)){
+        if(!userHasEngagedWithPost){
             this.setState({
                 requesting: true ,// to show user something is happening
                 openShareModal: true 
@@ -167,30 +169,8 @@ export default class ShareButton extends React.Component {
     }
 
     renderShareButton = () => {
-        const sharedPostsIds = this.state.loggedInUser.status? this.state.loggedInUser.user.sharedPostsIds : [] // if logged out, then just display the shares only
-        const postId = this.state.post.id
-
-        if (!sharedPostsIds) {
-            return (
-                <li style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
-                    <button disabled={this.state.requesting} className="lkcm152" onClick={this.handleShare}>
-                        <i className="uil uil-share-alt" />
-                        <span>{handleCountsDisplay(this.state.post.shares)}</span>
-                    </button>
-                </li>
-            )
-        }
-        if (sharedPostsIds.length === 0) {
-            return (
-                <li style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
-                    <button disabled={this.state.requesting} className="lkcm152" onClick={this.handleShare}>
-                        <i className="uil uil-share-alt" />
-                        <span>{handleCountsDisplay(this.state.post.shares)}</span>
-                    </button>
-                </li>
-            )
-        }
-        if (sharedPostsIds.includes(postId)) {
+        const userHasEngagedWithPost = this.state.userHasEngagedWithPost
+        if(userHasEngagedWithPost){
             return (
                 <li style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
                     <button disabled={this.state.requesting} className="lkcm152" onClick={this.handleShare}>
@@ -200,14 +180,23 @@ export default class ShareButton extends React.Component {
                 </li>
             )
         }
-        return (
-            <li style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
-                <button disabled={this.state.requesting} className="lkcm152" onClick={this.handleShare}>
-                    <i className="uil uil-share-alt" />
-                    <span>{handleCountsDisplay(this.state.post.shares)}</span>
-                </button>
-            </li>
-        )
+        else{
+            return (
+                <li style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
+                    <button disabled={this.state.requesting} className="lkcm152" onClick={this.handleShare}>
+                        <i className="uil uil-share-alt" />
+                        <span>{handleCountsDisplay(this.state.post.shares)}</span>
+                    </button>
+                </li>
+            )
+        }
+    }
+    
+    async componentDidMount(){
+        const checkIfUserSharedPost = await checkIfUserHasEngagedWithPost(this.props.loggedInUser,this.props.post.id,'shares')
+        this.setState({
+            userHasEngagedWithPost: checkIfUserSharedPost
+        })
     }
 
     render() {

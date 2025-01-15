@@ -2,7 +2,7 @@
 
 import LogInFirstModal from "@/components/Includes/Modals/LogInFirstModal"
 import React from "react"
-import { deleteEngagement, getImage, getPostFromId, handleCountsDisplay, logEngagement, sendPushNotification } from "@/Functions"
+import { checkIfUserHasEngagedWithPost, deleteEngagement, getImage, getPostFromId, handleCountsDisplay, logEngagement, sendPushNotification } from "@/Functions"
 import { clientUrl } from "@/Constants"
 
 export default class ViewsDisplay extends React.Component{
@@ -12,23 +12,11 @@ export default class ViewsDisplay extends React.Component{
         ...props,
         requesting: false,
         showLogInFirstModal: false,
+        userHasEngagedWithPost: false,
         viewLogged: false
       }
    }
   
-
-
- componentDidUpdate(){
-    if(this.props.logView && !this.state.viewLogged){
-        this.handleView()
-        this.setState({
-            viewLogged: true
-        })
-    }
-    else{
-        return
-    }
-   }
 
  handleView = async ()=>{
         // if(!this.props.loggedInUser.status){ // means you are logged out or you have never followed anyone before
@@ -47,6 +35,9 @@ export default class ViewsDisplay extends React.Component{
 
         logEngagement('views',postId,this.props.loggedInUser.user,this) 
         const viewsCount = parseInt(this.props.post.views)
+        if(viewsCount === 0){ // if for any reason it's 0, return
+            return
+        }
         if(viewsCount < 5 || viewsCount % 100 === 0){ // determine whether to send a push notification, because cannot be spamming users anyhow with each like
             const postWithThumbnail = await getPostFromId(postId,"media,featuredImages")
             const title = "Your video has been viewed "+viewsCount+ " times"
@@ -72,48 +63,47 @@ export default class ViewsDisplay extends React.Component{
    }
 
    renderViewButton = ()=>{
-       const viewedPostsIds = this.state.loggedInUser.status? this.state.loggedInUser.user.viewedPostsIds : [] // if logged out, then just display the views only
-       const postId = this.state.post.id
-    
-       if(!viewedPostsIds){ // meaning you have followed no-one before
-         return  <li style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
-                    <button disabled className="lkcm152">
-                        <i className="uil uil-eye" />
-                        <span>{handleCountsDisplay(this.state.post.views)}</span>
-                    </button>
-                </li>
-       }
-       if(viewedPostsIds.length === 0){ // meaning it's empty
-         return  <li style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
-                    <button disabled className="lkcm152">
-                        <i className="uil uil-eye" />
-                        <span>{handleCountsDisplay(this.state.post.views)}</span>
-                    </button>
-                </li>
-       }
-       if(viewedPostsIds.includes(postId)){ // it means you are already following this user, you can only unfollow the user
-         return  <li style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
+       const userHasEngagedWithPost = this.state.userHasEngagedWithPost
+       if(userHasEngagedWithPost){
+        return  (<li style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
                     <button disabled className="lkcm152">
                         <i className="uil uil-eye" style={{color: "#1e7193"}}/>
                         <span>{handleCountsDisplay(this.state.post.views)}</span>
                     </button>
-                </li>
+                </li>)
        }
-       if(!viewedPostsIds.includes(postId)){ // it means you are already following this user, you can only unfollow the user
-        return  <li style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
+       else{
+        return  (<li style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
                     <button disabled className="lkcm152">
                         <i className="uil uil-eye" />
                         <span>{handleCountsDisplay(this.state.post.views)}</span>
                     </button>
-                </li>
-      }
-       return <></>
+                </li>)
+       }
    }
 
    handleModalClose = ()=>{
         this.setState({
             showLogInFirstModal: false
         })
+    }
+
+    async componentDidMount(){
+        const userHasViewdPost = await checkIfUserHasEngagedWithPost(this.props.loggedInUser,this.props.post.id,'views')
+        this.setState({
+            userHasEngagedWithPost: userHasViewdPost
+        })
+    }
+    componentDidUpdate(){
+        if(this.props.logView && !this.state.viewLogged){
+            this.handleView()
+            this.setState({
+                viewLogged: true
+            })
+        }
+        else{
+            return
+        }
     }
    render(){
     return (

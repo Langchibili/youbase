@@ -107,6 +107,7 @@ const Home = () =>{
       const lastPostsDisplay = ()=>{ // all pages so exlcude totalPages prop and startPage={2} because we have already shown the first page
         return <ContentDisplaySection
           loggedInUser={loggedInUser}
+          removeBottomPadding={true}
           contentDisplay={(props) =><LandscapeContent content={props.content} loggedInUser={loggedInUser} />}
           contentUri={`${api_url}/posts`}
           limit={5}

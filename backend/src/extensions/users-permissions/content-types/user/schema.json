@@ -174,27 +174,6 @@
       "target": "api::post.post",
       "inversedBy": "postSeenBy"
     },
-    "likedPostsIds": {
-      "type": "json"
-    },
-    "sharedPostsIds": {
-      "type": "json"
-    },
-    "viewedPostsIds": {
-      "type": "json"
-    },
-    "playedPostsIds": {
-      "type": "json"
-    },
-    "seenPostsIds": {
-      "type": "json"
-    },
-    "followsUserIds": {
-      "type": "json"
-    },
-    "followingUserIds": {
-      "type": "json"
-    },
     "profilePicture": {
       "type": "media",
       "multiple": false,
@@ -241,9 +220,6 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::notification.notification"
-    },
-    "seenNotificationsIds": {
-      "type": "json"
     },
     "socials": {
       "type": "component",

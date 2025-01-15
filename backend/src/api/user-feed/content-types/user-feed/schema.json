@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "get_user_feed",
+  "info": {
+    "singularName": "user-feed",
+    "pluralName": "get-user-feed",
+    "displayName": "getUserFeed"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "AboutRoute": {
+      "type": "blocks"
+    }
+  }
+}

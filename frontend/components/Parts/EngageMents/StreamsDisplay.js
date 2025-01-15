@@ -2,8 +2,8 @@
 
 import LogInFirstModal from "@/components/Includes/Modals/LogInFirstModal"
 import React from "react"
-import { deleteEngagement, getImage, getPostFromId, handleCountsDisplay, logEngagement, sendPushNotification } from "@/Functions"
-import { clientUrl } from "@/Constants"
+import { checkIfUserHasEngagedWithPost, deleteEngagement, getImage, getPostFromId, handleCountsDisplay, logEngagement, sendPushNotification } from "@/Functions"
+import { clientUrl, log } from "@/Constants"
 
 export default class StreamsDisplay extends React.Component{
    constructor(props){
@@ -12,13 +12,14 @@ export default class StreamsDisplay extends React.Component{
         ...props,
         requesting: false,
         showLogInFirstModal: false,
+        userHasEngagedWithPost: false,
         playLogged: false
       }
    }
  
 
  handlePlay= async ()=>{
-    console.log('in the song play',this.props)
+        log('in the song play',this.props)
         // if(!this.props.loggedInUser.status){ // means you are logged out or you have never followed anyone before
         //     this.setState({
         //        showLogInFirstModal: true
@@ -34,6 +35,10 @@ export default class StreamsDisplay extends React.Component{
 
         logEngagement('plays',postId,this.props.loggedInUser.user,this) 
         const playsCount = parseInt(this.props.post.plays)
+        
+        if(playsCount === 0){ // if for any reason it's 0, return
+            return
+        }
         if(playsCount < 5 || playsCount % 100 === 0){ // determine whether to send a push notification, because cannot be spamming users anyhow with each like
             const postWithThumbnail = await getPostFromId(postId,"media,featuredImages")
             const title = "Your song has been played "+playsCount+ " times"
@@ -59,42 +64,29 @@ export default class StreamsDisplay extends React.Component{
    }
 
    renderPlayButton = ()=>{
-       const playedPostsIds = this.state.loggedInUser.status? this.state.loggedInUser.user.playedPostsIds : [] // if logged out, then just display the likes only
-       const postId = this.state.post.id
-    
-       if(!playedPostsIds){ // meaning you have followed no-one before
-         return  <li style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
-                    <button disabled className="lkcm152">
-                        <i className="uil uil-music" />
-                        <span>{handleCountsDisplay(this.state.post.plays)}</span>
-                    </button>
-                </li>
-       }
-       if(playedPostsIds.length === 0){ // meaning it's empty
-         return  <li style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
-                    <button disabled className="lkcm152">
-                        <i className="uil uil-music" />
-                        <span>{handleCountsDisplay(this.state.post.plays)}</span>
-                    </button>
-                </li>
-       }
-       if(playedPostsIds.includes(postId)){ // it means you are already following this user, you can only unfollow the user
-         return  <li style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
+       const userHasEngagedWithPost = this.state.userHasEngagedWithPost
+       if(userHasEngagedWithPost){
+              return (<li style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
                     <button disabled className="lkcm152">
                         <i className="uil uil-music" style={{color: "green"}}/>
                         <span>{handleCountsDisplay(this.state.post.plays)}</span>
                     </button>
-                </li>
+              </li>)
        }
-       if(!playedPostsIds.includes(postId)){ // it means you are already following this user, you can only unfollow the user
-        return  <li style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
+       else{
+             return (<li style={this.props.inFullScreen? {color:'snow',display: "block"} : {} }>
                     <button disabled className="lkcm152">
                         <i className="uil uil-music" />
                         <span>{handleCountsDisplay(this.state.post.plays)}</span>
                     </button>
-                </li>
-      }
-       return <></>
+             </li>)
+       }
+   }
+   async componentDidMount(){
+        const checkIfUserPlayedPost = await checkIfUserHasEngagedWithPost(this.props.loggedInUser,this.props.post.id,'plays')
+        this.setState({
+            userHasEngagedWithPost: checkIfUserPlayedPost
+        })
    }
    
    componentDidUpdate(){

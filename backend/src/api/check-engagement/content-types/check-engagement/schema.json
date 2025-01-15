@@ -1,0 +1,19 @@
+{
+  "kind": "collectionType",
+  "collectionName": "check_engagements",
+  "info": {
+    "singularName": "check-engagement",
+    "pluralName": "check-engagements",
+    "displayName": "checkEngagement"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "AboutRoute": {
+      "type": "blocks",
+      "private": true
+    }
+  }
+}

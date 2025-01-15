@@ -10,20 +10,21 @@ module.exports = createCoreController('api::filtered-user.filtered-user', ({ str
         status: { $eq: 'published' },
       };
 
-      // Add search term filter if provided
-      const searchFilters = SearchTerm
-        ? {
-            $or: [
-              { username: { $containsi: SearchTerm } },
-              { 'details.firstname': { $containsi: SearchTerm } },
-              { 'details.lastname': { $containsi: SearchTerm } },
-            ],
-          }
-        : {};
-
+     const searchFilters = SearchTerm
+    ? {
+        $or: SearchTerm.split(' ').map(term => ({
+          $or: [
+            { username: { $containsi: term } },
+            { 'details': { firstname: { $containsi: term }  } },
+            { 'details': { lastname: { $containsi: term } } }
+          ],
+        })),
+      }
+    : {}; // For returning all users when no SearchTerm is provided
+  
       // Pagination calculation
       const start = (page - 1) * pageSize;
-
+      
       // Fetch filtered and paginated users
       const users = await strapi.entityService.findMany('plugin::users-permissions.user', {
         filters: {
@@ -33,7 +34,7 @@ module.exports = createCoreController('api::filtered-user.filtered-user', ({ str
         populate: populate.split(','),
         sort: sort.split(','),
         limit: Number(pageSize),
-        start: Number(start),
+        start: Number(start)
       });
 
       // Fetch the total count of matching users
@@ -47,9 +48,17 @@ module.exports = createCoreController('api::filtered-user.filtered-user', ({ str
       // Calculate total pages
       const pageCount = Math.ceil(total / pageSize);
 
+      // remove these fields
+      const excludeFields = ['password', 'resetPasswordToken', 'confirmationToken'];
+
+      const filteredUsers = users.map(user => {
+        const filteredUser = { ...user };
+        excludeFields.forEach(field => delete filteredUser[field]);
+        return filteredUser;
+      })
       // Return the data and meta information
       return ctx.send({
-        data: users,
+        data: filteredUsers,
         meta: {
           pagination: {
             page: Number(page),

@@ -1,0 +1,19 @@
+{
+  "kind": "collectionType",
+  "collectionName": "check_user_followings",
+  "info": {
+    "singularName": "check-user-following",
+    "pluralName": "check-user-followings",
+    "displayName": "checkUserFollowing"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "AboutRoute": {
+      "type": "blocks",
+      "private": true
+    }
+  }
+}

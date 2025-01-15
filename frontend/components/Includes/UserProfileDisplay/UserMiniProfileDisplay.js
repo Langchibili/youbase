@@ -57,9 +57,9 @@ export default function UserMiniProfileDisplay(props) {
         <Link href={"/user/"+user.username} className="tutor_name">
           {truncateText(fullnames,30)}
         </Link>
-        <div className="mef78" title="Verify">
-          <i className="uil uil-check-circle" />
-        </div>
+        {user.verified? <div className="mef78" title="Verify">
+          <i className="uil uil-check-circle" style={{color:'forestgreen'}}/>
+        </div> : <></>}
       </div>
       <div className="tutor_cate">{userType}</div>
       <ul className="tutor_social_links">
