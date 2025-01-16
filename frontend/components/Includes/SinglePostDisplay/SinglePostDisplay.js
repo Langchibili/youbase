@@ -95,13 +95,13 @@ export default function SinglePostDisplay(props) {
 
 const moreFromUserFilters = {
   // Videos: Excludes portrait videos, includes embeds
-  'videos': `filters[$and][0][$or][0][$and][0][type][$eq]=video&filters[$and][0][$or][0][$and][1][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=embed&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${props.post.user.data.id}&filters[$and][3][id][$not][$eq]=${props.post.id}&populate=user,featuredImages,media`, 
+  'video': `filters[$and][0][$or][0][$and][0][type][$eq]=video&filters[$and][0][$or][0][$and][1][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=embed&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${props.post.user.data.id}&filters[$and][3][id][$not][$eq]=${props.post.id}&populate=user,featuredImages,media`, 
   
   // Music: Only music content
   'music': `filters[$and][0][type][$eq]=music&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${props.post.user.data.id}&filters[$and][3][id][$not][$eq]=${props.post.id}&populate=user,featuredImages,media`, 
   
   // Images: Excludes portrait images
-  'images': `filters[$and][0][$or][0][$and][0][type][$eq]=image&filters[$and][0][$or][0][$and][1][mediaDisplayType][$not][$eq]=portrait&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${props.post.user.data.id}&filters[$and][3][id][$not][$eq]=${props.post.id}&populate=user,featuredImages,media`, 
+  'image': `filters[$and][0][$or][0][$and][0][type][$eq]=image&filters[$and][0][$or][0][$and][1][mediaDisplayType][$not][$eq]=portrait&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${props.post.user.data.id}&filters[$and][3][id][$not][$eq]=${props.post.id}&populate=user,featuredImages,media`, 
   
   // Text: Only text content
   'text': `filters[$and][0][type][$eq]=text&filters[$and][1][status][$eq]=published&filters[$and][2][user][id][$eq]=${props.post.user.data.id}&filters[$and][3][id][$not][$eq]=${props.post.id}&populate=user,featuredImages,media`
@@ -109,13 +109,13 @@ const moreFromUserFilters = {
 
 const relatedPostsFilters = {
   // Videos: Excludes portrait videos, includes embeds
-  'videos': 'filters[$and][0][$or][0][$and][0][type][$eq]=video&filters[$and][0][$or][0][$and][1][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=embed&filters[$and][1][id][$not][$eq]=' + props.post.id + '&filters[$and][2][status][$eq]=published&filters[$and][3][user][id][$not][$eq]=' + props.post.user.data.id + '&populate=user,featuredImages,media&_sort=user.totalEngagement:desc', 
+  'video': 'filters[$and][0][$or][0][$and][0][type][$eq]=video&filters[$and][0][$or][0][$and][1][mediaDisplayType][$not][$eq]=portrait&filters[$and][0][$or][1][type][$eq]=embed&filters[$and][1][id][$not][$eq]=' + props.post.id + '&filters[$and][2][status][$eq]=published&filters[$and][3][user][id][$not][$eq]=' + props.post.user.data.id + '&populate=user,featuredImages,media&_sort=user.totalEngagement:desc', 
   
   // Music: Only music content
   'music': 'filters[$and][0][type][$eq]=music&filters[$and][1][id][$not][$eq]=' + props.post.id + '&filters[$and][2][status][$eq]=published&filters[$and][3][user][id][$not][$eq]=' + props.post.user.data.id + '&populate=user,featuredImages,media&_sort=user.totalEngagement:desc', 
   
   // Images: Excludes portrait images
-  'images': 'filters[$and][0][$and][0][type][$eq]=image&filters[$and][0][$and][1][mediaDisplayType][$not][$eq]=portrait&filters[$and][1][id][$not][$eq]=' + props.post.id + '&filters[$and][2][status][$eq]=published&filters[$and][3][user][id][$not][$eq]=' + props.post.user.data.id + '&populate=user,featuredImages,media&_sort=user.totalEngagement:desc', 
+  'image': 'filters[$and][0][$and][0][type][$eq]=image&filters[$and][0][$and][1][mediaDisplayType][$not][$eq]=portrait&filters[$and][1][id][$not][$eq]=' + props.post.id + '&filters[$and][2][status][$eq]=published&filters[$and][3][user][id][$not][$eq]=' + props.post.user.data.id + '&populate=user,featuredImages,media&_sort=user.totalEngagement:desc', 
   
   // Text: Only text content
   'text': 'filters[$and][0][type][$eq]=text&filters[$and][1][id][$not][$eq]=' + props.post.id + '&filters[$and][2][status][$eq]=published&filters[$and][3][user][id][$not][$eq]=' + props.post.user.data.id + '&populate=user,featuredImages,media&_sort=user.totalEngagement:desc'
@@ -147,6 +147,7 @@ const nextSectionToDisplay = ()=>{
           contentDisplay={(props) =><LandscapeContent content={props.content} loggedInUser={props.loggedInUser} />}
           contentUri={`${api_url}/posts`}
           contentTitle="More From User"
+          totalPages={1}
           limit={10}
           contentQueryFilters={moreFromUserFilters[props.post.type]}      
           nextSectionToDisplay={()=> nextSectionToDisplay()}
@@ -252,7 +253,7 @@ const nextSectionToDisplay = ()=>{
                     <div
                       className="owl-item"
                       style={{ width: "183.133px", marginRight: 10 }}
-                    >
+                       >
                       <div className="item">
                         <div className="stream_1">
                           <a href="live_output.html" className="stream_bg">

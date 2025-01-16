@@ -1,5 +1,6 @@
 'use client'
 
+import { useSearchModalOpen } from "@/Contexts/SearchModalContext"
 import { getImage, getUserById, truncateText } from "@/Functions"
 import Link from "next/link"
 import React from "react"
@@ -9,6 +10,7 @@ export default class AvatarWithUsernameOnly extends React.Component{
       super(props)
       this.state = {
         avatarLoaded: false,
+        redirectUser: false,
         user: null
       }
    }
@@ -25,7 +27,7 @@ export default class AvatarWithUsernameOnly extends React.Component{
     }
     // both of them have to be set for us to display your name
     return <h6 style={{color:textColor}}>{truncateText(this.state.user.details.firstname+" "+this.state.user.details.lastname,20)}</h6>
-   }
+  }
   async componentDidMount(){
         const user = await getUserById(this.props.userId,"profilePicture,details")
         this.setState({
@@ -39,15 +41,21 @@ export default class AvatarWithUsernameOnly extends React.Component{
         return <></>
     }
     return(<div className="live_user_dt" style={{color:'GrayText',alignItems:"center"}}> 
-                <Link href={'/user/'+this.state.user.username} style={{fontSize:'smaller'}}>
+                {this.state.redirectUser? <RedirectUser/> : <></>}
+                <Link href={'/user/'+this.state.user.username} style={{fontSize:'smaller'}} onClick={()=>{ this.setState({redirectUser:true}) }}>
                     <div className="menu--link user_img">
                             <img id="comments-avatar" src={getImage(this.state.user.profilePicture,'thumbnail','profilePicture') } alt="profile pic" style={{width:'24px !important', height:'24px !important',...this.props.exra_styles}}/>
                     </div>
                 </Link>
-                <Link href={'/user/'+this.state.user.username} style={{color:'GrayText',fontSize:'16px'}}>   
+                <Link href={'/user/'+this.state.user.username} style={{color:'GrayText',fontSize:'16px'}} onClick={()=>{ this.setState({redirectUser:true}) }}>   
                     {this.renderUserName()}
                </Link>
                {this.props.postMoreContent()}
           </div>)
    }
+  }
+
+  const RedirectUser = ()=>{
+    const useSearchModalOpenContext = useSearchModalOpen()
+    useSearchModalOpenContext.setOpenSearchModal(false)
   }

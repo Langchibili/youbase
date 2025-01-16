@@ -6,10 +6,19 @@ import MediaDisplay from "@/components/Parts/MediaDisplay/MediaDisplay";
 import CommentsModal from "../Modals/CommentsModal";
 import ReadMoreLess from "../ReadMoreLess/ReadMoreLess";
 import MusicPlayerCardType from "./PostsDisplayTypes/MusicPlayerCardType";
+import DownloadSongButton from "../DownloadSongButton/DownloadSongButton";
 
 export default function MusicPostMedium(props) {
     if(!props.post.media){
       return null
+    }
+    const renderDownloadButton = ()=>{
+      if(props.post.media.data && props.post.media.data[0] && props.post.media.data[0].attributes && props.post.media.data[0].attributes.url){
+        return <DownloadSongButton {...props} filepath={props.post.media.data[0].attributes.url}/>
+      }
+      else{
+        return <button disabled className="btn btn-danger">Download</button>
+      }
     }
     return (
          <>
@@ -36,7 +45,7 @@ export default function MusicPostMedium(props) {
             {props.post.media.data && props.post.media.data.length > 1? <h3>{props.post.media.data.length} Songs</h3> : <></>}
             <div style={{width:"60%",margin:'0 auto',display:'flex',justifyContent:'space-between'}}>
               <CommentsModal loggedInUser={props.loggedInUser} post={props.post} postId={props.post.id} />
-              {props.post.type === "music"? <button className="btn btn-danger">Download</button> : <></>}
+              {props.post.type === "music"? renderDownloadButton() : <></>}
             </div>
           </div>
         </div>) : <MusicPlayerCardType loggedInUser={props.loggedInUser} {...props}/>
