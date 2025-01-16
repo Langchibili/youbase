@@ -141,7 +141,7 @@ export default function UserProfileDisplay(props) {
                       Edit
                     </Link>  </li>: <></>}
                  
-                </ul>:  <UserFollowingButtons userId={props.user.id} loggedInUser={props.loggedInUser}/>}
+                </ul>:  <ul className="_bty149"><UserFollowingButtons userId={props.user.id} loggedInUser={props.loggedInUser}/></ul>}
               </div>
             </div>
           </div>}

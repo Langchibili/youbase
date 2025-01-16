@@ -67,7 +67,7 @@ export default class MainHeader extends React.Component{
                 return <FeedOutlined onClick={this.handleRedirectUserToFeedPage}/>
             }
          }
-         return <Button onClick={this.handleRedirectUserToFeedPage} color="info" variant="outlined" size="small" startIcon={<Feed />}>Feed</Button>
+         return <Button onClick={this.handleRedirectUserToFeedPage} sx={{color:'cadetblue',borderColor:'cadetblue'}} variant="outlined" size="small" startIcon={<Feed />}>Feed</Button>
     }
     handleRedirectUserToFeedPage = ()=>{
         const RedirectUserToFeedPage = this.state.RedirectUserToFeedPage

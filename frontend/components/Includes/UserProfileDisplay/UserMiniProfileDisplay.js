@@ -6,9 +6,11 @@ import Link from "next/link";
 import UserFollowingButtons from "@/components/Parts/UserActionButtons/UserFollowingButtons";
 import { log } from "@/Constants";
 import { useEffect, useState } from "react";
+import { useSearchModalOpen } from "@/Contexts/SearchModalContext";
 
 export default function UserMiniProfileDisplay(props) {
   const [postsCount, setPostsCount] = useState(null)
+  const useSearchModalOpenContext = useSearchModalOpen()
   const user = props.user
   const thisIsMyAccount = props.thisIsMyAccount? props.thisIsMyAccount : false
   log('in the mini profile display page',user)
@@ -57,13 +59,13 @@ export default function UserMiniProfileDisplay(props) {
   return (
     <div className="fcrse_2 mb-30">
     <div className="tutor_img">
-      <Link href={"/user/"+user.username}>
+      <Link href={"/user/"+user.username} onClick={()=>{ useSearchModalOpenContext.setOpenSearchModal(false)}}>
           <img src={profilePicture} alt="profile pic" />
       </Link>
     </div>
     <div className="tutor_content_dt">
       <div className="tutor150">
-        <Link href={"/user/"+user.username} className="tutor_name">
+        <Link href={"/user/"+user.username} className="tutor_name" onClick={()=>{ useSearchModalOpenContext.setOpenSearchModal(false)}}>
           {truncateText(fullnames,30)}
         </Link>
         {user.verified? <div className="mef78" title="Verify">
@@ -81,6 +83,7 @@ export default function UserMiniProfileDisplay(props) {
                       className="msg125 btn500 btn-success"
                       href="/manage/profile"
                       style={{ display:'inline-block',alignContent: 'center'}}
+                      onClick={()=>{ useSearchModalOpenContext.setOpenSearchModal(false)}}
                     >
                       Update Profile
                     </Link>
@@ -91,11 +94,12 @@ export default function UserMiniProfileDisplay(props) {
                       className="msg125 btn500 btn-info"
                       href="/manage/posts"
                       style={{ display:'inline-block',alignContent: 'center'}}
+                      onClick={()=>{ useSearchModalOpenContext.setOpenSearchModal(false)}}
                     >
                       Edit
                     </Link>  </li>: <></>}
                  
-        </ul>: <UserFollowingButtons userId={props.user.id} loggedInUser={props.loggedInUser}/>}
+        </ul>: <ul className="_bty149" style={{textAlign:'center', marginTop:'10px'}}> <UserFollowingButtons userId={props.user.id} loggedInUser={props.loggedInUser}/> </ul>}
       {/* <ul className="_ttl120">
                     <li>
                       <div className="_ttl121">
@@ -122,7 +126,7 @@ export default function UserMiniProfileDisplay(props) {
                     <span className="vdt15">{!postsCount? <></> : handleCountsDisplay(postsCount)} Posts</span>
                     </div>
 
-                  <Link href={"/user/"+user.username} className="prfle12link">
+                  <Link href={"/user/"+user.username} className="prfle12link" onClick={()=>{ useSearchModalOpenContext.setOpenSearchModal(false)}}>
                    Go To Profile
                   </Link>
     </div>

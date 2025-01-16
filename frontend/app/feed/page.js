@@ -6,7 +6,7 @@ import { Book, FeedOutlined, ImageOutlined, VideocamOutlined } from "@mui/icons-
 import React, { useEffect, useRef, useState } from "react"
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import TheatersIcon from '@mui/icons-material/Theaters'
 import PostIcon from '@mui/icons-material/Article'
 import VideoIcon from '@mui/icons-material/PlayCircleFilled'
@@ -147,6 +147,9 @@ const Feed = () => {
                 <div className="sa4d25">
                     <div className="container-fluid">
                         <div className="row">
+                          <div className="col-xl-9 col-lg-8" style={{marginTop:'10px'}}>
+                              <h4 class="item_title" style={{paddingTop:'1px'}}>FEED | </h4> <small style={{paddingLeft: '5px'}}> posts from who you follow</small>
+                          </div>
                             <div className="col-xl-9 col-lg-8"
                                 styles={{
                                     position: 'relative',
@@ -155,8 +158,7 @@ const Feed = () => {
                                     overflow: 'hidden',
                                 }}
                                 ref={containerRef}
-                            >
-                                <Box>
+                            >  <Box>
                                     {value === 0 ? AllPostTypesContent() : <ContentDisplaySection
                                         key={value}
                                         loggedInUser={loggedInUser}
