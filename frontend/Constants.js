@@ -1,5 +1,6 @@
 'use client'
 
+import { logNotification } from "./Functions"
 import { getJWT, saveJwt } from "./secrets"
 
 export const youtubeApiKey = 'AIzaSyCpjeIW-IKAUQSZuc5bb0Ncx1ksxEB5J_8'
@@ -201,6 +202,20 @@ const updateDefaultUserAccountToLogOut = async ()=>{
   return logOutStatus
 }
 
+const getYoubaseMainAccount = async ()=>{
+  const account = await fetch(api_url+'/youbase-main-account?populate=account',{
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }).then(response => response.json())
+    .then(data => data)
+    .catch(error => console.error(error))
+    if(account && account.data && account.data.attributes && account.data.attributes.account && account.data.attributes.account.data){
+      return account.data.attributes.account.data
+    }
+    
+}
+
 const updateDefaultUserAccountToLogIn = async (username,password)=>{
   const jwt = getJwt()
   const response = await getUserAccountWithUsernameAndPassword(username,password)
@@ -253,13 +268,17 @@ export const signUserUp = async (type,username="",password="", countryCode="", p
       else{
          if(await checkIfAccountHasBeenLoggedIntoBefore()){ // this checks if account hasBeenLoggedInBefore and creates another default account if has been, which's new jwt is what we shall use to sign user into
           const updatedUserAccount = await updateDefaultUserAccountToSignUp(username,password,countryCode,phoneNumber,province,town,age)
-          console.log(updatedUserAccount)
           if(updatedUserAccount.hasOwnProperty('error')){
             return {
               error:{
                   message:  updatedUserAccount.error.message
               }
             }
+          }
+          const youbaseMainAccount = await getYoubaseMainAccount()
+          if(youbaseMainAccount){
+            const notificationTitle = "Welcome to youbase! Follow our main account for official notices, policy changes and other updates."
+            logNotification(notificationTitle,youbaseMainAccount.id,[updatedUserAccount.id]) // send notification to the user being followed  
           }
           window.location = "/" // means you are logged in
        }

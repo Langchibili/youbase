@@ -252,6 +252,8 @@ export default class LocalSignUp extends React.Component{
         <MenuItem value="Mansa">Mansa</MenuItem>
         <MenuItem value="Solwezi">Solwezi</MenuItem>
         <MenuItem value="Choma">Choma</MenuItem>
+        <MenuItem value="Chama">Chama</MenuItem>
+        <MenuItem value="Chinsali">Chinsali</MenuItem>
         <MenuItem value="Mongu">Mongu</MenuItem>
         <MenuItem value="Kasama">Kasama</MenuItem>
         <MenuItem value="Mpika">Mpika</MenuItem>

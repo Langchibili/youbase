@@ -442,7 +442,7 @@ export default class UserProfileForm extends React.Component {
     this.towns = [
         "Lusaka", "Ndola", "Kitwe", "Kabwe", "Chingola", "Mufulira", 
         "Livingstone", "Luanshya", "Chipata", "Chililabombwe", "Kafue", 
-        "Kalulushi", "Mazabuka", "Mansa", "Solwezi", "Choma", "Mongu", 
+        "Kalulushi", "Mazabuka", "Mansa", "Solwezi", "Choma", "Chama", "Chinsali", "Mongu", 
         "Kasama", "Mpika", "Sesheke", "Kapiri Mposhi", "Nakonde", 
         "Kawambwa", "Petauke", "Samfya", "Kalabo", "Siavonga", 
         "Lundazi", "Mwinilunga", "Kaoma", "Chirundu", "Kabompo", 

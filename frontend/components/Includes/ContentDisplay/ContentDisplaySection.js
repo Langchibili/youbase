@@ -18,6 +18,7 @@ const ContentDisplaySection = ({
   removeBottomPadding = false,
   customPagination = false,
   emptyContentMessage = "",
+  actionIfContentIsEmpty = ()=> <></>,
   contentTitle="",
   contentDisplay = (props) => <></>,
   nextSectionToDisplay = (props) => <></>
@@ -103,7 +104,7 @@ const ContentDisplaySection = ({
 
  
   if(canShowEmptyContentMessage){
-    return <NoContent message={emptyContentMessage}/>
+    return <NoContent message={emptyContentMessage} actionIfContentIsEmpty={actionIfContentIsEmpty}/>
   }
   
   return (

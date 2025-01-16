@@ -9,9 +9,20 @@ import ViewsDisplay from '@/components/Parts/EngageMents/ViewsDisplay'
 import StreamsDisplay from '@/components/Parts/EngageMents/StreamsDisplay'
 import LikeButton from '@/components/Parts/EngageMents/LikeButton'
 import ShareButton from '@/components/Parts/EngageMents/ShareButton'
+import MoreContentLoader from '../Loader/MoreContentLoader'
 
-export default function LandscapeContent(props) {
+export default function FeedLandScapeContentDisplay(props) {
   const renderPostContent = (post, postEngagementsDisplay) => {
+    if(post.type === "music" || post.type === "video"){
+      if(!post.media){
+        return null
+      }
+    }
+    if(post.type === "image"){
+      if(!post.featuredImages){
+        return null
+      }
+    }
     switch (post.type) {
       case 'text':
         return <TextPostMedium post={post} postEngagementsDisplay={postEngagementsDisplay} {...props} />
@@ -32,16 +43,16 @@ export default function LandscapeContent(props) {
     return (
       <div className='inline-engagements-display'>
         <ul>
-          {post.type === 'video' && <ViewsDisplay post={post} user={post.user.data.attributes} {...props} />}
+          {post.type === 'video' && <ViewsDisplay post={post} user={post.user} {...props} />}
         </ul>
         <ul>
-          {post.type === 'music' && <StreamsDisplay post={post} user={post.user.data.attributes} {...props} />}
+          {post.type === 'music' && <StreamsDisplay post={post} user={post.user} {...props} />}
         </ul>
         <ul>
-          <LikeButton post={post} user={post.user.data.attributes} {...props} />
+          <LikeButton post={post} user={post.user} {...props} />
         </ul>
         <ul>
-          <ShareButton post={post} user={post.user.data.attributes} {...props} />
+          <ShareButton post={post} user={post.user} {...props} />
         </ul>
       </div>
     )
@@ -53,28 +64,42 @@ export default function LandscapeContent(props) {
   return ( // display landscape content
     <div>
       {props.content.map((post) => {
-        const postAttributes = post.attributes
-        if(!postAttributes) { 
+        if(!post) { 
           return null 
         }
-        if (!postAttributes.user || postAttributes.status !== 'published') { 
+        if (!post.user || post.status !== 'published') { 
           return null 
         }
         // only show landscape images and videos here
-        if(postAttributes.type === 'image' || postAttributes.type === 'video'){
-          if(!postAttributes.mediaDisplayType || postAttributes.mediaDisplayType !== 'landscape'){
+        if(post.type === 'image' || post.type === 'video'){
+          if(!post.mediaDisplayType || post.mediaDisplayType !== 'landscape'){
               return null
           }
         }
-        
-        postAttributes.id = post.id
-          
+        if(post.media){ // structure the data such that it can be read by children components
+          if(!post.media.hasOwnProperty('data')){
+              post.media.data = post.media
+          }
+        }
+        if(post.featuredImages){ // structure the data such that it can be read by children components
+            if(!post.featuredImages.hasOwnProperty('data')){
+                post.featuredImages.data = post.featuredImages
+            }
+        }
+        if(post.user){ // structure the data such that it can be read by children components
+            if(!post.user.hasOwnProperty('data')){
+                post.user.data = post.user
+                post.user.data.id = post.user.id
+                post.user.data.attributes = post.user.data
+                post.user.data.attributes.id = post.user.data.id
+            } 
+        }
         return (
           <div key={post.id} id={"post-"+post.id}>
-            {renderPostContent(postAttributes, postEngagementsDisplay)}
+            {renderPostContent(post,postEngagementsDisplay)}
           </div>
         )
       })}
-    </div>
+     </div>
   )
 }

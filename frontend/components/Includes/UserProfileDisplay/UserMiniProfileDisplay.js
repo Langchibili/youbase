@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 export default function UserMiniProfileDisplay(props) {
   const [postsCount, setPostsCount] = useState(null)
   const user = props.user
-  const thisIsMyAccount = props.thisIsMyAccount
+  const thisIsMyAccount = props.thisIsMyAccount? props.thisIsMyAccount : false
   log('in the mini profile display page',user)
   const fullnames = user.details?.firstname && user.details?.lastname ? `${user.details.firstname} ${user.details.lastname}` : "UnNamed User";
   const userType = user.loggedInUserType === "default" ? "User" : user.loggedInUserType;
@@ -74,7 +74,8 @@ export default function UserMiniProfileDisplay(props) {
       <ul className="tutor_social_links">
       {displaySocials()}
       </ul>
-      <ul className="_bty149" style={{textAlign:'center', marginTop:'10px'}}>
+      {/* only check if it's your account if you are logged in */}
+      {props.loggedInUser.status? <ul className="_bty149" style={{textAlign:'center', marginTop:'10px'}}>
                   {thisIsMyAccount? <li>
                     <Link
                       className="msg125 btn500 btn-success"
@@ -94,7 +95,7 @@ export default function UserMiniProfileDisplay(props) {
                       Edit
                     </Link>  </li>: <></>}
                  
-                </ul>
+        </ul>: <UserFollowingButtons userId={props.user.id} loggedInUser={props.loggedInUser}/>}
       {/* <ul className="_ttl120">
                     <li>
                       <div className="_ttl121">

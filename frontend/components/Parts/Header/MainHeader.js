@@ -1,18 +1,22 @@
 'use client'
 
 import CreatePostButton from "@/components/Includes/CreatePostButton/CreatePostButton"
-import React from "react"
+import React, { useEffect } from "react"
 import AvatarOnly from "../UserDisplay/AvatarOnly"
 import Link from "next/link"
 import { getUserById, handleCountsDisplay, truncateText } from "@/Functions"
 import SearchModal from "@/components/Includes/Modals/SearchModal"
 import NotificationsDisplay from "@/components/Includes/NofiticationsDisplay/NotificationsDisplay"
+import { Button } from "@mui/material"
+import { Feed, FeedOutlined } from "@mui/icons-material"
+import { useRouter } from "next/navigation"
 
 export default class MainHeader extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-          fullnames: ""
+          fullnames: "",
+          RedirectUserToFeedPage: false
         }
      }
   
@@ -26,10 +30,55 @@ export default class MainHeader extends React.Component{
           fullnames: fullnames
       })
      }
-   
+    renderLogo = ()=>{
+        if(!this.props.loggedInUser.status){
+            return (
+                <div className="main_logo" id="logo">
+                <Link href="/">
+                <img id="logo" src="/youbase-logo-with-wordings.png" alt="" />
+                </Link>
+                <Link href="/">
+                <img id="logo" className="logo-inverse" src="/youbase-logo-with-wordings.png" alt="" />
+                </Link>
+            </div>
+            )
+        }
+        else{
+            if(typeof window !== "undefined"){
+                if(window.innerWidth < 324){
+                    return <></>
+                }
+            }
+            return (
+                <div className="main_logo" id="logo">
+                <Link href="/">
+                <img src="/youbase-logo.png" alt="" style={{width:'36px',height:'36px'}}/>
+                </Link>
+                <Link href="/">
+                <img  src="/youbase-logo.png" className="logo-inverse" alt="" style={{width:'36px',height:'36px'}}/>
+                </Link>
+               </div>
+            )
+        }
+    }
+    renderFeedButton = ()=>{
+         if(typeof window !== "undefined"){
+            if(window.innerWidth < 400){
+                return <FeedOutlined onClick={this.handleRedirectUserToFeedPage}/>
+            }
+         }
+         return <Button onClick={this.handleRedirectUserToFeedPage} color="info" variant="outlined" size="small" startIcon={<Feed />}>Feed</Button>
+    }
+    handleRedirectUserToFeedPage = ()=>{
+        const RedirectUserToFeedPage = this.state.RedirectUserToFeedPage
+        this.setState({
+            RedirectUserToFeedPage: !RedirectUserToFeedPage
+        })
+   }
    render(){
     return (
         <header className="header clearfix">
+            {this.state.RedirectUserToFeedPage && typeof window !== "undefined"? <RedirectUserToFeedPage handleRedirectUserToFeedPage={this.handleRedirectUserToFeedPage}/> : <></>}
             {!this.props.loggedInUser.status? <></> : <CreatePostButton action="create" {...this.props}/>}
             {this.props.menu? this.props.menu() : <>
                <button type="button" id="toggleMenu" className="toggle_menu">
@@ -40,15 +89,8 @@ export default class MainHeader extends React.Component{
                     <span className="collapse_menu--label" />
                 </button>
             </>}
-            <div className="main_logo" id="logo">
-                <Link href="/">
-                <img id="logo" src="/youbase-logo-with-wordings.png" alt="" />
-                </Link>
-                <Link href="/">
-                <img id="logo" className="logo-inverse" src="/youbase-logo-with-wordings.png" alt="" />
-                </Link>
-            </div>
-          
+            
+           {this.renderLogo()}
             {/* <div className="search120">
                 <div className="ui search">
                 <div className="ui left icon input swdh10">
@@ -126,6 +168,7 @@ export default class MainHeader extends React.Component{
                 </div>
                 </li>} */}
                 {/*  notifications  */}
+                {!this.props.loggedInUser.status? <></> : this.renderFeedButton()}
                  {!this.props.loggedInUser.status? <></> : <NotificationsDisplay loggedInUser={this.props.loggedInUser}/> } 
                 {!this.props.loggedInUser.status? <></> : <li className="ui dropdown" tabIndex={0}>
                     <a href="#" className="opts_account" title="Account">
@@ -134,32 +177,34 @@ export default class MainHeader extends React.Component{
                     </a>
                     <div className="menu dropdown_account" tabIndex={-1}>
                     <div className="channel_my">
+                        <Link href='/user/profile'>
                         <div className="profile_link">
-                        <AvatarOnly userId={this.props.loggedInUser.user.id} profileOnly={true}/>
-                        <div className="pd_content">
-                            <div className="rhte85">
-                                <h6>{truncateText(this.state.fullnames,25)}</h6>
-                                {this.props.loggedInUser.user.verified? <div className="mef78" title="Verify">
-                                    <i className="uil uil-check-circle" />
-                                </div> : <></>}
+                            <AvatarOnly userId={this.props.loggedInUser.user.id} profileOnly={true}/>
+                            <div className="pd_content">
+                                <div className="rhte85">
+                                    <h6>{truncateText(this.state.fullnames,25)}</h6>
+                                    {this.props.loggedInUser.user.verified? <div className="mef78" title="Verify">
+                                        <i className="uil uil-check-circle" />
+                                    </div> : <></>}
+                                </div>
+                                <span>{this.props.loggedInUser.user.username}</span>
+                                <div>{handleCountsDisplay(this.props.loggedInUser.user.followersCount)} Followers</div>
+                                <div>{handleCountsDisplay(this.props.loggedInUser.user.followingCount)} Following</div> 
                             </div>
-                            <span>{this.props.loggedInUser.user.username}</span>
-                            <div>{handleCountsDisplay(this.props.loggedInUser.user.followersCount)} Followers</div>
-                            <div>{handleCountsDisplay(this.props.loggedInUser.user.followingCount)} Following</div> 
                         </div>
-                        </div>
-                        <Link href={'/user/profile'} className="dp_link_12" style={{textTransform:'capitalize'}}>  
+                        </Link>
+                        <Link href='/user/profile' className="dp_link_12" style={{textTransform:'capitalize'}}>  
                         {this.props.loggedInUser.user.loggedInUserType === "default"? "View Profile" : "View "+this.props.loggedInUser.user.loggedInUserType+ " Profile"}
                         </Link>
                     </div>
-                    <div className="night_mode_switch__btn">
+                    {/* <div className="night_mode_switch__btn">
                         <a href="#" id="night-mode" className="btn-night-mode">
                         <i className="uil uil-moon" /> Night mode
                         <span className="btn-night-mode-switch">
                             <span className="uk-switch-button" />
                         </span>
                         </a>
-                    </div>
+                    </div> */}
                     
                     <Link href="/manage/profile" className="item channel_item">
                         Update Profile
@@ -167,9 +212,9 @@ export default class MainHeader extends React.Component{
                     <Link href="/manage/posts" className="item channel_item">
                         Manage Posts
                     </Link>
-                    <Link href="/manage/account" className="item channel_item">
+                    {/* <Link href="/manage/account" className="item channel_item">
                         Settings
-                    </Link>
+                    </Link> */}
                     <Link href="/support" className="item channel_item">
                         Help
                     </Link>
@@ -183,4 +228,14 @@ export default class MainHeader extends React.Component{
         </header>
     )
    }
+  }
+
+  const RedirectUserToFeedPage = ({handleRedirectUserToFeedPage})=>{
+    const router = useRouter()
+    useEffect(() => {
+       handleRedirectUserToFeedPage()
+       router.push('/feed');
+    }, [router])
+  
+    return null; // Or an empty fragment if you prefer: <></>
   }

@@ -7,13 +7,11 @@ import GoogleSignIn from "@/components/Includes/GoogleSingIn/GoogleSignIn";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import Head from "next/head";
-import { dynamicConfig } from "@/Functions";
-
-// Force the page to be dynamically rendered on every request
-export const dynamic = dynamicConfig();
+import { Alert } from "@mui/material";
+import { useUser } from "@/Contexts/UserContext";
 
 export default function Signin() {
-    
+  const loggedInUser = useUser()
   // Custom hook to check if a feature is enabled
   function useFeature(featureId) {
     const [isEnabled, setIsEnabled] = useState(false);
@@ -41,7 +39,9 @@ export default function Signin() {
   // Using numerical IDs for features
   const isFacebookEnabled = useFeature(4);  // Assuming 4 is the ID for Facebook login
   const isGoogleEnabled = useFeature(3);    // Assuming 3 is the ID for Google login
-  
+  if(loggedInUser.status){
+    return <Alert severity="info">You are already logged in, log out to into another account</Alert>
+  }
   return (
     <>
     <Head>

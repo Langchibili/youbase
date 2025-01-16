@@ -28,7 +28,7 @@ function SearchModal(props) {
 
   return (
     <>
-      <Button onClick={() =>  useSearchModalOpenContext.setOpenSearchModal(true)} sx={{ color: 'gray' }}>
+      <Button size="small" onClick={() =>  useSearchModalOpenContext.setOpenSearchModal(true)} sx={{ color: 'gray' }}>
         <Search /> {props.text? props.text : ""}
       </Button>
       <Dialog

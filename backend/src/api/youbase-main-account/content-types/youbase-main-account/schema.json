@@ -1,0 +1,21 @@
+{
+  "kind": "singleType",
+  "collectionName": "youbase_main_accounts",
+  "info": {
+    "singularName": "youbase-main-account",
+    "pluralName": "youbase-main-accounts",
+    "displayName": "youbaseMainAccount",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "account": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    }
+  }
+}

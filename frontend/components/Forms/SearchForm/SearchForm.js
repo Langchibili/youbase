@@ -62,6 +62,24 @@ export default function SearchForm(props) {
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value); // Update the search term
   };
+
+  const constructSearchQuery = (searchTerm, baseFilter) => {
+    if (!searchTerm) {
+      return `${baseFilter}&filters[$and][1][status][$eq]=published&populate=user,featuredImages,media&sort=id:desc`
+    }
+  
+    const terms = searchTerm.split(' ')
+    const searchFilters = terms
+      .map((term, index) => {
+        const idx = index * 3 // Ensure unique keys for each term
+        return `filters[$and][2][$or][${idx}][title][$containsi]=${term}&filters[$and][2][$or][${idx + 1}][description][$containsi]=${term}`
+      })
+      .join('&')
+  
+    return `${baseFilter}&${searchFilters}&filters[$and][1][status][$eq]=published&populate=user,featuredImages,media&sort=id:desc`
+  }
+
+  
   const contentKey = `${value}-${debouncedSearchTerm}`;
   return (
     <Box
@@ -123,21 +141,22 @@ export default function SearchForm(props) {
                         limit={10}
                         contentQueryFilters={`SearchTerm=${debouncedSearchTerm}&populate=profilePicture,details,socials&sort=id:desc`}     
                       />: <ContentDisplaySection
-                              key={contentKey}
-                              loggedInUser={props.loggedInUser}
-                              emptyContentMessage="No results found"
-                              showEmptyContentMessage={true}
-                              contentDisplay={(props) =>
-                                value === 6 || value === 7 ? (
-                                  <PortraitContentDisplay content={props.content} loggedInUser={props.loggedInUser} />
-                                ) : (
-                                  <LandscapeContent content={props.content} loggedInUser={props.loggedInUser} />
-                                )
-                              }
-                              contentUri={`${api_url}/posts`}
-                              limit={10}
-                              contentQueryFilters={`${tabFilters[value]}&filters[$and][2][$or][0][title][$containsi]=${debouncedSearchTerm}&filters[$and][2][$or][1][description][$containsi]=${debouncedSearchTerm}&filters[$and][3][status][$eq]=published&populate=user,featuredImages,media`}
-                        />}
+                            key={contentKey}
+                            loggedInUser={props.loggedInUser}
+                            emptyContentMessage="No results found"
+                            showEmptyContentMessage={true}
+                            contentDisplay={(props) =>
+                              value === 6 || value === 7 ? (
+                                <PortraitContentDisplay content={props.content} loggedInUser={props.loggedInUser} />
+                              ) : (
+                                <LandscapeContent content={props.content} loggedInUser={props.loggedInUser} />
+                              )
+                            }
+                            contentUri={`${api_url}/posts`}
+                            limit={10}
+                            contentQueryFilters={constructSearchQuery(debouncedSearchTerm, tabFilters[value])}
+                        />
+                    }
       </Box>
 
       {/* Tabs */}

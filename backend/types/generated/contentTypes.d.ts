@@ -1924,6 +1924,42 @@ export interface ApiUserFeedUserFeed extends Schema.CollectionType {
   };
 }
 
+export interface ApiYoubaseMainAccountYoubaseMainAccount
+  extends Schema.SingleType {
+  collectionName: 'youbase_main_accounts';
+  info: {
+    singularName: 'youbase-main-account';
+    pluralName: 'youbase-main-accounts';
+    displayName: 'youbaseMainAccount';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    account: Attribute.Relation<
+      'api::youbase-main-account.youbase-main-account',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::youbase-main-account.youbase-main-account',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::youbase-main-account.youbase-main-account',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -1967,6 +2003,7 @@ declare module '@strapi/types' {
       'api::support.support': ApiSupportSupport;
       'api::support-issue.support-issue': ApiSupportIssueSupportIssue;
       'api::user-feed.user-feed': ApiUserFeedUserFeed;
+      'api::youbase-main-account.youbase-main-account': ApiYoubaseMainAccountYoubaseMainAccount;
     }
   }
 }

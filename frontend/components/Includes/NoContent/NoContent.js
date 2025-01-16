@@ -2,7 +2,7 @@ import React from 'react'
 import { Box, Typography } from '@mui/material'
 import { InsertDriveFile } from '@mui/icons-material'
 
-const NoContent = ({ message = 'No content selected', icon: Icon = InsertDriveFile }) => {
+const NoContent = ({ message = 'No content selected', icon: Icon = InsertDriveFile,actionIfContentIsEmpty }) => {
   return (
     <Box
       sx={{
@@ -20,6 +20,7 @@ const NoContent = ({ message = 'No content selected', icon: Icon = InsertDriveFi
     >
       <Icon sx={{ fontSize: 48, mb: 2 }} />
       <Typography variant="body1">{message}</Typography>
+      {actionIfContentIsEmpty? actionIfContentIsEmpty() : <></>}
     </Box>
   )
 }

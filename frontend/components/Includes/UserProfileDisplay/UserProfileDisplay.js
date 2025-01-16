@@ -5,10 +5,8 @@ import SocialsDisplay from "../SocialsDisplay/SocialsDisplay";
 import Link from "next/link";
 import UserFollowingButtons from "@/components/Parts/UserActionButtons/UserFollowingButtons";
 import { api_url, log } from "@/Constants";
-import UserContentDisplay from "../ContentDisplay/UserContentDisplay";
 import { useEffect, useState } from "react";
-import { FeedOutlined, ImageOutlined, MoreVert, VideocamOutlined } from "@mui/icons-material";
-import NoContent from "../NoContent/NoContent";
+import {MoreVert } from "@mui/icons-material";
 import ContentDisplaySection from "../ContentDisplay/ContentDisplaySection";
 import LandscapeContent from "../ContentDisplay/LandscapeContent";
 import PortraitContentDisplay from "../ContentDisplay/PortraitContentDisplay";
@@ -17,9 +15,6 @@ import { useUser } from "@/Contexts/UserContext";
 export default function UserProfileDisplay(props) {
   const [postsCount, setPostsCount] = useState(null)
   const loggedInUser = useUser();
-  const [feedHasReels, setFeedHasReels] = useState(true)
-  const [feedHasCaptures, setFeedHasCaptures] = useState(true)
-  const [feedHasExplore, setFeedHasExplore] = useState(true)
   
   const user = props.user
   const thisIsMyAccount = props.thisIsMyAccount? props.thisIsMyAccount : false
@@ -125,7 +120,8 @@ export default function UserProfileDisplay(props) {
                     {displaySocials()}
                   </ul>
                 </div>
-                <ul className="_bty149">
+                {/* only check if it's your account if you are logged in */}
+                {props.loggedInUser.status? <ul className="_bty149">
                   {thisIsMyAccount? <li>
                     <Link
                       className="msg125 btn500"
@@ -145,7 +141,7 @@ export default function UserProfileDisplay(props) {
                       Edit
                     </Link>  </li>: <></>}
                  
-                </ul>
+                </ul>:  <UserFollowingButtons userId={props.user.id} loggedInUser={props.loggedInUser}/>}
               </div>
             </div>
           </div>}
