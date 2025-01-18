@@ -62,7 +62,7 @@ export default class ShareButton extends React.Component {
         }
     }
 
-    handleShare = async (e) => {
+    handleShare = async (e) => { // also a logged in user can share their own post
         event.stopPropagation(); // Prevent parent click handler
         const userHasEngagedWithPost = this.state.userHasEngagedWithPost
         const postId = this.state.post.id
@@ -222,7 +222,7 @@ const SetPostMetaTags = ({post})=>{
         setSocialSharingTags({
             title: post.title? post.title : "A post on youbase",
             description:  truncateText(post.description? post.description : "View this post on youbase."),
-            image: post.type === "video"? getVideoThumbnail(post.media && post.media.data? post.media[0].attributes : null,post) : renderThumbNail(),
+            image: post.type === "video"? getVideoThumbnail(post.media && post.media.data && post.media.data[0]? post.media.data[0].attributes : null,post) : renderThumbNail(),
             url: window.location.origin+'/posts/'+post.dashed_title,
           })
     }, [])

@@ -59,7 +59,9 @@ export default function VideoThumbnailDisplay(props) {
               position: "relative", 
               display: "inline-block", 
               backgroundSize:'cover',
+              backgroundPosition: 'center',
               backgroundRepeat:'no-repeat',
+              borderRadius: '13px',
               width:'100%',
               backgroundImage:"url("+getVideoThumbnail(props.file, props.post)+")" }}
               onClick={handleClickOpen} 

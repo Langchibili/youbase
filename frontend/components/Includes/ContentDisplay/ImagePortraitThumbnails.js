@@ -61,8 +61,10 @@ return (
               position: "relative", 
               display: "inline-block", 
               backgroundSize:'cover',
+              backgroundPosition:'center',
               backgroundRepeat:'no-repeat',
               width:'100%',
+              borderRadius:'13px',
               backgroundImage:"url("+getImage(props.file,"small")+")" }}
               onClick={handleClickOpen}
               >

@@ -2,6 +2,7 @@
 
 import FullScreenContentModal from "@/components/Includes/Modals/FullScreenContentModal";
 import { getImage } from "@/Functions";
+import { Skeleton } from "@mui/material";
 import React from "react";
 // import 'bootstrap/dist/css/bootstrap.min.css';
 // import 'bootstrap/dist/js/bootstrap.bundle.min';
@@ -53,7 +54,13 @@ export default class FeaturedImages extends React.Component {
     render() {
         const { images } = this.state;
         if(this.state.imagesLoading) {
-            return <div>Loading...</div>;
+            return <div><Skeleton
+            variant="rectangular"
+            animation="wave"
+            width="100%"
+            height={200}
+            sx={{ borderRadius: '5px', marginBottom: '10px' }}
+        /></div>;
         }
 
         return (

@@ -54,14 +54,13 @@ export default class LikeButton extends React.Component{
         }
  } 
 
- handleLike = async ()=>{
+ handleLike = async ()=>{ // also a logged in user can like their own post
         if(!this.props.loggedInUser.status){ // means you are logged out or you have never followed anyone before
             this.setState({
                showLogInFirstModal: true
             })
             return
         }
-
         this.setState({
             requesting: true // to show user something is happening
         })

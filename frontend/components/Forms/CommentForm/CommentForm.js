@@ -15,6 +15,46 @@ class CommentForm extends React.Component {
     };
   }
 
+  createCommentNotification = async ()=>{
+          const loggedInUserId = this.props.loggedInUser.user.id
+          const userId = this.props.postUserId
+          const postId = this.props.postId
+          if(userId === loggedInUserId){
+            return
+          }
+          const loggedInUserDetails = await getUserById(loggedInUserId, "details")
+          const fullnames = loggedInUserDetails.details?.firstname && loggedInUserDetails.details?.lastname ? `${loggedInUserDetails.details.firstname} ${loggedInUserDetails.details.lastname}` : "A user";
+          const notificationTitle = fullnames + " commented on your post"
+          log('the post user ', this.props.post)
+          logNotification(notificationTitle,loggedInUserId,[userId], "post", postId) // send notification to the user being followed
+          // send a push notification
+          const followersCount = parseInt(this.props.loggedInUser.user.followersCount)
+          const commentsCount = parseInt(this.props.post.commentsCount)
+          // always notify a user that someone has commented on their post
+          sendPushNotification(notificationTitle,notificationTitle+" on youbase",[userId],clientUrl+"/posts/"+this.props.post.dashed_title,await getPostFromId(postId,"media,featuredImages"),"")
+          if(commentsCount === 0){ // if for any reason it's 0, return
+              return
+          }
+          
+          if(followersCount > 1000){ // this means the user has a big enough following, the post's user might need to know 
+             const postWithThumbnail = await getPostFromId(postId,"media,featuredImages")
+             const title = notificationTitle
+             const body = notificationTitle + " on youbase"
+             const image = getImage(postWithThumbnail.featuredImages.data,"thumbnail","notifications")
+             const postUrl = clientUrl+"/posts/"+this.props.post.dashed_title
+             sendPushNotification(title,body,[userId],postUrl,image,"")
+          }
+         
+          if(commentsCount < 5 || commentsCount % 100 === 0){ // determine whether to send a push notification, because cannot be spamming users anyhow with each like
+             const postWithThumbnail = await getPostFromId(postId,"media,featuredImages")
+             const title = "Your post has been commented on "+commentsCount+ " times"
+             const body = "Your post on youbase has been commented on "+commentsCount+ " times"
+             const image = getImage(postWithThumbnail.featuredImages.data,"thumbnail","notifications")
+             const postUrl = clientUrl+"/posts/"+this.props.post.dashed_title
+             sendPushNotification(title,body,[userId],postUrl,image,"")
+          }
+   } 
+
   handleSubmit = async (e) => {
     e.preventDefault();
     if(!this.props.loggedInUser.status){ // means you are logged out or you have never followed anyone before
@@ -44,6 +84,7 @@ class CommentForm extends React.Component {
     this.props.onAddComment(newComment);
     this.setState({ text: "", commenting: false },()=>{
       updateCommentEngagement(this.props.postUserId,this.props.postId) // add the comment count and engagemt up
+      this.createCommentNotification() // notify the user
     })
   };
 

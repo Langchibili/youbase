@@ -16,7 +16,7 @@ import LandscapeContent from "../ContentDisplay/LandscapeContent";
 import { api_url } from "@/Constants";
 
 export default function SinglePostDisplay(props) {
-
+  const thisIsMyPost = props.loggedInUser.status? props.post.user.data.id === props.loggedInUser.user.id : false
   const postEngagementsDisplay = post => {
       return (
         <div className='inline-engagements-display'>
@@ -142,7 +142,7 @@ const nextSectionToDisplay = ()=>{
         <div className="col-xl-8 col-lg-8">
         {renderPostContent(props.post, postEngagementsDisplay)}
         <PostImpressions {...props}/> {/* log the impression on the post when a user views the post */}
-        <ContentDisplaySection
+       {thisIsMyPost? <></> : <ContentDisplaySection
           loggedInUser={props.loggedInUser}
           contentDisplay={(props) =><LandscapeContent content={props.content} loggedInUser={props.loggedInUser} />}
           contentUri={`${api_url}/posts`}
@@ -151,7 +151,7 @@ const nextSectionToDisplay = ()=>{
           limit={10}
           contentQueryFilters={moreFromUserFilters[props.post.type]}      
           nextSectionToDisplay={()=> nextSectionToDisplay()}
-          />
+          />}
         </div>
         
    

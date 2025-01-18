@@ -8,6 +8,7 @@ import FeaturedImages from "./FeaturedImages";
 import EmbedDisplay from "@/components/Includes/EmbedDisplay/EmbedDisplay";
 import { log } from "@/Constants";
 import VideoFileDisplay from "@/components/Includes/VideoDisplay/VideoFileDisplay";
+import { Skeleton } from "@mui/material";
 
 export default class MediaDisplay extends React.Component{
     constructor(props){
@@ -102,7 +103,13 @@ export default class MediaDisplay extends React.Component{
     
     render(){
         return (
-            !this.state.featuredImagesLoaded? <>loading images...</> : <>
+            !this.state.featuredImagesLoaded? <><Skeleton
+                                                    variant="rectangular"
+                                                    animation="wave"
+                                                    width="100%"
+                                                    height={200}
+                                                    sx={{ borderRadius: '5px', marginBottom: '10px' }}
+                                                /></> : <>
             {this.featuredImagesDisplay()}
             {!this.state.mediaLoaded? <></> : this.mediaDisplay()}
             {this.titleAndDescription()}

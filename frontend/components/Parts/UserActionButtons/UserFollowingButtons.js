@@ -25,6 +25,9 @@ export default class UserFollowingButtons extends React.Component{
    }
 
    handleUserFollow = async ()=>{
+       if(this.props.userId === this.props.loggedInUser.user.id){
+          return // you cannot follow yourself
+       }
         this.setState({
             requesting: true, // to show user something is happening
             requestingText: 'Following...'

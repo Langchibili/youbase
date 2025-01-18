@@ -67,9 +67,8 @@ export default function PortraitContentDisplay(props) {
                   media.attributes.id = media.id; // Ensure media.id exists
                   return (
                       <div className="item" key={media.id} style={{width:'134px'}}>
-                      <div className="stream_1" style={{width:'134px',padding:'10px'}}>
+                      <div className="stream_1" style={{width:'134px',padding:'10px 0px',backgroundColor:'transparent'}}>
                         <VideoThumbnailDisplay
-                           
                             title={content.attributes.title}
                             file={media.attributes}
                             post={content.attributes}
@@ -98,7 +97,7 @@ export default function PortraitContentDisplay(props) {
                   media.attributes.id = media.id; // Ensure media.id exists
                   return (
                     <div className="item" key={media.id} style={{width:'134px'}}>
-                        <div className="stream_1" style={{width:'134px',padding:'10px'}}>
+                        <div className="stream_1" style={{width:'134px',padding:'10px 0px',backgroundColor:'transparent'}}>
                           <ImagePortraitThumbnails
                               key={media.id}
                               title={content.attributes.title}
@@ -140,7 +139,7 @@ const PortraitContentSkeleton = ()=>{
                   return (
                     <div className="owl-item active" key={index} style={{width:'134px',height:'200px',marginRight:'10px'}}>
                       
-                        <div className="stream_1" style={{width:'134px',padding:'10px',height:'200px'}}>
+                        <div className="stream_1" style={{width:'134px',height:'200px',borderRadius:'13px'}}>
                          
                       </div>
                     </div>

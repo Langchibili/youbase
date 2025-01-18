@@ -3,7 +3,7 @@
 import LogInFirstModal from "@/components/Includes/Modals/LogInFirstModal"
 import React from "react"
 import { checkIfUserHasEngagedWithPost, deleteEngagement, getImage, getPostFromId, handleCountsDisplay, logEngagement, sendPushNotification } from "@/Functions"
-import { clientUrl } from "@/Constants"
+import { clientUrl, log } from "@/Constants"
 
 export default class ViewsDisplay extends React.Component{
    constructor(props){
@@ -29,7 +29,12 @@ export default class ViewsDisplay extends React.Component{
         this.setState({
             requesting: true // to show user something is happening
         })
-        console.log('the views page',this.props.post)
+        log('the views page',this.props.post)
+        if(this.props.loggedInUser.status){
+            if(this.props.post.user.data.id === this.props.loggedInUser.user.id){
+                return // you cannot log view of your own post
+            }
+        }
         const userId = this.props.post.user.data? this.props.post.user.data.id : this.props.post.user.id
         const postId = this.props.post.id
 

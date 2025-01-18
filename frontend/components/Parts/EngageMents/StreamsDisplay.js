@@ -25,11 +25,18 @@ export default class StreamsDisplay extends React.Component{
         //        showLogInFirstModal: true
         //     })
         //     return
-        // } for now we shall allowed logged out users to stream music
+        // } 
+        // 
+        // // for now we shall allowed logged out users to stream music
        
         this.setState({
             requesting: true // to show user something is happening
         })
+        if(this.props.loggedInUser.status){
+            if(this.props.post.user.data.id === this.props.loggedInUser.user.id){
+                return // you cannot log stream of your own post
+            }
+        }
         const userId = this.props.post.user.data? this.props.post.user.data.id : this.props.post.user.id
         const postId = this.props.post.id
 

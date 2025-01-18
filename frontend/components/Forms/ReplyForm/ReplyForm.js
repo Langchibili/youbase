@@ -15,6 +15,24 @@ class ReplyForm extends React.Component {
     };
   }
 
+
+  createReplyNotification = async ()=>{
+            const loggedInUserId = this.props.loggedInUser.user.id
+            const commentUserId = this.props.commentUserId
+            const postId = this.props.postId
+            if(commentUserId === loggedInUserId){
+              return
+            }
+            const loggedInUserDetails = await getUserById(loggedInUserId, "details")
+            const fullnames = loggedInUserDetails.details?.firstname && loggedInUserDetails.details?.lastname ? `${loggedInUserDetails.details.firstname} ${loggedInUserDetails.details.lastname}` : "A user";
+            const notificationTitle = fullnames + " replied to your comment"
+            log('the post user ', this.props.post)
+            logNotification(notificationTitle,loggedInUserId,[commentUserId], "post", postId) // send notification to the user being followed
+            // send a push notification
+            // always notify a user that someone has replied to their comment
+            sendPushNotification(notificationTitle,notificationTitle+" on youbase",[commentUserId],clientUrl+"/posts/"+this.props.post.dashed_title,await getPostFromId(postId,"media,featuredImages"),"")
+  } 
+
   handleSubmit = async (e) => {
     e.preventDefault();
     if(!this.props.loggedInUser.status){ // means you are logged out or you have never followed anyone before
@@ -42,6 +60,7 @@ class ReplyForm extends React.Component {
     this.props.onAddReply(newReply);
     updateCommentEngagement(this.props.postUserId,this.props.postId)
     this.setState({ text: "", replying: false })
+    this.createReplyNotification()
   }
 
   handleChange = (e) => {

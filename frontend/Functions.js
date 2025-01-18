@@ -1003,7 +1003,7 @@ export const checkIfUserHasEngagedWithPost = async (loggedInUser, postId, engage
   }).then(response => response.json())
     .then(data => data)
     .catch(error => console.error(error))
-  return response.hasEngaged
+  return response? response.hasEngaged : false
 }
 
 export const checkUserFollowing = async (loggedInUser, otherUserId) => {

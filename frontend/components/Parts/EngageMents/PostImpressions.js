@@ -18,6 +18,11 @@ export default class PostImpressions extends React.Component{
    async componentDidMount(){
       let loggedInUser = null
       if(this.props.loggedInUser.status){
+         if(this.props.post.user.data.id === this.props.loggedInUser.user.id){
+             return // you cannot log impression of your own post
+         }
+      }
+      if(this.props.loggedInUser.status){
          loggedInUser = this.props.loggedInUser.user
       }
       else{

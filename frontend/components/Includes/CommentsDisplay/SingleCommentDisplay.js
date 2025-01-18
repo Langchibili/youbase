@@ -70,6 +70,7 @@ export default class SingleCommentDisplay extends React.Component {
                     commentId={comment.id}
                     post={post}
                     postUserId={postUserId}
+                    commentUserId={comment.user.data.id}
                     postId={postId}
                     onAddReply={(newReply) => onUpdateReplies(comment.id, newReply)}
                 />
