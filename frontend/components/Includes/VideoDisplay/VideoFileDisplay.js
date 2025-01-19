@@ -183,7 +183,7 @@ export default function VideoFileDisplay({ file, post, loggedInUser, handleRemov
         width: '100%',
         marginTop: '2px',
         padding: hideRemoveButton ? 'none' : '10px',
-        borderBottom: '1px solid ghostwhite',
+        /* borderBottom: '1px solid ghostwhite',*/
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>

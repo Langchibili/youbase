@@ -11,7 +11,7 @@ export default class AvatarWithFollowButton extends React.Component{
       super(props)
       this.state = {
         user: null,
-        avatarLoaded: true
+        userNameLoaded: false
       }
    }
 
@@ -39,10 +39,20 @@ export default class AvatarWithFollowButton extends React.Component{
         const user = await getUserById(this.props.userId,"profilePicture,details")
         this.setState({
             user: user,
-            avatarLoaded: true
+            userNameLoaded: true
         })
     }  
    render(){
+    if(!this.state.userNameLoaded){
+        return <Skeleton
+                    key={index}
+                    variant="text"
+                    width={100}
+                    height={10}
+                    animation="wave"
+                    style={{ marginBottom: "8px" }} // Spacing between lines
+                />
+      } 
     return ( 
         !this.props.user? <></> :
         this.props.shiftAvatarDisplay? <div className="live_user_dt">

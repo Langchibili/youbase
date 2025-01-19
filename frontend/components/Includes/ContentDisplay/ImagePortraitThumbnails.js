@@ -63,6 +63,7 @@ return (
               backgroundSize:'cover',
               backgroundPosition:'center',
               backgroundRepeat:'no-repeat',
+              padding:'5px',
               width:'100%',
               borderRadius:'13px',
               backgroundImage:"url("+getImage(props.file,"small")+")" }}
@@ -86,6 +87,7 @@ return (
             postId={props.post.id} 
             moreStyles={{
               position:'absolute',
+              marginTop: '5px',
               top: 0,
               right: 0,
               color:'white',

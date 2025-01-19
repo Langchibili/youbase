@@ -62,6 +62,7 @@ export default function VideoThumbnailDisplay(props) {
               backgroundPosition: 'center',
               backgroundRepeat:'no-repeat',
               borderRadius: '13px',
+              padding:'5px',
               width:'100%',
               backgroundImage:"url("+getVideoThumbnail(props.file, props.post)+")" }}
               onClick={handleClickOpen} 
@@ -84,6 +85,7 @@ export default function VideoThumbnailDisplay(props) {
             postId={props.post.id} 
             moreStyles={{
               position:'absolute',
+              marginTop: '5px',
               top: 0,
               right: 0,
               color:'white',

@@ -20,9 +20,9 @@ export default function VideoPostMedium(props) {
         {props.onSinglePostDisplayPage? 
         (<div className="review_item" style={{ position: 'relative'}}>
           <VideoFileDisplay post={props.post} loggedInUser={props.loggedInUser} videoMeta={getVideoMetaFromPostAndId(props.post,props.post.media.id)} file={props.post.media} hideRemoveButton={true}/>
-          <h4 className="rvds10" style={{ marginTop: '10px' }}>
+          <h3 className="rvds10" style={{ marginTop: '10px', fontWeight:'bold'}}>
           <ReadMoreLess text={props.post.title} length={50}/>
-          </h4>
+          </h3>
           <p className="rvds10" style={{ marginTop: '10px' }}>
           <ReadMoreLess text={props.post.description} length={150}/>
           </p>
@@ -33,17 +33,20 @@ export default function VideoPostMedium(props) {
         </div>)
            :
         (<div className="review_item" style={{ position: 'relative'}}>
-          <AvatarWithPostDate {...props} />
-          <div style={{minHeight: '10px'}}></div>
           <VideoFileDisplay post={props.post} loggedInUser={props.loggedInUser} videoMeta={getVideoMetaFromPostAndId(props.post,props.post.media.id)} file={props.post.media} hideRemoveButton={true}/>
           <Link href={"/posts/"+props.post.dashed_title} onClick={()=>{useSearchModalOpenContext.setOpenSearchModal(false)}}>
-          <h4 className="rvds10" style={{ marginTop: '10px' }}>
+          <h3 style={{ marginTop: '10px', fontWeight:'bold'}}  className="rvds10" >
           <ReadMoreLess text={props.post.title} length={50}/>
-          </h4>
-          <p className="rvds10" style={{ marginTop: '10px' }}>
-          <ReadMoreLess text={props.post.description} length={150}/>
-          </p>
+          </h3>
           </Link>
+          <div style={{minHeight: '10px'}}></div>
+          <AvatarWithPostDate {...props} />
+          <p className="rvds10" style={{ marginTop: '10px' }}>
+          <Link href={"/posts/"+props.post.dashed_title} onClick={()=>{useSearchModalOpenContext.setOpenSearchModal(false)}}>
+          <ReadMoreLess text={props.post.description} length={150}/>
+          </Link>
+          </p>
+          
           {props.postEngagementsDisplay(props.post)}
           <div style={{
                 width: "100%",

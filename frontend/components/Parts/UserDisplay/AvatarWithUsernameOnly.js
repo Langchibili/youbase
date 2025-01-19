@@ -42,7 +42,23 @@ export default class AvatarWithUsernameOnly extends React.Component{
 
    render(){
     if(!this.state.avatarLoaded){
-        return <></>
+        return <>  <div className="live_user_dt"><Skeleton
+                        variant="circular"
+                        width={36}
+                        height={36}
+                        animation="wave"
+                    />
+
+                       <Skeleton
+                             key={index}
+                             variant="text"
+                             width={100}
+                             height={10}
+                             animation="wave"
+                             style={{ marginBottom: "8px" }} // Spacing between lines
+                         />
+            </div>
+         </>
     }
     if(this.state.user){
         return(<div className="live_user_dt" style={{color:'GrayText',alignItems:"center"}}> 
@@ -57,7 +73,7 @@ export default class AvatarWithUsernameOnly extends React.Component{
            </Link>
            {this.props.postMoreContent()}
       </div>)
-   }
+    }
     return null
   }
  }

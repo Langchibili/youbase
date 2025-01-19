@@ -23,13 +23,13 @@ export default function EmbedPostMedium(props) {
           {props.postEngagementsDisplay(props.post)}
           <div style={{width:'100%', textAlign:'center'}}><CommentsModal loggedInUser={props.loggedInUser} post={props.post} postId={props.post.id} /></div>
         </div>) : (<div className="review_item" style={{ position: 'relative'}}>
-          <AvatarWithPostDate {...props} /><br/>
           <EmbedDisplay url={props.post.embedLink}/>
           <Link href={"/posts/"+props.post.dashed_title} onClick={()=>{useSearchModalOpenContext.setOpenSearchModal(false)}}>
           <p className="rvds10" style={{ marginTop: '10px' }}>
           <ReadMoreLess text={props.post.description} length={100}/>
           </p>
           </Link>
+          <AvatarWithPostDate {...props} /><br/>
           {props.postEngagementsDisplay(props.post)}
           {props.onSinglePostDisplayPage? <div style={{width:'100%', textAlign:'center'}}><CommentsModal loggedInUser={props.loggedInUser} post={props.post} postId={props.post.id} /></div> :
             (<div style={{
