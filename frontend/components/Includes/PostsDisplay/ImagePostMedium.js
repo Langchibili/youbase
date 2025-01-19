@@ -15,6 +15,7 @@ export default function ImagePostMedium(props) {
       <div style={{backgroundColor:"white",borderRadius:'5px',marginBottom:'10px'}}>
         <div className="review_item" style={{ position: 'relative' }}>
           <AvatarWithPostDate {...props} />
+          <div style={{minHeight: '10px'}}></div>
           <MediaDisplay loggedInUser={props.loggedInUser} post={props.post} displayType="mediaOnly" imageType="medium" listtype="carousel"/>
          {props.onSinglePostDisplayPage?
             (<p className="rvds10" style={{ marginTop: '10px' }}>

@@ -5,6 +5,7 @@ import AvatarOnly from "./AvatarOnly"
 import UserFollowingButtons from "../UserActionButtons/UserFollowingButtons"
 import Link from "next/link"
 import { getUserById, truncateText } from "@/Functions"
+import { Skeleton } from "@mui/material"
 
 export default class AvatarWithFollowButton extends React.Component{
    constructor(props){

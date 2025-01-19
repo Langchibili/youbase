@@ -2,6 +2,7 @@
 
 import { useSearchModalOpen } from "@/Contexts/SearchModalContext"
 import { getImage, getUserById, truncateText } from "@/Functions"
+import { Skeleton } from "@mui/material"
 import Link from "next/link"
 import React from "react"
 
