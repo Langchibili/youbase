@@ -46,7 +46,6 @@ export default class AvatarWithFollowButton extends React.Component{
    render(){
     if(!this.state.userNameLoaded){
         return <Skeleton
-                    key={index}
                     variant="text"
                     width={100}
                     height={10}

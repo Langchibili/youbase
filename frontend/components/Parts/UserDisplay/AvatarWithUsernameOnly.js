@@ -51,7 +51,6 @@ export default class AvatarWithUsernameOnly extends React.Component{
                     />
 
                        <Skeleton
-                             key={index}
                              variant="text"
                              width={100}
                              height={10}
