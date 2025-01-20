@@ -16,10 +16,10 @@ class ParentCommentsSection extends React.Component {
     };
   }
 
-  async componentDidMount() {
-    const comments = await getPostParentComments(this.props.postId);
-    this.setState({ comments, commentsLoading: false });
-  }
+  // async componentDidMount() {
+  //   const comments = await getPostParentComments(this.props.postId);
+  //   this.setState({ comments, commentsLoading: false });
+  // }
   componentDidUpdate(prevProps,nextState){
     const musicPlayer = document.getElementById('music-player-controller')
     if(musicPlayer){
