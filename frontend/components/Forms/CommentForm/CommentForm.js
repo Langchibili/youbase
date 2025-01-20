@@ -2,8 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import { TextField, Button, Box, IconButton } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import { createNewComment, updateCommentEngagement } from "@/Functions";
+import { createNewComment, getImage, getPostFromId, getUserById, logNotification, sendPushNotification, updateCommentEngagement } from "@/Functions";
 import LogInFirstModal from "@/components/Includes/Modals/LogInFirstModal";
+import { clientUrl, log } from "@/Constants";
 
 class CommentForm extends React.Component {
   constructor(props) {
@@ -79,7 +80,7 @@ class CommentForm extends React.Component {
       postId: this.props.postId.toString(),
       userId: this.props.loggedInUser.user.id.toString(),
 
-    };
+    }
     const newComment = await createNewComment({data:newCommentObject});
     this.props.onAddComment(newComment);
     this.setState({ text: "", commenting: false },()=>{

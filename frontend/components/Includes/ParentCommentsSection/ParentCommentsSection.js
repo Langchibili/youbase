@@ -88,6 +88,16 @@ class ParentCommentsSection extends React.Component {
               onAddComment={this.handleAddComment}
             />
             <Divider sx={{ my: 2 }} />
+            { // any new commments 
+              this.state.comments.length > 0?  <CommentsDisplay
+                  loggedInUser={this.props.loggedInUser}
+                  post={this.props.post}
+                  comments={this.state.comments}
+                  postUserId={this.props.post.user.data.id}
+                  postId={this.props.postId}
+                  onUpdateReplies={this.handleUpdateReplies}
+              /> : <></>
+            }
             <ContentDisplaySection
               loggedInUser={this.props.loggedInUser}
               removeBottomPadding={true}
