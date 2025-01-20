@@ -118,8 +118,7 @@
     cursor: pointer;
     font-family: 'Roboto', sans-serif;
 }
-
-.menu--link:hover,.menu--link:hover .menu--label {
+.menu--label {
 	background: #ffecec;
 }
 

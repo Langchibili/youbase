@@ -4,6 +4,8 @@ import { Box, Typography, Divider, Skeleton } from "@mui/material";
 import { getPostParentComments } from "@/Functions";
 import CommentForm from "@/components/Forms/CommentForm/CommentForm";
 import CommentsDisplay from "../CommentsDisplay/CommentsDisplay";
+import ContentDisplaySection from "../ContentDisplay/ContentDisplaySection";
+import { api_url } from "@/Constants";
 
 class ParentCommentsSection extends React.Component {
   constructor(props) {
@@ -55,7 +57,18 @@ class ParentCommentsSection extends React.Component {
       return { comments: updatedComments };
     });
   };
-
+  
+  commentsDisplaySection = (content)=>{
+    console.log(content)
+    return <CommentsDisplay
+                loggedInUser={this.props.loggedInUser}
+                post={this.props.post}
+                comments={content}
+                postUserId={this.props.post.user.data.id}
+                postId={this.props.postId}
+                onUpdateReplies={this.handleUpdateReplies}
+            />
+  }
   render() {
     const { comments,commentsLoading } = this.state;
     // if(commentsLoading){
@@ -68,22 +81,22 @@ class ParentCommentsSection extends React.Component {
           Comments {this.props.commentsCount}
         </Typography>
         {/* position:'fixed', bottom:'0',marginBottom:'120px',width:'90%' */}
-        
-            <CommentForm
+          <CommentForm
               loggedInUser={this.props.loggedInUser}
               postId={this.props.postId}
               postUserId={this.props.post.user.data.id}
               onAddComment={this.handleAddComment}
             />
             <Divider sx={{ my: 2 }} />
-            <CommentsDisplay
-                loggedInUser={this.props.loggedInUser}
-                post={this.props.post}
-                comments={comments}
-                postUserId={this.props.post.user.data.id}
-                postId={this.props.postId}
-                onUpdateReplies={this.handleUpdateReplies}
-            />
+            <ContentDisplaySection
+              loggedInUser={this.props.loggedInUser}
+              removeBottomPadding={true}
+              contentDisplay={(props) => this.commentsDisplaySection(props.content)}
+              contentUri={`${api_url}/comments`}
+              limit={5}
+              contentQueryFilters={'/comments?filters[parentComment][id][$null]=true&filters[post][id][$eq]='+this.props.postId}
+          />
+            
       </Box>
     );
   }

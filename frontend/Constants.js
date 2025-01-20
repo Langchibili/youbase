@@ -385,22 +385,24 @@ export const checkUserLogginStatus = async () => {
 const runPeriodicUserStatusChecks = async () => {
   // Perform the initial check immediately
   const loggedInUser = await checkUserLogginStatus()
-  if (loggedInUser.user.accountBlocked) {
-    if(loggedInUser.user.status){
-      logUserOut() // if you are logged in, then we log you out
-    }
-    return // Stop further execution if the user is blocked
-  }
-
-  // Schedule subsequent checks to run every 5 minutes (300000 milliseconds)
-  setInterval(async () => {
-    const updatedUserStatus = await checkUserLogginStatus()
-    if (updatedUserStatus.user.accountBlocked) {
-      if(loggedInUser.user.status){
-        logUserOut() // if you are logged in, then we log you out and redirect you to /blocked page to inform you
+  if(loggedInUser && loggedInUser.user){
+    if (loggedInUser.user.accountBlocked) {
+      if(loggedInUser.status){
+        logUserOut() // if you are logged in, then we log you out
       }
+      return // Stop further execution if the user is blocked
     }
-  }, 300000) // 5 minutes in milliseconds
+  
+    // Schedule subsequent checks to run every 5 minutes (300000 milliseconds)
+    setInterval(async () => {
+      const updatedUserStatus = await checkUserLogginStatus()
+      if (updatedUserStatus.user.accountBlocked) {
+        if(loggedInUser.status){
+          logUserOut() // if you are logged in, then we log you out and redirect you to /blocked page to inform you
+        }
+      }
+    }, 300000) // 5 minutes in milliseconds
+  }
 }
 
 if(typeof document !== "undefined"){ // only run the periodic check for login if it's in the

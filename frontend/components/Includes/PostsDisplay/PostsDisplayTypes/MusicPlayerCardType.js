@@ -17,7 +17,7 @@ import { useSearchModalOpen } from '@/Contexts/SearchModalContext'
 
 export default function MusicPlayerCardType(props) {
   const useSearchModalOpenContext = useSearchModalOpen()
-
+  const thisIsMyPost = props.loggedInUser.status? props.post.user.data.id === props.loggedInUser.user.id : false
   const renderThumbNail = () => {
     if (props.post.featuredImages && props.post.featuredImages.data && props.post.featuredImages.data[0]) {
       return getImage(props.post.featuredImages.data[0] || null, 'thumbnail', 'blank')
@@ -71,7 +71,7 @@ export default function MusicPlayerCardType(props) {
       >
         <AvatarWithUsernameOnly userId={props.post.user.data.id} textColor="white" extra_styles={  {color:"white !important",width:'24px !important', height:'24px !important'}} postMoreContent={()=>{}}/>
         <Headphones sx={{color:'white',opacity:'0.8'}}/>
-        <PostMoreBtn {...props} iconColor="white" action="edit" post={props.post}/>
+        <PostMoreBtn thisIsMyPost={thisIsMyPost} {...props} iconColor="white" action="edit" post={props.post} postId={props.post.id}/>
         </div>
       
       {/* <div style={{margin:'20px'}}><AvatarWithUsernameOnly post={props.post} {...props} textColor="white"/></div> */}

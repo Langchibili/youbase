@@ -20,6 +20,7 @@ import { api_url, getFeature, getJwt, log } from "@/Constants"
 import { FacebookTwoTone, Twitter, X, YouTube } from "@mui/icons-material"
 import EmbedPost from "./EmbedPost"
 import { useRouter } from "next/navigation"
+import PostTypeSelectorSkeleton from "@/components/Includes/Skeletons/PostTypeSelectorSkeleton"
 
 export default class PostForm extends React.Component{
    constructor(props){
@@ -456,13 +457,19 @@ export default class PostForm extends React.Component{
         this.setState({
           postSavingAsDraft: true
         })
-        postToSaveObject.data.status = "draft"
+        if(this.props.action === "edit"){
+           postToSaveObject.data.status === "published"
+        }
+        else{
+           postToSaveObject.data.status = "draft"
+        }
       }
       if(postToSaveObject.data.status === "published"){
          const postsCount = (this.props.loggedInUser.user.postsCount || 1)
          postToSaveObject.data.postCount = postsCount + 1
       }
-      const response =  await fetch(api_url+'/posts/'+draftPostId, {
+      const postId = this.props.action === "edit"? this.props.postId : draftPostId
+      const response =  await fetch(api_url+'/posts/'+postId, {
         method: 'PUT',
         headers: {
          'Authorization': `Bearer ${getJwt()}`,
@@ -567,7 +574,7 @@ export default class PostForm extends React.Component{
 
    postTypeSelector = ()=>{
     if(!this.state.dummyPostCreated){
-       return <>Loading Forms...</>
+       return <><PostTypeSelectorSkeleton/></>
     }
     const CenteredGrid = styled(Grid)({
         display: "flex",
@@ -863,6 +870,9 @@ export default class PostForm extends React.Component{
    }
 
    componentWillUnmount(){
+     if(this.props.action === "edit"){
+        return //cannot save an already created post as draft again, no cannot do
+     }
      this.savePost(false) // save draft during the unmounting phase
      if(typeof document !== "undefined"){
       const musicPlayer = document.getElementById('music-player-controller')

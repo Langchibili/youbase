@@ -40,6 +40,11 @@ export default function PostModal(props) {
       onClose={props.onPostModalClose}
       TransitionComponent={Transition}
       color="secondary"
+      onClick={(e)=>{
+        if(e){
+          e.stopPropagation()
+        }
+      }}
     >
       <StyledAppBar>
         <Toolbar>

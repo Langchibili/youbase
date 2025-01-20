@@ -135,7 +135,7 @@ export default class ShareButton extends React.Component {
         }
 
         return (
-            <Modal open={this.props.openShareModal? this.props.openShareModal : this.state.openShareModal} onClose={this.props.handleShareModalClose? this.props.handleShareModalClose : this.handleModalClose}>
+            <Modal sx={{zIndex:1990}} open={this.props.openShareModal? this.props.openShareModal : this.state.openShareModal} onClose={this.props.handleShareModalClose? this.props.handleShareModalClose : this.handleModalClose}>
                <Box sx={style}>
                 <SetPostMetaTags post={this.props.post}/>
                     <Typography variant="h6" component="h2">

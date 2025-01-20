@@ -38,3 +38,6 @@ body {
 .fullscreen-engagement-btn > button > i{
   color: white !important;
 }
+.menu--link:hover{
+  background-color: transparent !important;
+}

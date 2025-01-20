@@ -43,7 +43,8 @@ export default function DeletePostModal({ openDeletePostModal, handleClose, isCo
       onClose={handleClose}
       aria-labelledby="login-modal-title"
       aria-describedby="login-modal-description"
-    >
+      sx={{zIndex:1990}}
+   >
       <Box
         sx={{
           position: 'absolute',

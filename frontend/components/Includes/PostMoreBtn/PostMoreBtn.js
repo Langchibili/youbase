@@ -4,12 +4,12 @@ import React, { useState } from "react";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert"; // Menu icon (three dots)
 import PostModal from "../Modals/PostModal";
-import { log } from "@/Constants";
 import ShareButton from "@/components/Parts/EngageMents/ShareButton";
 import DeletePostModal from "../Modals/DeletePostModal";
 import ReportPostModal from "../Modals/ReportPostModal";
 
 const MoreOptions = ({ anchorEl, open, loggedInUser, handleDeleteModalOpen, handleReportModalOpen, handleShareModalOpen,handleClose,handlePostModalClickOpen,thisIsMyPost,thisIsMyComment,isComment}) => {
+  console.log('we are here though', open, isComment)
   if(isComment){
     return (
       <Menu
@@ -24,11 +24,12 @@ const MoreOptions = ({ anchorEl, open, loggedInUser, handleDeleteModalOpen, hand
           vertical: 'top',
           horizontal: 'right',
         }}
+        sx={{zIndex:1900}}
       >
        <MenuItem onClick={()=>{handleShareModalOpen(true)}}>Share Post</MenuItem>
        {!thisIsMyComment? null :  <MenuItem onClick={()=>{handleDeleteModalOpen(true)}}>Delete Comment</MenuItem>}
       </Menu>
-    );
+    )
   }
   return (
     <Menu
@@ -44,9 +45,9 @@ const MoreOptions = ({ anchorEl, open, loggedInUser, handleDeleteModalOpen, hand
         horizontal: 'right',
       }}
     >
-      {!thisIsMyPost?  null: <MenuItem onClick={() => { handleClose(); handlePostModalClickOpen(); }}>Edit</MenuItem>}
+      {!thisIsMyPost?  null: <MenuItem onClick={(e) => { e.stopPropagation(); handleClose(); handlePostModalClickOpen(); }}>Edit</MenuItem>}
       <MenuItem onClick={(e)=>{e.stopPropagation(); handleShareModalOpen(true)}}>Share</MenuItem>
-      {!thisIsMyPost? null :  <MenuItem onClick={()=>{handleDeleteModalOpen(true)}}>Delete</MenuItem>}
+      {!thisIsMyPost? null :  <MenuItem onClick={(e)=>{ e.stopPropagation(); handleDeleteModalOpen(true)}}>Delete</MenuItem>}
       {!loggedInUser.status? null : <MenuItem onClick={(e)=>{e.stopPropagation(); handleReportModalOpen(true)}}>Report</MenuItem>}
     </Menu>
   );
@@ -60,25 +61,38 @@ export default function PostMoreBtn(props) {
   const [openDeleteModal, handleDeleteModalOpen] = useState(false)
   const [openReportModal, handleReportModalOpen] = useState(false)
 
-  const handlePostModalClickOpen = () => {
+  const handlePostModalClickOpen = (e) => {
+    if(e){
+      e.stopPropagation(); // Prevent parent click handler
+    }
     setOpen(true);
   }
 
-  const handlePostModalClose = () => {
+  const handlePostModalClose = (e) => {
+    if(e){
+      e.stopPropagation(); // Prevent parent click handler
+    }
     setOpen(false);
   }
 
   const handleShareModalClose = (e)=>{
-    e.stopPropagation(); 
+    if(e){
+      e.stopPropagation(); // Prevent parent click handler
+    }
     handleShareModalOpen(false)
   }
 
-  const handleDeleteModalClose = ()=>{
+  const handleDeleteModalClose = (e)=>{
+    if(e){
+      e.stopPropagation(); // Prevent parent click handler
+    }
     handleDeleteModalOpen(false)
   }
 
   const handleReportModalClose = (e)=>{
-    e.stopPropagation(); 
+    if(e){
+      e.stopPropagation(); // Prevent parent click handler
+    }
     handleReportModalOpen(false)
   }
 
@@ -93,7 +107,6 @@ export default function PostMoreBtn(props) {
     }
     setAnchorEl(null);
   }
-  console.log('inside the share page',props.post)
   const iconColor = props.iconColor? props.iconColor: ''
   return (
     <>

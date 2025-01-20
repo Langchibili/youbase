@@ -19,6 +19,11 @@ const AutoResizeTextarea = (props) => {
           // in case of title, description is title
           placeholder={props.description && props.description.length > 0 ? '' : props.descriptionPlaceholder}
           onChange={(e) => props.setPostDescriptionOrTitle(e.target.value)}
+          onClick={(e)=>{
+                  if(e){
+                    e.stopPropagation()
+                  }
+                }}
           style={{
             border: props.bordered === "yes"? '1 px solid lightgray' : 'none',
             outline: 'none',
@@ -40,6 +45,11 @@ const AutoResizeTextarea = (props) => {
               // in case of title, description is title
               placeholder={props.description && props.description.length > 0 ? '' : props.descriptionPlaceholder}
               onChange={(e) => props.setPostDescriptionOrTitle(e.target.value)}
+              onClick={(e)=>{
+                      if(e){
+                        e.stopPropagation()
+                      }
+                    }}
               style={{
                 border:'none',
                 outline: 'none',
