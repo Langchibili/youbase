@@ -8,9 +8,9 @@ import PostPageSkeleton from '@/components/Includes/Skeletons/PostPageSkeleton'
 import { useUser } from '@/Contexts/UserContext'
 import { dynamicConfig, getPost, getPostFromId } from '@/Functions'
 import React, { useState, useEffect } from 'react'
-// Force the page to be dynamically rendered on every request
-export const dynamic = dynamicConfig();
 
+// Force the page to be dynamically rendered on every request
+export const dynamic = dynamicConfig()
 export default function Post({ params }) {
   const [post, setPost] = useState(null)
   const loggedInUser = useUser() // get loggedInUser from the useUser context

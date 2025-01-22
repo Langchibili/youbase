@@ -26,25 +26,36 @@ export default class AvatarWithPostDate extends React.Component{
        })
    }
    
-    renderUserName = ()=>{
-        const user = this.state.user
-        const textColor = this.props.textColor? this.props.textColor: ''
-        console.log('user in post date',user)
-        if(!user || !user.details){
-            return <h4 style={{color:textColor}}>Unnamed User</h4>  
-        }
-        if(user.details.firstname.trim() && !user.details.lastname.trim()){
-            return <h4 style={{color:textColor}}>{truncateText(user.details.firstname,20)}</h4>
-        }
-        if(user.details.lastname.trim() && !user.details.firstname.trim()){
-            return <h4 style={{color:textColor}}>{truncateText(user.details.lastname,20)}</h4>
-        }
-        if(user.details.firstname.trim() && user.details.lastname.trim()){ // if any of the first or last name is not set, then you are an unnamed user
-            return <h4 style={{color:textColor}}>{truncateText(user.details.firstname.trim()+" "+user.details.lastname.trim(),20)}</h4>
-        }// both of them have to be set for us to display your name
-    
-        return <h4 style={{color:textColor}}>Unnamed User</h4>   
+   renderUserName = () => {
+    const user = this.state.user;
+    const textColor = this.props.textColor ? this.props.textColor : '';
+    console.log('user in post date', user);
+
+    if (!user || !user.details) {
+        return <h4 style={{ color: textColor }}>Unnamed User</h4>;
     }
+
+    const firstName = user.details.firstname || '';
+    const lastName = user.details.lastname || '';
+
+    if (firstName.trim() && !lastName.trim()) {
+        return <h4 style={{ color: textColor }}>{truncateText(firstName.trim(), 20)}</h4>;
+    }
+
+    if (lastName.trim() && !firstName.trim()) {
+        return <h4 style={{ color: textColor }}>{truncateText(lastName.trim(), 20)}</h4>;
+    }
+
+    if (firstName.trim() && lastName.trim()) {
+        return (
+            <h4 style={{ color: textColor }}>
+                {truncateText(`${firstName.trim()} ${lastName.trim()}`, 20)}
+            </h4>
+        );
+    }
+
+    return <h4 style={{ color: textColor }}>Unnamed User</h4>;
+}
 
    render(){
     if(!this.props.post && !this.props.post.user && !this.props.post.user.data){

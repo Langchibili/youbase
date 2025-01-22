@@ -16,23 +16,40 @@ export default class AvatarWithUsernameOnly extends React.Component{
         user: null
       }
    }
-   renderUserName = ()=>{
-        const textColor = this.props.textColor? this.props.textColor: ''
-        if(!this.state.user || !this.state.user.details){
-            return <h6 style={{color:textColor}}>Unnamed User</h6>  
-        }
-        if(this.state.user.details.firstname.trim() && !this.state.user.details.lastname.trim()){
-            return <h6 style={{color:textColor}}>{truncateText(this.state.user.details.firstname,20)}</h6>
-        }
-        if(this.state.user.details.lastname.trim() && !this.state.user.details.firstname.trim()){
-            return <h6 style={{color:textColor}}>{truncateText(this.state.user.details.lastname,20)}</h6>
-        }
-        if(this.state.user.details.firstname.trim() && this.state.user.details.lastname.trim()){ // if any of the first or last name is not set, then you are an unnamed user
-            return <h6 style={{color:textColor}}>{truncateText(this.state.user.details.firstname.trim()+" "+this.state.user.details.lastname.trim(),20)}</h6>
-        }// both of them have to be set for us to display your name
+   renderUserName = () => {
+    const textColor = this.props.textColor ? this.props.textColor : '';
 
-        return <h6 style={{color:textColor}}>Unnamed User</h6>   
- }
+    // Check if the user or user details are not available
+    if (!this.state.user || !this.state.user.details) {
+        return <h6 style={{ color: textColor }}>Unnamed User</h6>;
+    }
+
+    // Safely access and handle `firstname` and `lastname`
+    const { firstname = '', lastname = '' } = this.state.user.details;
+    const trimmedFirstName = firstname.trim();
+    const trimmedLastName = lastname.trim();
+
+    // Determine the appropriate name to display
+    if (trimmedFirstName && !trimmedLastName) {
+        return <h6 style={{ color: textColor }}>{truncateText(trimmedFirstName, 20)}</h6>;
+    }
+
+    if (trimmedLastName && !trimmedFirstName) {
+        return <h6 style={{ color: textColor }}>{truncateText(trimmedLastName, 20)}</h6>;
+    }
+
+    if (trimmedFirstName && trimmedLastName) {
+        return (
+            <h6 style={{ color: textColor }}>
+                {truncateText(`${trimmedFirstName} ${trimmedLastName}`, 20)}
+            </h6>
+        );
+    }
+
+    // Fallback for unnamed users
+    return <h6 style={{ color: textColor }}>Unnamed User</h6>;
+};
+
   async componentDidMount(){
         const user = await getUserById(this.props.userId,"profilePicture,details")
         this.setState({

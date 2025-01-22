@@ -41,5 +41,5 @@ export default function User({ params }) {
     return <div style={{padding:'10px'}}><NoContent message="User Not Found"/></div>
   }
 
-  return <UserProfileDisplay  user={user} loggedInUser={loggedInUser} purpose="profile-view"/>
+  return <UserProfileDisplay  user={user} loggedInUser={loggedInUser} purpose="profile-view" thisIsMyAccount={true}/>
 }

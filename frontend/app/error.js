@@ -47,7 +47,7 @@ export default function Error({ error, reset }) {
             Something went wrong!
           </Alert>
           <Typography variant="body1" gutterBottom>
-            We have logged this issue, and we shall do our best to sort it.
+            We have logged this issue, and we shall do our best to sort it. Check after back after a few hours and retry this action or reload the page.
           </Typography>
           <Button
             variant="contained"

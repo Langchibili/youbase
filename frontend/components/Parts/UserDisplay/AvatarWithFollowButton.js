@@ -16,25 +16,41 @@ export default class AvatarWithFollowButton extends React.Component{
       }
    }
 
-   renderUserName = ()=>{
-           const user = this.state.user
-           const textColor = this.props.textColor? this.props.textColor: ''
-           console.log('user in post date',user)
-           if(!user || !user.details){
-               return <h4 style={{color:textColor}}>Unnamed User</h4>  
-           }
-           if(user.details.firstname.trim() && !user.details.lastname.trim()){
-               return <h4 style={{color:textColor}}>{truncateText(user.details.firstname,20)}</h4>
-           }
-           if(user.details.lastname.trim() && !user.details.firstname.trim()){
-               return <h4 style={{color:textColor}}>{truncateText(user.details.lastname,20)}</h4>
-           }
-           if(user.details.firstname.trim() && user.details.lastname.trim()){ // if any of the first or last name is not set, then you are an unnamed user
-               return <h4 style={{color:textColor}}>{truncateText(user.details.firstname.trim()+" "+user.details.lastname.trim(),20)}</h4>
-           }// both of them have to be set for us to display your name
-       
-           return <h4 style={{color:textColor}}>Unnamed User</h4>   
-     }
+   renderUserName = () => {
+    const user = this.state.user;
+    const textColor = this.props.textColor ? this.props.textColor : '';
+    console.log('user in post date', user);
+
+    // Handle cases where user or user details are missing
+    if (!user || !user.details) {
+        return <h4 style={{ color: textColor }}>Unnamed User</h4>;
+    }
+
+    // Safely access and set defaults for firstname and lastname
+    const firstName = user.details.firstname ? user.details.firstname.trim() : '';
+    const lastName = user.details.lastname ? user.details.lastname.trim() : '';
+
+    // Logic for rendering the user name
+    if (firstName && !lastName) {
+        return <h4 style={{ color: textColor }}>{truncateText(firstName, 20)}</h4>;
+    }
+
+    if (lastName && !firstName) {
+        return <h4 style={{ color: textColor }}>{truncateText(lastName, 20)}</h4>;
+    }
+
+    if (firstName && lastName) {
+        return (
+            <h4 style={{ color: textColor }}>
+                {truncateText(`${firstName} ${lastName}`, 20)}
+            </h4>
+        );
+    }
+
+    // Default fallback for unnamed users
+    return <h4 style={{ color: textColor }}>Unnamed User</h4>;
+};
+
 
      async componentDidMount(){
         const user = await getUserById(this.props.userId,"profilePicture,details")
