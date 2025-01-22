@@ -81,7 +81,7 @@ export default function VideoThumbnailDisplay(props) {
           <PostMoreBtn  
             action="edit" 
             {...props}
-            thisIsMyPost={props.loggedInUser.user.id === props.post.user.data.id} 
+            thisIsMyPost={props.loggedInUser.status? props.loggedInUser.user.id === props.post.user.data.id : false} 
             postId={props.post.id} 
             moreStyles={{
               position:'absolute',
@@ -128,7 +128,7 @@ export default function VideoThumbnailDisplay(props) {
             //             Sorry we are unable to show this video
             //     </video> */}
             //     <AvatarOnly userId={props.post.user.data.id}/>
-            //     <PostMoreBtn action="edit" thisIsMyPost={props.loggedInUser.user.id === props.post.user.data.id} postId={props.post.id}/>
+            //     <PostMoreBtn action="edit" thisIsMyPost={props.loggedInUser.status? props.loggedInUser.user.id === props.post.user.data.id : false}  postId={props.post.id}/>
             //     <img style={videoStyles}  onClick={handleClickOpen} src={getVideoThumbnail(props.file,props.post)}/>
             //     {/* Render the PostModal component */}
             //     <div id="fullscreen-content"><FullScreenContentModal open={open} onClose={handleClose} {...props}/></div>

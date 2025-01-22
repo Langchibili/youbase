@@ -22,7 +22,7 @@ export default class AvatarWithPostDate extends React.Component{
        const postUser = await getPostUser(this.props.post.dashed_title)
        this.setState({
         user: postUser,
-        thisIsMyPost: this.props.loggedInUser.user.id === postUser.id
+        thisIsMyPost: this.props.loggedInUser.status? this.props.loggedInUser.user.id === postUser.id : false
        })
    }
    

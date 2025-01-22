@@ -83,7 +83,7 @@ return (
           <PostMoreBtn  
             action="edit" 
             {...props}
-            thisIsMyPost={props.loggedInUser.user.id === props.post.user.data.id} 
+            thisIsMyPost={props.loggedInUser.status? props.loggedInUser.user.id === props.post.user.data.id : false} 
             postId={props.post.id} 
             moreStyles={{
               position:'absolute',
