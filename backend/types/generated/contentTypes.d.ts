@@ -766,11 +766,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.user'
     >;
-    engagements: Attribute.Relation<
-      'plugin::users-permissions.user',
-      'manyToMany',
-      'api::engagement.engagement'
-    >;
     extra_payload: Attribute.JSON;
     likedPosts: Attribute.Relation<
       'plugin::users-permissions.user',
@@ -925,11 +920,6 @@ export interface ApiAdAd extends Schema.CollectionType {
       ['banner', 'strip', 'slider', 'list', 'grid']
     > &
       Attribute.DefaultTo<'banner'>;
-    engagements: Attribute.Relation<
-      'api::ad.ad',
-      'oneToMany',
-      'api::engagement.engagement'
-    >;
     media: Attribute.Media;
     mediaType: Attribute.Enumeration<['single', 'multiple']> &
       Attribute.DefaultTo<'single'>;
@@ -1324,30 +1314,15 @@ export interface ApiEngagementEngagement extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    type: Attribute.Enumeration<
-      ['like', 'view', 'play', 'share', 'impression', 'clicks']
-    > &
-      Attribute.Required;
-    postType: Attribute.Enumeration<['content', 'ad']> &
-      Attribute.DefaultTo<'content'>;
     post: Attribute.Relation<
       'api::engagement.engagement',
-      'manyToOne',
+      'oneToOne',
       'api::post.post'
     >;
-    ad: Attribute.Relation<
-      'api::engagement.engagement',
-      'manyToOne',
-      'api::ad.ad'
-    >;
-    users: Attribute.Relation<
-      'api::engagement.engagement',
-      'manyToMany',
-      'plugin::users-permissions.user'
-    >;
-    userId: Attribute.String;
-    postId: Attribute.String;
-    extra_payload: Attribute.JSON;
+    daily: Attribute.JSON;
+    weekly: Attribute.JSON;
+    monthly: Attribute.JSON;
+    yearly: Attribute.JSON;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1605,11 +1580,6 @@ export interface ApiPostPost extends Schema.CollectionType {
       'plugin::users-permissions.user'
     >;
     description: Attribute.Text;
-    engagements: Attribute.Relation<
-      'api::post.post',
-      'oneToMany',
-      'api::engagement.engagement'
-    >;
     comments: Attribute.Relation<
       'api::post.post',
       'oneToMany',
@@ -1691,6 +1661,11 @@ export interface ApiPostPost extends Schema.CollectionType {
     commentsCount: Attribute.BigInteger;
     totalEngagement: Attribute.BigInteger;
     monetized: Attribute.Boolean;
+    engagement: Attribute.Relation<
+      'api::post.post',
+      'oneToOne',
+      'api::engagement.engagement'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

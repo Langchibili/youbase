@@ -135,12 +135,6 @@
       "target": "plugin::users-permissions.user",
       "inversedBy": "connectedAccounts"
     },
-    "engagements": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::engagement.engagement",
-      "mappedBy": "users"
-    },
     "extra_payload": {
       "type": "json"
     },

@@ -12,51 +12,22 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "type": {
-      "type": "enumeration",
-      "enum": [
-        "like",
-        "view",
-        "play",
-        "share",
-        "impression",
-        "clicks"
-      ],
-      "required": true
-    },
-    "postType": {
-      "type": "enumeration",
-      "enum": [
-        "content",
-        "ad"
-      ],
-      "default": "content"
-    },
     "post": {
       "type": "relation",
-      "relation": "manyToOne",
+      "relation": "oneToOne",
       "target": "api::post.post",
-      "inversedBy": "engagements"
+      "inversedBy": "engagement"
     },
-    "ad": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::ad.ad",
-      "inversedBy": "engagements"
+    "daily": {
+      "type": "json"
     },
-    "users": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "engagements"
+    "weekly": {
+      "type": "json"
     },
-    "userId": {
-      "type": "string"
+    "monthly": {
+      "type": "json"
     },
-    "postId": {
-      "type": "string"
-    },
-    "extra_payload": {
+    "yearly": {
       "type": "json"
     }
   }

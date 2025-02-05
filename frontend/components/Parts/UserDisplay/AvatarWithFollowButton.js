@@ -60,6 +60,7 @@ export default class AvatarWithFollowButton extends React.Component{
         })
     }  
    render(){
+    const loggedInUserId = this.props.loggedInUser.status? this.props.loggedInUser.user.id : null
     if(!this.state.userNameLoaded){
         return <Skeleton
                     variant="text"
@@ -76,7 +77,7 @@ export default class AvatarWithFollowButton extends React.Component{
             <Link href={'/user/'+this.props.user.username}>   
             {this.renderUserName()}
             </Link>
-            {this.props.user.id === this.props.loggedInUser.user.id? <Link
+            {this.props.user.id === loggedInUserId? <Link
                 className="btn btn-success"
                 href="/manage/profile"
                 style={{ display:'inline-block',alignContent: 'center'}}
@@ -97,7 +98,7 @@ export default class AvatarWithFollowButton extends React.Component{
             {this.props.user.verified? <div className="mef78" title="Verify">
                                     <i className="uil uil-check-circle" />
                                 </div> : <></>}
-            {this.props.user.id === this.props.loggedInUser.user.id? <Link
+            {this.props.user.id === loggedInUserId? <Link
                 className="btn btn-success"
                 href="/manage/profile"
                 style={{ display:'inline-block',alignContent: 'center'}}

@@ -42,12 +42,6 @@
       ],
       "default": "banner"
     },
-    "engagements": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::engagement.engagement",
-      "mappedBy": "ad"
-    },
     "media": {
       "type": "media",
       "multiple": true,
