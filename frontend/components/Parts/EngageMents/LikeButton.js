@@ -2,7 +2,7 @@
 
 import LogInFirstModal from "@/components/Includes/Modals/LogInFirstModal"
 import React from "react"
-import { deleteEngagement, getImage, getUserById, getPostFromId, handleCountsDisplay, logEngagement, logNotification, sendPushNotification, checkIfUserHasEngagedWithPost } from "@/Functions"
+import { deleteEngagement, getImage, getUserById, getPostFromId, handleCountsDisplay, logEngagement, logNotification, sendPushNotification, checkIfUserHasEngagedWithPost, logTimelyEngagement } from "@/Functions"
 import { clientUrl, log } from "@/Constants"
 import { ThumbUp, ThumbUpSharp } from "@mui/icons-material"
 import { Zoom } from "@material-ui/core"
@@ -65,7 +65,8 @@ export default class LikeButton extends React.Component{
             requesting: true // to show user something is happening
         })
         logEngagement('likes',this.props.post.id,this.props.loggedInUser.user,this,this.createLikeNotification) 
-   }
+        logTimelyEngagement('likes',this.props.post.id) // log the timely engagement
+    }
 
    handleUnLike = async ()=>{
         if(!this.props.loggedInUser.status){ // means you are logged out or you have never followed anyone before

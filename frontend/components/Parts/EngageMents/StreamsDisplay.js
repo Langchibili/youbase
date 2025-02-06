@@ -2,7 +2,7 @@
 
 import LogInFirstModal from "@/components/Includes/Modals/LogInFirstModal"
 import React from "react"
-import { checkIfUserHasEngagedWithPost, deleteEngagement, getImage, getPostFromId, handleCountsDisplay, logEngagement, sendPushNotification } from "@/Functions"
+import { checkIfUserHasEngagedWithPost, deleteEngagement, getImage, getPostFromId, handleCountsDisplay, logEngagement, logTimelyEngagement, sendPushNotification } from "@/Functions"
 import { clientUrl, log } from "@/Constants"
 
 export default class StreamsDisplay extends React.Component{
@@ -41,6 +41,7 @@ export default class StreamsDisplay extends React.Component{
         const postId = this.props.post.id
 
         logEngagement('plays',postId,this.props.loggedInUser.user,this) 
+        logTimelyEngagement('plays',postId) // log the timely engagement
         const playsCount = parseInt(this.props.post.plays)
         
         if(playsCount === 0){ // if for any reason it's 0, return

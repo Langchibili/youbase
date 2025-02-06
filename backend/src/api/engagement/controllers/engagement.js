@@ -63,6 +63,7 @@ module.exports = createCoreController('api::engagement.engagement', ({ strapi })
 
       if (engagements.length === 0) {
         // Initialize new engagement
+        /* // if i want to add all the engagements as 0 to a new engagement, consumes more storage though
         const initialEngagement = {
           likes: 0,
           plays: 0,
@@ -86,6 +87,14 @@ module.exports = createCoreController('api::engagement.engagement', ({ strapi })
           yearly: { 
             [yearDisplay]: { ...initialEngagement, [engagementType]: 1 } 
           }
+        };
+        */
+        const newEngagement = { // only adding a specific engagement type and not all, consumes less strorage but requires null checks
+          post: postId, // Use direct ID assignment instead of {connect: [...]}
+          daily: { [todayDisplay]: { [engagementType]: 1, toEngagement: 1 } },
+          weekly: { [weekOf]: { [engagementType]: 1, toEngagement: 1 } },
+          monthly: { [monthDisplay]: { [engagementType]: 1, toEngagement: 1 } },
+          yearly: { [yearDisplay]: { [engagementType]: 1, toEngagement: 1 } },
         };
         await strapi.entityService.create('api::engagement.engagement', { data: newEngagement });
         return { ok: true };

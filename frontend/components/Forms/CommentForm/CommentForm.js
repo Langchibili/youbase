@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { TextField, Button, Box, IconButton } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import { createNewComment, getImage, getPostFromId, getUserById, logNotification, sendPushNotification, updateCommentEngagement } from "@/Functions";
+import { createNewComment, getImage, getPostFromId, getUserById, logNotification, logTimelyEngagement, sendPushNotification, updateCommentEngagement } from "@/Functions";
 import LogInFirstModal from "@/components/Includes/Modals/LogInFirstModal";
 import { clientUrl, log } from "@/Constants";
 
@@ -29,19 +29,20 @@ class CommentForm extends React.Component {
           log('the post user ', this.props.post)
           logNotification(notificationTitle,loggedInUserId,[userId], "post", postId) // send notification to the user being followed
           // send a push notification
+          console.log('the post in comments',this.props)
           const followersCount = parseInt(this.props.loggedInUser.user.followersCount)
           const commentsCount = parseInt(this.props.post.commentsCount)
+          const postWithThumbnail = await getPostFromId(postId,"media,featuredImages")
+          const image = getImage(postWithThumbnail.featuredImages.data,"thumbnail","notifications")
           // always notify a user that someone has commented on their post
-          sendPushNotification(notificationTitle,notificationTitle+" on youbase",[userId],clientUrl+"/posts/"+this.props.post.dashed_title,await getPostFromId(postId,"media,featuredImages"),"")
+          sendPushNotification(notificationTitle,notificationTitle+" on youbase",[userId],clientUrl+"/posts/"+this.props.post.dashed_title,image,"")
           if(commentsCount === 0){ // if for any reason it's 0, return
               return
           }
           
           if(followersCount > 1000){ // this means the user has a big enough following, the post's user might need to know 
-             const postWithThumbnail = await getPostFromId(postId,"media,featuredImages")
              const title = notificationTitle
              const body = notificationTitle + " on youbase"
-             const image = getImage(postWithThumbnail.featuredImages.data,"thumbnail","notifications")
              const postUrl = clientUrl+"/posts/"+this.props.post.dashed_title
              sendPushNotification(title,body,[userId],postUrl,image,"")
           }
@@ -85,6 +86,7 @@ class CommentForm extends React.Component {
     this.props.onAddComment(newComment);
     this.setState({ text: "", commenting: false },()=>{
       updateCommentEngagement(this.props.postUserId,this.props.postId) // add the comment count and engagemt up
+      logTimelyEngagement('commentsCount',this.props.postId)
       this.createCommentNotification() // notify the user
     })
   };

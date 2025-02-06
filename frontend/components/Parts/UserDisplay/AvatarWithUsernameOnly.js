@@ -26,8 +26,8 @@ export default class AvatarWithUsernameOnly extends React.Component{
 
     // Safely access and handle `firstname` and `lastname`
     const { firstname = '', lastname = '' } = this.state.user.details;
-    const trimmedFirstName = firstname.trim();
-    const trimmedLastName = lastname.trim();
+    const trimmedFirstName = firstname? firstname.trim() : ''
+    const trimmedLastName = lastname? lastname.trim() : ''
 
     // Determine the appropriate name to display
     if (trimmedFirstName && !trimmedLastName) {

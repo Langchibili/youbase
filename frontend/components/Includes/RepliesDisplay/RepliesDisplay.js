@@ -82,6 +82,7 @@ class RepliesDisplay extends React.Component {
           <ReplyForm
             loggedInUser={this.props.loggedInUser}
             postId={this.props.postId}
+            post={this.props.post}
             commentUserId={this.props.commentUserId}
             commentId={this.props.commentId}
             postUserId={this.props.postUserId}

@@ -1020,6 +1020,16 @@ export const checkUserFollowing = async (loggedInUser, otherUserId) => {
   return response.isFollowing
 }
 
+export const logTimelyEngagement = async (engagementType,postId) => {
+  await fetch(api_url+"/engagements?engagementType="+engagementType+"&postId="+postId,{
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }).then(response => response.json())
+    .then(data => data)
+    .catch(error => console.error(error))
+}
+
 export const logEngagement = async (type, postId, loggedInUser, ctx, createNotification=()=>{})=> {
     // getting the user's current count, to avoid 2 users who have clicked or engaged concurrently having their engagements added as one
     // but when updating the logged in user, it's ok to update directly, because it's dependent on you yourself taking an action at a time
@@ -1224,6 +1234,7 @@ export const deleteEngagement = async (type, postId, loggedInUser, ctx)=> {
               clickAction: url
           }
     }
+    console.log('push notifications',notificationObject)
     fetch(api_url+'/send-fc-mnotifications', {
       method: 'POST',
       headers: {

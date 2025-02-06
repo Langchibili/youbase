@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { TextField, Button, Box } from "@mui/material";
 import ReplyIcon from "@mui/icons-material/Reply";
-import { createNewComment, getPostFromId, getUserById, logNotification, sendPushNotification, updateCommentEngagement } from "@/Functions";
+import { createNewComment, getImage, getPostFromId, getUserById, logNotification, logTimelyEngagement, sendPushNotification, updateCommentEngagement } from "@/Functions";
 import LogInFirstModal from "@/components/Includes/Modals/LogInFirstModal";
 import { clientUrl, log } from "@/Constants";
 
@@ -31,7 +31,9 @@ class ReplyForm extends React.Component {
             logNotification(notificationTitle,loggedInUserId,[commentUserId], "post", postId) // send notification to the user being followed
             // send a push notification
             // always notify a user that someone has replied to their comment
-            sendPushNotification(notificationTitle,notificationTitle+" on youbase",[commentUserId],clientUrl+"/posts/"+this.props.post.dashed_title,await getPostFromId(postId,"media,featuredImages"),"")
+            const postWithThumbnail = await getPostFromId(postId,"media,featuredImages")
+            const image = getImage(postWithThumbnail.featuredImages.data,"thumbnail","notifications")
+            sendPushNotification(notificationTitle,notificationTitle+" on youbase",[commentUserId],clientUrl+"/posts/"+this.props.post.dashed_title,image,"")
   } 
 
   handleSubmit = async (e) => {
@@ -60,9 +62,11 @@ class ReplyForm extends React.Component {
     const newReply = await createNewComment({data:newReplyObject});
     this.props.onAddReply(newReply);
     updateCommentEngagement(this.props.postUserId,this.props.postId)
-    this.setState({ text: "", replying: false })
     this.createReplyNotification()
+    logTimelyEngagement('commentsCount',this.props.postId)
+    this.setState({ text: "", replying: false })
   }
+  
 
   handleChange = (e) => {
     this.setState({ text: e.target.value });

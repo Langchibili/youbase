@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect } from "react"
-import { checkIfUserHasEngagedWithPost, getUserById, getVideoThumbnail, handleCountsDisplay, logEngagement, logNotification, sendPushNotification, truncateText } from "@/Functions"
+import { checkIfUserHasEngagedWithPost, getUserById, getVideoThumbnail, handleCountsDisplay, logEngagement, logNotification, logTimelyEngagement, sendPushNotification, truncateText } from "@/Functions"
 import { Button, Modal, Box, IconButton, Typography } from '@mui/material'
 import { Facebook, Twitter, Instagram, WhatsApp, ContentCopy, TikTok } from '@mui/icons-material'
 import { useSocialSharing } from "@/Contexts/SocialSharingContext";
@@ -75,6 +75,7 @@ export default class ShareButton extends React.Component {
                 openShareModal: true 
             })
             logEngagement('shares', this.props.post.id, this.props.loggedInUser.user, this, this.createShareNotification)
+            logTimelyEngagement('shares', this.props.post.id) // log the timely engagement
         }
     }
 

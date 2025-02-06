@@ -39,6 +39,7 @@ export default class ViewsDisplay extends React.Component{
         const postId = this.props.post.id
 
         logEngagement('views',postId,this.props.loggedInUser.user,this) 
+        logTimelyEngagement('views',postId)
         const viewsCount = parseInt(this.props.post.views)
         if(viewsCount === 0){ // if for any reason it's 0, return
             return
