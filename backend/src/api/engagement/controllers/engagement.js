@@ -95,6 +95,7 @@ module.exports = createCoreController('api::engagement.engagement', ({ strapi })
           weekly: { [weekOf]: { [engagementType]: 1, toEngagement: 1 } },
           monthly: { [monthDisplay]: { [engagementType]: 1, toEngagement: 1 } },
           yearly: { [yearDisplay]: { [engagementType]: 1, toEngagement: 1 } },
+          publishedAt: today
         };
         await strapi.entityService.create('api::engagement.engagement', { data: newEngagement });
         return { ok: true };

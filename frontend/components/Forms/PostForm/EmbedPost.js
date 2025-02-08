@@ -36,7 +36,6 @@ export default class EmbedPost extends React.Component{
             name="site"
             id="id_site"
             required=""
-            maxLength={64}
             placeholder={this.props.post.embedLink?.length > 0? this.props.post.embedLink : "add video link" }
          />
         </div>

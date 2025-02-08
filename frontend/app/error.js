@@ -16,7 +16,7 @@ export default function Error({ error, reset }) {
     // Create the error report object
     const errorReport = {
       location: window.location.pathname,
-      user: loggedInUser?.user?.id,
+      user: loggedInUser.status? loggedInUser.user.id : 2, // 2 is the id of the main account
       error_data: error.toString()
     }
     // Submit the error report as JSON

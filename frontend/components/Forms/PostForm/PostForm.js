@@ -666,8 +666,7 @@ export default class PostForm extends React.Component{
       {/* for now facebook,tiktok and twitter embeds are disabled until implemented */}
       <Grid item xs={6}>
         <StyledIconButton
-          disabled={true}
-          // disabled={this.isCreateDisabled("facebook")}
+         disabled={this.isCreateDisabled("facebook")}
           onClick={() => {
             this.handlePostTypeSelect("facebook");
           }}
@@ -678,8 +677,7 @@ export default class PostForm extends React.Component{
       </Grid>
       <Grid item xs={6}>
         <StyledIconButton
-        disabled={true}
-          // disabled={this.isCreateDisabled("tiktok")}
+          disabled={this.isCreateDisabled("tiktok")}
           onClick={() => {
             this.handlePostTypeSelect("tiktok");
           }}

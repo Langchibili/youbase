@@ -121,7 +121,7 @@ export default function PortraitContentDisplay(props) {
 
 const PortraitContentSkeleton = ()=>{
   return (
-    <div className="la5lo1" style={{marginBottom:'10px'}}>
+    <div className="la5lo1" style={{marginBottom:'100px'}}>
         <div className="owl-carousel live_stream owl-theme owl-loaded owl-drag">
        
         <div className="owl-stage-outer">

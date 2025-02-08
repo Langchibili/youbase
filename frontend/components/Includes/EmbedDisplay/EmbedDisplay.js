@@ -317,6 +317,7 @@
 // };
 
 
+
 'use client'
 
 import React, { useEffect } from 'react';
@@ -435,34 +436,32 @@ export default function EmbedDisplay({ url }) {
   // For TikTok, render the official blockquote embed code.
   if (isTikTok) {
     return (
-      <div className="embed-container">
-        <blockquote
-          className="tiktok-embed"
-          cite={url}
-          data-video-id={videoId}
-          style={{ maxWidth: '605px', minWidth: '325px' }}
+      <blockquote
+      className="tiktok-embed"
+      cite={url}
+      data-video-id={videoId}
+      style={{ maxWidth: '605px', minWidth: '325px' }}
+    >
+      <section>
+        <a
+          target="_blank"
+          rel="noreferrer"
+          title={`@${username}`}
+          href={`https://www.tiktok.com/@${username}?refer=embed`}
         >
-          <section>
-            <a
-              target="_blank"
-              rel="noreferrer"
-              title={`@${username}`}
-              href={`https://www.tiktok.com/@${username}?refer=embed`}
-            >
-              @{username}
-            </a>
-            <p>Check out this TikTok video.</p>
-            <a
-              target="_blank"
-              rel="noreferrer"
-              title="Watch on TikTok"
-              href={url}
-            >
-              Watch on TikTok
-            </a>
-          </section>
-        </blockquote>
-      </div>
+          @{username}
+        </a>
+        <p>Check out this TikTok video.</p>
+        <a
+          target="_blank"
+          rel="noreferrer"
+          title="Watch on TikTok"
+          href={url}
+        >
+          Watch on TikTok
+        </a>
+      </section>
+    </blockquote>
     );
   }
 

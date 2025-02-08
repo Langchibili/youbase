@@ -2,7 +2,7 @@
 
 import LogInFirstModal from "@/components/Includes/Modals/LogInFirstModal"
 import React from "react"
-import { checkIfUserHasEngagedWithPost, deleteEngagement, getImage, getPostFromId, handleCountsDisplay, logEngagement, sendPushNotification } from "@/Functions"
+import { checkIfUserHasEngagedWithPost, deleteEngagement, getImage, getPostFromId, handleCountsDisplay, logEngagement, logTimelyEngagement, sendPushNotification } from "@/Functions"
 import { clientUrl, log } from "@/Constants"
 
 export default class ViewsDisplay extends React.Component{
